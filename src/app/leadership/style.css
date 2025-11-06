@@ -1,0 +1,22 @@
+#leadership {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.leadership-card {
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.2s;
+    background-color: var(--card-background-light);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+body.dark-mode .leadership-card {
+    background-color: var(--card-background-dark);
+    border: 1px solid #333;
+}
+
+.leadership-card:hover {
+    transform: translateY(-5px);
+}
