@@ -7,7 +7,7 @@ export default function Navigation() {
   const pathname = usePathname()
   const links = [
     { href: '/', label: 'Home' },
-    { href: '/resume', label: 'Resume' },
+    // { href: '/resume', label: 'Resume' },
     { href: '/projects', label: 'Projects' },
     { href: '/technology', label: 'Technology' },
     { href: '/leadership', label: 'Leadership' },
