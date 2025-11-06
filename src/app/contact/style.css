@@ -1,0 +1,16 @@
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact-container {
+    display: flex;
+    align-items: center;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1em;
+}
