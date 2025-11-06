@@ -28,4 +28,3 @@ This research involved a detailed analysis of observations related to the Cosmic
 
 Isotopes Explorer
 A vizualiztion tool for nuclei of isotopes.
-
