@@ -26,11 +26,10 @@ jobs:
       - name: Build 🏗️
         run: npm run build
 
-      - name: Add .nojekyll file
-        run: touch ./out/.nojekyll
-
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # Deploy to the gh-pages branch
           folder: out # The folder the action should deploy.
+          clean: true # Automatically remove existing files from the branch
+          no-jekyll: true # Create the .nojekyll file for you
