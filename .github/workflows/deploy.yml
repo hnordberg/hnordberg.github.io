@@ -23,6 +23,12 @@ jobs:
       - name: Install Dependencies 👨🏻‍💻
         run: npm install
 
+      - name: Create 'out' directory
+        run: mkdir -p out
+
+      - name: Create .nojekyll file
+        run: touch ./out/.nojekyll
+
       - name: Build 🏗️
         run: npm run build
 
