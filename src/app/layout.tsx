@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Link from 'next/link'
+import '../../css/style.css'
+import Navigation from './components/Navigation';
 import ThemeSwitcher from './components/ThemeSwitcher'
 
 export const metadata: Metadata = {
@@ -17,17 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <header>
-          <nav id="main-nav">
-            <ul>
-              <li><Link href="/">Home</Link></li>
-              <li><Link href="#">Resume</Link></li>
-              <li><Link href="#">Projects</Link></li>
-              <li><Link href="#">Technology</Link></li>
-              <li><Link href="#">Leadership</Link></li>
-              <li><Link href="#">Publications</Link></li>
-              <li><Link href="/contact">Contact</Link></li>
-            </ul>
-          </nav>
+          <Navigation />
           <ThemeSwitcher />
         </header>
         {children}
