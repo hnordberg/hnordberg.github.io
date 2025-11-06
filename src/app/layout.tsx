@@ -5,7 +5,7 @@ import Navigation from './components/Navigation';
 import ThemeSwitcher from './components/ThemeSwitcher'
 
 export const metadata: Metadata = {
-  title: 'Project Showcase',
+  title: 'Henrik Nordberg, Principal Engineer',
   description: 'Henrik Nordberg\'s project showcase',
 }
 
