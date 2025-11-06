@@ -1,0 +1,7 @@
+1:"$Sreact.fragment"
+2:I[5500,["/_next/static/chunks/c14175b176370ec3.js","/_next/static/chunks/22d4426581bf32de.js"],"Image"]
+3:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/247eb132b7f7b574.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+:HL["/_next/static/chunks/ae5ecf12fe8aa050.css","style"]
+0:{"buildId":"PuhZoFyw_iZtTPwL5GNxr","rsc":["$","$1","c",{"children":[["$","main",null,{"children":["$","div",null,{"className":"contact-container","children":[["$","$L2",null,{"src":"/img/henrik.avatar.2024.jpeg","width":"100","height":"100","alt":"Photo of Henrik Nordberg","title":"Photo of Henrik Nordberg"}],["$","div",null,{"className":"contact-details","children":["hnordberg@apache.org",["$","br",null,{}],["$","a",null,{"href":"https://linkedin.com/in/hnordberg","children":"linkedin.com/in/hnordberg"}]]}]]}]}],[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/ae5ecf12fe8aa050.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/22d4426581bf32de.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
+5:null
