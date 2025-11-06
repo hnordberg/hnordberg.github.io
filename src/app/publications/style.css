@@ -22,11 +22,12 @@ body.dark-mode .publications-container li {
   transform: translateY(-5px);
 }
 
-.publications-container li strong {
+.publication-category {
   display: block;
   font-size: 1.2em;
   margin-bottom: 0.5rem;
   color: #2196F3;
+  font-weight: bold;
 }
 
 .publications-container li a {
@@ -36,4 +37,33 @@ body.dark-mode .publications-container li {
 
 .publications-container li a:hover {
   text-decoration: underline;
+}
+
+.scholar-link {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.scholar-link a {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    background-color: #2196F3;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.scholar-link a:hover {
+    background-color: #1976D2;
+}
+
+body.dark-mode .scholar-link a {
+    background-color: #42A5F5;
+    color: #000;
+}
+
+body.dark-mode .scholar-link a:hover {
+    background-color: #64B5F6;
 }
