@@ -2,10 +2,15 @@ import fs from 'fs'
 import path from 'path'
 import './style.css'
 
+interface Project {
+  title: string;
+  description: string;
+}
+
 const ProjectsPage = () => {
   const projectsFilePath = path.join(process.cwd(), 'projects.json')
   const projectsFileContent = fs.readFileSync(projectsFilePath, 'utf8')
-  const projects = JSON.parse(projectsFileContent);
+  const projects: Project[] = JSON.parse(projectsFileContent);
 
   return (
     <main>
