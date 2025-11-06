@@ -8,7 +8,7 @@ interface Project {
 }
 
 const ProjectsPage = () => {
-  const projectsFilePath = path.join(process.cwd(), 'projects.json')
+  const projectsFilePath = path.join(process.cwd(), 'data/projects.json')
   const projectsFileContent = fs.readFileSync(projectsFilePath, 'utf8')
   const projects: Project[] = JSON.parse(projectsFileContent);
 
