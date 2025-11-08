@@ -31,7 +31,7 @@ const PublicationsPage = () => {
           <li>
             <span className="publication-category">Large Scale Data Management</span> Arie Shoshani, Luis M. Bernardo, Henrik Nordberg, Doron Rotem, Alex Sim:
             Multidimensional Indexing and Query Coordination for Tertiary Storage Management
-            <a href="https://dblp.org/db/conf/ssdbm/ssdbm1999.html"> SSDBM 1999</a> 214-225
+            <a href="https://www.computer.org/csdl/proceedings-article/ssdbm/1999/00460214/12OmNqIzh6y"> SSDBM 1999</a> 214-225
           </li>
           <li>
             <span className="publication-category">Science Web Portal</span> Igor Grigoriev, Henrik Nordberg, et al., <a href="https://doi.org/10.1093/nar/gkr947">
