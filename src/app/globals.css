@@ -75,7 +75,7 @@ body.light-mode #main-nav a {
 
 main {
     padding: 2rem;
-    max-width: 1200px;
+    max-width: 75rem;
     margin: 0 auto;
 }
 
@@ -105,8 +105,8 @@ footer {
 .theme-switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 3.75em;
+    height: 2.125em;
 }
 
 .theme-switch input { 
@@ -129,10 +129,10 @@ footer {
 .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
+    height: 1.625em;
+    width: 1.625em;
+    left: 0.25em;
+    bottom: 0.25em;
     background-color: white;
     transition: .4s;
 }
@@ -146,11 +146,11 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-    transform: translateX(26px);
+    transform: translateX(1.625em);
 }
 
 .slider.round {
-    border-radius: 34px;
+    border-radius: 2.125em;
 }
 
 .slider.round:before {

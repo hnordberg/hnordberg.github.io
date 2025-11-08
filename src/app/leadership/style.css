@@ -1,15 +1,15 @@
 #leadership {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(18.75rem, 1fr));
     gap: 1.5rem;
 }
 
 .leadership-card {
-    border-radius: 8px;
+    border-radius: 0.5em;
     padding: 1.5rem;
     transition: transform 0.2s;
     background-color: var(--card-background-light);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 0.25em 0.375em rgba(0,0,0,0.1);
 }
 
 body.dark-mode .leadership-card {
@@ -18,5 +18,5 @@ body.dark-mode .leadership-card {
 }
 
 .leadership-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-0.3125em);
 }

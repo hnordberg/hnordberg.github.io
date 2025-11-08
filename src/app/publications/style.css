@@ -6,10 +6,10 @@
 .publications-container li {
   background-color: var(--card-background-light);
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 0.5em;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 0.25em 0.375em rgba(0,0,0,0.1);
   transition: transform 0.2s;
 }
 
@@ -19,7 +19,7 @@ body.dark-mode .publications-container li {
 }
 
 .publications-container li:hover {
-  transform: translateY(-5px);
+  transform: translateY(-0.3125em);
 }
 
 .publication-category {
@@ -47,7 +47,7 @@ body.dark-mode .publications-container li {
 .scholar-link a {
     display: inline-block;
     padding: 0.75rem 1.5rem;
-    border-radius: 8px;
+    border-radius: 0.5em;
     background-color: #2196F3;
     color: #fff;
     text-decoration: none;
