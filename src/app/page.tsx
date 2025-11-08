@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import './style.css';
 import Timeline from './components/Timeline';
 
 const Home = () => {
