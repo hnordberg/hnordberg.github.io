@@ -20,3 +20,31 @@ body.dark-mode .leadership-card {
 .leadership-card:hover {
     transform: translateY(-5px);
 }
+
+.leadership-card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.leadership-card-subtitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.leadership-card-text {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.leadership-card ul.list {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.leadership-card ul.list li {
+    margin-bottom: 0.5rem;
+}
