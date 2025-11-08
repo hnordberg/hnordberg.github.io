@@ -1,94 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1000"
-   height="650.16345"
-   viewBox="-14.69907 -9.55680 293.98147 191.13602"
-   version="1.1"
-   id="svg8"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="A.svg">
-  <rect x="-14.69907" y="-9.55680" width="293.98147" height="191.13602" fill="white"/>
-  <defs
-     id="defs2">
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath1550">
-      <path
-         d="m 294.809,24.668 h 45.024 v 26.681 h -45.024 z"
-         id="path1548"
-         inkscape:connector-curvature="0" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath3072">
-      <path
-         d="M 0,792 H 612 V 0 H 0 Z"
-         id="path3070"
-         inkscape:connector-curvature="0" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath3818">
-      <path
-         d="M 0,0 H 612 V 792 H 0 Z"
-         id="path3816"
-         inkscape:connector-curvature="0" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath3750">
-      <path
-         d="M 0,0 H 612 V 792 H 0 Z"
-         id="path3748"
-         inkscape:connector-curvature="0" />
-    </clipPath>
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.82352941"
-     inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="720.67383"
-     inkscape:cy="-224.81355"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:pagecheckerboard="true"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0" />
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 417 346" width="417" height="346">
+  <rect x="0" y="0" width="417" height="346" fill="white"/>
+  <g transform="translate(38.85, 62.70) scale(1.2824)">
+<g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
@@ -260,5 +173,6 @@
            d="m 0,0 c -0.125,0 -0.255,-0.049 -0.366,-0.147 l -1.205,-1.188 c -0.158,-0.184 -0.172,-0.441 -0.036,-0.657 0.701,-0.865 1.696,-1.344 2.801,-1.344 2.326,0 3.949,1.653 3.949,4.02 V 8.98 c 0,0.278 -0.226,0.503 -0.503,0.503 H 2.495 C 2.218,9.483 1.993,9.258 1.993,8.98 V 0.701 c 0,-0.759 -0.448,-1.168 -0.869,-1.168 -0.424,0 -0.59,0.133 -0.777,0.32 C 0.249,-0.049 0.126,0 0,0" />
       </g>
     </g>
+  </g>
   </g>
 </svg>
