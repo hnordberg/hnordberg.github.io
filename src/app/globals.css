@@ -79,6 +79,13 @@ main {
     margin: 0 auto;
 }
 
+/* Mobile view - narrower margins */
+@media (max-width: 768px) {
+    main {
+        padding: 1rem;
+    }
+}
+
 h1 {
     text-align: center;
     margin-bottom: 2rem;

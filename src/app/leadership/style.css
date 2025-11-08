@@ -48,3 +48,34 @@ body.dark-mode .leadership-card {
 .leadership-card ul.list li {
     margin-bottom: 0.5rem;
 }
+
+/* Mobile view - narrower margins */
+@media (max-width: 768px) {
+    .leadership-card {
+        padding: 0.75rem 0.25em;
+    }
+
+    #leadership {
+        gap: 1rem;
+    }
+
+    .leadership-card-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .leadership-card-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .leadership-card-text {
+        margin-bottom: 0.75rem;
+    }
+
+    .leadership-card ul.list {
+        margin-left: 1.25rem;
+        margin-top: 0.4rem;
+        margin-bottom: 0.4rem;
+    }
+}

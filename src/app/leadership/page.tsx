@@ -74,6 +74,18 @@ const LeadershipPage = () => {
             <li>These rules are guidelines, so use the retro to adjust them for your team.</li>
           </ul>
         </div>
+        <div className="leadership-card">
+          <div className="leadership-card-title">Focus of the Week</div>
+          <div className="leadership-card-text">This is something my team adapted from <a href="https://www.amazon.com/dp/1955469016">Radical Focus</a> by 
+            Christina Wodtke. The book is about 
+            OKR's but they discuss "Monday Commitments and Friday Wins" and we adapted it as Focus of the Week. The main
+            idea is to pick something that is important to the team / organization, and designate it as the focus. Each time
+            someone finishes a task, they ask what they can do to futher the focus of the week. It's a way of ensuring
+            that important things get done first. Team members who finish tasks ask other team members --that are working on FotW -- 
+            what they can do to help. It's simple and effective.
+          </div>
+          <div className="leadership-card-subtitle pt-4"></div>
+        </div>
       </section>
     </main>
   )
