@@ -5,6 +5,7 @@ const LeadershipPage = () => {
   return (
     <main>
       <section id="leadership">
+
         <div className="leadership-card">
           <div className="leadership-card-title">Metrics, OKRs, and reviewing progress</div>
           <div className="leadership-card-text">Much has been written about metrics, so I will focus on the core of the idea -- 
@@ -27,9 +28,10 @@ const LeadershipPage = () => {
           </div>
           <div className="leadership-card-subtitle pt-4">Review often</div>
           <div className="leadership-card-text">Have your team review their metrics weekly. Celebrate victories and make course corrections when
-            things go down.
+            things trend downwards.
           </div>
         </div>
+
         <div className="leadership-card">
           <div className="leadership-card-title">Lean vs Scrum</div>
           <div className="leadership-card-text">Scrum is better than waterfall, and Lean is better than Scrum. Lean means small tasks instead of two-week
@@ -55,6 +57,7 @@ const LeadershipPage = () => {
             Bring someone from your team and you'll likely have a champion when it comes to implementing it.
           </div>
         </div>
+
         <div className="leadership-card">
           <div className="leadership-card-title">Retrospectives</div>
           <div className="leadership-card-text">A retro is a meeting where the team reflects on what went well and what could be improved.
@@ -74,6 +77,7 @@ const LeadershipPage = () => {
             <li>These rules are guidelines, so use the retro to adjust them for your team.</li>
           </ul>
         </div>
+
         <div className="leadership-card">
           <div className="leadership-card-title">Focus of the Week</div>
           <div className="leadership-card-text">This is something my team adapted from <a href="https://www.amazon.com/dp/1955469016">Radical Focus</a> by 
@@ -94,7 +98,8 @@ const LeadershipPage = () => {
             What we did instead is to use part of the Friday huddle to celebrate what was done and consider what was missed.
           </div>
         </div>
-        <div className="leadership-card">
+
+        <div className="leadership-card hidden">
           <div className="leadership-card-title">.</div>
           <div className="leadership-card-text">.
           </div>
