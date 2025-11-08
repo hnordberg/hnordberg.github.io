@@ -23,6 +23,6 @@
 }
 
 .circles {
-    transform: translate(-4px, 6px);
+    transform: translate(-6px, 6px);
     z-index: 30;
 }
