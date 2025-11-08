@@ -15,24 +15,13 @@ type Entry = {
 // The component is server-rendered and receives items as a prop.
 export default function Timeline({ items }: { items: Entry[] }) {
 
-  const yearLabel = (period: string) => {
-    const years = period.match(/\b(19|20)\d{2}\b/g);
-    if (!years) {
-      const start = period.match(/\b(19|20)\d{2}\b/);
-      if (start && /Present/i.test(period)) return `${start[0]}–Present`;
-      return period;
-    }
-    if (years.length === 1) return years[0];
-    return `${years[0]}–${years[years.length - 1]}`;
-  }
-
   return (
     <section aria-label="Timeline" className="container mx-auto px-4 py-8">
       <div className="relative">
         {/* vertical line positioned between the year column (w-24) and center column (w-8): left-28 = 7rem */}
         <div aria-hidden="true" className={`${styles.line} z-10`} />
         {items.map((item) => {
-          const year = yearLabel(item.period);
+          const year = item.period;
           return (
             <div key={item.id} className={`mb-10 ${styles.rowGrid}`}>
               {/* left: year (keep only year part) */}
