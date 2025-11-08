@@ -26,7 +26,8 @@ const ThemeSwitcher = () => {
 
     return (
         <div className={styles.themeSwitchContainer}>
-            <input type="checkbox" id="checkbox" className={styles.checkbox} onChange={toggleTheme} checked={theme === 'light-mode'} title="Toggle theme" aria-label="Toggle theme" />
+            <input type="checkbox" id="checkbox" className={styles.checkbox} onChange={toggleTheme} 
+                checked={theme === 'light-mode'} title="Toggle theme" aria-label="Toggle theme" />
             <label htmlFor="checkbox" className={styles.label}></label>
         </div>
     );
