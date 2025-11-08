@@ -1,5 +1,5 @@
 
-.tag-line {
+.text-box {
   text-align: left;
   max-width: 50em;
   background-color: var(--card-background-light);
@@ -11,7 +11,7 @@
   transition: transform 0.2s;
 }
 
-body.dark-mode .tag-line {
+body.dark-mode .text-box {
   background-color: var(--card-background-dark);
   border-color: #333;
 }

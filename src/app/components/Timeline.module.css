@@ -1,0 +1,28 @@
+.line {
+  position: absolute;
+  left: 7rem; /* matches Tailwind left-28 */
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #6b7280; /* gray-500 */
+  pointer-events: none;
+  /* subtle glow to lift line off background */
+  box-shadow: 0 0 6px rgba(0,0,0,0.04);
+}
+
+/* card helper to restrict width on large screens */
+.card {
+  max-width: 820px;
+}
+
+.rowGrid {
+  display: grid;
+  grid-template-columns: 6rem 2rem 1fr;
+  column-gap: 1rem;
+  align-items: start;
+}
+
+.circles {
+    transform: translate(-4px, 6px);
+    z-index: 30;
+}
