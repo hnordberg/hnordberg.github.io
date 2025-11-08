@@ -3,28 +3,28 @@
     "id": "optum",
     "period": "2019 – Present",
     "title": "Principal Software Engineer",
-    "org": "Optum (Remote)",
+    "org": "Optum",
     "location": "",
     "description": "Architected, developed, and operated the John Muir Health public website and critical internal applications, ensuring high availability and performance. Guided development towards resilient and secure software and introduced SCA and SAST into DevOps practices. ",
-  "icon": "optum.svg"
+    "icon": "optum.svg"
   },
   {
-    "id": "john-muir",
+    "id": "john-muir-health",
     "period": "2016 – 2019",
     "title": "Principal Software Engineer",
     "org": "John Muir Health, Walnut Creek, CA",
     "location": "Walnut Creek, CA",
     "description": "Tech-lead for the software engineering team.",
-  "icon": "jmh.svg"
+    "icon": "jmh.svg"
   },
   {
     "id": "jitterbit-vp",
     "period": "2014 – 2016",
     "title": "Vice President, Engineering, Co-founder",
-    "org": "Jitterbit, Alameda, CA",
+    "org": "Jitterbit",
     "location": "Alameda, CA",
     "description": "Returned to lead engineering for this cloud-based data integration company.",
-  "icon": "jitterbit.png"
+    "icon": "jitterbit.png"
   },
   {
     "id": "jgi",
@@ -33,7 +33,7 @@
     "org": "Joint Genome Institute (JGI), Lawrence Berkeley National Laboratory",
     "location": "Walnut Creek, CA",
     "description": "Led the Genome Portal team building tools for researchers to access and analyze large genomic datasets.",
-  "icon": "jgi.png"
+    "icon": "jgi.png"
   },
   {
     "id": "jitterbit-founder",
@@ -42,7 +42,7 @@
     "org": "Jitterbit",
     "location": "",
     "description": "Co-founded Jitterbit and served as Chief Software Architect.",
-  "icon": "jitterbit.png"
+    "icon": "jitterbit.png"
   },
   {
     "id": "nersc",
@@ -51,7 +51,7 @@
     "org": "Lawrence Berkeley Lab / NERSC",
     "location": "Berkeley, CA",
     "description": "Worked on clustering algorithms, compressed bitmap indexes, and distributed systems for large-scale scientific data management.",
-  "icon": "berkeley_lab.png"
+    "icon": "berkeley_lab.png"
   },
   {
     "id": "lbnl-visit",
@@ -60,7 +60,7 @@
     "org": "Lawrence Berkeley Lab, Nuclear Science Division",
     "location": "",
     "description": "Developed data visualization tools and early web services for nuclear structure data.",
-  "icon": "berkeley_lab.png"
+    "icon": "berkeley_lab.png"
   },
   {
     "id": "education",
@@ -69,6 +69,6 @@
     "org": "Lund University, Lund, Sweden",
     "location": "",
     "description": "Coursework and thesis completed in collaboration with UC Berkeley. Thesis supervised by Nobel Laureate Prof. George Smoot.",
-  "icon": "lund_university.svg"
+    "icon": "lund_university.svg"
   }
 ]
