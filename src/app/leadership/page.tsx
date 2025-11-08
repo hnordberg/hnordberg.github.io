@@ -78,13 +78,27 @@ const LeadershipPage = () => {
           <div className="leadership-card-title">Focus of the Week</div>
           <div className="leadership-card-text">This is something my team adapted from <a href="https://www.amazon.com/dp/1955469016">Radical Focus</a> by 
             Christina Wodtke. The book is about 
-            OKR's but they discuss "Monday Commitments and Friday Wins" and we adapted it as Focus of the Week. The main
+            OKR's but they discuss "Monday Commitments and Friday Wins" and we adapted it as Focus of the Week (FotW). The main
             idea is to pick something that is important to the team / organization, and designate it as the focus. Each time
             someone finishes a task, they ask what they can do to futher the focus of the week. It's a way of ensuring
-            that important things get done first. Team members who finish tasks ask other team members --that are working on FotW -- 
+            that important things get done first. Team members who finish tasks ask other team members -- that are working on FotW -- 
             what they can do to help. It's simple and effective.
           </div>
-          <div className="leadership-card-subtitle pt-4"></div>
+          <div className="leadership-card-subtitle pt-4">Focus planning and review</div>
+          <div className="leadership-card-text">Each Friday the team plans the focus for the following week.
+            On Monday morning, the team reviews the focus for the week and adjusts it as needed. If you have mutliple teams
+            working on related efforts, you can have each team briefly present their focus. The team commits to
+            finishing the focus by the end of the week. In a healthy organization the team will choose a focus that
+            is challenging and without sandbagging (making it too easy). Use the retro to discuss how you can get better at
+            picking the focus. The book suggests to have a separate meeting to celebrate the week's achievements.
+            What we did instead is to use part of the Friday huddle to celebrate what was done and consider what was missed.
+          </div>
+        </div>
+        <div className="leadership-card">
+          <div className="leadership-card-title">.</div>
+          <div className="leadership-card-text">.
+          </div>
+          <div className="leadership-card-subtitle pt-4">.</div>
         </div>
       </section>
     </main>
