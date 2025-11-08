@@ -11,7 +11,7 @@
 .label {
     width: 48px;
     height: 24px;
-    background-color: #ccc;
+    background-color: #696969;
     display: flex;
     border-radius: 24px;
     align-items: center;
@@ -28,7 +28,7 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background-color: white;
+    background-color: rgb(229, 229, 229);
     left: 5px;
     transition: transform .4s;
 }
