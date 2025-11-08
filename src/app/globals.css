@@ -48,10 +48,12 @@ header {
 
 body.dark-mode header {
     background-color: var(--header-background-dark);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 body.light-mode header {
     background-color: var(--header-background-light);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 #main-nav ul {
@@ -82,6 +84,17 @@ body.light-mode #main-nav a {
     color: #2196F3;
 }
 
+#main-nav li a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: currentColor;
+    transition: width 0.3s ease-in-out;
+}
+
 main {
     padding: 2rem;
     max-width: 1200px;
@@ -104,6 +117,23 @@ h1 {
 
 h2 {
     margin-top: 0;
+}
+
+.text-box {
+    text-align: left;
+    max-width: 50em;
+    background-color: var(--card-background-light);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+body.dark-mode .text-box {
+    background-color: var(--card-background-dark);
+    border-color: #333;
 }
 
 footer {
