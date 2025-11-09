@@ -4,6 +4,7 @@ const TechnologyPage = () => {
     <main>
       <section className="card-grid">
         <div className="card">
+        <div className="card-text"><i>Note: these are some musings on similarities LLMs and human thought</i></div>
           <div className="card-title">The hard problem of LLMs</div>
           <div className="card-text">The title is a play on the hard problem of consciousness and how LLMs may approach being conscious.
             The problem is stated something like how do the material processes of the brain give rise to human consciousness. This is
