@@ -1,6 +1,7 @@
 .line {
   position: absolute;
-  left: 7rem; /* matches Tailwind left-28 */
+  /* Mobile: left edge, Desktop: positioned at 7rem */
+  left: 0.5rem; /* 8px from left on mobile */
   top: 0;
   bottom: 0;
   width: 1px;
@@ -10,6 +11,13 @@
   box-shadow: 0 0 6px rgba(0,0,0,0.04);
 }
 
+/* Desktop: position line at 7rem */
+@media (min-width: 768px) {
+  .line {
+    left: 7rem; /* matches Tailwind left-28 */
+  }
+}
+
 /* card helper to restrict width on large screens */
 .card {
   max-width: 51.25rem;
@@ -17,14 +25,93 @@
 
 .rowGrid {
   display: grid;
-  grid-template-columns: 6rem 2rem 1fr;
-  column-gap: 1rem;
+  /* Mobile: single column (just content), Desktop: 3-column grid */
+  grid-template-columns: 1fr;
   align-items: start;
+  /* Add left padding on mobile to make room for timeline */
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+/* Desktop: 3-column grid layout */
+@media (min-width: 768px) {
+  .rowGrid {
+    grid-template-columns: 6rem 2rem 1fr;
+    column-gap: 1rem;
+    padding-left: 0;
+  }
+}
+
+.yearColumn {
+  /* Mobile: hidden (year shown in content area instead) */
+  display: none;
+}
+
+/* Desktop: year on left, right-aligned */
+@media (min-width: 768px) {
+  .yearColumn {
+    display: block;
+    text-align: right;
+    padding-right: 1rem;
+    grid-column: 1;
+    grid-row: 1;
+  }
+}
+
+.yearMobile {
+  /* Mobile: show year above icon */
+  display: block;
+}
+
+/* Desktop: hide (year shown in left column instead) */
+@media (min-width: 768px) {
+  .yearMobile {
+    display: none;
+  }
 }
 
 .circles {
+  /* Mobile: positioned on left edge, aligned with timeline */
+  position: absolute;
+  /* Timeline line is at 0.5rem from the relative container
+     rowGrid has padding-left: 1.5rem, so its content area starts at 1.5rem
+     But circles are positioned relative to rowGrid's padding box (which starts at 0)
+     So to align with line at 0.5rem: position circle center at 0.5rem
+     Circle is 0.75rem wide, so left edge at 0.5rem - 0.375rem = 0.125rem */
+  left: 0.125rem; /* Position left edge so center aligns with line at 0.5rem */
+  top: 0.375em; /* Vertical offset to align with content */
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Make sure the container is exactly the circle size */
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+/* Desktop: positioned on timeline line */
+@media (min-width: 768px) {
+  .circles {
+    position: static;
     transform: translate(-0.375em, 0.375em);
-    z-index: 30;
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+.contentColumn {
+  /* Mobile: full width with no left padding */
+  padding-left: 0;
+  grid-column: 1;
+}
+
+/* Desktop: add left padding */
+@media (min-width: 768px) {
+  .contentColumn {
+    padding-left: 1.5rem;
+    grid-column: 3;
+    grid-row: 1;
+  }
 }
 
 .logoContainer {
@@ -38,6 +125,14 @@
     width: 80px;
     height: 80px;
     overflow: hidden;
+}
+
+/* Mobile: smaller logo */
+@media (max-width: 767px) {
+  .logoContainer {
+    width: 60px;
+    height: 60px;
+  }
 }
 
 .logoImage {
