@@ -56,6 +56,10 @@ body.light-mode header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+#main-nav {
+    position: relative;
+}
+
 #main-nav ul {
     list-style: none;
     margin: 0;
@@ -93,6 +97,115 @@ body.light-mode #main-nav a {
     height: 1px;
     background-color: currentColor;
     transition: width 0.3s ease-in-out;
+}
+
+/* Hamburger menu button */
+.hamburger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 101;
+}
+
+.hamburger-menu span {
+    width: 2rem;
+    height: 3px;
+    background-color: currentColor;
+    border-radius: 10px;
+    transition: all 0.3s linear;
+    position: relative;
+    transform-origin: 1px;
+}
+
+body.dark-mode .hamburger-menu span {
+    background-color: var(--text-color-dark);
+}
+
+body.light-mode .hamburger-menu span {
+    background-color: var(--text-color-light);
+}
+
+/* Mobile menu styles */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .hamburger-menu {
+        display: flex;
+        position: relative;
+    }
+
+    #main-nav ul {
+        position: fixed;
+        left: 0;
+        top: 0;
+        flex-direction: column;
+        background-color: var(--header-background-light);
+        width: 100%;
+        height: 100vh;
+        padding-top: 4rem;
+        gap: 0;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 100;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark-mode #main-nav ul {
+        background-color: var(--header-background-dark);
+    }
+
+    #main-nav ul.menu-open {
+        transform: translateX(0);
+    }
+
+    #main-nav li {
+        width: 100%;
+    }
+
+    #main-nav li a {
+        display: block;
+        padding: 1rem 2rem;
+        width: 100%;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark-mode #main-nav li a {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    #main-nav li a.active::after {
+        display: none;
+    }
+
+    #main-nav li a.active {
+        background-color: rgba(33, 150, 243, 0.1);
+        color: #2196F3;
+    }
+
+    /* Hamburger animation when menu is open */
+    #main-nav.menu-open .hamburger-menu span:first-child {
+        transform: rotate(45deg);
+    }
+
+    #main-nav.menu-open .hamburger-menu span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    #main-nav.menu-open .hamburger-menu span:nth-child(3) {
+        transform: rotate(-45deg);
+    }
 }
 
 main {

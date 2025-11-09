@@ -2,9 +2,11 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 
 export default function Navigation() {
   const pathname = usePathname()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const links = [
     { href: '/', label: 'Home' },
     // { href: '/resume', label: 'Resume' },
@@ -15,12 +17,36 @@ export default function Navigation() {
     { href: '/contact', label: 'Contact' },
   ]
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  const closeMenu = () => {
+    setIsMenuOpen(false)
+  }
+
   return (
-    <nav id="main-nav">
-      <ul>
+    <nav id="main-nav" className={isMenuOpen ? 'menu-open' : ''}>
+      <button 
+        className="hamburger-menu" 
+        onClick={toggleMenu}
+        aria-label="Toggle menu"
+        aria-expanded={isMenuOpen}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul className={isMenuOpen ? 'menu-open' : ''}>
         {links.map(link => (
           <li key={link.href}>
-            <Link href={link.href} className={pathname === link.href ? 'active' : ''}>{link.label}</Link>
+            <Link 
+              href={link.href} 
+              className={pathname === link.href ? 'active' : ''}
+              onClick={closeMenu}
+            >
+              {link.label}
+            </Link>
           </li>
         ))}
       </ul>
