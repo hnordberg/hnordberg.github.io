@@ -17,7 +17,7 @@ const LeadershipPage = () => {
           </div>
           <div className="card-subtitle pt-4">Deciding what metrics to use</div>
           <div className="card-text">Let your team decide what metrics to use, and let them change them as needed. Even if you are using OKRs, it's 
-            easy to convice your team to change direction based on the metrics they chose. Then add the trickle down metrics 
+            easy to convince your team to change direction based on the metrics they chose. Then add the trickle down metrics 
             from leadership or company goals. 
           </div>
           <div className="card-subtitle pt-4">Automate metrics gathering</div>
@@ -82,13 +82,13 @@ const LeadershipPage = () => {
             Christina Wodtke. The book is about 
             OKR's but they discuss "Monday Commitments and Friday Wins" and we adapted it as Focus of the Week (FotW). The main
             idea is to pick something that is important to the team / organization, and designate it as the focus. Each time
-            someone finishes a task, they ask what they can do to futher the focus of the week. It's a way of ensuring
+            someone finishes a task, they ask what they can do to further the focus of the week. It's a way of ensuring
             that important things get done first. Team members who finish tasks ask other team members -- that are working on FotW -- 
             what they can do to help. It's simple and effective.
           </div>
           <div className="card-subtitle pt-4">Focus planning and review</div>
           <div className="card-text">Each Friday the team plans the focus for the following week.
-            On Monday morning, the team reviews the focus for the week and adjusts it as needed. If you have mutliple teams
+            On Monday morning, the team reviews the focus for the week and adjusts it as needed. If you have multiple teams
             working on related efforts, you can have each team briefly present their focus. The team commits to
             finishing the focus by the end of the week. In a healthy organization the team will choose a focus that
             is challenging and without sandbagging (making it too easy). Use the retro to discuss how you can get better at
