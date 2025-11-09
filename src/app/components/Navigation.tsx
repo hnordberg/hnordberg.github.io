@@ -27,24 +27,18 @@ export default function Navigation() {
 
   return (
     <nav id="main-nav" className={isMenuOpen ? 'menu-open' : ''}>
-      <button 
-        className="hamburger-menu" 
-        onClick={toggleMenu}
-        aria-label="Toggle menu"
-        aria-expanded={isMenuOpen}
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <div className="nav-mobile-header">
+        <button className="hamburger-menu" onClick={toggleMenu} aria-label="Toggle menu" aria-expanded={isMenuOpen} >
+          <span></span> { /* the hamburger lines */ }
+          <span></span>
+          <span></span>
+        </button>
+        <span className="mobile-name">Henrik Nordberg</span>
+      </div>
       <ul className={isMenuOpen ? 'menu-open' : ''}>
         {links.map(link => (
           <li key={link.href}>
-            <Link 
-              href={link.href} 
-              className={pathname === link.href ? 'active' : ''}
-              onClick={closeMenu}
-            >
+            <Link href={link.href} className={pathname === link.href ? 'active' : ''} onClick={closeMenu} >
               {link.label}
             </Link>
           </li>

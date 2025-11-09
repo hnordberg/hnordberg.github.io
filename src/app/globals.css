@@ -60,6 +60,14 @@ body.light-mode header {
     position: relative;
 }
 
+.nav-mobile-header {
+    display: none;
+}
+
+.mobile-name {
+    display: none;
+}
+
 #main-nav ul {
     list-style: none;
     margin: 0;
@@ -138,6 +146,18 @@ body.light-mode .hamburger-menu span {
         position: sticky;
         top: 0;
         z-index: 100;
+    }
+
+    .nav-mobile-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .mobile-name {
+        display: block;
+        font-weight: 600;
+        font-size: 1.1rem;
     }
 
     .hamburger-menu {
