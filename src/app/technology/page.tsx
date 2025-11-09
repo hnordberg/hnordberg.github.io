@@ -42,13 +42,11 @@ const TechnologyPage = () => {
             thinking changes somewhat. But generating words (or concepts) based on previous words, is what LLMs do, so are they thinking?
             Yes, according to our definition, they are. But that doesn't mean they are conscious.
           </div>
-          <div className="card">
-            <div className="card-subtitle pt-4">Are we there yet?</div>
-            <div className="card-text">If defining thinking is hard, defining consciousness is even harder. That said, LLMs are
-              not conscious in the way we are, yet. They would need to have a continuous, though not infinite, context. They
-              would need to selectively forget things, and be able to update their weights as they generate new information. But
-              maybe we are more machine like than we thought.
-            </div>
+          <div className="card-subtitle pt-4">Are we there yet?</div>
+          <div className="card-text">If defining thinking is hard, defining consciousness is even harder. That said, LLMs are
+            not conscious in the way we are, yet. They would need to have a continuous, though not infinite, context. They
+            would need to selectively forget things, and be able to update their weights as they generate new information. But
+            maybe we are more machine like than we thought.
           </div>
           <div className="card hidden">
             <div className="card-title">.</div>
