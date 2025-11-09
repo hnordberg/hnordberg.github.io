@@ -1,4 +1,4 @@
-#leadership {
+.card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(18.75rem, 1fr));
     gap: 1.5rem;
@@ -12,7 +12,7 @@
     box-shadow: 0 0.25em 0.375em rgba(0,0,0,0.1);
 }
 
-body.dark-mode .leadership-card {
+body.dark-mode .card {
     background-color: var(--card-background-dark);
     border: 1px solid #333;
 }
@@ -21,61 +21,62 @@ body.dark-mode .leadership-card {
     transform: translateY(-0.3125em);
 }
 
-.leadership-card-title {
+.card-title {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 1rem;
 }
 
-.leadership-card-subtitle {
+.card-subtitle {
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
 
-.leadership-card-text {
+.card-text {
     margin-bottom: 1rem;
     line-height: 1.6;
 }
 
-.leadership-card ul.list {
+.card ul.list {
     list-style-type: disc;
     margin-left: 1.5rem;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 }
 
-.leadership-card ul.list li {
+.card ul.list li {
     margin-bottom: 0.5rem;
 }
 
 /* Mobile view - narrower margins */
 @media (max-width: 768px) {
-    .leadership-card {
-        padding: 0.75rem 0.25em;
+    .card {
+        padding: 0.75rem 0.5rem;
     }
 
-    #leadership {
+    .card-grid {
         gap: 1rem;
     }
 
-    .leadership-card-title {
+    .card-title {
         font-size: 1.25rem;
         margin-bottom: 0.75rem;
     }
 
-    .leadership-card-subtitle {
+    .card-subtitle {
         font-size: 1.1rem;
         margin-bottom: 0.4rem;
     }
 
-    .leadership-card-text {
+    .card-text {
         margin-bottom: 0.75rem;
     }
 
-    .leadership-card ul.list {
+    .card ul.list {
         margin-left: 1.25rem;
         margin-top: 0.4rem;
         margin-bottom: 0.4rem;
     }
 }
+

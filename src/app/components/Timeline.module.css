@@ -26,3 +26,29 @@
     transform: translate(-0.375em, 0.375em);
     z-index: 30;
 }
+
+.logoContainer {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 4px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+}
+
+.logoImage {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain;
+}
+
+body.dark-mode .logoContainer {
+    background-color: white;
+    border-color: #4b5563;
+}

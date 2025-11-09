@@ -34,9 +34,9 @@ export default function Timeline({ items }: { items: Entry[] }) {
 
               {/* right: icon + content */}
               <div className="md:pl-6 w-full flex items-start gap-4">
-                <div className="flex-shrink-0">
+                <div className={`flex-shrink-0 ${styles.logoContainer}`}>
                   {item.icon ? (
-                    <Image src={`/img/${item.icon}`} alt={item.title ?? ''} width={80} height={80} className="object-contain" />
+                    <Image src={`/img/${item.icon}`} title={`${item.title} at ${item.org}`} alt={`${item.title} at ${item.org}`} width={80} height={80} className={styles.logoImage} />
                   ) : (
                     <div className="w-8 h-8 bg-sky-500" />
                   )}
