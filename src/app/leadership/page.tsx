@@ -115,7 +115,11 @@ const LeadershipPage = () => {
             If you have a large group, you can run your retros as a Lean Coffee meeting. I first learned about it from
             the fine folks at <a href="https://modernagile.org/">Modern Agile</a>.
           </div>
-          <div className="card-subtitle pt-4">It uses a voting system to decide what gets covered and in what order.
+          <div className="card-subtitle pt-4">
+            Voting system
+          </div>
+          <div className="card-text">
+            It uses a voting system to decide what gets covered and in what order.
             in the original form, we would put a sticky note on the wall for each topic. Then we would vote on the topics.
             You get 3 votes (more if you have more participants). Put a dot on the sticky you would like to cover.
             In a remote setting, you can create a simple Kanban board and vote by putting your name on the card. 
