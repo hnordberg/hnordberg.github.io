@@ -1,10 +1,20 @@
+import Contents from '../components/Contents'
+
 const LeadershipPage = () => {
+  const articles = [
+    { id: 'metrics-okrs', title: 'Metrics, OKRs, and reviewing progress' },
+    { id: 'lean-vs-scrum', title: 'Lean vs Scrum' },
+    { id: 'retrospectives', title: 'Retrospectives' },
+    { id: 'focus-of-the-week', title: 'Focus of the Week' },
+    { id: 'lean-coffee', title: 'Lean Coffee' }
+  ]
 
   return (
     <main>
+      <Contents articles={articles} />
       <section className="card-grid">
 
-        <div className="card">
+        <div className="card" id="metrics-okrs">
           <div className="card-title">Metrics, OKRs, and reviewing progress</div>
           <div className="card-text">Much has been written about metrics, so I will focus on the core of the idea -- 
             creating a loop of deciding what metrics to use, recording them, and reviewing them regularly. If you are looking
@@ -30,7 +40,7 @@ const LeadershipPage = () => {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card" id="lean-vs-scrum">
           <div className="card-title">Lean vs Scrum</div>
           <div className="card-text">Scrum is better than waterfall, and Lean is better than Scrum. Lean means small tasks instead of two-week
             sprints. Use a Kanban board.
@@ -56,7 +66,7 @@ const LeadershipPage = () => {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card" id="retrospectives">
           <div className="card-title">Retrospectives</div>
           <div className="card-text">A retro is a meeting where the team reflects on what went well and what could be improved.
             It can be a great tool, but only if used correctly.
@@ -73,10 +83,11 @@ const LeadershipPage = () => {
             <li>Celebrate the small stuff. "I appreciate you for pairing with me on debugging the issue yesterday."</li>
             <li>As a leader, focus on guiding the team back to these rules, instead of "leading" the retro.</li>
             <li>These rules are guidelines, so use the retro to adjust them for your team.</li>
+            <li>If you have a large group, you can run your retros as a <a href="#lean-coffee">Lean Coffee</a> meeting.</li>
           </ul>
         </div>
 
-        <div className="card">
+        <div className="card" id="focus-of-the-week">
           <div className="card-title">Focus of the Week</div>
           <div className="card-text">This is something my team adapted from <a href="https://www.amazon.com/dp/1955469016">Radical Focus</a> by 
             Christina Wodtke. The book is about 
@@ -94,6 +105,21 @@ const LeadershipPage = () => {
             is challenging and without sandbagging (making it too easy). Use the retro to discuss how you can get better at
             picking the focus. The book suggests to have a separate meeting to celebrate the week's achievements.
             What we did instead is to use part of the Friday huddle to celebrate what was done and consider what was missed.
+          </div>
+        </div>
+
+        <div className="card" id="lean-coffee">
+          <div className="card-title">Lean Coffee -- Large meetings</div>
+          <div className="card-text">Lean Coffee is a way of gathering input from a large group of people. 
+            It's useful when you likely will not have time to cover every topic. It's driven by the participants, rather than the leader.
+            If you have a large group, you can run your retros as a Lean Coffee meeting. I first learned about it from
+            the fine folks at <a href="https://modernagile.org/">Modern Agile</a>.
+          </div>
+          <div className="card-subtitle pt-4">It uses a voting system to decide what gets covered and in what order.
+            in the original form, we would put a sticky note on the wall for each topic. Then we would vote on the topics.
+            You get 3 votes (more if you have more participants). Put a dot on the sticky you would like to cover.
+            In a remote setting, you can create a simple Kanban board and vote by putting your name on the card. 
+            When people are done writing and voting, you go over the cards with the most votes. 
           </div>
         </div>
 

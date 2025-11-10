@@ -1,9 +1,15 @@
+import Contents from '../components/Contents'
+
 const TechnologyPage = () => {
+  const articles = [
+    { id: 'hard-problem-llms', title: 'The hard problem of LLMs' }
+  ]
 
   return (
     <main>
+      <Contents articles={articles} />
       <section className="card-grid">
-        <div className="card">
+        <div className="card" id="hard-problem-llms">
         <div className="card-text"><i>Note: these are some musings on similarities LLMs and human thought</i></div>
           <div className="card-title">The hard problem of LLMs</div>
           <div className="card-text">The title is a play on the hard problem of consciousness and how LLMs may approach being conscious.
