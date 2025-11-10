@@ -80,7 +80,7 @@ const LeadershipPage = () => {
           <div className="card-title">Focus of the Week</div>
           <div className="card-text">This is something my team adapted from <a href="https://www.amazon.com/dp/1955469016">Radical Focus</a> by 
             Christina Wodtke. The book is about 
-            OKR's but they discuss "Monday Commitments and Friday Wins" and we adapted it as Focus of the Week (FotW). The main
+            OKR's and they discuss "Monday Commitments and Friday Wins" and we adapted it as Focus of the Week (FotW). The main
             idea is to pick something that is important to the team / organization, and designate it as the focus. Each time
             someone finishes a task, they ask what they can do to further the focus of the week. It's a way of ensuring
             that important things get done first. Team members who finish tasks ask other team members -- that are working on FotW -- 
