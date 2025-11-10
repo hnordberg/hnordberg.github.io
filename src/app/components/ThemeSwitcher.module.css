@@ -40,7 +40,7 @@
     top: 45%;
     transform: translateY(-50%);
     font-size: 0.8125em;
-    color: #333;
+    color: white;
     transition: content .4s, color .4s, left .4s, right .4s;
 }
 
