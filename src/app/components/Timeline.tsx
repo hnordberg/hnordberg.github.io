@@ -25,7 +25,7 @@ export default function Timeline({ items }: { items: Entry[] }) {
           return (
             <div key={item.id} className={`mb-10 ${styles.rowGrid}`}>
               {/* Mobile: year on left (hidden), Desktop: year on left */}
-              <div className={`${styles.yearColumn} text-sm text-gray-500`}>{year}</div>
+              <div className={`${styles.yearColumn} text-sm`}>{year}</div>
 
               {/* center: circle on the vertical line */}
               <div className={`flex ${styles.circles}`}>
@@ -35,7 +35,7 @@ export default function Timeline({ items }: { items: Entry[] }) {
               {/* right: icon + content */}
               <div className={`${styles.contentColumn} w-full`}>
                 {/* Mobile: year above icon */}
-                <div className={`${styles.yearMobile} text-sm text-gray-500 mb-2`}>{year}</div>
+                <div className={`${styles.yearMobile} text-sm mb-2`}>{year}</div>
                 <div className="flex items-start gap-4">
                   <div className={`flex-shrink-0 ${styles.logoContainer}`}>
                     {item.icon ? (

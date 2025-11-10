@@ -147,3 +147,14 @@ body.dark-mode .logoContainer {
     background-color: white;
     border-color: #4b5563;
 }
+
+/* Year label contrast fixes for accessibility */
+.yearColumn,
+.yearMobile {
+    color: #4b5563; /* gray-600 - darker for light mode */
+}
+
+:global(body.dark-mode) .yearColumn,
+:global(body.dark-mode) .yearMobile {
+    color: #9ca3af; /* gray-400 - lighter for dark mode */
+}
