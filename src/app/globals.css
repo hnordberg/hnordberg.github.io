@@ -234,6 +234,20 @@ main {
     margin: 0 auto;
 }
 
+/* Desktop layout for pages with contents */
+@media (min-width: 769px) {
+    main.page-with-contents {
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
+    }
+    
+    main.page-with-contents .card-grid {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
 /* Mobile view - narrower margins */
 @media (max-width: 768px) {
     main {

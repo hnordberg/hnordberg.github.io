@@ -15,7 +15,15 @@ export default function Contents({ articles }: ContentsProps) {
   const handleClick = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const header = document.querySelector('header')
+      const headerHeight = header ? header.offsetHeight : 0
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+      const offsetPosition = elementPosition - headerHeight - 20 // 20px extra padding
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
     }
   }
 

@@ -6,7 +6,7 @@ const TechnologyPage = () => {
   ]
 
   return (
-    <main>
+    <main className="page-with-contents">
       <Contents articles={articles} />
       <section className="card-grid">
         <div className="card" id="hard-problem-llms">

@@ -6,6 +6,19 @@
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
+/* Desktop: sticky on left side */
+@media (min-width: 769px) {
+  .contents {
+    position: sticky;
+    top: 2rem;
+    flex-shrink: 0;
+    width: 16rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    margin-bottom: 0;
+  }
+}
+
 :global(body.dark-mode) .contents {
   background-color: var(--card-background-dark);
   border: 1px solid #333;

@@ -10,7 +10,7 @@ const LeadershipPage = () => {
   ]
 
   return (
-    <main>
+    <main className="page-with-contents">
       <Contents articles={articles} />
       <section className="card-grid">
 
