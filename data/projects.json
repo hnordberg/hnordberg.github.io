@@ -30,5 +30,9 @@
   {
     "title": "Isotopes Explorer",
     "description": "A visualization tool for nuclei of isotopes."
+  },
+  {
+    "title": "BatMUD",
+    "description": "A MUD (Multi-User Dungeon) is an online role-playing game. In 1991 I was at the university and joined BatMUD as a player. I wizzed (reached level 20 and beat Tiamat) and started extending the game as all wizards do. This is how I discovered my love of programming. I started working on the, adding a 'feelings' system and the first global event (orch raids). The coding for LPC MUDs is in LPC, an object-oriented language version of C."
   }
 ]
