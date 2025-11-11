@@ -7,18 +7,34 @@
 .card {
     border-radius: 8px;
     padding: 1.5rem;
-    transition: transform 0.2s;
+    transition: transform 0.2s, border 0.5s ease-out, box-shadow 0.5s ease-out;
     background-color: var(--card-background-light);
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: 1px solid transparent;
 }
 
 body.dark-mode .card {
     background-color: var(--card-background-dark);
     border: 1px solid #333;
+    transition: transform 0.2s, border 0.5s ease-out, box-shadow 0.5s ease-out;
 }
 
 .card:hover {
     transform: translateY(-5px);
+}
+
+.card.selected,
+.card:target {
+    border: 2px solid #2196F3;
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.2), 0 4px 6px rgba(0,0,0,0.1);
+    transition: border 0.3s ease-in, box-shadow 0.3s ease-in, transform 0.2s;
+}
+
+body.dark-mode .card.selected,
+body.dark-mode .card:target {
+    border-color: #42A5F5;
+    box-shadow: 0 0 0 4px rgba(66, 165, 245, 0.2), 0 4px 6px rgba(0,0,0,0.1);
+    transition: border 0.3s ease-in, box-shadow 0.3s ease-in, transform 0.2s;
 }
 
 .card-title {
