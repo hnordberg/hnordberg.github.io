@@ -2,7 +2,8 @@ import Contents from '../components/Contents'
 
 const TechnologyPage = () => {
   const articles = [
-    { id: 'hard-problem-llms', title: 'The hard problem of LLMs' }
+    { id: 'hard-problem-llms', title: 'The hard problem of LLMs' },
+    { id: 'debugging', title: 'The art of debugging' }
   ]
 
   return (
@@ -55,13 +56,39 @@ const TechnologyPage = () => {
             would need to selectively forget things, and be able to update their weights as they generate new information. But
             maybe we are more machine like than we thought.
           </div>
+        </div>
+
+          <div className="card" id="debugging">
+            <div className="card-title">The art of debugging</div>
+            <div className="card-text">Debugging is a skill you hone over the years.
+              With time you will start to recognize problems and their solutions. 
+              But there are some principles that you can keep in mind, especially when you get
+              stuck on a difficult bug.
+              <ul className="list">
+                <li>Verify your assumptions</li>
+                <li>Verify your inputs</li>
+                <li>Break down the problem</li>
+                <li>Keep track of your progress</li>
+                <li>Explain the problem to someone</li>
+                <li>Don't give up</li>
+              </ul>
+              You may assume a function returns a certain kind of value -- verify that it does.<br />
+              You may assume the input is always in a certain range or of a certain type -- verify that it is.<br />
+              You may assume a library or class does what it says on the tin -- verify that it does.<br />
+              For really tricky bugs it's helpful to write down the assumptions, the inputs, other system state,
+              and to write down a plan of attack. 
+            </div>
+          </div>
+        
           <div className="card hidden">
             <div className="card-title">.</div>
             <div className="card-text">.
             </div>
+            <div className="card-text">.
+            </div>
             <div className="card-subtitle pt-4">.</div>
           </div>
-        </div>
+
       </section>
     </main>
   )
