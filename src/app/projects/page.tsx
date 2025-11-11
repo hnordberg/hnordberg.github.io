@@ -59,8 +59,7 @@ const ProjectsPage = () => {
             data integration company recognized as a leader and visionary in the iPaaS field. The solution expanded a prior
             product to include the ability to call and host web services, offering visual mapping for integration across
             structures like XML, databases, LDAP directories, and multiple cloud applications (e.g., Salesforce.com,
-            NetSuite). I also completed the porting of the data integration and workflow software to Solaris and Linux and
-            made it open source, contributing to the Apache Axis web service framework in the process.</div>
+            NetSuite).</div>
         </div>
 
         <div className="card" id="commerceroute-data-integration-and-workflow-solutions">
@@ -77,8 +76,8 @@ const ProjectsPage = () => {
         <div className="card" id="query-estimator-for-petabyte-storage-systems">
           <div className="card-title">Query Estimator for Petabyte Storage Systems</div>
           <div className="card-text">This component was developed as part of a Department of Energy (DOE) Grand Challenge
-            project focused on handling petabytes of data stored on robotic tape systems (HPSS). The Query Estimator utilizes
-            a researched and implemented compressed bitmap index to quickly estimate the size of a result set for a particular
+            project focused on handling petabytes (in 1998) of data stored on robotic tape systems (HPSS). The Query Estimator utilizes
+            a compressed bitmap index I researched and implemented to quickly estimate the size of a result set for a particular
             query before the data retrieval request is executed, optimizing access to massive multi-dimensional datasets. The
             distributed system coordinating this storage access relied on CORBA for inter-component communication.</div>
         </div>
@@ -107,10 +106,11 @@ const ProjectsPage = () => {
         <div className="card" id="batmud">
           <div className="card-title">BatMUD</div>
           <div className="card-text">A MUD (Multi-User Dungeon) is an online role-playing game. In 1991 I was at the
-            university and joined BatMUD as a player. I wizzed (reached level 20 and beat Tiamat) and started extending the
-            game as all wizards do. This is how I discovered my love of programming. I started working on the, adding a
+            university and joined BatMUD as a player. Back then you accessed the game via a telnet client.
+            I wizzed (reached level 20 and beat Tiamat) and started extending the
+            game as all wizards do. This is how I discovered my love of programming. I started working on the backend, adding a
             'feelings' system and the first global event (orch raids). The coding for LPC MUDs is in LPC, an object-oriented
-            language version of C.</div>
+            version of C. My player character is the Archwizard Plura.</div>
         </div>
 
         <div className="card hidden">
