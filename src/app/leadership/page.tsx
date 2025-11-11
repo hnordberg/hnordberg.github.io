@@ -6,7 +6,8 @@ const LeadershipPage = () => {
     { id: 'lean-vs-scrum', title: 'Lean vs Scrum' },
     { id: 'retrospectives', title: 'Retrospectives' },
     { id: 'focus-of-the-week', title: 'Focus of the Week' },
-    { id: 'lean-coffee', title: 'Lean Coffee' }
+    { id: 'lean-coffee', title: 'Lean Coffee' },
+    { id: 'pairing', title: 'Pairing and Mob programming' }
   ]
 
   return (
@@ -127,12 +128,41 @@ const LeadershipPage = () => {
           </div>
         </div>
 
+        <div className="card" id="pairing">
+          <div className="card-title">Pairing and Mob programming</div>
+          <div className="card-text">Basic pairing involves two roles: the driver (at the keyboard)
+             and the navigator (giving directions).
+            A core idea is that all ideas flow from the navigator to the driver, and that the driver 
+            only enters those ideas. You do, of course, swap roles so both can navigate.
+            Mob programming is a variant of pairing but with more roles. In addition to the driver and navigator, 
+            there are also a few other roles: Facilitator 
+            (ensures courteousness and flow), Researcher, and others. 
+            I went to visit Hunter Industries in San Diego to learn about their approach to pairing 
+            and mob programming. I observed multiple groups there. Everyone at the company seemed to like it.
+          </div>
+          <div className="card-subtitle pt-4">Benefits</div>
+          <div className="card-text">
+            The main benefit is having more eyes on the code. It raises the quality of the code and more 
+            people understand the code.
+          </div>
+          <div className="card-subtitle pt-4">Should your team do it?</div>
+          <div className="card-text">
+            Personally I enjoy pairing and think the benefits outweigh the cost. But not all
+            developers are extroverts and enjoy the process. If you want to introduce it, 
+            you should stick with it for a meaningful length of time, at least for a couple of months.
+            It takes a while to get into the rhythm. It takes a while to learn to stick to the roles.
+          </div>
+        </div>
+
         <div className="card hidden">
           <div className="card-title">.</div>
           <div className="card-text">.
           </div>
           <div className="card-subtitle pt-4">.</div>
+          <div className="card-text">.
+          </div>
         </div>
+
       </section>
     </main>
   )
