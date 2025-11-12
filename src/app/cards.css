@@ -19,10 +19,6 @@ body.dark-mode .card {
     transition: transform 0.2s, border 0.5s ease-out, box-shadow 0.5s ease-out;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-}
-
 .card.selected,
 .card:target {
     border: 2px solid #2196F3;
