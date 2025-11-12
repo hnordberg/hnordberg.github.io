@@ -1,4 +1,5 @@
 import Contents from '../components/Contents'
+import LightboxImage from '../components/LightboxImage';
 
 const ProjectsPage = () => {
   const articles = [
@@ -27,7 +28,7 @@ const ProjectsPage = () => {
       id: 'cosmic-microwave-background-cmb-spectrum-analysis',
       title: 'Cosmic Microwave Background (CMB) Spectrum Analysis'
     },
-    { id: 'isotopes-explorer', title: 'Isotopes Explorer' },
+    { id: 'isotope-explorer', title: 'Isotope Explorer' },
     { id: 'batmud', title: 'BatMUD' }
   ]
 
@@ -98,9 +99,34 @@ const ProjectsPage = () => {
             of our solar system relative to the CMB.</div>
         </div>
 
-        <div className="card" id="isotopes-explorer">
-          <div className="card-title">Isotopes Explorer</div>
-          <div className="card-text">A visualization tool for nuclei of isotopes.</div>
+        <div className="card" id="isotope-explorer">
+          <div className="card-title">Isotope Explorer</div>
+          <div className="card-text">In 1995 I moved to Berkeley to work on a visualization tool for nuclei of isotopes 
+            at Lawrence Berkeley Laboratory.
+            Originally called VuENSDF, it is a tool for exploring the nuclear data from the ENSDF database. Up till then,
+            when you needed to access nuclear energy level data, you used the Table of Isotopes (ToI), which was a thick book.
+            ToI was published by the Isotopes Project, a research group at the Nuclear Science Division of LBL. That group was
+            headed by Nobel Laureate Glenn T. Seaborg, who still checked in on us from time to time. Dr. Seaborg was famous
+            for the discovery of the elements plutonium, americium, curium, berkelium, californium, einsteinium,
+            fermium, mendelevium, nobelium, and seaborgium.
+          </div>
+          <div className="card-subtitle pt-4">Technology</div>
+          <div className="card-text">
+            The tool was written in C++ and Borland's OWL library for Windows. One weekend I was reading the C code for
+            the Unix Telnet server and decided to see if I could talk to it from Isotope Explorer. This led to us adding
+            access to a large document set of references to the nuclear data. This was a web service before the term was invented.
+          </div>
+          <div className="card-subtitle pt-4">Features</div>
+          <div className="card-text">
+            Isotope Explorer can display level drawings, coincidences, tables, band plots, nuclear charts, chart data and literature references.
+            <LightboxImage 
+              src="/img/isotope-explorer.png" 
+              alt="Isotope Explorer" 
+              width={800} 
+              height={600}
+              className="pt-4 pb-4"
+            />
+          </div>
         </div>
 
         <div className="card" id="batmud">
@@ -109,7 +135,7 @@ const ProjectsPage = () => {
             university and joined BatMUD as a player. Back then you accessed the game via a telnet client.
             I wizzed (reached level 20 and beat Tiamat) and started extending the
             game as all wizards do. This is how I discovered my love of programming. I started working on the backend, adding a
-            'feelings' system and the first global event (orch raids). The coding for LPC MUDs is in LPC, an object-oriented
+            'feelings' system and the first global event (orch raids), among other things. The coding for LPC MUDs is in LPC, an object-oriented
             version of C. My player character is the Archwizard Plura.</div>
         </div>
 
@@ -118,6 +144,8 @@ const ProjectsPage = () => {
           <div className="card-text">.
           </div>
           <div className="card-subtitle pt-4">.</div>
+          <div className="card-text">.
+          </div>
         </div>
       </section>
     </main>
