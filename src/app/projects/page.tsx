@@ -4,6 +4,7 @@ import LightboxImage from '../components/LightboxImage';
 const ProjectsPage = () => {
   const articles = [
     { id: 'jgi-genome-portal', title: 'JGI Genome Portal' },
+    { id: 'elviz-metagenome-visualization', title: 'Elviz -- metagenome visualization' },
     {
       id: 'biopig-hadoop-based-genomic-analysis-toolkit',
       title: 'BioPig: Hadoop-based Genomic Analysis Toolkit'
@@ -14,15 +15,15 @@ const ProjectsPage = () => {
     },
     {
       id: 'commerceroute-data-integration-and-workflow-solutions',
-      title: 'CommerceRoute Data Integration and Workflow Solutions'
+      title: 'CommerceRoute Data Integration and Workflow'
     },
     {
       id: 'query-estimator-for-petabyte-storage-systems',
       title: 'Query Estimator for Petabyte Storage Systems'
     },
     {
-      id: 'compressed-bitmap-index-implementation',
-      title: 'Compressed Bitmap Index Implementation'
+      id: 'compressed-bitmap-index',
+      title: 'Compressed Bitmap Index'
     },
     {
       id: 'cosmic-microwave-background-cmb-spectrum-analysis',
@@ -46,12 +47,81 @@ const ProjectsPage = () => {
             older Perl scripts.</div>
         </div>
 
+        <div className="card" id="elviz-metagenome-visualization">
+          <div className="card-title">Elviz -- metagenome visualization</div>
+          <div className="card-text">
+              <LightboxImage 
+                src="/img/elviz.png" 
+                alt="Elviz -- metagenome visualization" 
+                width={800} 
+                height={600}
+                className="pb-4"
+              />
+              Elviz (Environmental Laboratory Visualization) is an interactive web-based tool
+              for the visual exploration of assembled metagenomes and their complex metadata.
+              Elviz allows scientists to navigate metagenome assemblies across multiple dimensions and scales, plotting parameters
+              such as GC content, relative abundance, phylogenetic affiliation and assembled contig length. Furthermore Elviz enables
+              interactive exploration using real-time plot navigation, search, filters, axis selection, and the ability to drill from
+              a whole-community profile down to individual gene annotations.
+            </div>
+            <div className="card-subtitle pt-4">Technology</div>
+            <div className="card-text">
+              Elviz is a web application, written in AngularJS, JavaScript, and WebGL. Try it out 
+              at <a href="https://genome.jgi.doe.gov/viz">genome.jgi.doe.gov/viz</a>. We published a paper on
+              it in BMC Bioinformatics in 2015: <a href="https://doi.org/10.1186/s12859-015-0566-4">Elviz – exploration
+              of metagenome assemblies with an interactive visualization tool</a>.
+            </div>
+        </div>
+
+
         <div className="card" id="biopig-hadoop-based-genomic-analysis-toolkit">
           <div className="card-title">BioPig: Hadoop-based Genomic Analysis Toolkit</div>
-          <div className="card-text">This project involved developing BioPig, a Hadoop-based framework extending Apache Pig,
-            specifically designed for large-scale genomic data analysis. This toolkit was introduced to address the "data
-            deluge" resulting from the exponential growth of sequence data, making it one of the key solutions that scale to
-            handle massive data and computational needs in bioinformatics.</div>
+          <div className="card-text">BioPig is a Hadoop-based analytic toolkit designed to scale large-scale sequence analysis
+            to data volumes that overwhelm traditional tools. It sits on top of Hadoop MapReduce and the Pig data-flow language
+            to provide a higher-level, more programmable framework for bioinformatics tasks, with emphasis on scalability,
+            portability, and ease of use. We published a paper on it in Bioinformatics in 
+            2013: <a href="https://doi.org/10.1093/bioinformatics/btt528">BioPig: a Hadoop-based analytic toolkit for large-scale sequence data</a>.
+          </div>
+          <div className="card-subtitle pt-4">Origin</div>
+          <div className="card-text">
+            In 2010, as I was working on the Genome Portal, I collaborated with Dr. Zhong Wang's Genome Analysis 
+            research group at the Joint Genome Institute (JGI) to develop BioPig. Researchers at the JGI assemble genomes
+            from raw sequence data using supercomputers at NERSC. BioPig was envisioned as a way to scale beyond the current
+            methods. 
+            It was written by me and Karan Bhatia, using Java and Pig Latin. The source code 
+            is <a href="https://github.com/JGI-Bioinformatics/biopig">available on GitHub</a>.
+          </div>
+          <div className="card-subtitle pt-4">Performance and Scalability</div>
+          <div className="card-text">
+            Empirical results compare BioPig against serial and MPI implementations, using datasets from 100 Mb (Mega basepairs)
+            up to 500 Gb. BioPig demonstrates near-linear scaling with data size on Hadoop clusters (e.g., Magellan/NERSC and AWS EC2),
+            whereas traditional serial/MPI approaches hit memory limits or scale poorly in practice due to high-latency or 
+            bespoke parallelization requirements. While there is a certain amount of overhead thanks to Hadoop’s startup,
+            for very large datasets the data-analysis time dominates startup costs.
+            <LightboxImage 
+              src="/img/biopig-graphs.png" 
+              alt="BioPig performance and scalability" 
+              width={800} 
+              height={600}
+              className="pt-4 pb-4"
+            />
+          </div>
+          <div className="card-subtitle pt-4">Example</div>
+          <div className="card-text">Below is a simple example of a Pig script to count kmers. For more advanced
+            examples, see the <a href="https://github.com/JGI-Bioinformatics/biopig/tree/master/examples">examples</a>
+            directory on GitHub, or the paper.
+            <pre>
+              -- a simple example of pig script to count kmers<br/>
+              1 register /.../biopig-core-0.3.0-job-pig.jar<br/>
+              2 A = load '$input' using gov.jgi.meta.pig.storage.FastaStorage as (id: chararray, d: int, seq: bytearray, header: chararray);<br/>
+              3 B = foreach A generate flatten(gov.jgi.meta.pig.eval.KmerGenerator(seq, 20)) as (kmer:bytearray);<br/>
+              4 C = group B by kmer parallel $p;<br/>
+              5 D = foreach C generate group, count(B);<br/>
+              6 E = group D by $1 parallel $p;<br/>
+              7 F = foreach E generate group, count(D);<br/>
+              8 store F into '$output';<br/>
+            </pre>
+          </div>
         </div>
 
         <div className="card" id="jitterbit-data-integration-platform-ipaas">
@@ -83,8 +153,8 @@ const ProjectsPage = () => {
             distributed system coordinating this storage access relied on CORBA for inter-component communication.</div>
         </div>
 
-        <div className="card" id="compressed-bitmap-index-implementation">
-          <div className="card-title">Compressed Bitmap Index Implementation</div>
+        <div className="card" id="compressed-bitmap-index">
+          <div className="card-title">Compressed Bitmap Index</div>
           <div className="card-text">I researched and implemented a specialized compressed bitmap index that is highly
             effective for range queries. A key feature of this work is the ability to perform query execution directly without
             needing to decompress the index first, enhancing performance for high-dimensional data problems. This work was
