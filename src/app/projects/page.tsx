@@ -40,6 +40,7 @@ const ProjectsPage = () => {
 
         <div className="card" id="jgi-genome-portal">
           <div className="card-title">JGI Genome Portal</div>
+          <div className="card-title-subtitle">2008 - 2014 • JavaScript, AngularJS, Perl</div>
           <div className="card-text">
             The Department of Energy (DOE) Joint Genome Institute (JGI) is a national user facility with massive-scale DNA 
             sequencing and analysis capabilities dedicated to advancing genomics for bioenergy and environmental applications.
@@ -53,8 +54,7 @@ const ProjectsPage = () => {
                 height={600}
                 className="pt-4 pb-4"
               />
-            The 
-            JGI Genome Portal (<a href="https://genome.jgi.doe.gov">genome.jgi.doe.gov</a>) provides a unified access point
+            The JGI Genome Portal (<a href="https://genome.jgi.doe.gov">genome.jgi.doe.gov</a>) provides a unified access point
             to all JGI genomic databases and analytical tools. A user can find all DOE JGI sequencing projects and their status,
             search for and download assemblies and annotations of sequenced genomes, and interactively explore those genomes
             and compare them with other sequenced microbes, fungi, plants or metagenomes using specialized systems tailored
@@ -82,6 +82,7 @@ const ProjectsPage = () => {
 
         <div className="card" id="elviz-metagenome-visualization">
           <div className="card-title">Elviz: metagenome visualization</div>
+          <div className="card-title-subtitle">2015 • AngularJS, JavaScript, WebGL</div>
           <div className="card-text">
               <LightboxImage 
                 src="/img/elviz.png" 
@@ -109,6 +110,7 @@ const ProjectsPage = () => {
 
         <div className="card" id="biopig-hadoop-based-genomic-analysis-toolkit">
           <div className="card-title">BioPig: Hadoop-based Genomic Analysis Toolkit</div>
+          <div className="card-title-subtitle">2013 • Java, Python, Pig Latin, Hadoop</div>
           <div className="card-text">BioPig is a Hadoop-based analytic toolkit designed to scale large-scale sequence analysis
             to data volumes that overwhelm traditional tools. It sits on top of Hadoop MapReduce and the Pig data-flow language
             to provide a higher-level, more programmable framework for bioinformatics tasks, with emphasis on scalability,
@@ -159,6 +161,7 @@ const ProjectsPage = () => {
 
         <div className="card" id="commerceroute-data-integration-and-workflow-solutions">
           <div className="card-title">CommerceRoute Data Integration and Workflow Solutions</div>
+          <div className="card-title-subtitle">1997 - 2003 • C++, Microsoft MFC, Java</div>
           <div className="card-text">In 1997 I was the engineering founder of what became CommerceRoute.
             The first product was a workflow/Business Process Modeling (BPM) offering. It featured a client tool
             for defining the flow, a rules database, and a rules engine. You would define a workflow process,
@@ -212,7 +215,7 @@ const ProjectsPage = () => {
             started with 2 multi-core machines and one database server. From there, customers would add capacity as needed by adding more machines.
             This was designed to be a simple process and was done via the web interface. For enterprises, they would add a second database server,
             which would run in a two-phase commit mode to ensure data consistency. In that mode, each query is executed in a way that
-            the transaction succeeds only after both database server have confirm a successful commit. During one demo we did to a large
+            the transaction succeeds only after both database servers have confirmed a successful commit. During one demo we did to a large
             enterprise customer, we used a workflow with complex logic with loops and data dependencies 
             between tasks. In the middle of the demo, we pulled the power to the machine and waited for it to restart.
             When it came back online, the process continued and completed successfully. This was possible because the source of
@@ -222,6 +225,7 @@ const ProjectsPage = () => {
 
         <div className="card" id="multi-dimensional-clustering">
           <div className="card-title">Multi-dimensional Clustering Algorithm</div>
+          <div className="card-title-subtitle">1997 - 1999 • C++, Java</div>
           <div className="card-text">When I joined the Scientific Data Management R&D group at Lawrence Berkeley Laboratory in 1997,
             the first project I worked on was a multi-dimensional clustering algorithm. As the high energy physics community was preparing
             for the Large Hadron Collider, they looked to our group to help manage the data. My task was to come up with an 
@@ -268,6 +272,7 @@ const ProjectsPage = () => {
 
         <div className="card" id="compressed-bitmap-index">
           <div className="card-title">Compressed Bitmap Index</div>
+          <div className="card-title-subtitle">1997 - 1999 • C++</div>
           <div className="card-text">To be able to serve high energy physics data from tape systems, we needed to be able
             to quickly estimate the size of a result set for a particular query before the data retrieval request was executed.
             This would allow the scientists to refine their queries before retrieving the data. 
@@ -343,7 +348,9 @@ const ProjectsPage = () => {
 
     lnum = lnum - result_num;
     rnum = rnum - result_num;
-    encode( result, result_bit, result_num );
+    encode( result, 
+            result_bit,
+            result_num );
   }
   return result;
 }`}</pre>
@@ -352,6 +359,7 @@ const ProjectsPage = () => {
 
         <div className="card" id="cosmic-microwave-background-cmb-spectrum-analysis">
           <div className="card-title">Cosmic Microwave Background (CMB) Spectrum Analysis</div>
+          <div className="card-title-subtitle">1990s • Fortran</div>
           <div className="card-text">This research involved a detailed analysis of observations related to the Cosmic
             Microwave Background (CMB) radiation intensity, a relic of the Big Bang. The resulting analysis provided new,
             more precise values for the best fit temperature of the CMB (2.7356 ± 0.0038 K at 95% CL) and calculated the speed
@@ -360,6 +368,7 @@ const ProjectsPage = () => {
 
         <div className="card" id="isotope-explorer">
           <div className="card-title">Isotope Explorer</div>
+          <div className="card-title-subtitle">1995 • C++, Borland OWL, Microsoft MFC</div>
           <div className="card-text">In 1995 I moved to Berkeley to work on a visualization tool for nuclei of isotopes 
             at Lawrence Berkeley Laboratory.
             Originally called VuENSDF, it is a tool for exploring the nuclear data from the ENSDF database. Up till then,
@@ -390,6 +399,7 @@ const ProjectsPage = () => {
 
         <div className="card" id="batmud">
           <div className="card-title">BatMUD</div>
+          <div className="card-title-subtitle">1991 • LPC</div>
           <div className="card-text">A MUD (Multi-User Dungeon) is an online role-playing game. In 1991 I was at the
             university and joined BatMUD as a player. Back then you accessed the game via a telnet client.
             I wizzed (reached level 20 and beat Tiamat) and started extending the

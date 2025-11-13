@@ -36,7 +36,19 @@ body.dark-mode .card:target {
 .card-title {
     font-size: 1.5rem;
     font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.card-title-subtitle {
+    font-size: 0.875rem;
+    font-weight: normal;
+    color: #666;
     margin-bottom: 1rem;
+    font-style: italic;
+}
+
+body.dark-mode .card-title-subtitle {
+    color: #999;
 }
 
 .card-subtitle {
@@ -101,6 +113,11 @@ body.dark-mode .card pre {
 
     .card-title {
         font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .card-title-subtitle {
+        font-size: 0.8rem;
         margin-bottom: 0.75rem;
     }
 
