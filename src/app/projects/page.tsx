@@ -205,6 +205,19 @@ const ProjectsPage = () => {
             For example the <a href="https://sourceforge.net/p/jitterbit/code/39302/tree/trunk/integration/cpp/konga/ProcessEngine/Engine/RoutingEngineCore.cpp">RoutingEngineCore.cpp</a> file
             handles the routing logic for the workflow.
           </div>
+          <div className="card-subtitle pt-4">Scaling</div>
+          <div className="card-text">
+            The workflow engine is multi-threaded and will detect the number of cores available and use them. It is also able to scale
+            as a cluster of machines. In this mode, synchronization is handled via the database. The standard Syncx appliance configuration
+            started with 2 multi-core machines and one database server. From there, customers would add capacity as needed by adding more machines.
+            This was designed to be a simple process and was done via the web interface. For enterprises, they would add a second database server,
+            which would run in a two-phase commit mode to ensure data consistency. In that mode, each query is executed in a way that
+            the transaction succeeds only after both database server have confirm a successful commit. During one demo we did to a large
+            enterprise customer, we used a workflow with complex logic with loops and data dependencies 
+            between tasks. In the middle of the demo, we pulled the power to the machine and waited for it to restart.
+            When it came back online, the process continued and completed successfully. This was possible because the source of
+            truth for the workflow logic and state was always the database.
+          </div>
         </div>
 
         <div className="card" id="query-estimator-for-petabyte-storage-systems">
@@ -228,12 +241,12 @@ const ProjectsPage = () => {
 
         <div className="card" id="multi-dimensional-clustering">
           <div className="card-title">Multi-dimensional Clustering Algorithm</div>
-          <div className="card-text">When I joined the Scientific Data Managment R&D group at Lawrence Berkeley Laboratory in 1997,
+          <div className="card-text">When I joined the Scientific Data Management R&D group at Lawrence Berkeley Laboratory in 1997,
             the first project I worked on was a multi-dimensional clustering algorithm. As the high energy physics community was preparing
             for the Large Hadron Collider, they looked to our group to help manage the data. My task was to come up with an 
             algorithm to find clusters of collision events. An "event" is when two particles collide in a collider. The data describes
             how many of each type of elementary particle were produced in the collision, along with data for each particle,
-            such is momentum and energy. We were dealing with 100 - 150 columns or dimensions of data. The events tend to cluster
+            such as momentum and energy. We were dealing with 100 - 150 columns or dimensions of data. The events tend to cluster
             into groups of events that are similar. My task was to find them.
           </div>
           <div className="card-subtitle pt-4">Algorithm</div>
