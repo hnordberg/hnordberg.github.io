@@ -18,12 +18,12 @@ const ProjectsPage = () => {
       title: 'Multi-dimensional Clustering Algorithm'
     },
     {
-      id: 'query-estimator-for-petabyte-storage-systems',
-      title: 'Query Estimator for Petabyte Storage Systems'
-    },
-    {
       id: 'compressed-bitmap-index',
       title: 'Compressed Bitmap Index'
+    },
+    {
+      id: 'query-estimator-for-petabyte-storage-systems',
+      title: 'Query Estimator for Petabyte Storage Systems'
     },
     {
       id: 'cosmic-microwave-background-cmb-spectrum-analysis',
@@ -81,7 +81,7 @@ const ProjectsPage = () => {
         </div>
 
         <div className="card" id="elviz-metagenome-visualization">
-          <div className="card-title">Elviz -- metagenome visualization</div>
+          <div className="card-title">Elviz: metagenome visualization</div>
           <div className="card-text">
               <LightboxImage 
                 src="/img/elviz.png" 
@@ -220,25 +220,6 @@ const ProjectsPage = () => {
           </div>
         </div>
 
-        <div className="card" id="query-estimator-for-petabyte-storage-systems">
-          <div className="card-title">Query Estimator for Petabyte Storage Systems</div>
-          <div className="card-text">This component was developed as part of a Department of Energy (DOE) Grand Challenge
-            project focused on handling petabytes (in 1998) of data stored on robotic tape systems (HPSS). The Query Estimator utilizes
-            a compressed bitmap index I researched and implemented to quickly estimate the size of a result set for a particular
-            query before the data retrieval request is executed, optimizing access to massive multi-dimensional datasets. The
-            distributed system coordinating this storage access relied on CORBA for inter-component communication.
-          </div>
-        </div>
-
-        <div className="card" id="compressed-bitmap-index">
-          <div className="card-title">Compressed Bitmap Index</div>
-          <div className="card-text">I researched and implemented a specialized compressed bitmap index that is highly
-            effective for range queries. A key feature of this work is the ability to perform query execution directly without
-            needing to decompress the index first, enhancing performance for high-dimensional data problems. This work was
-            published in a scientific paper titled "Notes on Design and Implementation of Compressed Bit Vectors".
-          </div>
-        </div>
-
         <div className="card" id="multi-dimensional-clustering">
           <div className="card-title">Multi-dimensional Clustering Algorithm</div>
           <div className="card-text">When I joined the Scientific Data Management R&D group at Lawrence Berkeley Laboratory in 1997,
@@ -246,12 +227,17 @@ const ProjectsPage = () => {
             for the Large Hadron Collider, they looked to our group to help manage the data. My task was to come up with an 
             algorithm to find clusters of collision events. An "event" is when two particles collide in a collider. The data describes
             how many of each type of elementary particle were produced in the collision, along with data for each particle,
-            such as momentum and energy. We were dealing with 100 - 150 columns or dimensions of data. The events tend to cluster
-            into groups of events that are similar. My task was to find them.
+            such as momentum and energy.
+          </div>
+          <div className="card-subtitle pt-4">The Curse of Dimensionality</div>
+          <div className="card-text">
+            We were dealing with 100 - 150 columns or dimensions of data.
+            Classical clustering algorithms like k-means or hierarchical clustering break down
+            when you have that many dimensions. This is known as the curse of dimensionality.
+            The events tend to cluster into groups of events that are similar. My task was to find them.
           </div>
           <div className="card-subtitle pt-4">Algorithm</div>
-          <div className="card-text">Classical clustering algorithms like k-means or hierarchical clustering break down
-            when you have that many dimensions. I relied on the fact that the data is very sparse in higher dimensions. 
+          <div className="card-text"> I relied on the fact that the data is very sparse in higher dimensions. 
             Since the number of events was large but known, I decided to use a hash table to store information about
             only the non-empty cells. The algorithm was:
             <ul className="list">
@@ -277,6 +263,90 @@ const ProjectsPage = () => {
             />
             Selecting the bins was a task of its own. The Java Applet allowed you to explore what bins 
             yielded the best clusters.
+          </div>
+        </div>
+
+        <div className="card" id="compressed-bitmap-index">
+          <div className="card-title">Compressed Bitmap Index</div>
+          <div className="card-text">To be able to serve high energy physics data from tape systems, we needed to be able
+            to quickly estimate the size of a result set for a particular query before the data retrieval request was executed.
+            This would allow the scientists to refine their queries before retrieving the data. 
+            To this end, I researched and implemented a specialized compressed bitmap (a.k.a. bit-sliced) index that is highly
+            effective for range queries. The queries were logical joins of ranges on several columns.
+            A key feature of this work is the ability to perform query execution directly without
+            needing to decompress the index first. 
+            One idea was to run clustering on the data, and re-order the events based on clusters. 
+            In 1995 Gennady Antoshenkov developed the Byte-aligned Bitmap Code (BBC), a well-known scheme for bitmap compression.
+            Our work is similar but we added several novel features to make them more efficient for our use case.
+          </div>
+          <div className="card-subtitle pt-4">Algorithm</div>
+          <div className="card-text">
+            We assume that the objects are stored in a certain order in the index, and this order does not change.
+            Thus, we first generate vertical partitions for each of the 100 properties. If all the properties are
+            short integers, the size of all the partitions is 20 GBs (100 × 2 × 10⁸ bytes). The size doubles if 
+            all were real numbers. The vertical partitions are stored on disk. Now the bit-sliced index is designed
+            to be a concise representation of these partitions, so that it is much smaller and can be stored in memory.
+            Since the properties we deal with are numeric, we can partition each dimension into bins. For example, we
+            can partition the "energy" dimension into 1–2 GeV, 2–3 GeV, and so on. We then assign to each bin a bit
+            vector, where a "0" means that the value for that object does not fall in that bin, and "1" means it does.
+            <LightboxImage 
+              src="/img/bit-slices.png" 
+              alt="Partitions" 
+              width={800} 
+              height={600}
+              className="pt-4 pb-4"
+            />
+            The figure shows an example where Property 1 was partitioned into 7 bins, Property 2 into 5 bins, etc. Note
+            that only a single "1" can exist for each row of each property, since the value only falls into a single bin.
+            <br/><br/>
+            We now compress the vertical bit-vectors using a modified version of run-length encoding. The advantage of
+            this scheme is that boolean operations can be performed directly on the compressed vectors without decompression.
+            This scheme is particularly effective for highly skewed data such as High Energy Physics data. Our version of
+            run-length encoding does not encode short sequences into counts. Instead, it represents them as-is. A single
+            bit in each word indicates whether it is a count or a pattern. Results show a compression factor
+            of 10-100.
+            The choice of bins and bin boundaries has a significant impact on compression. Assume 100 properties,
+            each with 10 bins. This requires 10¹¹ bits before compression. With a compression factor of 100, the 
+            space required is 10⁹ bits, or about 125 MBs. This can be stored permanently in memory. Note that it 
+            is not necessary to keep all bit slices in memory. Only the most relevant slices for a query need to be retained.
+          </div>
+          <div className="card-subtitle pt-4">Logical Operations on bit slices</div>
+          <div className="card-text">
+            The compression scheme described above permits logical operations on the compressed bit-slices (bitmap columns). This
+            is an important feature of the compression algorithm used, since it makes it possible to do the operations in memory.
+            These operations take as input two compressed slices and produce one compressed slice (the input for "negation" is only
+            one bit-slice).
+
+            All logical operations are implemented the same way:
+            <ul className="list">
+              <li>The state ["0" or "1"] at the current position and the number of bits of the current run (number of consecutive
+                  bits of that same state), 'num', from each bit-slice, are extracted (decoded).
+              </li>
+              <li>
+                  The result is created (encoded) by performing the required logical operation (AND, OR, XOR) on the state bits from
+                  each bit-slice and subtracting the smaller 'num' from the larger and appending the result to the resulting
+                  bit-slice. The resulting bit-slice is encoded as we go along, using the most efficient method for the size of its
+                  run lengths.
+              </li>
+            </ul>
+            An example: pseudo code for logical or:
+            <pre>{`function bmp_or( bitslice left,
+                 bitslice right )
+{
+  while( there_are_more_bits(left) 
+    and there_are_more_bits(right) )
+  {
+    lbit = decode( left, lnum );
+    rbit = decode( right, rnum );
+    result_bit = lbit | rbit;
+    result_num = min( lnum, rnum );
+
+    lnum = lnum - result_num;
+    rnum = rnum - result_num;
+    encode( result, result_bit, result_num );
+  }
+  return result;
+}`}</pre>
           </div>
         </div>
 
