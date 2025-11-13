@@ -10,10 +10,6 @@ const ProjectsPage = () => {
       title: 'BioPig: Hadoop-based Genomic Analysis Toolkit'
     },
     {
-      id: 'jitterbit-data-integration-platform-ipaas',
-      title: 'Jitterbit Data Integration Platform (iPaaS)'
-    },
-    {
       id: 'commerceroute-data-integration-and-workflow-solutions',
       title: 'CommerceRoute Data Integration and Workflow'
     },
@@ -65,7 +61,9 @@ const ProjectsPage = () => {
             to each particular class of organisms.
             As Team Lead, I was
             responsible for this portal, which provides access to data at multiple stages of genome analysis and annotation
-            pipelines.
+            pipelines.<br/><br/>
+            We published a paper on it in Nucleic Acids Research in 2012: <a href="https://doi.org/10.1093/nar/gkr947">
+            The Genome Portal of the Department of Energy</a>.
           </div>
           <div className="card-subtitle pt-4">Technology</div>
           <div className="card-text">
@@ -138,7 +136,7 @@ const ProjectsPage = () => {
               alt="BioPig performance and scalability" 
               width={800} 
               height={600}
-              className="pt-4 pb-4"
+              className="pt-4"
             />
           </div>
           <div className="card-subtitle pt-4">Example</div>
@@ -159,25 +157,53 @@ const ProjectsPage = () => {
           </div>
         </div>
 
-        <div className="card" id="jitterbit-data-integration-platform-ipaas">
-          <div className="card-title">Jitterbit Data Integration Platform (iPaaS)</div>
-          <div className="card-text">As a co-founder and Chief Software Architect, I developed Jitterbit into a cloud-based
-            data integration company recognized as a leader and visionary in the iPaaS field. The solution expanded a prior
-            product to include the ability to call and host web services, offering visual mapping for integration across
-            structures like XML, databases, LDAP directories, and multiple cloud applications (e.g., Salesforce.com,
-            NetSuite).
-          </div>
-        </div>
-
         <div className="card" id="commerceroute-data-integration-and-workflow-solutions">
           <div className="card-title">CommerceRoute Data Integration and Workflow Solutions</div>
-          <div className="card-text">This suite of products began with the architecture and implementation of SilkRoute (later
-            WebWorkflow), a core workflow/Business Process Modeling product featuring a client tool, a rule database, and an
-            engine written in C++ and ported to Linux and Solaris. Building upon this powerful engine, we developed the
-            CommerceRoute data integration solution, which handles transformations and transfers between sources and targets
-            (including FTP, SAP, databases, and formats like XML/EDI) and implements the RosettaNet B2B framework. The
-            complete solution was later sold as the Syncx integration appliance, reducing support costs by limiting customer
-            access strictly to a web browser.
+          <div className="card-text">In 1997 I was the engineering founder of what became CommerceRoute.
+            The first product was a workflow/Business Process Modeling (BPM) offering. It featured a client tool
+            for defining the flow, a rules database, and a rules engine. You would define a workflow process,
+            with tasks linked together by routes. It didn't have any restrictions on how complicated the flow could be,
+            allowing recursive flows and multiple instances of the same task. Right away people wanted to pull
+            in data from external sources, and use them in the logic. We started adding connections to databases,
+            LDAP, SAP, FTP, local files, and formats like XML, EDI, flat files, etc.
+            With time people started to use the flows for data movement instead
+            of just process automation. That's how the next product was born.
+          </div>
+          <div className="card-subtitle pt-4">Data Integration</div>
+          <div className="card-text">
+            Building upon the powerful engine, we developed the CommerceRoute data integration solution, 
+            which handles transformations and transfers between sources and targets, and implemented the 
+            RosettaNet B2B framework. The complete solution was later sold as the Syncx integration appliance,
+            reducing support costs. 
+          </div>
+          <div className="card-subtitle pt-4">CommerceRoute SaaS</div>
+          <div className="card-text">
+            The launch of CommerceRoute Syncx was accompanied by a new SaaS offering: commerceroute.net
+            All Syncx appliances talked to commerceroute.net and reported health and usage data. As needed,
+            updates were pushed to the appliances. This included both OS level security updates and new features.
+            <LightboxImage 
+              src="/img/commerceroute-web-data-interchange-login.png" 
+              alt="CommerceRoute Web Data Interchange Login" 
+              width={800} 
+              height={600}
+              className="pt-4"
+            />
+          </div>
+          <div className="card-subtitle pt-4">Acquisition</div>
+          <div className="card-text">In 2003 a new company was formed to acquire the product. The new company was called 
+            Jitterbit, and it acquired the technology from CommerceRoute. A few of the founders of CommerceRoute stayed on
+            to start Jitterbit. Jitterbit is now a cloud-based data integration company recognized as a leader 
+            and visionary in the iPaaS field.
+          </div>
+          <div className="card-subtitle pt-4">Technology and Architecture</div>
+          <div className="card-text">
+            The engine was written in C++ using boost libraries. The workflow client was written in C++ using Microsoft's MFC library.
+            For a while Jitterbit open sourced the product, and it is <a href="https://sourceforge.net/p/jitterbit/code/HEAD/tree/">available</a> on
+            SourceForge. After a while Jitterbit completely stopped using the workflow product and focused on the data integration product.
+            But it wasn't until 2009 that they pushed an update to remove the workflow logic from the code. So you can still find my
+            original code in the repository by <a href="https://sourceforge.net/p/jitterbit/code/30994/tree/trunk/">going back through the history</a>.
+            For example the <a href="https://sourceforge.net/p/jitterbit/code/39302/tree/trunk/integration/cpp/konga/ProcessEngine/Engine/RoutingEngineCore.cpp">RoutingEngineCore.cpp</a> file
+            handles the routing logic for the workflow.
           </div>
         </div>
 
@@ -236,7 +262,7 @@ const ProjectsPage = () => {
               height={600}
               className="pt-4 pb-4"
             />
-            Selecting the bins was a task of its own. The Java Applet allowed you to explorer what bins 
+            Selecting the bins was a task of its own. The Java Applet allowed you to explore what bins 
             yielded the best clusters.
           </div>
         </div>
