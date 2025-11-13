@@ -15,7 +15,7 @@ const PublicationsPage = () => {
             <span className="publication-category">Data Visualization</span> Michael Cantor, Henrik Nordberg, et al.,
             <a href="https://doi.org/10.1186/s12859-015-0566-4"> Elviz – exploration of metagenome assemblies with an
               interactive visualization tool</a>, BMC Bioinformatics 2015 16:130, DOI: 10.1186/s12859-015-0566-4;
-              AngularJS based visualization tool available at <a href="http://genome.jgi.doe.gov/viz">http://genome.jgi.doe.gov/viz</a>
+              AngularJS and WebGL based visualization tool available at <a href="https://genome.jgi.doe.gov/viz">genome.jgi.doe.gov/viz</a>
           </li>
           <li>
             <span className="publication-category">Big Data</span> Henrik Nordberg et al.,
