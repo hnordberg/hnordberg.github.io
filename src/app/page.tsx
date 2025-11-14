@@ -9,7 +9,7 @@ const Home = () => {
 
   return (
     <main>
-      <p className='text-box'>Henrik Nordberg is a Principal Engineer and technology leader with 20+ years 
+      <p className='text-box mx-auto'>Henrik Nordberg is a Principal Engineer and technology leader with 20+ years 
         of experience architecting high-performance
         data platforms and leading engineering teams in healthcare, genomics, and cloud integration. Proven 
         success in building scalable, secure systems, modernizing DevOps pipelines, and mentoring engineers.
