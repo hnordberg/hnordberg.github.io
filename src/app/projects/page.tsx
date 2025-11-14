@@ -498,7 +498,7 @@ const ProjectsPage = () => {
               alt="Thermo dynamic temperature as a function of frequency of the CMB dipole" 
               width={800} 
               height={600}
-              className="pt-4 pb-4"
+              className="pt-4"
               caption="Thermo dynamic temperature as a function of frequency of the CMB dipole"
             />
           </div>

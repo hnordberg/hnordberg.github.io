@@ -8,7 +8,7 @@ export const mathContent =
   '    By Taylor expansion of $\\chi^2$ we have\n' +
   '</p>\n' +
   '\n' +
-  '$$\\begin{multline}\\chi^2 = \\chi^2(0)+\\sum_i \\frac{\\partial \\chi^2}{\\partial x_i}x_i\\\\+\\frac{1}{2}\\sum_{i,j}\\frac{\\partial^2\\chi^2}{\\partial x_i\\partial x_j}x_ix_j+...\\end{multline}$$\n' +
+  '$$\\begin{multline*}\\chi^2 = \\chi^2(0)+\\sum_i \\frac{\\partial \\chi^2}{\\partial x_i}x_i\\\\+\\frac{1}{2}\\sum_{i,j}\\frac{\\partial^2\\chi^2}{\\partial x_i\\partial x_j}x_ix_j+...\\end{multline*}$$\n' +
   '\n' +
   '<p>which we can write as</p>\n' +
   '\n' +
@@ -28,13 +28,13 @@ export const mathContent =
   '            \\left({\\partial t(\\vec{a}) \\over \\partial a_i}\\right)_q\n' +
   '            {\\bf M}_{qr}^{-1} (s-t(\\vec{a}))_r \\right\\}}$$\n' +
   '\n' +
-  '<div style="margin-left: -2em; font-size: 90%;">$$\\begin{multline}{\\partial ^2 \\chi ^2 \\over \\partial a_i \\partial a_j} = 2\\sum_{q,r}\\left[\n' +
+  '<div style="margin-left: -2em; font-size: 90%;">$$\\begin{multline*}{\\partial ^2 \\chi ^2 \\over \\partial a_i \\partial a_j} = 2\\sum_{q,r}\\left[\n' +
   '            \\left\\{\\left({\\partial t(\\vec{a}) \\over \\partial a_i}\\right)_q\n' +
   '            {\\bf M}_{qr}^{-1} \\left({\\partial t(\\vec{a}) \\over \\partial a_j}\\right)_r \\right\\}-\n' +
   '            \\right.\\\\ \\left.\n' +
   '            \\left\\{\\left({\\partial^2 t(\\vec{a}) \\over \\partial a_i\\partial a_j}\\right)_q\n' +
   '            {\\bf M}_{qr}^{-1} (s-t(\\vec{a}))_r \\right\\}\n' +
-  '            \\right]\\end{multline}$$</div>\n' +
+  '            \\right]\\end{multline*}$$</div>\n' +
   '\n' +
   '<p>Define</p>\n' +
   '\n' +
@@ -52,7 +52,7 @@ export const mathContent =
   '    \\right\\}$$\n' +
   '\n' +
   '<p>\n' +
-  '    Following equation (\\ref{eq:parabola}) we have $\\bf\\alpha={1\\over 2}\n' +
+  '    Following equation (\\ref{eq:parabola}) we have ${\\bf\\alpha}={1\\over 2}\n' +
   '    {\\bf D}$ and we can re-write eq.~(\\ref{eq:just_above}) as\n' +
   '</p>\n' +
   '\n' +
@@ -90,7 +90,7 @@ export const mathContent =
   '\n' +
   '<p>We also need to calculate the standard deviations, $\\delta a_i$,</p>\n' +
   '\n' +
-  '$${\\bf C}=\\boldsymbol{\\alpha}^{-1}$$\n' +
+  '$${\\bf C}={\\bf{\\alpha}}^{-1}$$\n' +
   '\n' +
   '<p>and thus,</p>\n' +
   '\n' +
