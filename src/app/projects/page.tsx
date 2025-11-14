@@ -46,12 +46,23 @@ const ProjectsPage = () => {
     const renderMath = () => {
       if (hasRendered) return; // Prevent multiple renders
       if (typeof window !== 'undefined' && (window as any).MathJax && mathContentRef.current) {
-        // Typeset the specific element containing math content
-        (window as any).MathJax.typesetPromise([mathContentRef.current]).then(() => {
+        const MathJax = (window as any).MathJax;
+        
+        // Check if typesetPromise exists, otherwise use typeset
+        if (typeof MathJax.typesetPromise === 'function') {
+          MathJax.typesetPromise([mathContentRef.current]).then(() => {
+            hasRendered = true;
+          }).catch((err: any) => {
+            console.error('MathJax typeset error:', err);
+          });
+        } else if (typeof MathJax.typeset === 'function') {
+          // Fallback to typeset if typesetPromise doesn't exist
+          MathJax.typeset([mathContentRef.current]);
           hasRendered = true;
-        }).catch((err: any) => {
-          console.error('MathJax typeset error:', err);
-        });
+        } else {
+          // Wait a bit more if MathJax isn't fully ready
+          setTimeout(() => renderMath(), 200);
+        }
       }
     };
     
@@ -59,11 +70,15 @@ const ProjectsPage = () => {
     const checkAndRender = () => {
       if (hasRendered) return true;
       if (typeof window !== 'undefined' && (window as any).MathJax && mathContentRef.current) {
-        // Small delay to ensure DOM is fully updated
-        setTimeout(() => {
-          renderMath();
-        }, 100);
-        return true;
+        const MathJax = (window as any).MathJax;
+        // Check if MathJax is ready (has startup property or typesetPromise)
+        if (MathJax.startup || typeof MathJax.typesetPromise === 'function' || typeof MathJax.typeset === 'function') {
+          // Small delay to ensure DOM is fully updated
+          setTimeout(() => {
+            renderMath();
+          }, 100);
+          return true;
+        }
       }
       return false;
     };
@@ -84,7 +99,7 @@ const ProjectsPage = () => {
     const timeout = setTimeout(() => {
       checkAndRender();
       clearInterval(interval);
-    }, 2000);
+    }, 3000);
     
     return () => {
       clearInterval(interval);
@@ -117,6 +132,35 @@ const ProjectsPage = () => {
       <Script
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
         strategy="lazyOnload"
+        onLoad={() => {
+          // MathJax is loaded, trigger rendering
+          if (mathContentRef.current && typeof window !== 'undefined' && (window as any).MathJax) {
+            const MathJax = (window as any).MathJax;
+            // Wait for MathJax to be ready
+            if (MathJax.startup && MathJax.startup.promise) {
+              MathJax.startup.promise.then(() => {
+                if (typeof MathJax.typesetPromise === 'function') {
+                  MathJax.typesetPromise([mathContentRef.current]).catch((err: any) => {
+                    console.error('MathJax typeset error:', err);
+                  });
+                } else if (typeof MathJax.typeset === 'function') {
+                  MathJax.typeset([mathContentRef.current]);
+                }
+              });
+            } else {
+              // Fallback: try after a short delay
+              setTimeout(() => {
+                if (typeof MathJax.typesetPromise === 'function') {
+                  MathJax.typesetPromise([mathContentRef.current]).catch((err: any) => {
+                    console.error('MathJax typeset error:', err);
+                  });
+                } else if (typeof MathJax.typeset === 'function') {
+                  MathJax.typeset([mathContentRef.current]);
+                }
+              }, 500);
+            }
+          }
+        }}
       />
       <Contents articles={articles} />
       <section className="card-grid">
@@ -517,11 +561,14 @@ const ProjectsPage = () => {
           <div className="card-text">
             This work shows strong evidence for the hot Big Bang model. The monopole
             CMB spectrum is very close to a blackbody spectrum.
-            There is a lot more math and physics than I can fit here. I wrote a Master's thesis on this,
-            available <a href="/henrik-thesis-final.pdf">here</a>. Dr. Smoot and I wrote a paper
-            on a more extensive analysis of the data, available <a href="https://arxiv.org/pdf/astro-ph/9805123">here</a>.
+            There is a lot more math and physics than I can fit here. 
+            I wrote my <a href="/henrik-thesis-final.pdf">Master's thesis</a> on this, and
+            Dr. Smoot and I wrote a paper with a <a href="https://arxiv.org/pdf/astro-ph/9805123">more
+            extensive analysis of the data</a>.
             Probably the most fun result is how we put an upper bound on the tachyon coupling constant, and
-            an upper bound on photon mass. Read the paper if you want to know more. Sadly George passed away in 2025.
+            an upper bound on the mass of a second species of photon. 
+            <br/><br/>
+            Sadly George passed away in 2025.
           </div>
         </div>
 
