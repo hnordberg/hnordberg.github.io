@@ -63,7 +63,7 @@ const LightboxImage = ({
         open={isLightboxOpen}
         close={() => setIsLightboxOpen(false)}
         slides={[{ src, alt }]}
-        closeOnBackdropClick={true}
+        controller={{ closeOnBackdropClick: true }}
         on={{
           click: () => setIsLightboxOpen(false),
         }}
