@@ -53,6 +53,7 @@ const ProjectsPage = () => {
                 width={800} 
                 height={600}
                 className="pt-4 pb-4"
+                caption="Tree of Life showing sequenced organisms and samples"
               />
             The JGI Genome Portal (<a href="https://genome.jgi.doe.gov">genome.jgi.doe.gov</a>) provides a unified access point
             to all JGI genomic databases and analytical tools. A user can find all DOE JGI sequencing projects and their status,
@@ -76,6 +77,7 @@ const ProjectsPage = () => {
                 width={800} 
                 height={600}
                 className="pt-4 pb-4"
+                caption="Genome browser implemented in Perl"
               />
           </div>
         </div>
@@ -90,6 +92,7 @@ const ProjectsPage = () => {
                 width={800} 
                 height={600}
                 className="pb-4"
+                caption="Interactive visualization of metagenome assemblies"
               />
               Elviz (Environmental Laboratory Visualization) is an interactive web-based tool
               for the visual exploration of assembled metagenomes and their complex metadata.
@@ -139,6 +142,7 @@ const ProjectsPage = () => {
               width={800} 
               height={600}
               className="pt-4"
+              caption="Performance comparison showing near-linear scaling with data size"
             />
           </div>
           <div className="card-subtitle pt-4">Example</div>
@@ -190,6 +194,7 @@ const ProjectsPage = () => {
               width={800} 
               height={600}
               className="pt-4"
+              caption="CommerceRoute SaaS web interface"
             />
           </div>
           <div className="card-subtitle pt-4">Acquisition</div>
@@ -264,6 +269,7 @@ const ProjectsPage = () => {
               width={800} 
               height={600}
               className="pt-4 pb-4"
+              caption="Java applet for exploring multi-dimensional clusters"
             />
             Selecting the bins was a task of its own. The Java Applet allowed you to explore what bins 
             yielded the best clusters.
@@ -300,6 +306,7 @@ const ProjectsPage = () => {
               width={800} 
               height={600}
               className="pt-4 pb-4"
+              caption="Example of bit-sliced index partitions"
             />
             The figure shows an example where Property 1 was partitioned into 7 bins, Property 2 into 5 bins, etc. Note
             that only a single "1" can exist for each row of each property, since the value only falls into a single bin.
@@ -359,11 +366,43 @@ const ProjectsPage = () => {
 
         <div className="card" id="cosmic-microwave-background-cmb-spectrum-analysis">
           <div className="card-title">Cosmic Microwave Background (CMB) Spectrum Analysis</div>
-          <div className="card-title-subtitle">1990s • Fortran</div>
-          <div className="card-text">This research involved a detailed analysis of observations related to the Cosmic
-            Microwave Background (CMB) radiation intensity, a relic of the Big Bang. The resulting analysis provided new,
-            more precise values for the best fit temperature of the CMB (2.7356 ± 0.0038 K at 95% CL) and calculated the speed
-            of our solar system relative to the CMB.</div>
+          <div className="card-title-subtitle">1996 - 1998 • Fortran</div>
+          <div className="card-text">
+            This research involved a detailed analysis of observations related to the Cosmic
+            Microwave Background (CMB) radiation intensity, a relic of the Big Bang.
+            In 1995 and 1996 I worked on the Isotope Explorer (see below) while also completing 
+            MSc in Physics, taking classes at UC Berkeley. When it came time to write my thesis,
+            Dr. Richard Firestone of the Isotopes Project at LBL put me in touch with Dr. George Smoot,
+            who had recently gathered data from his DMR experiment onboard the COBE satellite.
+          </div>
+          <div className="card-subtitle pt-4">Nobel Prize</div>
+          <div className="card-text">
+            The DMR data showed that the CMB was not uniform, but had a large difference in one direction,
+            and small variations all around. This dipole pattern showed the motion of our solar system,
+            and our local group of galaxies relative to the CMB. George received the Nobel Prize in Physics
+            in 2006 for this work.
+            <LightboxImage 
+              src="/img/george-smoot.jpg" 
+              alt="Dr. George Smoot and Dr. Steven Chu" 
+              width={800} 
+              height={600}
+              className="pt-4 pb-4"
+              caption="Dr. Chu and Dr. Smoot on the day of the Nobel Prize announcement. Photo: Henrik Nordberg"
+            />
+            The image shows Dr. George Smoot and Dr. Steven Chu, who was the lab director at the time and
+            also the Secretary of Energy, on the day of the announcement of the Nobel Prize in Physics. Dr. Chu
+            received the Nobel Prize in Physics in 1997. As a side note, Berkeley Lab is an amazing place.
+            George would tell me stories about his advisor, Luis Alvarez, who also was a Nobel Laureate in Physics (1968).
+            So you know, I still have a few years... :) I would attend the INPA (Institute for Nuclear and Particle Astrophysics)
+            seminars on a regular basis.
+            Whenever a new important paper was published, the authors would come and give a talk.
+            The lab has had 17 Nobel Prize winners affiliated with it. 
+          </div>
+          <div className="card-subtitle pt-4">Data Analysis</div>
+          <div className="card-text">
+            In addtion to the COBE data, George and I collected all known published data on the CMB spectrum.
+            I then wrote Fortran code to fit the data to various models. 
+          </div>
         </div>
 
         <div className="card" id="isotope-explorer">
@@ -383,6 +422,7 @@ const ProjectsPage = () => {
               width={800} 
               height={600}
               className="pt-4"
+              caption="Isotope Explorer visualization tool"
             />
           </div>
           <div className="card-subtitle pt-4">Technology</div>
