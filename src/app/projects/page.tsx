@@ -1,5 +1,10 @@
+"use client";
+
 import Contents from '../components/Contents'
 import LightboxImage from '../components/LightboxImage';
+import Script from 'next/script';
+import { useEffect, useRef } from 'react';
+import { mathContent } from './mathContent';
 
 const ProjectsPage = () => {
   const articles = [
@@ -33,8 +38,86 @@ const ProjectsPage = () => {
     { id: 'batmud', title: 'BatMUD' }
   ]
 
+  const mathContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let hasRendered = false;
+    
+    const renderMath = () => {
+      if (hasRendered) return; // Prevent multiple renders
+      if (typeof window !== 'undefined' && (window as any).MathJax && mathContentRef.current) {
+        // Typeset the specific element containing math content
+        (window as any).MathJax.typesetPromise([mathContentRef.current]).then(() => {
+          hasRendered = true;
+        }).catch((err: any) => {
+          console.error('MathJax typeset error:', err);
+        });
+      }
+    };
+    
+    // Wait for both MathJax to load and the ref to be set
+    const checkAndRender = () => {
+      if (hasRendered) return true;
+      if (typeof window !== 'undefined' && (window as any).MathJax && mathContentRef.current) {
+        // Small delay to ensure DOM is fully updated
+        setTimeout(() => {
+          renderMath();
+        }, 100);
+        return true;
+      }
+      return false;
+    };
+    
+    // Check immediately (in case content is already there)
+    if (checkAndRender()) {
+      return;
+    }
+    
+    // Poll until both conditions are met
+    const interval = setInterval(() => {
+      if (checkAndRender()) {
+        clearInterval(interval);
+      }
+    }, 100);
+    
+    // Fallback timeout
+    const timeout = setTimeout(() => {
+      checkAndRender();
+      clearInterval(interval);
+    }, 2000);
+    
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []); // Only run once on mount
+
   return (
     <main className="page-with-contents">
+      <Script
+        id="MathJax-config"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.MathJax = {
+              tex: {
+                inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
+                displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                tags: 'ams'
+              },
+              svg: {
+                fontCache: 'global'
+              }
+            };
+          `,
+        }}
+      />
+      <Script
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+        strategy="lazyOnload"
+      />
       <Contents articles={articles} />
       <section className="card-grid">
 
@@ -86,16 +169,16 @@ const ProjectsPage = () => {
           <div className="card-title">Elviz: metagenome visualization</div>
           <div className="card-title-subtitle">2015 • AngularJS, JavaScript, WebGL</div>
           <div className="card-text">
-              <LightboxImage 
-                src="/img/elviz.png" 
-                alt="Elviz -- metagenome visualization" 
-                width={800} 
-                height={600}
-                className="pb-4"
-                caption="Interactive visualization of metagenome assemblies"
-              />
               Elviz (Environmental Laboratory Visualization) is an interactive web-based tool
               for the visual exploration of assembled metagenomes and their complex metadata.
+              <LightboxImage 
+                src="/img/elviz.png" 
+                alt="Elviz: metagenome visualization" 
+                width={800} 
+                height={600}
+                className="pt-4 pb-4"
+                caption="Interactive visualization of metagenome assemblies"
+              />
               Elviz allows scientists to navigate metagenome assemblies across multiple dimensions and scales, plotting parameters
               such as GC content, relative abundance, phylogenetic affiliation and assembled contig length. Furthermore Elviz enables
               interactive exploration using real-time plot navigation, search, filters, axis selection, and the ability to drill from
@@ -402,6 +485,43 @@ const ProjectsPage = () => {
           <div className="card-text">
             In addition to the COBE data, George and I collected all known published data on the CMB spectrum.
             I then wrote Fortran code to fit the data to various models. 
+            <LightboxImage 
+              src="/img/cmb-spectrum.png" 
+              alt="CMB spectrum analysis" 
+              width={800} 
+              height={600}
+              className="pt-4 pb-4"
+              caption="Brightness as a function of frequency of the CMB"
+            />
+            <LightboxImage 
+              src="/img/cmb-dipole.png" 
+              alt="Thermo dynamic temperature as a function of frequency of the CMB dipole" 
+              width={800} 
+              height={600}
+              className="pt-4 pb-4"
+              caption="Thermo dynamic temperature as a function of frequency of the CMB dipole"
+            />
+          </div>
+          <div className="card-subtitle pt-4">Levenberg-Marquardt Method</div>
+          <div className="card-text">
+            I first tried gradient descent to fit the data to a model. It didn't converge in a reasonable time.
+            
+            <div
+              ref={mathContentRef}
+              dangerouslySetInnerHTML={{
+                __html: mathContent,
+              }}
+            />
+          </div>
+          <div className="card-subtitle pt-4">Summary</div>
+          <div className="card-text">
+            This work shows strong evidence for the hot Big Bang model. The monopole
+            CMB spectrum is very close to a blackbody spectrum.
+            There is a lot more math and physics than I can fit here. I wrote a Master's thesis on this,
+            available <a href="/henrik-thesis-final.pdf">here</a>. Dr. Smoot and I wrote a paper
+            on a more extensive analysis of the data, available <a href="https://arxiv.org/pdf/astro-ph/9805123">here</a>.
+            Probably the most fun result is how we put an upper bound on the tachyon coupling constant, and
+            an upper bound on photon mass. Read the paper if you want to know more. Sadly George passed away in 2025.
           </div>
         </div>
 
