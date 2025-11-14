@@ -93,6 +93,10 @@ body.dark-mode .card-title-subtitle {
     text-decoration: underline;
 }
 
+body.dark-mode .card a {
+    color: #64B5F6;
+}
+
 .card pre {
     background-color: #f5f5f5;
     border: 1px solid #ddd;

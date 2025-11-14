@@ -30,9 +30,17 @@ body.dark-mode .publications-container li {
   font-weight: bold;
 }
 
+body.dark-mode .publication-category {
+  color: #64B5F6;
+}
+
 .publications-container li a {
   color: #2196F3;
   text-decoration: none;
+}
+
+body.dark-mode .publications-container li a {
+  color: #64B5F6;
 }
 
 .publications-container li a:hover {
