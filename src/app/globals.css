@@ -347,3 +347,12 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+/* Image caption styles */
+.image-caption {
+    color: #666;
+}
+
+body.dark-mode .image-caption {
+    color: #999;
+}

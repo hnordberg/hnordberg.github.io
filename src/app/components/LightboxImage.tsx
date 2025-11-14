@@ -12,6 +12,7 @@ interface LightboxImageProps {
   height?: number
   className?: string
   title?: string
+  caption?: string
 }
 
 const LightboxImage = ({ 
@@ -20,32 +21,52 @@ const LightboxImage = ({
   width = 800, 
   height = 600,
   className = '',
-  title
+  title,
+  caption
 }: LightboxImageProps) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
 
   return (
     <>
-      <Image 
-        src={src} 
-        alt={alt} 
-        title={title || 'Click to enlarge'}
-        width={width} 
-        height={height}
-        className={className}
-        onClick={() => setIsLightboxOpen(true)}
-        style={{ cursor: 'pointer', transition: 'opacity 0.2s' }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.opacity = '0.9'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.opacity = '1'
-        }}
-      />
+      <div style={{ display: 'inline-block', width: '100%' }} className={className}>
+        <Image 
+          src={src} 
+          alt={alt} 
+          title={title || 'Click to enlarge'}
+          width={width} 
+          height={height}
+          onClick={() => setIsLightboxOpen(true)}
+          style={{ cursor: 'pointer', transition: 'opacity 0.2s' }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = '0.9'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = '1'
+          }}
+        />
+        {caption && (
+          <div 
+            style={{
+              fontSize: '0.875rem',
+              fontStyle: 'italic',
+              marginTop: '0.5rem',
+              textAlign: 'center',
+              lineHeight: '1.4'
+            }}
+            className="image-caption"
+          >
+            {caption}
+          </div>
+        )}
+      </div>
       <Lightbox
         open={isLightboxOpen}
         close={() => setIsLightboxOpen(false)}
         slides={[{ src, alt }]}
+        closeOnBackdropClick={true}
+        on={{
+          click: () => setIsLightboxOpen(false),
+        }}
       />
     </>
   )
