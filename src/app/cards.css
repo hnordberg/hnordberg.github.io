@@ -73,6 +73,17 @@ body.dark-mode .card-title-subtitle {
     margin-bottom: 0.5rem;
 }
 
+.card ol {
+    list-style-type: decimal;
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card ol li {
+    margin-bottom: 0.5rem;
+}
+
 .card a {
     color: #2196F3;
     text-decoration: none;
@@ -131,6 +142,12 @@ body.dark-mode .card pre {
     }
 
     .card ul.list {
+        margin-left: 1.25rem;
+        margin-top: 0.4rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .card ol {
         margin-left: 1.25rem;
         margin-top: 0.4rem;
         margin-bottom: 0.4rem;
