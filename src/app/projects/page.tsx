@@ -9,7 +9,7 @@ import { mathContent } from './mathContent';
 const ProjectsPage = () => {
   const articles = [
     { id: 'jgi-genome-portal', title: 'JGI Genome Portal' },
-    { id: 'elviz-metagenome-visualization', title: 'Elviz: metagenome visualization' },
+    { id: 'elviz-metagenome-visualization', title: 'Elviz: Metagenome Visualization' },
     {
       id: 'biopig-hadoop-based-genomic-analysis-toolkit',
       title: 'BioPig: Hadoop-based Genomic Analysis Toolkit'
@@ -210,7 +210,7 @@ const ProjectsPage = () => {
         </div>
 
         <div className="card" id="elviz-metagenome-visualization">
-          <div className="card-title">Elviz: metagenome visualization</div>
+          <div className="card-title">Elviz: Metagenome Visualization</div>
           <div className="card-title-subtitle">2015 • AngularJS, JavaScript, WebGL</div>
           <div className="card-text">
               Elviz (Environmental Laboratory Visualization) is an interactive web-based tool
