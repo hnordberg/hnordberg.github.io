@@ -4,7 +4,7 @@ import LightboxImage from '../components/LightboxImage';
 const ProjectsPage = () => {
   const articles = [
     { id: 'jgi-genome-portal', title: 'JGI Genome Portal' },
-    { id: 'elviz-metagenome-visualization', title: 'Elviz -- metagenome visualization' },
+    { id: 'elviz-metagenome-visualization', title: 'Elviz: metagenome visualization' },
     {
       id: 'biopig-hadoop-based-genomic-analysis-toolkit',
       title: 'BioPig: Hadoop-based Genomic Analysis Toolkit'
@@ -390,18 +390,27 @@ const ProjectsPage = () => {
               caption="Dr. Chu and Dr. Smoot on the day of the Nobel Prize announcement. Photo: Henrik Nordberg"
             />
             The image shows Dr. George Smoot and Dr. Steven Chu, who was the lab director at the time and
-            also the Secretary of Energy, on the day of the announcement of the Nobel Prize in Physics. Dr. Chu
+            also the Secretary of Energy; on the day of the announcement of the Nobel Prize in Physics in October 2006. Dr. Chu
             received the Nobel Prize in Physics in 1997. As a side note, Berkeley Lab is an amazing place.
             George would tell me stories about his advisor, Luis Alvarez, who also was a Nobel Laureate in Physics (1968).
             So you know, I still have a few years... :) I would attend the INPA (Institute for Nuclear and Particle Astrophysics)
             seminars on a regular basis.
-            Whenever a new important paper was published, the authors would come and give a talk.
+            Whenever a new important paper in physics was published, the authors would come and give a talk.
             The lab has had 17 Nobel Prize winners affiliated with it. 
           </div>
           <div className="card-subtitle pt-4">Data Analysis</div>
           <div className="card-text">
-            In addtion to the COBE data, George and I collected all known published data on the CMB spectrum.
+            In addition to the COBE data, George and I collected all known published data on the CMB spectrum.
             I then wrote Fortran code to fit the data to various models. 
+          </div>
+        </div>
+
+        <div className="card" id="query-estimator-for-petabyte-storage-systems">
+          <div className="card-title">Query Estimator for Petabyte Storage Systems</div>
+          <div className="card-title-subtitle">1998 - 1999 • C++</div>
+          <div className="card-text">To be able to serve high energy physics data from tape systems, we needed to be able
+            to quickly estimate the size of a result set for a particular query before the data retrieval request was executed.
+            This would allow the scientists to refine their queries before retrieving the data.
           </div>
         </div>
 
