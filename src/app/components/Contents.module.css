@@ -48,7 +48,6 @@
   cursor: pointer;
   padding: 0;
   font-size: 1rem;
-  text-decoration: underline;
   transition: opacity 0.2s;
 }
 
