@@ -7,7 +7,7 @@ const LeadershipPage = () => {
     { id: 'retrospectives', title: 'Retrospectives' },
     { id: 'focus-of-the-week', title: 'Focus of the Week' },
     { id: 'lean-coffee', title: 'Lean Coffee' },
-    { id: 'pairing', title: 'Pairing and Mob programming' }
+    { id: 'pairing', title: 'Pairing and Mob Programming' }
   ]
 
   return (
@@ -22,13 +22,13 @@ const LeadershipPage = () => {
             to start using metrics (or OKRs etc.), those three aspects should be at the core of your process.
           </div>
           <div className="card-subtitle pt-4">Motivation</div>
-          <div className="card-text">Perhaps it's self-evident that you need to measure in order to course correct. But it was surprising to me
+          <div className="card-text">Perhaps it's self-evident that you need to measure in order to course-correct. But it was surprising to me
             how effective metrics are for effecting change. Humans are competitive and seeing those numbers go up is 
             more motivating than having a manager telling you what to do.
           </div>
           <div className="card-subtitle pt-4">Deciding what metrics to use</div>
           <div className="card-text">Let your team decide what metrics to use, and let them change them as needed. Even if you are using OKRs, it's 
-            easy to convince your team to change direction based on the metrics they chose. Then add the trickle down metrics 
+            easy to convince your team to change direction based on the metrics they chose. Then add the trickle-down metrics 
             from leadership or company goals. 
           </div>
           <div className="card-subtitle pt-4">Automate metrics gathering</div>
@@ -52,10 +52,10 @@ const LeadershipPage = () => {
             if someone needs help.
           </div>
           <div className="card-subtitle pt-4">Choosing what to work on</div>
-          <div className="card-text">The main difference between Lean and Scrum, is how you choose what to work on. Lean is metrics
-            driven and the focus is on tasks that can be completed in one to two days. Scrum usually have tasks
+          <div className="card-text">The main difference between Lean and Scrum is how you choose what to work on. Lean is metrics-driven
+            and the focus is on tasks that can be completed in one to two days. Scrum usually has tasks
             spanning multiple days and releases every two weeks. Completing a task generally means getting it into production.
-            This means you must have both a release pipeline and test automation that're strong enough to be 
+            This means you must have both a release pipeline and test automation that are strong enough to be 
             relied on for such frequent releases.
           </div>
           <div className="card-subtitle pt-4">Should you switch from Scrum to Lean?</div>
@@ -92,7 +92,7 @@ const LeadershipPage = () => {
           <div className="card-title">Focus of the Week</div>
           <div className="card-text">This is something my team adapted from <a href="https://www.amazon.com/dp/1955469016">Radical Focus</a> by 
             Christina Wodtke. The book is about 
-            OKR's and they discuss "Monday Commitments and Friday Wins" and we adapted it as Focus of the Week (FotW). The main
+            OKRs and they discuss "Monday Commitments and Friday Wins" and we adapted it as Focus of the Week (FotW). The main
             idea is to pick something that is important to the team / organization, and designate it as the focus. Each time
             someone finishes a task, they ask what they can do to further the focus of the week. It's a way of ensuring
             that important things get done first. Team members who finish tasks ask other team members -- that are working on FotW -- 
@@ -121,7 +121,7 @@ const LeadershipPage = () => {
           </div>
           <div className="card-text">
             It uses a voting system to decide what gets covered and in what order.
-            in the original form, we would put a sticky note on the wall for each topic. Then we would vote on the topics.
+            In the original form, we would put a sticky note on the wall for each topic. Then we would vote on the topics.
             You get 3 votes (more if you have more participants). Put a dot on the sticky you would like to cover.
             In a remote setting, you can create a simple Kanban board and vote by putting your name on the card. 
             When people are done writing and voting, you go over the cards with the most votes. 
@@ -129,7 +129,7 @@ const LeadershipPage = () => {
         </div>
 
         <div className="card" id="pairing">
-          <div className="card-title">Pairing and Mob programming</div>
+          <div className="card-title">Pairing and Mob Programming</div>
           <div className="card-text">Basic pairing involves two roles: the driver (at the keyboard)
              and the navigator (giving directions).
             A core idea is that all ideas flow from the navigator to the driver, and that the driver 
@@ -147,7 +147,7 @@ const LeadershipPage = () => {
           </div>
           <div className="card-subtitle pt-4">Should your team do it?</div>
           <div className="card-text">
-            Personally I enjoy pairing and think the benefits outweigh the cost. But not all
+            Personally, I enjoy pairing and think the benefits outweigh the cost. But not all
             developers are extroverts and enjoy the process. If you want to introduce it, 
             you should stick with it for a meaningful length of time, at least for a couple of months.
             It takes a while to get into the rhythm. It takes a while to learn to stick to the roles.
