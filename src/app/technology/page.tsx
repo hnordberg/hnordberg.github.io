@@ -2,8 +2,9 @@ import Contents from '../components/Contents'
 
 const TechnologyPage = () => {
   const articles = [
-    { id: 'hard-problem-llms', title: 'The hard problem of LLMs' },
-    { id: 'debugging', title: 'The art of debugging' }
+    { id: 'hard-problem-llms', title: 'The Hard Problem of LLMs' },
+    { id: 'debugging', title: 'The Art of Debugging' },
+    { id: 'test-automation', title: 'Test Automation' }
   ]
 
   return (
@@ -12,7 +13,7 @@ const TechnologyPage = () => {
       <section className="card-grid">
         <div className="card" id="hard-problem-llms">
         <div className="card-text"><i>Note: these are some musings on similarities between LLMs and human thought</i></div>
-          <div className="card-title">The hard problem of LLMs</div>
+          <div className="card-title">The Hard Problem of LLMs</div>
           <div className="card-text">The title is a play on the hard problem of consciousness and how LLMs may approach being conscious.
             The problem is stated something like how do the material processes of the brain give rise to human consciousness. This is
             one of my favorite problems in philosophy and now is the first time I have seen something of a possible answer to it.
@@ -36,15 +37,15 @@ const TechnologyPage = () => {
             text embeddings from one vector space to another without any paired data, encoders, or predefined matches. While 
             this has security implications, it could also lead to innovations. What if we used the vector spaces from multiple
             models and try to derive a more complete space, or one with more accurate vectors (such that they better represent
-            platonic semantic meanings)?
+            Platonic semantic meanings)?
           </div>
           <div className="card-subtitle pt-4">Is word generation thinking?</div>
           <div className="card-text">To answer that question we should define what thinking is. Google Gemini said it's 
             "Thinking is the mental process of manipulating information to form concepts, solve problems, make decisions, and understand the world.";
-            Grok said "cognitive process of using one's mind to consider, reason about, or manipulate ideas..."; Others give
+            Grok said: "cognitive process of using one's mind to consider, reason about, or manipulate ideas..."; Others give
             similar definitions, but they seem a tad circular to me. "mental process of manipulating ideas" and "using one's mind to consider" are
             about the same to me, but don't get to the underlying mechanism. I like the idea of a <i>train of thought</i> better. 
-            Thinking is generating words in your mind, based on the words you thought last. The thing is there are multiple ways
+            Thinking is generating words in your mind, based on the words you thought last. The thing is, there are multiple ways
             of thinking. The definition I just gave applies to when we are chatting with someone, or writing something like this paragraph.
             If someone asks us to do arithmetic, then we may be using a different part of the brain and the definition of
             thinking changes somewhat. But generating words (or concepts) based on previous words, is what LLMs do, so are they thinking?
@@ -54,12 +55,12 @@ const TechnologyPage = () => {
           <div className="card-text">If defining thinking is hard, defining consciousness is even harder. That said, LLMs are
             not conscious in the way we are, yet. They would need to have a continuous, though not infinite, context. They
             would need to selectively forget things, and be able to update their weights as they generate new information. But
-            maybe we are more machine like than we thought.
+            maybe we are more machine-like than we thought.
           </div>
         </div>
 
           <div className="card" id="debugging">
-            <div className="card-title">The art of debugging</div>
+            <div className="card-title">The Art of Debugging</div>
             <div className="card-text">Debugging is a skill you hone over the years.
               With time you will start to recognize problems and their solutions. 
               But there are some principles that you can keep in mind, especially when you get
@@ -79,7 +80,32 @@ const TechnologyPage = () => {
               and to write down a plan of attack. 
             </div>
           </div>
-        
+
+          <div className="card" id="test-automation">
+            <div className="card-title">Test Automation</div>
+            <div className="card-text">
+              When done right, test automation can save you a lot of time. Test automation is a big topic,
+              and here I'll just cover some observations and tips that I found useful. 
+              <ul className="list">
+                <li>Write the tests early in the development process. That way you make use of the investment longer.</li>
+                <li>Run the tests on a schedule.</li>
+                <li>Review the test results frequently. Ideally you set alerts for when tests fail.</li>
+                <li>Make the test results part of your metrics.</li>
+              </ul>
+            </div>
+            <div className="card-subtitle pt-4">What tools to use?</div>
+            <div className="card-text">
+              It depends on what the system under test is. For a web application, I would highly recommend
+              Microsoft Playwright. It supports difficult use cases such as iframes and shadow DOM.
+              At Optum we built a system where the user would launch tests from ALM (formerly HP ALM, now
+              managed by Opentext) by clicking a toolbar button. We hooked up a script to the button that
+              would invoke GitHub Actions workflow to run the Playwright tests. Playwright lets you take screenshots
+              and record videos of the test runs. If a test failed, we would create a defect in ALM and
+              attach screenshots and videos to it. We also emailed them to the user. These tests were for
+              the Epic EMR (which now has a web version).
+            </div>
+          </div>
+
           <div className="card hidden">
             <div className="card-title">.</div>
             <div className="card-text">.
