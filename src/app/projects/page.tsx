@@ -197,7 +197,7 @@ const ProjectsPage = () => {
           <div className="card-text">
             The Genome Portal is built using a combination of technologies. The genome browser (annotation and assembly viewer)
             is a large Perl program. When I took over, I implemented parallel rendering of the different tracks (see image below).
-            I also added a number of long requested features. 
+            I also added a number of long-requested features. 
             <LightboxImage 
                 src="/img/genome-portal-browser.png" 
                 alt="Genome Portal browser" 
@@ -224,7 +224,7 @@ const ProjectsPage = () => {
                 caption="Interactive visualization of metagenome assemblies"
               />
               Elviz allows scientists to navigate metagenome assemblies across multiple dimensions and scales, plotting parameters
-              such as GC content, relative abundance, phylogenetic affiliation and assembled contig length. Furthermore Elviz enables
+              such as GC content, relative abundance, phylogenetic affiliation and assembled contig length. Furthermore, Elviz enables
               interactive exploration using real-time plot navigation, search, filters, axis selection, and the ability to drill from
               a whole-community profile down to individual gene annotations.
             </div>
@@ -373,13 +373,13 @@ const ProjectsPage = () => {
             The events tend to cluster into groups of events that are similar. My task was to find them.
           </div>
           <div className="card-subtitle pt-4">Algorithm</div>
-          <div className="card-text"> I relied on the fact that the data is very sparse in higher dimensions. 
+          <div className="card-text">I relied on the fact that the data is very sparse in higher dimensions. 
             Since the number of events was large but known, I decided to use a hash table to store information about
             only the non-empty cells. The algorithm was:
             <ul className="list">
               <li>Read the data (one pass) and populate the cells</li>
               <li>Sort the cells by the number of events</li>
-              <li>Grow cluster around the largest cell. Find all neighbors of Manhattan distance 1.
+              <li>Grow a cluster around the largest cell. Find all neighbors of Manhattan distance 1.
                 Stop growing when events in a cell are below a threshold, or when the gradient
                 increases.</li>
               <li>Then grow the cluster around the <i>next available</i> largest cell. </li>
@@ -415,7 +415,7 @@ const ProjectsPage = () => {
             needing to decompress the index first. 
             One idea was to run clustering on the data, and re-order the events based on clusters. 
             In 1995 Gennady Antoshenkov developed the Byte-aligned Bitmap Code (BBC), a well-known scheme for bitmap compression.
-            Our work is similar but we added several novel features to make them more efficient for our use case.
+            Our work is similar, but we added several novel features to make them more efficient for our use case.
           </div>
           <div className="card-subtitle pt-4">Algorithm</div>
           <div className="card-text">
@@ -449,7 +449,7 @@ const ProjectsPage = () => {
             space required is 10⁹ bits, or about 125 MBs. This can be stored permanently in memory. Note that it 
             is not necessary to keep all bit slices in memory. Only the most relevant slices for a query need to be retained.
           </div>
-          <div className="card-subtitle pt-4">Logical Operations on bit slices</div>
+          <div className="card-subtitle pt-4">Logical Operations on Bit-Slices</div>
           <div className="card-text">
             The compression scheme described above permits logical operations on the compressed bit-slices (bitmap columns). This
             is an important feature of the compression algorithm used, since it makes it possible to do the operations in memory.
@@ -517,7 +517,7 @@ const ProjectsPage = () => {
               caption="Dr. Chu and Dr. Smoot on the day of the Nobel Prize announcement. Photo: Henrik Nordberg"
             />
             The image shows Dr. George Smoot and Dr. Steven Chu, who was the lab director at the time and
-            also the Secretary of Energy; on the day of the announcement of the Nobel Prize in Physics in October 2006. Dr. Chu
+            also the Secretary of Energy, on the day of the announcement of the Nobel Prize in Physics in October 2006. Dr. Chu
             received the Nobel Prize in Physics in 1997. As a side note, Berkeley Lab is an amazing place.
             George would tell me stories about his advisor, Luis Alvarez, who also was a Nobel Laureate in Physics (1968).
             So you know, I still have a few years... :) I would attend the INPA (Institute for Nuclear and Particle Astrophysics)
@@ -539,11 +539,11 @@ const ProjectsPage = () => {
             />
             <LightboxImage 
               src="/img/cmb-dipole.png" 
-              alt="Thermo dynamic temperature as a function of frequency of the CMB dipole" 
+              alt="Thermodynamic temperature as a function of frequency of the CMB dipole" 
               width={800} 
               height={600}
               className="pt-4"
-              caption="Thermo dynamic temperature as a function of frequency of the CMB dipole"
+              caption="Thermodynamic temperature as a function of frequency of the CMB dipole"
             />
           </div>
           <div className="card-subtitle pt-4">Levenberg-Marquardt Method</div>
