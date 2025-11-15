@@ -5,7 +5,7 @@
     "title": "Principal Software Engineer",
     "org": "Optum",
     "location": "",
-    "description": "Architected, developed, and operated the John Muir Health public website and critical internal applications, ensuring high availability and performance. Guided development towards resilient and secure software and introduced SCA and SAST into DevOps practices. ",
+    "description": "Architected, developed, and operated the John Muir Health public website and critical internal applications, ensuring high availability and performance. Guided development towards resilient and secure software and introduced SCA and SAST into DevOps practices.",
     "icon": "optum.svg"
   },
   {
@@ -14,7 +14,7 @@
     "title": "Principal Software Engineer",
     "org": "John Muir Health, Walnut Creek, CA",
     "location": "Walnut Creek, CA",
-    "description": "Tech-lead for the software engineering team.",
+    "description": "Tech-lead for John Muir Health's software engineering team.",
     "icon": "jmh.svg"
   },
   {
@@ -32,7 +32,7 @@
     "title": "Team Lead",
     "org": "Joint Genome Institute (JGI), Lawrence Berkeley National Laboratory",
     "location": "Walnut Creek, CA",
-    "description": "Led the Genome Portal team building tools for researchers to access and analyze large genomic datasets.",
+    "description": "Led the Genome Portal team in building tools for researchers to access and analyze large genomic datasets.",
     "icon": "jgi.png"
   },
   {
