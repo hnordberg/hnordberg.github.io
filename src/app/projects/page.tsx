@@ -575,9 +575,36 @@ const ProjectsPage = () => {
         <div className="card" id="query-estimator-for-petabyte-storage-systems">
           <div className="card-title">Query Estimator for Petabyte Storage Systems</div>
           <div className="card-title-subtitle">1998 - 1999 • C++</div>
-          <div className="card-text">To be able to serve high energy physics data from tape systems, we needed to be able
-            to quickly estimate the size of a result set for a particular query before the data retrieval request was executed.
-            This would allow the scientists to refine their queries before retrieving the data.
+          <div className="card-text">
+            Retrieving large subsets of data from tape-based datasets is very expensive both in terms of computer and 
+            system resources, as well as the total elapsed time for a query to be completed.  Therefore, it is quite 
+            useful to provide an estimate of the amount of data and the number of files that need to be retrieved for 
+            a potential query. Often, users start a query, get frustrated with the length of time to perform the analysis, 
+            and abort the query. An important optimization strategy is to prevent such non-productive activities by 
+            providing a quick estimate of the size of the returned data, and a time estimate of how long it will take 
+            to retrieve the data. I designed and developed such a "query estimator" by taking 
+            advantage of the compressed bitmap index used to evaluate a query.
+            <LightboxImage 
+              src="/img/qe-using-index.png" 
+              alt="Query Estimator" 
+              width={800} 
+              height={600}
+              className="pt-4 pb-4"
+              caption="Query Estimator"
+            />
+          </div>
+          <div className="card-subtitle pt-4">Technology</div>
+          <div className="card-text">
+            <LightboxImage 
+              src="/img/storage-manager.png" 
+              alt="Storage Manager" 
+              width={800} 
+              height={600}
+              className="pt-4 pb-4"
+              caption="Storage Manager"
+            />
+            The query estimator was written in C++ and boost libraries, running on Solaris and Linux. It talked to
+            other components in the distributed system via CORBA.
           </div>
         </div>
 
