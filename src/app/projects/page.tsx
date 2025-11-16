@@ -35,7 +35,8 @@ const ProjectsPage = () => {
       title: 'Cosmic Microwave Background (CMB) Spectrum Analysis'
     },
     { id: 'isotope-explorer', title: 'Isotope Explorer' },
-    { id: 'batmud', title: 'BatMUD' }
+    { id: 'batmud', title: 'BatMUD' },
+    { id: 'copy-that', title: 'Firefox extension: Copy That' }
   ]
 
   const mathContentRef = useRef<HTMLDivElement>(null);
@@ -649,6 +650,35 @@ const ProjectsPage = () => {
             game as all wizards do. This is how I discovered my love of programming. I started working on the backend, adding a
             'feelings' system and the first global event (orch raids), among other things. The coding for LPC MUDs is in LPC, an object-oriented
             version of C. My player character is the Archwizard Plura.</div>
+        </div>
+
+        <div className="card" id="copy-that">
+          <div className="card-title">Firefox extension: Copy That</div>
+          <div className="card-title-subtitle">2025 • JavaScript</div>
+          <div className="card-text">
+            Copy-That is a Firefox extension that allows you to copy text or HTML from an element on the page to the clipboard.
+            <ul className="list">
+              <li>Element Selection: Click the extension icon to activate, then hover over any element to see it highlighted</li>
+              <li>Plain Text Copy: Click an element to copy its innerText (plain text content)</li>
+              <LightboxImage 
+                src="/img/copy-that.png" 
+                alt="Copy That" 
+                width={800} 
+                height={600}
+                className="pt-4 pb-4"
+                caption="Blue outline shows what element is being selected"
+              />
+              <li>HTML Copy Mode: Hold Shift while clicking to copy the element's innerHTML as rich HTML (with plain text fallback)</li>
+              <li>Visual Feedback:
+                <ul className="list">
+                  <li>Red outline for normal mode</li>
+                  <li>Blue outline for HTML mode (Shift held)</li>
+                  <li>Green outline after successful copy</li>
+                </ul>
+              </li>
+              <li>Keyboard Support: Press Escape to cancel selection mode</li>
+            </ul>
+          </div>
         </div>
 
         <div className="card hidden">
