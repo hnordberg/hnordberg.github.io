@@ -493,6 +493,7 @@ body.dark-mode .card .code {
 }
 
 .card .block-quote {
+    display: block;
     border-left: 4px solid #2196F3;
     padding-left: 1.5rem;
     margin: 1.5rem 0;
