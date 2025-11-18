@@ -248,10 +248,76 @@ main {
     }
 }
 
+/* Full bleed layout */
+main.full-bleed {
+    max-width: none;
+    padding: 0;
+    margin: 0;
+}
+
+main.full-bleed .content-container {
+    max-width: 75rem;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+main.full-bleed .content-container .intro {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    max-width: 65rem;
+}
+
+main.full-bleed .content-container section {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode main.full-bleed .content-container section {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+main.full-bleed .content-container section:last-child {
+    border-bottom: none;
+}
+
+main.full-bleed .content-container h1 {
+    text-align: left;
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+main.full-bleed .content-container h2 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+main.full-bleed .content-container p {
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
 /* Mobile view - narrower margins */
 @media (max-width: 768px) {
     main {
         padding: 0.5rem;
+    }
+    
+    main.full-bleed .content-container {
+        padding: 1rem;
+    }
+    
+    main.full-bleed .content-container h1 {
+        font-size: 2rem;
+    }
+    
+    main.full-bleed .content-container section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
     }
 }
 
