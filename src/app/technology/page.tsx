@@ -4,7 +4,9 @@ const TechnologyPage = () => {
   const articles = [
     { id: 'hard-problem-llms', title: 'The Hard Problem of LLMs' },
     { id: 'debugging', title: 'The Art of Debugging' },
+    { id: 'security', title: 'Software Security' },
     { id: 'test-automation', title: 'Test Automation' },
+    { id: 'software-development-lifecycle', title: 'Software Development Lifecycle' },
     { id: 'this-website', title: 'This Website' }
   ]
 
@@ -114,6 +116,139 @@ const TechnologyPage = () => {
               The code is available on GitHub 
               at <a href="https://github.com/hnordberg/hnordberg.github.io">hnordberg/hnordberg.github.io</a>. To publish, I
               to push to the master branch. If it had been built as a collaboration, I would be using pull requests instead.
+            </div>
+          </div>
+
+          <div className="card" id="security">
+            <div className="card-title">Software Security</div>
+            <div className="card-text">This section is about the steps you need to take as a software engineer
+              to ensure that the products you make are secure. If your team is just starting to implement secure coding
+              practices, then this is what you should do.
+              <ul className="list">
+                <li>Scan your code for secrets</li>
+                <li>Scan your dependencies for vulnerabilities</li>
+                <li>Scan your code for vulnerabilities</li>
+              </ul>
+              If you use a platform like GitHub, then you will have all three available right away. Scanning your code for
+              vulnerabilities might have an extra cost. When you are starting out, you may have lot of vulnerabilities to triage. 
+              Use the CVSS score to prioritize them. Then establish a policy for handling them. It may look like this in terms of CVSS scores:
+              <ul className="list">
+                <li>&ge; 9 is a critical; fix immediately / best effort</li>
+                <li>7 - 8.9 is a high; fix within 7 days</li>
+                <li>4 - 6.9 is a medium</li>
+                <li>&le; 3.9 is a low</li>
+              </ul>
+              You can address medium and low vulnerabilities when you are fixing high and critical vulnerabilities. This
+              is an example of a policy, and depending on your exposure, you may need to adjust it.
+            </div>
+            <div className="card-subtitle pt-4">Scan your code for secrets</div>
+            <div className="card-text">The reason I put this first is that the impact of failing this is high. You or
+              your developers may have committed proof of concept code with secrets in it. Or you may even have config
+              files with secrets in them, directly in the repository. If you find secrets, you should invalidate them.
+              If you have config files in your repo, you should switch to, ideally, using a vault. You can also use environment
+              variables to store secrets, but this is not as secure.
+            </div>
+            <div className="card-subtitle pt-4">Scan your dependencies for vulnerabilities</div>
+            <div className="card-text">SCA -- Software Composition Analysis -- is the process of analyzing the dependencies of your code.
+              It will use your package manager to list the dependencies and then scan them for vulnerabilities. It them continues to 
+              for vulnerabilities recursively. For example, if you use <div className="code">npm</div> SCA will 
+              use <div className="code">package.json</div> and <div className="code">package-lock.json</div> 
+              to list the dependencies. 
+              <div className="block-quote">
+                By the way, you should commit the <div className="code">package-lock.json</div> file
+                to your repository. You should also use specific versions of the dependencies, not just ranges.
+              </div>
+              To fix the vulnerability,
+              run <div className="code">npm ls &lt;package-name&gt;</div> to see where in the tree the package is used. If it is a
+              direct dependency, you can just update the version but if it is a transitive dependency, you may need to add an entry
+              in the <div className="code">overrides</div> section of the <div className="code">package.json</div> file.
+            </div>
+            <div className="card-subtitle pt-4">Scan your code for vulnerabilities</div>
+            <div className="card-text">SAST -- Static Application Security Testing -- is the process of analyzing your code
+              for vulnerabilities the authors of the code added. If you use a platform like GitHub, then you will have this
+              available right away. Scanning your code for vulnerabilities might have an extra cost. This is straightforward to 
+              handle. Your scanner will explain the vulnerability and how to fix it.
+            </div>
+          </div>
+
+          <div className="card" id="software-development-lifecycle">
+            <div className="card-title">Software Development Lifecycle</div>
+            <div className="card-text">Here is a typical software development lifecycle:
+              <ol>
+                <li>What task to work on
+                  <ol>
+                    <li>Projects</li>
+                    <li>Maintenance
+                      <ol>
+                        <li>Security fix</li>
+                        <li>Bug fix</li>
+                      </ol>
+                    </li>
+                  </ol>
+                </li>
+                <li>Source Control
+                  <ol>
+                    <li>Create a new branch in the repo</li>
+                    <li>Add Branch: &lt;branch&gt; to the card on the board you are working on</li>
+                    <li>Branch names should be snakecase (e.g., my-branch).</li>
+                  </ol>
+                </li>
+                <li>Write code
+                  <ol>
+                    <li>Write the feature / fix the bug</li>
+                    <li>Add unit tests if new feature</li>
+                    <li>Add test automation that covers the new feature or that would have caught the bug</li>
+                    <li>If you need to add libraries:
+                      <ol>
+                        <li>Discuss with the senior developers</li>
+                        <li>Commit your code to a branch and check SCA and SAST for vulnerabilities</li>
+                      </ol>
+                    </li>
+                  </ol>
+                </li>
+                <li>Use of AI agents for coding is encouraged. The same controls apply to generated code as to normal code. All code must be secure, maintainable, etc. You MUST understand the code you commit. This includes security fixes, complicated regex, and other code that an agent may be used for. Generated code must match our conventions. Pay specific attention to comments. In general we discourage comments in the code. Instead, write code that documents itself by use of clear variable, function, and type names.</li>
+                <li>SAST – Static Application Security Scanning
+                  <ol>
+                    <li>Check GitHub Advanced Security for any code vulnerabilities.</li>
+                  </ol>
+                </li>
+                <li>Build it using GitHub Actions
+                  <ol>
+                    <li>Pick a test server that isn't currently used for same part of the code</li>
+                    <li>Add Deployed to: &lt;environment&gt; to the card on the board you are working on</li>
+                  </ol>
+                </li>
+                <li>Do developer testing
+                  <ol>
+                    <li>Make sure your feature works / bug is fixed, in a lower env (TST, TST2, POC)</li>
+                    <li>Most developers will develop and test locally before deploying</li>
+                  </ol>
+                </li>
+                <li>Create a PR (pull request)
+                  <ol>
+                    <li>Add PR: &lt;PR URL&gt; to the card you are working on</li>
+                    <li>Respond to PR comments. Reviewers should follow the Code Review Checklist</li>
+                    <li>The PR must be approved by one senior engineer and one other engineer</li>
+                    <li>The PR must be approved by QA, who will leave a comment as to what was tested (if applicable) and when it is ok to merge</li>
+                    <li>Do not merge until the full team is in agreement that we will have a release</li>
+                  </ol>
+                </li>
+                <li>Change management would go here, but it is left out because it is usually organization specific.
+                </li>
+                <li>Merge PR
+                  <ol>
+                    <li>Once all conditions (see above) are right, merge the PR</li>
+                    <li>For most apps this will trigger a release</li>
+                    <li>You can also trigger the release manually in GitHub Actions (check with senior engineers)</li>
+                  </ol>
+                </li>
+                <li>Production validation
+                  <ol>
+                    <li>Watch the release in GitHub Actions and ensure all steps are successful</li>
+                    <li>Validate that the new feature works / that the bug is fixed, in production</li>
+                  </ol>
+                </li>
+              </ol>
             </div>
           </div>
 
