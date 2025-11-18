@@ -131,6 +131,11 @@ const TechnologyPage = () => {
               You can address medium and low vulnerabilities when you are fixing high and critical vulnerabilities. This
               is an example of a policy, and depending on your exposure, you may need to adjust it.
             </div>
+            <div className="card-subtitle pt-4">Avoid writing insecure code in the first place</div>
+            <div className="card-text">Make sure your team is familiar with the <a href="https://owasp.org/Top10/">OWASP Top 10</a>,
+              which is a list of the most common security vulnerabilities affecting web applications. Incorporate
+              security review into your PR process. Make it an opportunity to learn and improve.
+            </div>
             <div className="card-subtitle pt-4">Scan your code for secrets</div>
             <div className="card-text">The reason I put this first is that the impact of failing this is high. You or
               your developers may have committed proof of concept code with secrets in it. Or you may even have config
