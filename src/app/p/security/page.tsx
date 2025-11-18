@@ -4,7 +4,7 @@ const OWASPPage = () => {
       <div className="content-container">
         <h1>Dealing with Security Vulnerabilities</h1>
         <section id="best-practices">
-          <h2>Best Practices of Mitigations</h2>
+          <h2>Best Practices for Mitigation</h2>
           <p>
             Don't <i>just</i> try to reason about what a hacker might do. The way to protect yourself is to look up how to mitigate for each vulnerability.
             As an example, let's say you want to protect against path traversal vulnerabilities. You know you shouldn't allow '../' in paths.
@@ -18,7 +18,7 @@ const OWASPPage = () => {
           <h2>Content Security Policy (CSP)</h2>
           <p>
             Content Security Policy (CSP) allows whitelisting of sources of content that are allowed to be loaded. Helps prevent XSS attacks.
-            CSP supercedes <code>X-Frame-Options</code>.
+            CSP supersedes <code>X-Frame-Options</code>.
           </p>
           <h2>Cross-Origin Resource Sharing (CORS)</h2>
           <p>
@@ -58,17 +58,6 @@ const OWASPPage = () => {
         <section id="a01-broken-access-control">
           <h2>A01:2025 - Broken Access Control</h2>
           <p>
-            Examples of broken access control vulnerabilities are:
-            <ul className="list">
-              <li>SQL injection</li>
-              <li>Cross-site scripting (XSS). This is an injection vulnerability where the attacker injects code into the web page.
-                Commonly exploited features include URL parameters, search fields, and forms.
-              </li>
-              <li>Cross-site request forgery (CSRF)</li>
-              <li>Directory traversal</li>
-              <li>File inclusion</li>
-              <li>Command injection</li>
-            </ul>
           </p>
         </section>
 
@@ -93,6 +82,16 @@ const OWASPPage = () => {
         <section id="a05-injection">
           <h2>A05:2025 - Injection</h2>
           <p>
+          <ul className="list">
+              <li>SQL injection</li>
+              <li>Cross-site scripting (XSS). This is an injection vulnerability where the attacker injects code into the web page.
+                Commonly exploited features include URL parameters, search fields, and forms.
+              </li>
+              <li>Cross-site request forgery (CSRF)</li>
+              <li>Directory traversal</li>
+              <li>File inclusion</li>
+              <li>Command injection</li>
+            </ul>
           </p>
         </section>
 
