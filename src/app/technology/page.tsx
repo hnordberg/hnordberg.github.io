@@ -111,6 +111,7 @@ const TechnologyPage = () => {
 
           <div className="card" id="security">
             <div className="card-title">Software Security</div>
+            <div className="card-title-subtitle">Delve deeper with the <a href="/p/security">Dig deeper into Security</a></div>
             <div className="card-text">This section is about the steps you need to take as a software engineer
               to ensure that the products you make are secure. If your team is just starting to implement secure coding
               practices, then this is what you should do.
