@@ -29,6 +29,20 @@ body.light-mode {
     color: var(--text-color-light);
 }
 
+/* Global link styles */
+a {
+    color: #2196F3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+body.dark-mode a {
+    color: #64B5F6;
+}
+
 header {
     padding: 1rem;
     display: flex;
@@ -508,19 +522,6 @@ body.dark-mode .card-title-subtitle {
 
 .card ol li {
     margin-bottom: 0.5rem;
-}
-
-.card a {
-    color: #2196F3;
-    text-decoration: none;
-}
-
-.card a:hover {
-    text-decoration: underline;
-}
-
-body.dark-mode .card a {
-    color: #64B5F6;
 }
 
 .card pre {
