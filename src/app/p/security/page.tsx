@@ -1,7 +1,23 @@
+import Contents from '../../components/Contents'
+
 const OWASPPage = () => {
+  const articles = [
+    { id: 'best-practices', title: 'Dealing with Security Vulnerabilities' },
+    { id: 'web-standards', title: 'Web Standards' },
+    { id: 'three-acronyms', title: 'XSS, CSRF, and SSRF' },
+    { id: 'owasp-top-10', title: 'The OWASP Top 10' }
+  ]
+
   return (
-    <main className="full-bleed">
+    <main className="page-with-contents">
+      <Contents articles={articles} />
       <div className="content-container">
+        <h1>Security for the Web</h1>
+        <section id="best-practices">
+          <p>
+            On this page I will cover web security specifically. 
+          </p>
+        </section>
         <h1>Dealing with Security Vulnerabilities</h1>
         <section id="best-practices">
           <h2>Best Practices for Mitigation</h2>
