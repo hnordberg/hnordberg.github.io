@@ -43,6 +43,23 @@ body.dark-mode a {
     color: #64B5F6;
 }
 
+/* Global code styles */
+code {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 0.2em 0.4em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.875em;
+    color: #1f2937;
+}
+
+body.dark-mode code {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: #4b5563;
+    color: #e5e7eb;
+}
+
 /* Global list styles */
 ul.list {
     list-style-type: disc;
@@ -278,7 +295,7 @@ main {
         gap: 2rem;
         align-items: flex-start;
     }
-    
+
     main.page-with-contents .card-grid {
         flex: 1;
         min-width: 0;
@@ -343,15 +360,15 @@ main.full-bleed .content-container p {
     main {
         padding: 0.5rem;
     }
-    
+
     main.full-bleed .content-container {
         padding: 1rem;
     }
-    
+
     main.full-bleed .content-container h1 {
         font-size: 2rem;
     }
-    
+
     main.full-bleed .content-container section {
         margin-bottom: 2rem;
         padding-bottom: 1.5rem;
@@ -375,7 +392,7 @@ h2 {
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
 }
 
@@ -403,7 +420,7 @@ footer {
     height: 2.125em;
 }
 
-.theme-switch input { 
+.theme-switch input {
     opacity: 0;
     width: 0;
     height: 0;
@@ -431,15 +448,15 @@ footer {
     transition: .4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
     background-color: #2196F3;
 }
 
-input:focus + .slider {
+input:focus+.slider {
     box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
     transform: translateX(1.625em);
 }
 
@@ -472,7 +489,7 @@ body.dark-mode .image-caption {
     padding: 1.5rem;
     transition: transform 0.2s, border 0.5s ease-out, box-shadow 0.5s ease-out;
     background-color: var(--card-background-light);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid transparent;
 }
 
@@ -485,14 +502,14 @@ body.dark-mode .card {
 .card.selected,
 .card:target {
     border: 2px solid #2196F3;
-    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.2), 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.2), 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: border 0.3s ease-in, box-shadow 0.3s ease-in, transform 0.2s;
 }
 
 body.dark-mode .card.selected,
 body.dark-mode .card:target {
     border-color: #42A5F5;
-    box-shadow: 0 0 0 4px rgba(66, 165, 245, 0.2), 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 0 0 4px rgba(66, 165, 245, 0.2), 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: border 0.3s ease-in, box-shadow 0.3s ease-in, transform 0.2s;
 }
 
