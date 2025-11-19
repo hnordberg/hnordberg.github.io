@@ -26,13 +26,15 @@ const OWASPPage = () => {
             default the browser prevents scripts on the page from accessing resources on other domains. CORS allows you to configure
             what other domains are allowed to access the resource. This is done by setting the Access-Control-Allow-Origin header. 
             The flow looks like this:
-            <ol>
-              <li>The browser sends a request with <code>Origin: https://example.com</code> to the server.</li>
-              <li>The server looks at the <code>Origin</code> header and checks its CORS policy. If it approves, the 
-              server sets the <code>Access-Control-Allow-Origin: https://example.com</code> header in the response.</li>
-              <li>The browser looks at the <code>Access-Control-Allow-Origin</code> header and allows the request to proceed,
-              if its value matches its origin.</li>
-            </ol>
+          </p>
+          <ol>
+            <li>The browser sends a request with <code>Origin: https://example.com</code> to the server.</li>
+            <li>The server looks at the <code>Origin</code> header and checks its CORS policy. If it approves, the 
+            server sets the <code>Access-Control-Allow-Origin: https://example.com</code> header in the response.</li>
+            <li>The browser looks at the <code>Access-Control-Allow-Origin</code> header and allows the request to proceed,
+            if its value matches its origin.</li>
+          </ol>
+          <p>
             For requests using methods other than GET, POST, or HEAD, or POSTs with a Content-Type other than application/x-www-form-urlencoded,
             multipart/form-data, or text/plain, or if the request has a custom header, the browser will send a <i>preflight request</i> to the server. 
             The preflight request will be an OPTIONS request with the following headers: Origin, Access-Control-Request-Method, 
@@ -84,10 +86,10 @@ const OWASPPage = () => {
           <p>
           <ul className="list">
               <li>SQL injection</li>
-              <li>Cross-site scripting (XSS). This is an injection vulnerability where the attacker injects code into the web page.
+              <li>Cross-site scripting (XSS). This is where the attacker injects code into the web page.
                 Commonly exploited features include URL parameters, search fields, and forms.
               </li>
-              <li>Cross-site request forgery (CSRF)</li>
+              <li>Cross-site request forgery (CSRF). </li>
               <li>Directory traversal</li>
               <li>File inclusion</li>
               <li>Command injection</li>
