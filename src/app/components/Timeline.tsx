@@ -8,6 +8,7 @@ type Entry = {
   title: string;
   org?: string;
   location?: string;
+  paperTitle?: string;
   description: string;
   icon?: string; // filename inside public/img, e.g. 'jgi.webp'
 };
@@ -46,6 +47,14 @@ export default function Timeline({ items }: { items: Entry[] }) {
                   </div>
                   <div className={`relative z-20 text-box rounded-lg shadow w-full ${styles.card}`}>
                     <h3 className="font-semibold text-lg">{item.title}</h3>
+                    {item.org && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{item.org}</p>}
+                    {item.location && (
+                      <p className="text-xs mt-1">
+                        Paper: <a href={item.location} target="_blank" rel="noopener noreferrer" className="text-sky-600 dark:text-sky-400 hover:underline">
+                          {item.paperTitle || item.title}
+                        </a>
+                      </p>
+                    )}
                     <p className="mt-2 whitespace-pre-line">{item.description}</p>
                   </div>
                 </div>
