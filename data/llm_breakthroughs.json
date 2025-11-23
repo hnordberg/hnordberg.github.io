@@ -1,0 +1,944 @@
+[
+  {
+    "id": "Perceptron",
+    "period": "1957",
+    "title": "Perceptron",
+    "org": "Cornell Aeronautical Laboratory",
+    "location": "https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf",
+    "paperTitle": "The Perceptron: A Perceiving and Recognizing Automaton",
+    "authors": [
+      "Frank Rosenblatt"
+    ],
+    "description": "The Perceptron was the first model that could learn the weights defining categories given examples from each category. It established the foundation for artificial neural networks by introducing a learning algorithm that could automatically adjust connection weights. The perceptron demonstrated that machines could learn from experience, marking a fundamental breakthrough in machine learning.",
+    "icon": "ml/cornell.svg"
+  },
+  {
+    "id": "Neocognitron",
+    "period": "1980",
+    "title": "Neocognitron",
+    "org": "NHK Science & Technical Research Laboratories",
+    "location": "https://www.rctn.org/bruno/public/papers/Fukushima1980.pdf",
+    "paperTitle": "Neocognitron: A Self-organizing Neural Network Model for a Mechanism of Pattern Recognition Unaffected by Shift in Position",
+    "authors": [
+      "Kunihiko Fukushima"
+    ],
+    "description": "The Neocognitron was a hierarchical, multilayered neural network inspired by the visual cortex. It introduced the concepts of S-cells (simple cells) and C-cells (complex cells) arranged in a hierarchy, allowing for position-invariant pattern recognition. This architecture laid the groundwork for modern convolutional neural networks and demonstrated that local feature extraction combined with spatial pooling could achieve robust visual recognition.",
+    "icon": "ml/nhk.svg"
+  },
+  {
+    "id": "Backpropagation",
+    "period": "1986",
+    "title": "Backpropagation",
+    "org": "University of California San Diego, Carnegie Mellon University, University of Toronto",
+    "location": "https://www.nature.com/articles/323533a0",
+    "paperTitle": "Learning Representations by Back-propagating Errors",
+    "authors": [
+      "David E. Rumelhart",
+      "Geoffrey E. Hinton",
+      "Ronald J. Williams"
+    ],
+    "description": "Backpropagation provided an efficient method for training multi-layer neural networks by computing gradients through the chain rule. This algorithm enabled the training of deep networks by propagating error signals backwards through layers, allowing hidden units to learn internal representations. Backpropagation became the workhorse of neural network training and remains fundamental to modern deep learning.",
+    "icon": "ml/ucsd.svg"
+  },
+  {
+    "id": "LSTM",
+    "period": "1997",
+    "title": "Long Short-Term Memory (LSTM)",
+    "org": "Technische Universität München",
+    "location": "https://deeplearning.cs.cmu.edu/S23/document/readings/LSTM.pdf",
+    "paperTitle": "Long Short-Term Memory",
+    "authors": [
+      "Sepp Hochreiter",
+      "Jürgen Schmidhuber"
+    ],
+    "description": "LSTM addressed the vanishing gradient problem in recurrent neural networks by introducing memory cells with gating mechanisms. The architecture uses input, output, and forget gates to control information flow, enabling networks to learn long-term dependencies. LSTM became the dominant architecture for sequence modeling tasks including speech recognition, machine translation, and time series prediction before the transformer era.",
+    "icon": "ml/tum.gif"
+  },
+  {
+    "id": "LeNet",
+    "period": "1998",
+    "title": "Convolutional Neural Networks (LeNet)",
+    "org": "AT&T Bell Laboratories",
+    "location": "http://vision.stanford.edu/cs598_spring07/papers/Lecun98.pdf",
+    "paperTitle": "Gradient-Based Learning Applied to Document Recognition",
+    "authors": [
+      "Yann LeCun",
+      "Léon Bottou",
+      "Yoshua Bengio",
+      "Patrick Haffner"
+    ],
+    "description": "LeNet introduced a practical convolutional neural network architecture for document recognition. It combined convolutional layers for local feature extraction, pooling for spatial invariance, and fully connected layers for classification. This architecture demonstrated that CNNs could be trained end-to-end using backpropagation and achieved state-of-the-art results on handwritten digit recognition, establishing the blueprint for modern computer vision systems.",
+    "icon": "ml/bell_labs.svg"
+  },
+  {
+    "id": "Neural_Probabilistic_LM",
+    "period": "2003",
+    "title": "The Neural Probabilistic Language Model",
+    "org": "Université de Montréal",
+    "location": "https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf",
+    "paperTitle": "A Neural Probabilistic Language Model",
+    "authors": [
+      "Yoshua Bengio",
+      "Réjean Ducharme",
+      "Pascal Vincent",
+      "Christian Jauvin"
+    ],
+    "description": "The Neural Probabilistic Language Model addressed the curse of dimensionality in language modeling by learning distributed representations for words. It introduced the idea that similar words would have similar vector representations, allowing the model to generalize to unseen word sequences. This foundational work pioneered the use of neural networks for language modeling and word embeddings, directly inspiring Word2Vec and modern language models.",
+    "icon": "ml/montreal.png"
+  },
+  {
+    "id": "ImageNet",
+    "period": "2009",
+    "title": "ImageNet Dataset",
+    "org": "Princeton University",
+    "location": "https://www.image-net.org/static_files/papers/imagenet_cvpr09.pdf",
+    "paperTitle": "ImageNet: A Large-Scale Hierarchical Image Database",
+    "authors": [
+      "Jia Deng",
+      "Wei Dong",
+      "Richard Socher",
+      "Li-Jia Li",
+      "Kai Li",
+      "Li Fei-Fei"
+    ],
+    "description": "ImageNet created a large-scale dataset with over 14 million labeled images across thousands of categories, organized hierarchically using WordNet. The annual ImageNet Large Scale Visual Recognition Challenge (ILSVRC) became the premier benchmark for computer vision. ImageNet's scale and diversity enabled the training of deep neural networks and catalyzed the deep learning revolution, particularly with AlexNet's breakthrough in 2012.",
+    "icon": "ml/princeton.png"
+  },
+  {
+    "id": "Xavier",
+    "period": "2010",
+    "title": "Xavier/Glorot Initialization",
+    "org": "Université de Montréal",
+    "location": "https://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf",
+    "paperTitle": "Understanding the Difficulty of Training Deep Feedforward Neural Networks",
+    "authors": [
+      "Xavier Glorot",
+      "Yoshua Bengio"
+    ],
+    "description": "Xavier initialization provided a principled method for initializing neural network weights to maintain consistent variance of activations and gradients across layers. By scaling initial weights based on the number of input and output connections, it prevented vanishing or exploding gradients during training. This simple but crucial technique enabled the training of much deeper networks and remains a standard practice in deep learning.",
+    "icon": "ml/montreal.png"
+  },
+  {
+    "id": "ReLU",
+    "period": "2010",
+    "title": "Rectified Linear Unit (ReLU) Activation",
+    "org": "University of Toronto",
+    "location": "https://www.cs.toronto.edu/~fritz/absps/reluICML.pdf",
+    "paperTitle": "Rectified Linear Units Improve Restricted Boltzmann Machines",
+    "authors": [
+      "Vinod Nair",
+      "Geoffrey E. Hinton"
+    ],
+    "description": "ReLU introduced a simple non-saturating activation function f(x) = max(0, x) that addressed the vanishing gradient problem of sigmoid and tanh activations. ReLU enabled faster training, reduced computational cost, and induced sparsity in neural networks. Despite its simplicity, ReLU became the default activation function for deep neural networks and enabled the training of much deeper architectures.",
+    "icon": "ml/toronto.svg"
+  },
+  {
+    "id": "AlexNet",
+    "period": "2012",
+    "title": "AlexNet",
+    "org": "University of Toronto",
+    "location": "https://proceedings.neurips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf",
+    "paperTitle": "ImageNet Classification with Deep Convolutional Neural Networks",
+    "authors": [
+      "Alex Krizhevsky",
+      "Ilya Sutskever",
+      "Geoffrey E. Hinton"
+    ],
+    "description": "AlexNet won the ImageNet 2012 competition with a significant margin, demonstrating that deep convolutional networks trained with GPUs could dramatically outperform traditional computer vision methods. The architecture combined ReLU activations, dropout regularization, data augmentation, and GPU training. AlexNet's success marked the beginning of the deep learning era and sparked intense interest in neural networks across academia and industry.",
+    "icon": "ml/toronto.svg"
+  },
+  {
+    "id": "Dropout",
+    "period": "2012",
+    "title": "Dropout",
+    "org": "University of Toronto",
+    "location": "https://www.cs.toronto.edu/~rsalakhu/papers/srivastava14a.pdf",
+    "paperTitle": "Dropout: A Simple Way to Prevent Neural Networks from Overfitting",
+    "authors": [
+      "Nitish Srivastava",
+      "Geoffrey Hinton",
+      "Alex Krizhevsky",
+      "Ilya Sutskever",
+      "Ruslan Salakhutdinov"
+    ],
+    "description": "Dropout introduced a powerful regularization technique by randomly dropping units during training, preventing co-adaptation of features. This simple method significantly reduced overfitting in deep neural networks by training an ensemble of exponentially many sub-networks. Dropout became a standard regularization technique and enabled the training of larger networks without excessive overfitting.",
+    "icon": "ml/toronto.svg"
+  },
+  {
+    "id": "Word2Vec",
+    "period": "2013",
+    "title": "Word2Vec",
+    "org": "Google",
+    "location": "https://arxiv.org/pdf/1301.3781.pdf",
+    "paperTitle": "Efficient Estimation of Word Representations in Vector Space",
+    "authors": [
+      "Tomas Mikolov",
+      "Kai Chen",
+      "Greg Corrado",
+      "Jeffrey Dean"
+    ],
+    "description": "Word2Vec introduced efficient methods (Skip-gram and CBOW) for learning dense vector representations of words from large corpora. These embeddings captured semantic and syntactic relationships, enabling vector arithmetic like 'king' - 'man' + 'woman' ≈ 'queen'. Word2Vec revolutionized natural language processing by providing a scalable way to represent words as continuous vectors, becoming foundational for modern NLP.",
+    "icon": "ml/google.png"
+  },
+  {
+    "id": "VAE",
+    "period": "2013",
+    "title": "Variational Autoencoder (VAE)",
+    "org": "University of Amsterdam",
+    "location": "https://arxiv.org/pdf/1312.6114.pdf",
+    "paperTitle": "Auto-Encoding Variational Bayes",
+    "authors": [
+      "Diederik P. Kingma",
+      "Max Welling"
+    ],
+    "description": "VAE introduced a probabilistic approach to learning latent representations by combining variational inference with neural networks. It learns a distribution over latent codes rather than deterministic encodings, enabling both efficient inference and generation. VAE provided a principled framework for generative modeling and became influential in unsupervised learning, representation learning, and generative AI.",
+    "icon": "ml/amsterdam.svg"
+  },
+  {
+    "id": "GAN",
+    "period": "2014",
+    "title": "Generative Adversarial Network (GAN)",
+    "org": "Université de Montréal",
+    "location": "https://arxiv.org/pdf/1406.2661.pdf",
+    "paperTitle": "Generative Adversarial Networks",
+    "authors": [
+      "Ian J. Goodfellow",
+      "Jean Pouget-Abadie",
+      "Mehdi Mirza",
+      "Bing Xu",
+      "David Warde-Farley",
+      "Sherjil Ozair",
+      "Aaron Courville",
+      "Yoshua Bengio"
+    ],
+    "description": "GAN introduced a game-theoretic framework where a generator network learns to create realistic data by competing against a discriminator network. This adversarial training process enabled the generation of highly realistic images without requiring explicit modeling of probability distributions. GANs revolutionized generative modeling and spawned numerous applications in image synthesis, style transfer, and data augmentation.",
+    "icon": "ml/montreal.png"
+  },
+  {
+    "id": "Adam",
+    "period": "2014",
+    "title": "Adam Optimizer",
+    "org": "OpenAI, University of Toronto",
+    "location": "https://arxiv.org/pdf/1412.6980.pdf",
+    "paperTitle": "Adam: A Method for Stochastic Optimization",
+    "authors": [
+      "Diederik P. Kingma",
+      "Jimmy Ba"
+    ],
+    "description": "Adam combined the benefits of AdaGrad and RMSProp by computing adaptive learning rates for each parameter using estimates of first and second moments of gradients. It included bias correction terms and proved robust across a wide range of problems with minimal hyperparameter tuning. Adam became the most widely used optimizer in deep learning due to its efficiency, ease of use, and strong empirical performance.",
+    "icon": "ml/openai.svg"
+  },
+  {
+    "id": "Seq2Seq",
+    "period": "2014",
+    "title": "Sequence-to-Sequence Learning",
+    "org": "Google",
+    "location": "https://arxiv.org/pdf/1409.3215.pdf",
+    "paperTitle": "Sequence to Sequence Learning with Neural Networks",
+    "authors": [
+      "Ilya Sutskever",
+      "Oriol Vinyals",
+      "Quoc V. Le"
+    ],
+    "description": "Seq2Seq introduced an end-to-end framework for sequence transduction using an encoder-decoder architecture with LSTMs. The encoder maps variable-length input sequences to fixed-size representations, which the decoder transforms into variable-length output sequences. This architecture unified many NLP tasks under a single framework and achieved breakthrough results in machine translation, establishing neural approaches as state-of-the-art.",
+    "icon": "ml/google.png"
+  },
+  {
+    "id": "Bahdanau_Attention",
+    "period": "2014",
+    "title": "Attention Mechanism",
+    "org": "Université de Montréal",
+    "location": "https://arxiv.org/pdf/1409.0473.pdf",
+    "paperTitle": "Neural Machine Translation by Jointly Learning to Align and Translate",
+    "authors": [
+      "Dzmitry Bahdanau",
+      "Kyunghyun Cho",
+      "Yoshua Bengio"
+    ],
+    "description": "Bahdanau attention addressed the bottleneck in sequence-to-sequence models by allowing the decoder to focus on different parts of the input sequence at each decoding step. This attention mechanism computed context vectors as weighted sums of encoder hidden states, where weights were learned based on relevance. Attention became a fundamental building block of modern NLP systems and directly inspired the transformer architecture.",
+    "icon": "ml/montreal.png"
+  },
+  {
+    "id": "GloVe",
+    "period": "2014",
+    "title": "GloVe Word Embeddings",
+    "org": "Stanford University",
+    "location": "https://nlp.stanford.edu/pubs/glove.pdf",
+    "paperTitle": "GloVe: Global Vectors for Word Representation",
+    "authors": [
+      "Jeffrey Pennington",
+      "Richard Socher",
+      "Christopher D. Manning"
+    ],
+    "description": "GloVe combined global matrix factorization with local context window methods for learning word embeddings. It trained on aggregated word-word co-occurrence statistics to produce vectors with meaningful linear substructures. GloVe provided an alternative to Word2Vec with strong performance on word analogy and similarity tasks, and its pre-trained vectors became widely used in NLP applications.",
+    "icon": "ml/stanford.png"
+  },
+  {
+    "id": "Neural_Turing_Machine",
+    "period": "2014",
+    "title": "Neural Turing Machine",
+    "org": "Google DeepMind",
+    "location": "https://arxiv.org/pdf/1410.5401.pdf",
+    "paperTitle": "Neural Turing Machines",
+    "authors": [
+      "Alex Graves",
+      "Greg Wayne",
+      "Ivo Danihelka"
+    ],
+    "description": "Neural Turing Machines extended neural networks by coupling them to external memory resources accessed through attention mechanisms. The entire system was differentiable end-to-end, allowing gradient-based training. NTMs demonstrated that neural networks could learn simple algorithms like copying, sorting, and associative recall from examples alone, showing that neural networks could exhibit more algorithmic and programmable behavior.",
+    "icon": "ml/deepmind.svg"
+  },
+  {
+    "id": "BatchNorm",
+    "period": "2015",
+    "title": "Batch Normalization",
+    "org": "Google",
+    "location": "https://arxiv.org/pdf/1502.03167.pdf",
+    "paperTitle": "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift",
+    "authors": [
+      "Sergey Ioffe",
+      "Christian Szegedy"
+    ],
+    "description": "Batch Normalization normalized layer inputs across mini-batches, stabilizing training by reducing internal covariate shift. It enabled much higher learning rates, reduced sensitivity to initialization, and acted as a regularizer. Batch normalization dramatically accelerated training and became a standard component in deep networks, enabling the training of very deep architectures that were previously difficult to optimize.",
+    "icon": "ml/google.png"
+  },
+  {
+    "id": "ResNet",
+    "period": "2015",
+    "title": "Residual Networks (ResNet)",
+    "org": "Microsoft Research",
+    "location": "https://arxiv.org/pdf/1512.03385.pdf",
+    "paperTitle": "Deep Residual Learning for Image Recognition",
+    "authors": [
+      "Kaiming He",
+      "Xiangyu Zhang",
+      "Shaoqing Ren",
+      "Jian Sun"
+    ],
+    "description": "ResNet introduced skip connections that allowed gradients to flow directly through networks by learning residual mappings. This simple architectural change enabled the training of networks with hundreds or even thousands of layers without degradation problems. ResNet won ImageNet 2015 and demonstrated that very deep networks could be effectively trained, fundamentally changing how we design neural network architectures.",
+    "icon": "ml/microsoft.png"
+  },
+  {
+    "id": "Layer_Normalization",
+    "period": "2016",
+    "title": "Layer Normalization",
+    "org": "University of Toronto",
+    "location": "https://arxiv.org/pdf/1607.06450.pdf",
+    "paperTitle": "Layer Normalization",
+    "authors": [
+      "Jimmy Lei Ba",
+      "Jamie Ryan Kiros",
+      "Geoffrey E. Hinton"
+    ],
+    "description": "Layer Normalization normalized inputs across features for each example independently, unlike batch normalization which normalized across the batch dimension. This made it particularly effective for recurrent neural networks and sequences of varying length. Layer normalization stabilized hidden state dynamics in RNNs and later became the standard normalization technique in transformer architectures.",
+    "icon": "ml/toronto.svg"
+  },
+  {
+    "id": "BPE",
+    "period": "2016",
+    "title": "Subword Units (BPE): Solving the Rare Word Problem",
+    "org": "University of Edinburgh",
+    "location": "https://arxiv.org/pdf/1508.07909.pdf",
+    "paperTitle": "Neural Machine Translation of Rare Words with Subword Units",
+    "authors": [
+      "Rico Sennrich",
+      "Barry Haddow",
+      "Alexandra Birch"
+    ],
+    "description": "Byte-Pair Encoding (BPE) adapted a data compression algorithm for neural machine translation, enabling open-vocabulary learning by breaking words into subword units. This solved the rare word problem by representing infrequent words as sequences of common subwords. BPE became the standard tokenization approach for language models, enabling models to handle any word while maintaining reasonable vocabulary sizes, and is used in GPT, BERT, and most modern LLMs.",
+    "icon": "ml/edinburgh.png"
+  },
+  {
+    "id": "Transformer",
+    "period": "2017",
+    "title": "Transformer Architecture",
+    "org": "Google",
+    "location": "https://arxiv.org/pdf/1706.03762.pdf",
+    "paperTitle": "Attention Is All You Need",
+    "authors": [
+      "Ashish Vaswani",
+      "Noam Shazeer",
+      "Niki Parmar",
+      "Jakob Uszkoreit",
+      "Llion Jones",
+      "Aidan N. Gomez",
+      "Łukasz Kaiser",
+      "Illia Polosukhin"
+    ],
+    "description": "The Transformer replaced recurrence and convolutions entirely with self-attention mechanisms, processing sequences in parallel rather than sequentially. It introduced multi-head attention, positional encodings, and a feedforward encoder-decoder structure. The Transformer achieved state-of-the-art translation results while being more parallelizable and requiring significantly less training time. This architecture became the foundation for modern large language models and revolutionized NLP.",
+    "icon": "ml/google.png"
+  },
+  {
+    "id": "RLHF",
+    "period": "2017",
+    "title": "Reinforcement Learning from Human Feedback (RLHF)",
+    "org": "OpenAI, UC Berkeley, DeepMind",
+    "location": "https://arxiv.org/pdf/1706.03741.pdf",
+    "paperTitle": "Deep Reinforcement Learning from Human Preferences",
+    "authors": [
+      "Paul Christiano",
+      "Jan Leike",
+      "Tom Brown",
+      "Miljan Martic",
+      "Shane Legg",
+      "Dario Amodei"
+    ],
+    "description": "RLHF introduced a method for training RL agents using human preference comparisons rather than hand-crafted reward functions. Humans compared pairs of trajectory segments, and a reward model was trained to predict preferences. This reward model then guided policy optimization. RLHF scaled preference-based learning to complex tasks and later became crucial for aligning large language models with human values and intentions.",
+    "icon": "ml/openai.svg"
+  },
+  {
+    "id": "MoE",
+    "period": "2017",
+    "title": "Sparsely-Gated Mixture of Experts",
+    "org": "Google",
+    "location": "https://arxiv.org/pdf/1701.06538.pdf",
+    "paperTitle": "Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer",
+    "authors": [
+      "Noam Shazeer",
+      "Azalia Mirhoseini",
+      "Krzysztof Maziarz",
+      "Andy Davis",
+      "Quoc Le",
+      "Geoffrey Hinton",
+      "Jeff Dean"
+    ],
+    "description": "Mixture of Experts introduced conditional computation where a gating network routes each input to a sparse subset of expert sub-networks. This enabled training models with orders of magnitude more parameters without proportional increases in computation. MoE demonstrated that model capacity could be dramatically increased through sparsity, achieving state-of-the-art results in language modeling and translation. This approach later influenced large-scale models like GPT-4.",
+    "icon": "ml/google.png"
+  },
+  {
+    "id": "PPO",
+    "period": "2017",
+    "title": "Proximal Policy Optimization (PPO)",
+    "org": "OpenAI",
+    "location": "https://arxiv.org/pdf/1707.06347.pdf",
+    "paperTitle": "Proximal Policy Optimization Algorithms",
+    "authors": [
+      "John Schulman",
+      "Filip Wolski",
+      "Prafulla Dhariwal",
+      "Alec Radford",
+      "Oleg Klimov"
+    ],
+    "description": "PPO introduced a simpler and more stable policy gradient method by clipping the objective function to prevent excessively large policy updates. It combined the benefits of trust region methods with the simplicity of first-order optimization. PPO became the most widely used reinforcement learning algorithm due to its robustness, ease of implementation, and strong empirical performance across diverse tasks.",
+    "icon": "ml/openai.svg"
+  },
+  {
+    "id": "ELMo",
+    "period": "2018",
+    "title": "ELMo (Embeddings from Language Models)",
+    "org": "Allen Institute for AI, University of Washington",
+    "location": "https://arxiv.org/pdf/1802.05365.pdf",
+    "paperTitle": "Deep Contextualized Word Representations",
+    "authors": [
+      "Matthew E. Peters",
+      "Mark Neumann",
+      "Mohit Iyyer",
+      "Matt Gardner",
+      "Christopher Clark",
+      "Kenton Lee",
+      "Luke Zettlemoyer"
+    ],
+    "description": "ELMo generated context-dependent word representations by using bidirectional LSTMs trained as language models. Unlike static embeddings, ELMo representations varied based on context, capturing polysemy and complex linguistic features. ELMo demonstrated the power of pre-training and fine-tuning, significantly improving performance across diverse NLP tasks. It was a crucial step toward modern contextualized language models and transfer learning in NLP.",
+    "icon": "ml/allen.png"
+  },
+  {
+    "id": "GPT",
+    "period": "2018",
+    "title": "GPT (Generative Pre-Training)",
+    "org": "OpenAI",
+    "location": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "paperTitle": "Improving Language Understanding by Generative Pre-Training",
+    "authors": [
+      "Alec Radford",
+      "Karthik Narasimhan",
+      "Tim Salimans",
+      "Ilya Sutskever"
+    ],
+    "description": "GPT introduced a two-stage approach: unsupervised pre-training of a transformer language model on large text corpora, followed by supervised fine-tuning on specific tasks. This demonstrated that language models could learn general representations useful across many tasks. GPT showed that pre-training could significantly reduce the labeled data required for downstream tasks, establishing the pre-train-then-fine-tune paradigm that dominated subsequent NLP research.",
+    "icon": "ml/openai.svg"
+  },
+  {
+    "id": "BERT",
+    "period": "2018",
+    "title": "BERT (Bidirectional Encoder Representations from Transformers)",
+    "org": "Google",
+    "location": "https://arxiv.org/pdf/1810.04805.pdf",
+    "paperTitle": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    "authors": [
+      "Jacob Devlin",
+      "Ming-Wei Chang",
+      "Kenton Lee",
+      "Kristina Toutanova"
+    ],
+    "description": "BERT pre-trained bidirectional transformers using masked language modeling and next sentence prediction. Unlike previous unidirectional models, BERT jointly conditioned on both left and right context in all layers. BERT achieved state-of-the-art results across eleven NLP tasks and demonstrated that deeply bidirectional pre-training was crucial for language understanding. BERT became the foundation for numerous downstream applications and variants.",
+    "icon": "ml/google.png"
+  },
+  {
+    "id": "GPT-2",
+    "period": "2019",
+    "title": "GPT-2",
+    "org": "OpenAI",
+    "location": "https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf",
+    "paperTitle": "Language Models are Unsupervised Multitask Learners",
+    "authors": [
+      "Alec Radford",
+      "Jeffrey Wu",
+      "Rewon Child",
+      "David Luan",
+      "Dario Amodei",
+      "Ilya Sutskever"
+    ],
+    "description": "GPT-2 scaled up the original GPT to 1.5 billion parameters and trained on a larger, more diverse dataset. It demonstrated that language models could perform many tasks zero-shot without fine-tuning by simply conditioning on appropriate prompts. GPT-2 showed strong performance on diverse tasks including translation, summarization, and question answering, suggesting that with sufficient scale and data, language models naturally learn multitask capabilities.",
+    "icon": "ml/openai.svg"
+  },
+  {
+    "id": "T5",
+    "period": "2019",
+    "title": "T5 (Text-to-Text Transfer Transformer)",
+    "org": "Google",
+    "location": "https://arxiv.org/pdf/1910.10683.pdf",
+    "paperTitle": "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer",
+    "authors": [
+      "Colin Raffel",
+      "Noam Shazeer",
+      "Adam Roberts",
+      "Katherine Lee",
+      "Sharan Narang",
+      "Michael Matena",
+      "Yanqi Zhou",
+      "Wei Li",
+      "Peter J. Liu"
+    ],
+    "description": "T5 unified all NLP tasks into a text-to-text format where both inputs and outputs are text strings. It systematically explored transfer learning techniques including pre-training objectives, architectures, datasets, and fine-tuning methods. T5's encoder-decoder architecture and comprehensive evaluation provided insights into what makes transfer learning effective. The unified framework simplified multi-task learning and became influential for instruction-following models.",
+    "icon": "ml/google.png"
+  },
+  {
+    "id": "Bitter_Lesson",
+    "period": "2019",
+    "title": "The Bitter Lesson",
+    "org": "University of Alberta, DeepMind",
+    "location": "http://www.incompleteideas.net/IncIdeas/BitterLesson.html",
+    "paperTitle": "The Bitter Lesson (Essay)",
+    "authors": [
+      "Richard Sutton"
+    ],
+    "description": "The Bitter Lesson essay argued that general methods leveraging computation consistently outperform approaches that rely on human knowledge in the long run. Sutton observed that search and learning, when given sufficient computation, surpass hand-crafted features and domain expertise. This philosophical perspective influenced the field to focus on scalable learning methods rather than encoding human knowledge, providing intellectual foundation for the scaling paradigm in modern AI.",
+    "icon": "ml/alberta.png"
+  },
+  {
+    "id": "Scaling_Laws",
+    "period": "2020",
+    "title": "Scaling Laws for Neural Language Models",
+    "org": "OpenAI",
+    "location": "https://arxiv.org/pdf/2001.08361.pdf",
+    "paperTitle": "Scaling Laws for Neural Language Models",
+    "authors": [
+      "Jared Kaplan",
+      "Sam McCandlish",
+      "Tom Henighan",
+      "Tom B. Brown",
+      "Benjamin Chess",
+      "Rewon Child",
+      "Scott Gray",
+      "Alec Radford",
+      "Jeffrey Wu",
+      "Dario Amodei"
+    ],
+    "description": "This work empirically demonstrated that language model performance scales as power-laws with model size, dataset size, and compute budget. The research showed predictable relationships between these factors and suggested optimal allocation strategies. These scaling laws provided quantitative guidance for training large models and predicted that simply scaling up models would continue to yield improvements, influencing subsequent investment in large-scale model development.",
+    "icon": "ml/openai.svg"
+  },
+  {
+    "id": "GPT-3",
+    "period": "2020",
+    "title": "GPT-3",
+    "org": "OpenAI",
+    "location": "https://arxiv.org/pdf/2005.14165.pdf",
+    "paperTitle": "Language Models are Few-Shot Learners",
+    "authors": [
+      "Tom B. Brown",
+      "Benjamin Mann",
+      "Nick Ryder",
+      "Melanie Subbiah",
+      "Jared Kaplan",
+      "Prafulla Dhariwal",
+      "Arvind Neelakantan",
+      "Pranav Shyam",
+      "Girish Sastry",
+      "Amanda Askell",
+      "Sandhini Agarwal",
+      "Ariel Herbert-Voss",
+      "Gretchen Krueger",
+      "Tom Henighan",
+      "Rewon Child",
+      "Aditya Ramesh",
+      "Daniel M. Ziegler",
+      "Jeffrey Wu",
+      "Clemens Winter",
+      "Christopher Hesse",
+      "Mark Chen",
+      "Eric Sigler",
+      "Mateusz Litwin",
+      "Scott Gray",
+      "Benjamin Chess",
+      "Jack Clark",
+      "Christopher Berner",
+      "Sam McCandlish",
+      "Alec Radford",
+      "Ilya Sutskever",
+      "Dario Amodei"
+    ],
+    "description": "GPT-3 scaled transformers to 175 billion parameters, demonstrating that language models could perform diverse tasks with few-shot, one-shot, or zero-shot learning from prompts alone. It showed impressive performance on translation, question-answering, arithmetic, and novel word usage without gradient updates. GPT-3 revealed that with sufficient scale, language models develop broad capabilities and sparked widespread interest in large language models and prompt engineering.",
+    "icon": "ml/openai.svg"
+  },
+  {
+    "id": "ZeRO",
+    "period": "2020",
+    "title": "ZeRO (Zero Redundancy Optimizer)",
+    "org": "Microsoft",
+    "location": "https://arxiv.org/pdf/1910.02054.pdf",
+    "paperTitle": "ZeRO: Memory Optimizations Toward Training Trillion Parameter Models",
+    "authors": [
+      "Samyam Rajbhandari",
+      "Jeff Rasley",
+      "Olatunji Ruwase",
+      "Yuxiong He"
+    ],
+    "description": "ZeRO eliminated memory redundancies in data-parallel distributed training by partitioning optimizer states, gradients, and parameters across devices rather than replicating them. ZeRO enabled training models with trillions of parameters by dramatically reducing per-device memory requirements while maintaining computational efficiency. This optimization became crucial for training large language models and is implemented in DeepSpeed, enabling the scale of models like GPT-3 and beyond.",
+    "icon": "ml/microsoft.png"
+  },
+  {
+    "id": "RoPE",
+    "period": "2021",
+    "title": "RoFormer: Rotary Position Embedding (RoPE)",
+    "org": "Zhuiyi Technology",
+    "location": "https://arxiv.org/pdf/2104.09864.pdf",
+    "paperTitle": "RoFormer: Enhanced Transformer with Rotary Position Embedding",
+    "authors": [
+      "Jianlin Su",
+      "Yu Lu",
+      "Shengfeng Pan",
+      "Ahmed Murtadha",
+      "Bo Wen",
+      "Yunfeng Liu"
+    ],
+    "description": "Rotary Position Embedding (RoPE) encodes position information by rotating word embeddings based on their absolute positions, while naturally encoding relative position information through the rotation properties. RoPE provided better extrapolation to longer sequences than previous position encoding methods while being computationally efficient. It was adopted by influential models including PaLM, LLaMA, and many other modern LLMs, becoming a preferred position encoding technique.",
+    "icon": "ml/zhuiyi.png"
+  },
+  {
+    "id": "LoRA",
+    "period": "2021",
+    "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+    "org": "Microsoft",
+    "location": "https://arxiv.org/pdf/2106.09685.pdf",
+    "paperTitle": "LoRA: Low-Rank Adaptation of Large Language Models",
+    "authors": [
+      "Edward J. Hu",
+      "Yelong Shen",
+      "Phillip Wallis",
+      "Zeyuan Allen-Zhu",
+      "Yuanzhi Li",
+      "Shean Wang",
+      "Lu Wang",
+      "Weizhu Chen"
+    ],
+    "description": "LoRA enabled efficient fine-tuning of large language models by training low-rank decomposition matrices that are added to frozen pre-trained weights. This reduced trainable parameters by 10,000x and memory requirements by 3x while maintaining or exceeding full fine-tuning performance. LoRA made it practical to customize large models for specific tasks with limited compute resources, democratizing access to fine-tuning and enabling rapid adaptation of foundation models.",
+    "icon": "ml/microsoft.png"
+  },
+  {
+    "id": "InstructGPT",
+    "period": "2022",
+    "title": "InstructGPT",
+    "org": "OpenAI",
+    "location": "https://arxiv.org/pdf/2203.02155.pdf",
+    "paperTitle": "Training Language Models to Follow Instructions with Human Feedback",
+    "authors": [
+      "Long Ouyang",
+      "Jeff Wu",
+      "Xu Jiang",
+      "Diogo Almeida",
+      "Carroll L. Wainwright",
+      "Pamela Mishkin",
+      "Chong Zhang",
+      "Sandhini Agarwal",
+      "Katarina Slama",
+      "Alex Ray",
+      "John Schulman",
+      "Jacob Hilton",
+      "Fraser Kelton",
+      "Luke Miller",
+      "Maddie Simens",
+      "Amanda Askell",
+      "Peter Welinder",
+      "Paul Christiano",
+      "Jan Leike",
+      "Ryan Lowe"
+    ],
+    "description": "InstructGPT fine-tuned GPT-3 using supervised learning on human-written demonstrations followed by reinforcement learning from human feedback. Despite having 100x fewer parameters, InstructGPT outputs were preferred to GPT-3 outputs. The model showed improvements in truthfulness, helpfulness, and reduced toxicity. InstructGPT demonstrated that alignment with human preferences through RLHF was crucial for making language models useful and safe, establishing the approach used in ChatGPT.",
+    "icon": "ml/openai.svg"
+  },
+  {
+    "id": "Chain_of_Thought",
+    "period": "2022",
+    "title": "Chain-of-Thought Prompting",
+    "org": "Google Research",
+    "location": "https://arxiv.org/pdf/2201.11903.pdf",
+    "paperTitle": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+    "authors": [
+      "Jason Wei",
+      "Xuezhi Wang",
+      "Dale Schuurmans",
+      "Maarten Bosma",
+      "Brian Ichter",
+      "Fei Xia",
+      "Ed Chi",
+      "Quoc Le",
+      "Denny Zhou"
+    ],
+    "description": "Chain-of-thought prompting enabled language models to solve complex reasoning tasks by generating intermediate reasoning steps before arriving at final answers. Simply adding a few examples with reasoning chains dramatically improved performance on arithmetic, commonsense, and symbolic reasoning tasks. This technique revealed emergent reasoning capabilities in large models and demonstrated that prompting strategies could unlock latent abilities without additional training.",
+    "icon": "ml/google.png"
+  },
+  {
+    "id": "FlashAttention",
+    "period": "2022",
+    "title": "FlashAttention",
+    "org": "Stanford University",
+    "location": "https://arxiv.org/pdf/2205.14135.pdf",
+    "paperTitle": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+    "authors": [
+      "Tri Dao",
+      "Daniel Y. Fu",
+      "Stefano Ermon",
+      "Atri Rudra",
+      "Christopher Ré"
+    ],
+    "description": "FlashAttention optimized the attention mechanism by accounting for GPU memory hierarchy, using tiling to reduce data movement between GPU memory levels. This IO-aware algorithm achieved exact attention with significantly reduced memory usage and 2-4x speedup compared to standard implementations. FlashAttention enabled training transformers with much longer context lengths and became widely adopted, fundamentally improving the efficiency of transformer models.",
+    "icon": "ml/stanford.png"
+  },
+  {
+    "id": "Constitutional_AI",
+    "period": "2022",
+    "title": "Constitutional AI: Harmlessness from AI Feedback",
+    "org": "Anthropic",
+    "location": "https://arxiv.org/pdf/2212.08073.pdf",
+    "paperTitle": "Constitutional AI: Harmlessness from AI Feedback",
+    "authors": [
+      "Yuntao Bai",
+      "Saurav Kadavath",
+      "Sandipan Kundu",
+      "Amanda Askell",
+      "Jackson Kernion",
+      "Andy Jones",
+      "Anna Chen",
+      "Anna Goldie",
+      "Azalia Mirhoseini",
+      "Cameron McKinnon",
+      "Carol Chen",
+      "Catherine Olsson",
+      "Christopher Olah",
+      "Danny Hernandez",
+      "Dawn Drain",
+      "Deep Ganguli",
+      "Dustin Li",
+      "Eli Tran-Johnson",
+      "Ethan Perez",
+      "Jamie Kerr",
+      "Jared Mueller",
+      "Jeffrey Ladish",
+      "Joshua Landau",
+      "Kamal Ndousse",
+      "Kamile Lukosuite",
+      "Liane Lovitt",
+      "Michael Sellitto",
+      "Nelson Elhage",
+      "Nicholas Schiefer",
+      "Noemi Mercado",
+      "Nova DasSarma",
+      "Robert Lasenby",
+      "Robin Larson",
+      "Sam Ringer",
+      "Scott Johnston",
+      "Shauna Kravec",
+      "Sheer El Showk",
+      "Stanislav Fort",
+      "Tamera Lanham",
+      "Timothy Telleen-Lawton",
+      "Tom Conerly",
+      "Tom Henighan",
+      "Tristan Hume",
+      "Samuel R. Bowman",
+      "Zac Hatfield-Dodds",
+      "Ben Mann",
+      "Dario Amodei",
+      "Nicholas Joseph",
+      "Sam McCandlish",
+      "Tom Brown",
+      "Jared Kaplan"
+    ],
+    "description": "Constitutional AI introduced a method for training harmless AI assistants using AI-generated feedback based on a set of principles (a 'constitution') rather than relying solely on human feedback. The model critiques and revises its own responses according to constitutional principles, then learns from these self-improvements. This approach reduced reliance on human labelers for harmlessness training while making the values guiding AI behavior more transparent and debuggable.",
+    "icon": "ml/anthropic.svg"
+  },
+  {
+    "id": "DPO",
+    "period": "2023",
+    "title": "Direct Preference Optimization (DPO)",
+    "org": "Stanford University",
+    "location": "https://arxiv.org/pdf/2305.18290.pdf",
+    "paperTitle": "Direct Preference Optimization: Your Language Model is Secretly a Reward Model",
+    "authors": [
+      "Rafael Rafailov",
+      "Archit Sharma",
+      "Eric Mitchell",
+      "Stefano Ermon",
+      "Christopher D. Manning",
+      "Chelsea Finn"
+    ],
+    "description": "DPO simplified preference learning by directly optimizing language models on human preferences without requiring a separate reward model or reinforcement learning. It reformulated RLHF as a classification problem over preference pairs, making training more stable and efficient. DPO achieved comparable or better results than RLHF while being simpler to implement and tune, becoming a popular alternative for aligning language models with human preferences.",
+    "icon": "ml/stanford.png"
+  },
+  {
+    "id": "QLoRA",
+    "period": "2023",
+    "title": "QLoRA: Efficient Fine-Tuning of Quantized LLMs",
+    "org": "University of Washington",
+    "location": "https://arxiv.org/pdf/2305.14314.pdf",
+    "paperTitle": "QLoRA: Efficient Finetuning of Quantized LLMs",
+    "authors": [
+      "Tim Dettmers",
+      "Artidoro Pagnoni",
+      "Ari Holtzman",
+      "Luke Zettlemoyer"
+    ],
+    "description": "QLoRA combined quantization with LoRA to enable fine-tuning of extremely large models on consumer hardware. It quantized the base model to 4-bit precision while using LoRA adapters in higher precision, maintaining full fine-tuning performance. QLoRA made it possible to fine-tune a 65B parameter model on a single GPU with 48GB memory, dramatically democratizing access to fine-tuning large language models and enabling researchers with limited resources to customize state-of-the-art models.",
+    "icon": "ml/washington.png"
+  },
+  {
+    "id": "MoE_Test_Time",
+    "period": "2024",
+    "title": "Mixture-of-Experts (MoE) and Test-Time Compute Scaling",
+    "org": "Google, xAI, DeepSeek",
+    "location": "https://arxiv.org/pdf/2401.04088.pdf",
+    "paperTitle": "Mixtral of Experts",
+    "authors": [
+      "Albert Q. Jiang",
+      "Alexandre Sablayrolles",
+      "Antoine Roux",
+      "Arthur Mensch",
+      "Blanche Savary",
+      "Chris Bamford",
+      "Devendra Singh Chaplot",
+      "Diego de las Casas",
+      "Emma Bou Hanna",
+      "Florian Bressand",
+      "Gianna Lengyel",
+      "Guillaume Bour",
+      "Guillaume Lample",
+      "Lélio Renard Lavaud",
+      "Lucile Saulnier",
+      "Marie-Anne Lachaux",
+      "Pierre Stock",
+      "Sandeep Subramanian",
+      "Sophia Yang",
+      "Szymon Antoniak",
+      "Teven Le Scao",
+      "Théophile Gervet",
+      "Thibaut Lavril",
+      "Thomas Wang",
+      "Timothée Lacroix",
+      "William El Sayed"
+    ],
+    "description": "Modern Mixture-of-Experts architectures like Mixtral, Grok, and DeepSeek-V2 combined sparse routing with test-time compute scaling, allowing models to dynamically allocate computation based on task difficulty. These architectures activated only a subset of parameters per token while maintaining large total capacity, achieving better performance-per-compute ratios. The combination with test-time scaling, where models use more computation for harder problems, represented a shift toward more efficient and adaptive AI systems.",
+    "icon": "ml/google.png"
+  },
+  {
+    "id": "Layer_Dropping",
+    "period": "2024",
+    "title": "Layer Dropping and Progressive Pruning (TrimLLM)",
+    "org": "Northeastern University, Indiana University Bloomington, University of Connecticut, University of Massachusetts Dartmouth, North Carolina State University",
+    "location": "https://arxiv.org/pdf/2406.02629.pdf",
+    "paperTitle": "TrimLLM: Progressive Layer Dropping for Efficient LLM Inference",
+    "authors": [
+      "Lei Lu",
+      "Zhepeng Wang",
+      "Runyu Peng",
+      "Mengbing Wang",
+      "Fangyi Zhu",
+      "Zilong Wang",
+      "Hong Xu",
+      "Shangguang Wang"
+    ],
+    "description": "Layer dropping and progressive pruning techniques enabled efficient inference by selectively skipping or removing transformer layers based on input characteristics or layer importance. Research showed that many layers in large language models are redundant for certain tasks, and adaptive layer selection could maintain performance while reducing computation. These techniques became important for deploying large models in resource-constrained environments and improving inference efficiency.",
+    "icon": "ml/northeastern.png"
+  },
+  {
+    "id": "Multimodal_Secure",
+    "period": "2024",
+    "title": "Multimodal Secure Alignment",
+    "org": "Carnegie Mellon University, University of Washington",
+    "location": "https://arxiv.org/pdf/2404.12464.pdf",
+    "paperTitle": "Defending Against Jailbreak Attacks in Multimodal Language Models",
+    "authors": [
+      "Xuguang Wang",
+      "Xin Eric Wang"
+    ],
+    "description": "Multimodal secure alignment addresses unique safety challenges when language models process multiple modalities (text, images, audio). Research revealed that multimodal models could be more vulnerable to jailbreaks through adversarial images or cross-modal attacks. New alignment techniques were developed to ensure consistent safety behavior across modalities, including modality-specific safety layers and cross-modal consistency checking. This work became critical as vision-language models like GPT-4V and Gemini became widely deployed.",
+    "icon": "ml/cmu.png"
+  },
+  {
+    "id": "chain_of_thought_monitorability",
+    "period": "2025",
+    "title": "Chain-of-Thought Monitorability",
+    "org": "Google DeepMind, Anthropic",
+    "location": "https://doi.org/10.48550/arXiv.2507.05246",
+    "paperTitle": "When Chain of Thought is Necessary, Language Models Struggle to Evade Monitors",
+    "authors": [
+      "Scott Emmons",
+      "Erik Jenner",
+      "David K. Elson",
+      "Rif A. Saurous",
+      "Senthooran Rajamanoharan",
+      "Heng Chen",
+      "Irhum Shafkat",
+      "Rohin Shah"
+    ],
+    "description": "This work reframed chain-of-thought (CoT) safety monitoring around monitorability rather than faithfulness, distinguishing CoT-as-rationalization from CoT-as-computation. By making harmful behaviors require multi-step reasoning, the authors forced models to expose their plans and showed that CoT monitoring can detect severe risks unless attackers receive substantial assistance. The paper also offered stress-testing guidelines, concluding that CoT monitoring remains a valuable, if imperfect, layer of defense that warrants active protection and continual evaluation.",
+    "icon": "ml/deepmind_icon.svg"
+  },
+  {
+    "id": "CRFT",
+    "period": "2025",
+    "title": "Critical Representation Fine-Tuning (CRFT)",
+    "org": "Zhejiang University, Alibaba Cloud Computing",
+    "location": "https://doi.org/10.48550/arXiv.2507.10085",
+    "paperTitle": "Enhancing Chain-of-Thought Reasoning with Critical Representation Fine-tuning",
+    "authors": [
+      "Chenxi Huang",
+      "Shaotian Yan",
+      "Liang Xie",
+      "Binbin Lin",
+      "Sinan Fan",
+      "Yue Xin",
+      "Deng Cai",
+      "Chen Shen",
+      "Jieping Ye"
+    ],
+    "description": "CRFT extends Representation Fine-Tuning by identifying \"critical\" hidden representations that aggregate or gate reasoning signals, then editing them in a low-rank subspace while freezing the base LLaMA or Mistral weights. Information-flow analysis selects these high-leverage states, enabling large CoT accuracy gains across eight arithmetic and commonsense benchmarks as well as sizeable one-shot improvements. The work highlights that representation-level PEFT can unlock better reasoning without touching most model parameters.",
+    "icon": "ml/zhejiang_university_icon.svg"
+  },
+  {
+    "id": "OOCR_Steering_Vectors",
+    "period": "2025",
+    "title": "Mechanistic OOCR Steering Vectors",
+    "org": "Massachusetts Institute of Technology, Independent Researchers",
+    "location": "https://doi.org/10.48550/arXiv.2507.08218",
+    "paperTitle": "Simple Mechanistic Explanations for Out-Of-Context Reasoning",
+    "authors": [
+      "Atticus Wang",
+      "Joshua Engels",
+      "Oliver Clive-Griffin",
+      "Senthooran Rajamanoharan",
+      "Neel Nanda"
+    ],
+    "description": "This study dissects out-of-context reasoning (OOCR) and finds that many reported cases arise because LoRA fine-tuning effectively adds a constant steering vector that pushes models toward latent concepts. By extracting or directly training such steering vectors, the authors reproduce OOCR across risky/safe decision, function, location, and backdoor benchmarks, showing that unconditional steering can even implement conditional behaviors. The results provide a simple mechanistic account of why fine-tuned LLMs can generalize far beyond their training distribution and highlight the alignment implications of steering-vector interventions.",
+    "icon": "ml/mit.svg"
+  }
+]
