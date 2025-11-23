@@ -6,6 +6,11 @@ import ThemeSwitcher from './components/ThemeSwitcher'
 export const metadata: Metadata = {
   title: 'Henrik Nordberg, Principal Engineer',
   description: 'Henrik Nordberg\'s project showcase',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({
