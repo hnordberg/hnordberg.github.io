@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './Timeline.module.css';
 
@@ -6,6 +8,7 @@ type Entry = {
   id: string;
   period: string;
   title: string;
+  authors?: string[];
   org?: string;
   location?: string;
   paperTitle?: string;
@@ -13,7 +16,111 @@ type Entry = {
   icon?: string; // filename inside public/img, e.g. 'jgi.webp'
 };
 
-// The component is server-rendered and receives items as a prop.
+function ExpandableAuthors({ authors }: { authors: string[] }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isWrapping, setIsWrapping] = useState(false);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const authorsText = authors.join(', ');
+
+  useEffect(() => {
+    const checkWrapping = () => {
+      if (!textRef.current || !containerRef.current) {
+        return;
+      }
+
+      const textEl = textRef.current;
+      const containerWidth = containerRef.current.clientWidth - 30; // account for button space
+
+      // Temporarily disable wrapping to measure the natural width of the text
+      const previousWhiteSpace = textEl.style.whiteSpace;
+      const previousDisplay = textEl.style.display;
+      textEl.style.whiteSpace = 'nowrap';
+      textEl.style.display = 'inline';
+
+      // Force reflow before measuring
+      const textWidth = textEl.scrollWidth;
+
+      // Revert temporary overrides
+      textEl.style.whiteSpace = previousWhiteSpace;
+      textEl.style.display = previousDisplay;
+
+      if (textWidth === 0) {
+        return;
+      }
+
+      setIsWrapping(textWidth > containerWidth);
+    };
+
+    // Check multiple times to account for layout timing and hydration
+    // Immediate check
+    requestAnimationFrame(() => {
+      checkWrapping();
+    });
+
+    // Check after a short delay (for hydration)
+    const timeout1 = setTimeout(checkWrapping, 50);
+
+    // Check again after hydration should be complete
+    const timeout2 = setTimeout(checkWrapping, 100);
+
+    // Additional check for stubborn cases
+    const timeout3 = setTimeout(checkWrapping, 200);
+
+    window.addEventListener('resize', checkWrapping);
+
+    return () => {
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+      clearTimeout(timeout3);
+      window.removeEventListener('resize', checkWrapping);
+    };
+  }, [authorsText]);
+
+  if (!authorsText) {
+    return null;
+  }
+
+  if (!isWrapping) {
+    return (
+      <div ref={containerRef} className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+        <span ref={textRef}>{authorsText}</span>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={containerRef} className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+      <div className="flex items-start gap-2">
+        <span
+          ref={textRef}
+          style={{
+            flex: 1,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: isExpanded ? 'normal' : 'nowrap',
+            display: isExpanded ? 'block' : 'block'
+          }}
+        >
+          {authorsText}
+        </span>
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex-shrink-0 text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 transition-transform duration-200"
+          aria-label={isExpanded ? 'Show fewer authors' : 'Show all authors'}
+          style={{
+            transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+            fontSize: '12px'
+          }}
+        >
+          ▼
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// The component receives items as a prop.
 export default function Timeline({ items }: { items: Entry[] }) {
 
   return (
@@ -48,6 +155,7 @@ export default function Timeline({ items }: { items: Entry[] }) {
                   <div className={`relative z-20 text-box rounded-lg shadow w-full ${styles.card}`}>
                     <h3 className="font-semibold text-lg">{item.title}</h3>
                     {item.org && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{item.org}</p>}
+                    {item.authors && item.authors.length > 0 && <ExpandableAuthors authors={item.authors} />}
                     {item.location && (
                       <p className="text-xs mt-1">
                         Paper: <a href={item.location} target="_blank" rel="noopener noreferrer" className="text-sky-600 dark:text-sky-400 hover:underline">
