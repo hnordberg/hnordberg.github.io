@@ -15,6 +15,7 @@ const TechnologyPage = () => {
       <Contents articles={articles} />
       <section className="card-grid">
         <div className="card" id="hard-problem-llms">
+        <div className="card-title-subtitle">Delve deeper with the <a href="/p/ml">history of Machine Learning & LLMs</a></div>
         <div className="card-text"><i>Note: these are some musings on similarities between LLMs and human thought</i></div>
           <div className="card-title">The Hard Problem of LLMs</div>
           <div className="card-text">The title is a play on the hard problem of consciousness and how LLMs may approach being conscious.
