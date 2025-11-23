@@ -439,7 +439,7 @@
       "Luke Zettlemoyer"
     ],
     "description": "ELMo generated context-dependent word representations by using bidirectional LSTMs trained as language models. Unlike static embeddings, ELMo representations varied based on context, capturing polysemy and complex linguistic features. ELMo demonstrated the power of pre-training and fine-tuning, significantly improving performance across diverse NLP tasks. It was a crucial step toward modern contextualized language models and transfer learning in NLP.",
-    "icon": "ml/allen.png"
+    "icon": "ml/allen_ai.svg"
   },
   {
     "id": "GPT",
@@ -901,7 +901,7 @@
       "Rohin Shah"
     ],
     "description": "This work reframed chain-of-thought (CoT) safety monitoring around monitorability rather than faithfulness, distinguishing CoT-as-rationalization from CoT-as-computation. By making harmful behaviors require multi-step reasoning, the authors forced models to expose their plans and showed that CoT monitoring can detect severe risks unless attackers receive substantial assistance. The paper also offered stress-testing guidelines, concluding that CoT monitoring remains a valuable, if imperfect, layer of defense that warrants active protection and continual evaluation.",
-    "icon": "ml/deepmind_icon.svg"
+    "icon": "ml/deepmind.svg"
   },
   {
     "id": "CRFT",
@@ -922,7 +922,7 @@
       "Jieping Ye"
     ],
     "description": "CRFT extends Representation Fine-Tuning by identifying \"critical\" hidden representations that aggregate or gate reasoning signals, then editing them in a low-rank subspace while freezing the base LLaMA or Mistral weights. Information-flow analysis selects these high-leverage states, enabling large CoT accuracy gains across eight arithmetic and commonsense benchmarks as well as sizeable one-shot improvements. The work highlights that representation-level PEFT can unlock better reasoning without touching most model parameters.",
-    "icon": "ml/zhejiang_university_icon.svg"
+    "icon": "ml/zhejiang_university.svg"
   },
   {
     "id": "OOCR_Steering_Vectors",
@@ -939,6 +939,6 @@
       "Neel Nanda"
     ],
     "description": "This study dissects out-of-context reasoning (OOCR) and finds that many reported cases arise because LoRA fine-tuning effectively adds a constant steering vector that pushes models toward latent concepts. By extracting or directly training such steering vectors, the authors reproduce OOCR across risky/safe decision, function, location, and backdoor benchmarks, showing that unconditional steering can even implement conditional behaviors. The results provide a simple mechanistic account of why fine-tuned LLMs can generalize far beyond their training distribution and highlight the alignment implications of steering-vector interventions.",
-    "icon": "ml/mit.svg"
+    "icon": "ml/mit.png"
   }
 ]
