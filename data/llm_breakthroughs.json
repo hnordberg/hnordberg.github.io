@@ -504,6 +504,32 @@
     "details": "Pretrain BERT by randomly masking 15% of tokens (80% [MASK], 10% random token, 10% unchanged) and predicting them with a Transformer encoder (L=12 or 24). Add Next Sentence Prediction by classifying whether sentence B follows sentence A using [CLS] token representation. Use WordPiece tokenization, segment + position embeddings, GELU activations, dropout 0.1, Adam optimizer (lr=1e−4) with warmup over 10k steps and linear decay. Fine-tune by adding task-specific heads on [CLS] (classification) or token embeddings (QA, tagging) and training for a few epochs with small LR."
   },
   {
+    "id": "Mixed_Precision_Training",
+    "period": "2018",
+    "title": "Mixed Precision Training",
+    "org": "NVIDIA",
+    "location": "https://arxiv.org/pdf/1710.03740.pdf",
+    "paperTitle": "Mixed Precision Training",
+    "authors": [
+      "Paulius Micikevicius",
+      "Sharan Narang",
+      "Jonah Alben",
+      "Gregory Diamos",
+      "Erich Elsen",
+      "David Garcia",
+      "Boris Ginsburg",
+      "Michael Houston",
+      "Olaf Klauser",
+      "Andrew Kraljevic",
+      "Chris Paine",
+      "Naveen Satish",
+      "Michael Wu"
+    ],
+    "description": "Micikevicius et al. showed how to safely train deep networks using half-precision (FP16) arithmetic while preserving full-precision accuracy. By keeping FP32 master weights, accumulating gradients in FP32, and using loss scaling to avoid underflow, they demonstrated 2–3× speedups on NVIDIA Tensor Cores without sacrificing convergence. Mixed precision became the standard recipe for large-scale transformer training, enabling today’s models to fit within GPU memory budgets.",
+    "icon": "ml/nvidia.png",
+    "details": "To implement mixed precision, cast activations, gradients, and matrix multiplications to FP16/BF16 while maintaining FP32 master weights. Use dynamic loss scaling: multiply the loss by a scale factor S, backpropagate in FP16, check for overflow (NaNs/infs), and if none occur divide gradients by S before the optimizer step; otherwise skip the update and reduce S. Retain FP32 copies of weights and optimizer states (e.g., Adam’s moments) and update them in full precision, then cast the updated weights back to FP16 for the forward pass. Combine with Tensor Core-optimized kernels, gradient accumulation, and ZeRO-style sharding for maximal throughput. Frameworks such as NVIDIA Apex AMP and PyTorch’s torch.cuda.amp automate these steps—enable autocast for forward passes and wrap the backward step with GradScaler to manage loss scaling."
+  },
+  {
     "id": "GPT-2",
     "period": "2019",
     "title": "GPT-2",
