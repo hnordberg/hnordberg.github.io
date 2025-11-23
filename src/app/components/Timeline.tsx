@@ -13,6 +13,7 @@ type Entry = {
   location?: string;
   paperTitle?: string;
   description: string;
+  details?: string;
   icon?: string; // filename inside public/img, e.g. 'jgi.webp'
 };
 
@@ -122,6 +123,33 @@ function ExpandableAuthors({ authors }: { authors: string[] }) {
 
 // The component receives items as a prop.
 export default function Timeline({ items }: { items: Entry[] }) {
+  const [activeEntry, setActiveEntry] = useState<Entry | null>(null);
+
+  const handleOpenDetails = (entry: Entry) => {
+    if (entry.details) {
+      setActiveEntry(entry);
+    }
+  };
+
+  const handleCloseDetails = () => setActiveEntry(null);
+
+  useEffect(() => {
+    if (!activeEntry) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        handleCloseDetails();
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [activeEntry]);
 
   return (
     <section aria-label="Timeline" className="container mx-auto px-4 py-8">
@@ -153,6 +181,19 @@ export default function Timeline({ items }: { items: Entry[] }) {
                     )}
                   </div>
                   <div className={`relative z-20 text-box rounded-lg shadow w-full ${styles.card}`}>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenDetails(item)}
+                      disabled={!item.details}
+                      className={`absolute top-3 right-3 text-xs font-medium px-2 py-1 rounded transition-colors ${
+                        item.details
+                          ? 'text-sky-600 dark:text-sky-400 border border-sky-200 dark:border-sky-800 hover:bg-sky-50 dark:hover:bg-slate-900'
+                          : 'text-gray-400 border border-gray-200 cursor-not-allowed'
+                      }`}
+                      aria-label={item.details ? `View more details for ${item.title}` : `Details not available for ${item.title}`}
+                    >
+                      Details
+                    </button>
                     <h3 className="font-semibold text-lg">{item.title}</h3>
                     {item.org && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{item.org}</p>}
                     {item.authors && item.authors.length > 0 && <ExpandableAuthors authors={item.authors} />}
@@ -171,6 +212,33 @@ export default function Timeline({ items }: { items: Entry[] }) {
           );
         })}
       </div>
+      {activeEntry && activeEntry.details && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="timeline-details-title"
+          onClick={handleCloseDetails}
+        >
+          <div
+            className="bg-white dark:bg-slate-900 rounded-lg shadow-xl max-w-2xl w-full p-6 relative"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="absolute top-3 right-3 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+              onClick={handleCloseDetails}
+              aria-label="Close details dialog"
+            >
+              ✕
+            </button>
+            <h4 id="timeline-details-title" className="text-xl font-semibold mb-3">
+              {activeEntry.title}
+            </h4>
+            <p className="text-sm whitespace-pre-line">{activeEntry.details}</p>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
