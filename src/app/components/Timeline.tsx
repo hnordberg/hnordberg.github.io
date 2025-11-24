@@ -181,19 +181,19 @@ export default function Timeline({ items }: { items: Entry[] }) {
                     )}
                   </div>
                   <div className={`relative z-20 text-box rounded-lg shadow w-full ${styles.card}`}>
-                    <button
-                      type="button"
-                      onClick={() => handleOpenDetails(item)}
-                      disabled={!item.details}
-                      className={`absolute top-3 right-3 text-xs font-medium px-2 py-1 rounded transition-colors ${
-                        item.details
-                          ? 'text-sky-600 dark:text-sky-400 border border-sky-200 dark:border-sky-800 hover:bg-sky-50 dark:hover:bg-slate-900'
-                          : 'text-gray-400 border border-gray-200 cursor-not-allowed'
-                      }`}
-                      aria-label={item.details ? `View more details for ${item.title}` : `Details not available for ${item.title}`}
-                    >
-                      Details
-                    </button>
+                    { item.details && <button
+                        type="button"
+                        onClick={() => handleOpenDetails(item)}
+                        className={`absolute top-3 right-3 text-xs font-medium px-2 py-1 rounded transition-colors ${
+                          item.details
+                            ? 'text-sky-600 dark:text-sky-400 border border-sky-200 dark:border-sky-800 hover:bg-sky-50 dark:hover:bg-slate-900'
+                            : 'text-gray-400 border border-gray-200 cursor-not-allowed'
+                        }`}
+                        aria-label={item.details ? `View more details for ${item.title}` : `Details not available for ${item.title}`}
+                      >
+                        Details
+                      </button>
+                    }
                     <h3 className="font-semibold text-lg">{item.title}</h3>
                     {item.org && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{item.org}</p>}
                     {item.authors && item.authors.length > 0 && <ExpandableAuthors authors={item.authors} />}
