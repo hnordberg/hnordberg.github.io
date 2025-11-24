@@ -200,7 +200,7 @@ export default function Timeline({ items }: { items: Entry[] }) {
                     {item.location && (
                       <p className="text-xs mt-1">
                         Paper: <a href={item.location} target="_blank" rel="noopener noreferrer" className="text-sky-600 dark:text-sky-400 hover:underline">
-                          {item.paperTitle || item.title}
+                          {item.paperTitle}
                         </a>
                       </p>
                     )}
