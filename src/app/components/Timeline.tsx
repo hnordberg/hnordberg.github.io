@@ -197,7 +197,7 @@ export default function Timeline({ items }: { items: Entry[] }) {
                     <h3 className="font-semibold text-lg">{item.title}</h3>
                     {item.org && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{item.org}</p>}
                     {item.authors && item.authors.length > 0 && <ExpandableAuthors authors={item.authors} />}
-                    {item.location && (
+                    {item.paperTitle && (
                       <p className="text-xs mt-1">
                         Paper: <a href={item.location} target="_blank" rel="noopener noreferrer" className="text-sky-600 dark:text-sky-400 hover:underline">
                           {item.paperTitle}
