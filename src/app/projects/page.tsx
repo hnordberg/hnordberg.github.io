@@ -36,7 +36,8 @@ const ProjectsPage = () => {
     },
     { id: 'isotope-explorer', title: 'Isotope Explorer' },
     { id: 'batmud', title: 'BatMUD' },
-    { id: 'copy-that', title: 'Firefox extension: Copy That' }
+    { id: 'copy-that', title: 'Firefox extension: Copy That' },
+    { id: 'photostats', title: 'Photo Stats: A Python EXIF scanner' }
   ]
 
   const mathContentRef = useRef<HTMLDivElement>(null);
@@ -654,7 +655,7 @@ const ProjectsPage = () => {
 
         <div className="card" id="copy-that">
           <div className="card-title">Firefox extension: Copy That</div>
-          <div className="card-title-subtitle">2025 • JavaScript</div>
+          <div className="card-title-subtitle">2025 • JavaScript • <a href="https://github.com/hnordberg/copy-that">GitHub Repository</a></div>
           <div className="card-text">
             Copy-That is a Firefox extension that allows you to copy text or HTML from an element on the page to the clipboard.
             <ul className="list">
@@ -678,6 +679,24 @@ const ProjectsPage = () => {
               </li>
               <li>Keyboard Support: Press Escape to cancel selection mode</li>
             </ul>
+          </div>
+        </div>
+
+        <div className="card" id="photostats">
+          <div className="card-title">Photo Stats: A Python EXIF scanner</div>
+          <div className="card-title-subtitle">2025 • Python • <a href="https://github.com/hnordberg/photo-stats">GitHub Repository</a></div>
+          <div className="card-text">A Python tool for scanning your photo collection and displaying statistics about your
+            photography, such as your favorite lens, focal length, camera, and more. It uses SciPy and a KD-tree to quickly search geolocation data,
+            and display the nearest cities for your photos. The cities data comes 
+            from <a href="https://github.com/dr5hn/countries-states-cities-database">Countries, States, and Cities database</a> on GitHub.
+            <LightboxImage 
+              src="/img/photostats-screenshot.png" 
+              alt="Photo Stats" 
+              width={800} 
+              height={600}
+              className="pt-4 pb-4"
+              caption="Photo Stats"
+            />
           </div>
         </div>
 
