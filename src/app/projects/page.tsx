@@ -37,7 +37,8 @@ const ProjectsPage = () => {
     { id: 'isotope-explorer', title: 'Isotope Explorer' },
     { id: 'batmud', title: 'BatMUD' },
     { id: 'copy-that', title: 'Firefox extension: Copy That' },
-    { id: 'photostats', title: 'Photo Stats: A Python EXIF scanner' }
+    { id: 'photostats', title: 'Photo Stats: A Python EXIF scanner' },
+    { id: 'webscan', title: 'WebScan: A product / price / availability scanner' }
   ]
 
   const mathContentRef = useRef<HTMLDivElement>(null);
@@ -646,7 +647,7 @@ const ProjectsPage = () => {
           <div className="card-title">BatMUD</div>
           <div className="card-title-subtitle">1991 • LPC</div>
           <div className="card-text">A MUD (Multi-User Dungeon) is an online role-playing game. In 1991 I was at the
-            university and joined BatMUD as a player. Back then you accessed the game via a telnet client.
+            university and joined <a href="https://www.bat.org/">BatMUD</a> as a player. Back then you accessed the game via a telnet client.
             I wizzed (reached level 20 and beat Tiamat) and started extending the
             game as all wizards do. This is how I discovered my love of programming. I started working on the backend, adding a
             'feelings' system and the first global event (orch raids), among other things. The coding for LPC MUDs is in LPC, an object-oriented
@@ -697,6 +698,15 @@ const ProjectsPage = () => {
               className="pt-4 pb-4"
               caption="Photo Stats"
             />
+          </div>
+        </div>
+
+        <div className="card" id="webscan">
+          <div className="card-title">WebScan: A product / price / availability scanner</div>
+          <div className="card-title-subtitle">2023 • JavaScript • <a href="https://github.com/hnordberg/webscan">GitHub Repository</a></div>
+          <div className="card-text">WebScan continuously monitors configured websites, tracks product listings, and alerts you when new
+            products appear. Both email and desktop notifications are supported. It's particularly useful for monitoring e-commerce sites
+            for new inventory, price changes, or specific product availability. You specify the website and a CSS selector for the element to monitor.
           </div>
         </div>
 
