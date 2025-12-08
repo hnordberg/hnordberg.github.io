@@ -155,7 +155,8 @@
     ],
     "description": "AlexNet won the ImageNet 2012 competition with a significant margin, demonstrating that deep convolutional networks trained with GPUs could dramatically outperform traditional computer vision methods. The architecture combined ReLU activations, dropout regularization, data augmentation, and GPU training. AlexNet's success marked the beginning of the deep learning era and sparked intense interest in neural networks across academia and industry.",
     "icon": "ml/toronto.svg",
-    "details": "Recreate AlexNet with five convolutional layers followed by three fully connected layers: Conv1 (11×11 stride 4, 96 filters) → LRN → max pool; Conv2 (5×5, 256 filters split across GPUs) → LRN → max pool; Conv3 (3×3, 384) → Conv4 (3×3, 384) → Conv5 (3×3, 256) → max pool; FC6 (4096) → FC7 (4096) → FC8 (1000). Use ReLU activations, dropout (p=0.5) on FC6/FC7, and overlapping pooling (stride 2). Train on ImageNet with SGD, initial lr=0.01, momentum 0.9, weight decay 5e-4, step lr decay, and heavy data augmentation (random crops, flips, color jitter). Parallelize across two GPUs by splitting filters/channel groups. Evaluate with top-1/top-5 accuracy; visualize learned kernels to ensure diverse edge/color detectors."
+    "details": "Recreate AlexNet with five convolutional layers followed by three fully connected layers: Conv1 (11×11 stride 4, 96 filters) → LRN → max pool; Conv2 (5×5, 256 filters split across GPUs) → LRN → max pool; Conv3 (3×3, 384) → Conv4 (3×3, 384) → Conv5 (3×3, 256) → max pool; FC6 (4096) → FC7 (4096) → FC8 (1000). Use ReLU activations, dropout (p=0.5) on FC6/FC7, and overlapping pooling (stride 2). Train on ImageNet with SGD, initial lr=0.01, momentum 0.9, weight decay 5e-4, step lr decay, and heavy data augmentation (random crops, flips, color jitter). Parallelize across two GPUs by splitting filters/channel groups. Evaluate with top-1/top-5 accuracy; visualize learned kernels to ensure diverse edge/color detectors.",
+    "repo": "https://github.com/akrizhevsky/cuda-convnet2"
   },
   {
     "id": "Dropout",
@@ -190,7 +191,8 @@
     ],
     "description": "Word2Vec introduced efficient methods (Skip-gram and CBOW) for learning dense vector representations of words from large corpora. These embeddings captured semantic and syntactic relationships, enabling vector arithmetic like 'king' - 'man' + 'woman' ≈ 'queen'. Word2Vec revolutionized natural language processing by providing a scalable way to represent words as continuous vectors, becoming foundational for modern NLP.",
     "icon": "ml/google.png",
-    "details": "To train Skip-gram with negative sampling (SGNS): iterate over tokenized text, for each center word w_c predict surrounding context words w_o within a window k. For each positive pair (w_c, w_o), sample K negatives from the unigram distribution^0.75. Optimize log σ(u_o·v_c) + Σ log σ(−u_n·v_c), where v are input embeddings and u are output embeddings. Use subsampling to drop frequent words via P_drop(w)=1−√(t/f(w)). Implement with efficient batching (e.g., PyTorch’s EmbeddingBag) and asynchronous updates (Hogwild) for speed. After training, discard output vectors and use v as word embeddings. Evaluate via analogy tasks or downstream classifiers."
+    "details": "To train Skip-gram with negative sampling (SGNS): iterate over tokenized text, for each center word w_c predict surrounding context words w_o within a window k. For each positive pair (w_c, w_o), sample K negatives from the unigram distribution^0.75. Optimize log σ(u_o·v_c) + Σ log σ(−u_n·v_c), where v are input embeddings and u are output embeddings. Use subsampling to drop frequent words via P_drop(w)=1−√(t/f(w)). Implement with efficient batching (e.g., PyTorch’s EmbeddingBag) and asynchronous updates (Hogwild) for speed. After training, discard output vectors and use v as word embeddings. Evaluate via analogy tasks or downstream classifiers.",
+    "repo": "https://github.com/google/word2vec"
   },
   {
     "id": "VAE",
@@ -257,7 +259,8 @@
     ],
     "description": "Seq2Seq introduced an end-to-end framework for sequence transduction using an encoder-decoder architecture with LSTMs. The encoder maps variable-length input sequences to fixed-size representations, which the decoder transforms into variable-length output sequences. This architecture unified many NLP tasks under a single framework and achieved breakthrough results in machine translation, establishing neural approaches as state-of-the-art.",
     "icon": "ml/google.png",
-    "details": "Build a Seq2Seq translator with LSTM encoder-decoder: embed input tokens, pass through a bidirectional LSTM to produce hidden states. Use the final encoder state to initialize the decoder LSTM. During training, apply teacher forcing: feed ground-truth previous token to the decoder, project hidden state to vocabulary logits, and minimize cross-entropy. At inference, decode autoregressively with greedy or beam search. Handle variable lengths via padding + masking, and add attention (Bahdanau/Luong) to improve long-sentence performance. Optimizers like Adam with scheduled learning rates and label smoothing help stabilize training on large corpora."
+    "details": "Build a Seq2Seq translator with LSTM encoder-decoder: embed input tokens, pass through a bidirectional LSTM to produce hidden states. Use the final encoder state to initialize the decoder LSTM. During training, apply teacher forcing: feed ground-truth previous token to the decoder, project hidden state to vocabulary logits, and minimize cross-entropy. At inference, decode autoregressively with greedy or beam search. Handle variable lengths via padding + masking, and add attention (Bahdanau/Luong) to improve long-sentence performance. Optimizers like Adam with scheduled learning rates and label smoothing help stabilize training on large corpora.",
+    "repo": "https://github.com/google/seq2seq"
   },
   {
     "id": "Bahdanau_Attention",
@@ -289,7 +292,8 @@
     ],
     "description": "GloVe combined global matrix factorization with local context window methods for learning word embeddings. It trained on aggregated word-word co-occurrence statistics to produce vectors with meaningful linear substructures. GloVe provided an alternative to Word2Vec with strong performance on word analogy and similarity tasks, and its pre-trained vectors became widely used in NLP applications.",
     "icon": "ml/stanford.png",
-    "details": "Implement GloVe by constructing a sparse co-occurrence matrix X where X_ij counts how often word j appears in the context of word i within a window. Optimize the weighted least-squares objective: Σ f(X_ij) (w_iᵗ w̃_j + b_i + b̃_j − log X_ij)^2, where f(x) = min((x/x_max)^α, 1). Typical hyperparameters: x_max = 100, α = 0.75, embedding dimension 100–300. Use AdaGrad or Adam with mini-batches over non-zero entries. After training, sum word and context vectors (w_i + w̃_i) to form the final embedding. Evaluate on word analogy tasks by checking that vector differences correspond to semantic relations."
+    "details": "Implement GloVe by constructing a sparse co-occurrence matrix X where X_ij counts how often word j appears in the context of word i within a window. Optimize the weighted least-squares objective: Σ f(X_ij) (w_iᵗ w̃_j + b_i + b̃_j − log X_ij)^2, where f(x) = min((x/x_max)^α, 1). Typical hyperparameters: x_max = 100, α = 0.75, embedding dimension 100–300. Use AdaGrad or Adam with mini-batches over non-zero entries. After training, sum word and context vectors (w_i + w̃_i) to form the final embedding. Evaluate on word analogy tasks by checking that vector differences correspond to semantic relations.",
+    "repo": "https://github.com/stanfordnlp/GloVe"
   },
   {
     "id": "Neural_Turing_Machine",
@@ -320,7 +324,7 @@
     ],
     "description": "Batch Normalization normalized layer inputs across mini-batches, stabilizing training by reducing internal covariate shift. It enabled much higher learning rates, reduced sensitivity to initialization, and acted as a regularizer. Batch normalization dramatically accelerated training and became a standard component in deep networks, enabling the training of very deep architectures that were previously difficult to optimize.",
     "icon": "ml/google.png",
-    "details": "For each batch, compute mean μ_B and variance σ²_B of activations for a given feature. Normalize: \u02dc x = (x − μ_B) / √(σ²_B + ε), then scale and shift with learnable γ, β: y = γ \u02dc x + β. Insert BN between linear/conv layers and nonlinearities (typically before ReLU). During inference, use running averages of μ_B and σ²_B accumulated during training. BN allows higher learning rates and reduces dependency on initialization. When batch sizes are small, switch to LayerNorm or GroupNorm. Remember to disable dropout before BN in the layer order (Conv → BN → ReLU)."
+    "details": "For each batch, compute mean μ_B and variance σ²_B of activations for a given feature. Normalize: ˜ x = (x − μ_B) / √(σ²_B + ε), then scale and shift with learnable γ, β: y = γ ˜ x + β. Insert BN between linear/conv layers and nonlinearities (typically before ReLU). During inference, use running averages of μ_B and σ²_B accumulated during training. BN allows higher learning rates and reduces dependency on initialization. When batch sizes are small, switch to LayerNorm or GroupNorm. Remember to disable dropout before BN in the layer order (Conv → BN → ReLU)."
   },
   {
     "id": "ResNet",
@@ -337,7 +341,8 @@
     ],
     "description": "ResNet introduced skip connections that allowed gradients to flow directly through networks by learning residual mappings. This simple architectural change enabled the training of networks with hundreds or even thousands of layers without degradation problems. ResNet won ImageNet 2015 and demonstrated that very deep networks could be effectively trained, fundamentally changing how we design neural network architectures.",
     "icon": "ml/microsoft.png",
-    "details": "Implement ResNet-50 using bottleneck blocks: 1×1 conv (reduce channels) → 3×3 conv → 1×1 conv (expand), each followed by BatchNorm + ReLU. Add identity shortcuts so block output is F(x)+x; when spatial or channel dimensions change, apply a 1×1 projection to the shortcut. Arrange blocks in stages {3,4,6,3} with stride-2 downsampling at stage boundaries. Train on ImageNet with SGD (lr=0.1, momentum 0.9, weight decay 1e−4) and step/cosine LR schedules, using data augmentation (random crops, flips, color jitter). Residual connections preserve gradient flow, enabling very deep stacks—monitor training to ensure earlier layers remain active and validation accuracy surpasses non-residual baselines."
+    "details": "Implement ResNet-50 using bottleneck blocks: 1×1 conv (reduce channels) → 3×3 conv → 1×1 conv (expand), each followed by BatchNorm + ReLU. Add identity shortcuts so block output is F(x)+x; when spatial or channel dimensions change, apply a 1×1 projection to the shortcut. Arrange blocks in stages {3,4,6,3} with stride-2 downsampling at stage boundaries. Train on ImageNet with SGD (lr=0.1, momentum 0.9, weight decay 1e−4) and step/cosine LR schedules, using data augmentation (random crops, flips, color jitter). Residual connections preserve gradient flow, enabling very deep stacks—monitor training to ensure earlier layers remain active and validation accuracy surpasses non-residual baselines.",
+    "repo": "https://github.com/KaimingHe/deep-residual-networks"
   },
   {
     "id": "Layer_Normalization",
@@ -353,7 +358,7 @@
     ],
     "description": "Layer Normalization normalized inputs across features for each example independently, unlike batch normalization which normalized across the batch dimension. This made it particularly effective for recurrent neural networks and sequences of varying length. Layer normalization stabilized hidden state dynamics in RNNs and later became the standard normalization technique in transformer architectures.",
     "icon": "ml/toronto.svg",
-    "details": "For a hidden vector h with H features, compute μ = (1/H) Σ h_i and σ² = (1/H) Σ (h_i − μ)^2 per sample. Normalize as \u02dc h = (h − μ) / √(σ² + ε), then learn affine parameters γ, β so output y = γ ⊙ \u02dc h + β. Apply LayerNorm to each timestep independently in RNNs or to the last dimension in transformers (often before attention/MLP sublayers in a pre-LN architecture). Since statistics are sample-wise, LN works with batch size 1 and avoids running averages. Implementation in PyTorch: nn.LayerNorm(hidden_dim). Tune ε to avoid numerical issues when σ is small."
+    "details": "For a hidden vector h with H features, compute μ = (1/H) Σ h_i and σ² = (1/H) Σ (h_i − μ)^2 per sample. Normalize as ˜ h = (h − μ) / √(σ² + ε), then learn affine parameters γ, β so output y = γ ⊙ ˜ h + β. Apply LayerNorm to each timestep independently in RNNs or to the last dimension in transformers (often before attention/MLP sublayers in a pre-LN architecture). Since statistics are sample-wise, LN works with batch size 1 and avoids running averages. Implementation in PyTorch: nn.LayerNorm(hidden_dim). Tune ε to avoid numerical issues when σ is small."
   },
   {
     "id": "BPE",
@@ -369,7 +374,8 @@
     ],
     "description": "Byte-Pair Encoding (BPE) adapted a data compression algorithm for neural machine translation, enabling open-vocabulary learning by breaking words into subword units. This solved the rare word problem by representing infrequent words as sequences of common subwords. BPE became the standard tokenization approach for language models, enabling models to handle any word while maintaining reasonable vocabulary sizes, and is used in GPT, BERT, and most modern LLMs.",
     "icon": "ml/edinburgh.png",
-    "details": "To train BPE, initialize the vocabulary with all characters (or bytes) and count symbol pair frequencies in the corpus. Iteratively merge the most frequent adjacent pair (e.g., 't'+'h'→'th'), add the new token to the vocabulary, and update the corpus by replacing occurrences of that pair. Repeat until reaching the desired vocab size (typically 30k–50k). At tokenization time, greedily apply the learned merges from most to least frequent to segment new words into subwords. For neural models, replace words with their subword sequences before feeding them into embeddings. Libraries like SentencePiece or Hugging Face tokenizers expose BPE training/payment APIs; ensure consistent pre-processing (lowercasing, normalization) between training and inference."
+    "details": "To train BPE, initialize the vocabulary with all characters (or bytes) and count symbol pair frequencies in the corpus. Iteratively merge the most frequent adjacent pair (e.g., 't'+'h'→'th'), add the new token to the vocabulary, and update the corpus by replacing occurrences of that pair. Repeat until reaching the desired vocab size (typically 30k–50k). At tokenization time, greedily apply the learned merges from most to least frequent to segment new words into subwords. For neural models, replace words with their subword sequences before feeding them into embeddings. Libraries like SentencePiece or Hugging Face tokenizers expose BPE training/payment APIs; ensure consistent pre-processing (lowercasing, normalization) between training and inference.",
+    "repo": "https://github.com/rsennrich/subword-nmt"
   },
   {
     "id": "Transformer",
@@ -390,7 +396,8 @@
     ],
     "description": "The Transformer replaced recurrence and convolutions entirely with self-attention mechanisms, processing sequences in parallel rather than sequentially. It introduced multi-head attention, positional encodings, and a feedforward encoder-decoder structure. The Transformer achieved state-of-the-art translation results while being more parallelizable and requiring significantly less training time. This architecture became the foundation for modern large language models and revolutionized NLP.",
     "icon": "ml/google.png",
-    "details": "Implement a Transformer block with multi-head attention and position-wise feedforward layers. For attention, project inputs to Q, K, V, split into h heads, compute softmax(QKᵗ/√d_k)V with masking for padding/causal constraints, then concatenate heads and project back. Add residual connections and LayerNorm around attention and feedforward sublayers (pre-LN: LN → sublayer → residual). Encode sequence order with sinusoidal or learned positional embeddings. Stack encoder blocks; decoder blocks include masked self-attention plus encoder–decoder attention. Train with Adam (β₁=0.9, β₂=0.98) and warmup/inverse-sqrt LR schedule, apply label smoothing and dropout. Use beam search during inference."
+    "details": "Implement a Transformer block with multi-head attention and position-wise feedforward layers. For attention, project inputs to Q, K, V, split into h heads, compute softmax(QKᵗ/√d_k)V with masking for padding/causal constraints, then concatenate heads and project back. Add residual connections and LayerNorm around attention and feedforward sublayers (pre-LN: LN → sublayer → residual). Encode sequence order with sinusoidal or learned positional embeddings. Stack encoder blocks; decoder blocks include masked self-attention plus encoder–decoder attention. Train with Adam (β₁=0.9, β₂=0.98) and warmup/inverse-sqrt LR schedule, apply label smoothing and dropout. Use beam search during inference.",
+    "repo": "https://github.com/tensorflow/tensor2tensor"
   },
   {
     "id": "RLHF",
@@ -447,7 +454,8 @@
     ],
     "description": "PPO introduced a simpler and more stable policy gradient method by clipping the objective function to prevent excessively large policy updates. It combined the benefits of trust region methods with the simplicity of first-order optimization. PPO became the most widely used reinforcement learning algorithm due to its robustness, ease of implementation, and strong empirical performance across diverse tasks.",
     "icon": "ml/openai.svg",
-    "details": "Implement PPO with clipped surrogate objective: L = E[min(r_t(θ)Â_t, clip(r_t(θ), 1−ε, 1+ε)Â_t)], where r_t is the probability ratio and Â_t Generalized Advantage Estimation. Collect trajectories with π_old, compute returns/advantages, then run multiple epochs of mini-batch SGD (Adam lr≈3e−4) updating both policy and value heads. Include value loss and entropy bonus; monitor KL divergence to adjust learning rate or early-stop. Works for continuous control (Gaussian policies with tanh outputs) and discrete actions. Use normalized advantages and gradient clipping for stability."
+    "details": "Implement PPO with clipped surrogate objective: L = E[min(r_t(θ)Â_t, clip(r_t(θ), 1−ε, 1+ε)Â_t)], where r_t is the probability ratio and Â_t Generalized Advantage Estimation. Collect trajectories with π_old, compute returns/advantages, then run multiple epochs of mini-batch SGD (Adam lr≈3e−4) updating both policy and value heads. Include value loss and entropy bonus; monitor KL divergence to adjust learning rate or early-stop. Works for continuous control (Gaussian policies with tanh outputs) and discrete actions. Use normalized advantages and gradient clipping for stability.",
+    "repo": "https://github.com/openai/baselines"
   },
   {
     "id": "ELMo",
@@ -467,7 +475,8 @@
     ],
     "description": "ELMo generated context-dependent word representations by using bidirectional LSTMs trained as language models. Unlike static embeddings, ELMo representations varied based on context, capturing polysemy and complex linguistic features. ELMo demonstrated the power of pre-training and fine-tuning, significantly improving performance across diverse NLP tasks. It was a crucial step toward modern contextualized language models and transfer learning in NLP.",
     "icon": "ml/allen_ai.svg",
-    "details": "Train a bidirectional 2-layer LSTM language model on large text (e.g., 1B Word Benchmark). For each token, concatenate forward and backward hidden states from all layers, then learn task-specific scalar weights to combine them. During downstream training, keep LM weights fixed or fine-tune lightly while adding the weighted ELMo embeddings to the model input (or intermediate layers). Implementation tips: apply character CNNs to build robust token embeddings, use dropout/variational dropout in LSTMs, and train with sampled softmax for efficiency. Evaluate by plugging ELMo into tagging, QA, or classification models and measuring gains."
+    "details": "Train a bidirectional 2-layer LSTM language model on large text (e.g., 1B Word Benchmark). For each token, concatenate forward and backward hidden states from all layers, then learn task-specific scalar weights to combine them. During downstream training, keep LM weights fixed or fine-tune lightly while adding the weighted ELMo embeddings to the model input (or intermediate layers). Implementation tips: apply character CNNs to build robust token embeddings, use dropout/variational dropout in LSTMs, and train with sampled softmax for efficiency. Evaluate by plugging ELMo into tagging, QA, or classification models and measuring gains.",
+    "repo": "https://github.com/allenai/bilm-tf"
   },
   {
     "id": "GPT",
@@ -484,7 +493,8 @@
     ],
     "description": "GPT introduced a two-stage approach: unsupervised pre-training of a transformer language model on large text corpora, followed by supervised fine-tuning on specific tasks. This demonstrated that language models could learn general representations useful across many tasks. GPT showed that pre-training could significantly reduce the labeled data required for downstream tasks, establishing the pre-train-then-fine-tune paradigm that dominated subsequent NLP research.",
     "icon": "ml/openai.svg",
-    "details": "To replicate GPT, train a decoder-only Transformer with masked self-attention on large text (e.g., BookCorpus). Use byte pair encoding, 12 layers, hidden size 768, 12 heads, context length 512, GELU activations, and learned positional embeddings. Optimize with Adam (β1=0.9, β2=0.95), LR warmup + cosine decay, and layer-wise LR decay. Fine-tune on downstream tasks by prepending task-specific prompts and continuing supervised training with small LR. Evaluation uses perplexity for pretraining and task-specific metrics (accuracy, F1) during fine-tuning."
+    "details": "To replicate GPT, train a decoder-only Transformer with masked self-attention on large text (e.g., BookCorpus). Use byte pair encoding, 12 layers, hidden size 768, 12 heads, context length 512, GELU activations, and learned positional embeddings. Optimize with Adam (β1=0.9, β2=0.95), LR warmup + cosine decay, and layer-wise LR decay. Fine-tune on downstream tasks by prepending task-specific prompts and continuing supervised training with small LR. Evaluation uses perplexity for pretraining and task-specific metrics (accuracy, F1) during fine-tuning.",
+    "repo": "https://github.com/openai/finetune-transformer-lm"
   },
   {
     "id": "BERT",
@@ -501,7 +511,8 @@
     ],
     "description": "BERT pre-trained bidirectional transformers using masked language modeling and next sentence prediction. Unlike previous unidirectional models, BERT jointly conditioned on both left and right context in all layers. BERT achieved state-of-the-art results across eleven NLP tasks and demonstrated that deeply bidirectional pre-training was crucial for language understanding. BERT became the foundation for numerous downstream applications and variants.",
     "icon": "ml/google.png",
-    "details": "Pretrain BERT by randomly masking 15% of tokens (80% [MASK], 10% random token, 10% unchanged) and predicting them with a Transformer encoder (L=12 or 24). Add Next Sentence Prediction by classifying whether sentence B follows sentence A using [CLS] token representation. Use WordPiece tokenization, segment + position embeddings, GELU activations, dropout 0.1, Adam optimizer (lr=1e−4) with warmup over 10k steps and linear decay. Fine-tune by adding task-specific heads on [CLS] (classification) or token embeddings (QA, tagging) and training for a few epochs with small LR."
+    "details": "Pretrain BERT by randomly masking 15% of tokens (80% [MASK], 10% random token, 10% unchanged) and predicting them with a Transformer encoder (L=12 or 24). Add Next Sentence Prediction by classifying whether sentence B follows sentence A using [CLS] token representation. Use WordPiece tokenization, segment + position embeddings, GELU activations, dropout 0.1, Adam optimizer (lr=1e−4) with warmup over 10k steps and linear decay. Fine-tune by adding task-specific heads on [CLS] (classification) or token embeddings (QA, tagging) and training for a few epochs with small LR.",
+    "repo": "https://github.com/google-research/bert"
   },
   {
     "id": "Mixed_Precision_Training",
@@ -527,7 +538,8 @@
     ],
     "description": "Micikevicius et al. showed how to safely train deep networks using half-precision (FP16) arithmetic while preserving full-precision accuracy. By keeping FP32 master weights, accumulating gradients in FP32, and using loss scaling to avoid underflow, they demonstrated 2–3× speedups on NVIDIA Tensor Cores without sacrificing convergence. Mixed precision became the standard recipe for large-scale transformer training, enabling today’s models to fit within GPU memory budgets.",
     "icon": "ml/nvidia.png",
-    "details": "To implement mixed precision, cast activations, gradients, and matrix multiplications to FP16/BF16 while maintaining FP32 master weights. Use dynamic loss scaling: multiply the loss by a scale factor S, backpropagate in FP16, check for overflow (NaNs/infs), and if none occur divide gradients by S before the optimizer step; otherwise skip the update and reduce S. Retain FP32 copies of weights and optimizer states (e.g., Adam’s moments) and update them in full precision, then cast the updated weights back to FP16 for the forward pass. Combine with Tensor Core-optimized kernels, gradient accumulation, and ZeRO-style sharding for maximal throughput. Frameworks such as NVIDIA Apex AMP and PyTorch’s torch.cuda.amp automate these steps—enable autocast for forward passes and wrap the backward step with GradScaler to manage loss scaling."
+    "details": "To implement mixed precision, cast activations, gradients, and matrix multiplications to FP16/BF16 while maintaining FP32 master weights. Use dynamic loss scaling: multiply the loss by a scale factor S, backpropagate in FP16, check for overflow (NaNs/infs), and if none occur divide gradients by S before the optimizer step; otherwise skip the update and reduce S. Retain FP32 copies of weights and optimizer states (e.g., Adam’s moments) and update them in full precision, then cast the updated weights back to FP16 for the forward pass. Combine with Tensor Core-optimized kernels, gradient accumulation, and ZeRO-style sharding for maximal throughput. Frameworks such as NVIDIA Apex AMP and PyTorch’s torch.cuda.amp automate these steps—enable autocast for forward passes and wrap the backward step with GradScaler to manage loss scaling.",
+    "repo": "https://github.com/NVIDIA/apex"
   },
   {
     "id": "GPT-2",
@@ -546,7 +558,8 @@
     ],
     "description": "GPT-2 scaled up the original GPT to 1.5 billion parameters and trained on a larger, more diverse dataset. It demonstrated that language models could perform many tasks zero-shot without fine-tuning by simply conditioning on appropriate prompts. GPT-2 showed strong performance on diverse tasks including translation, summarization, and question answering, suggesting that with sufficient scale and data, language models naturally learn multitask capabilities.",
     "icon": "ml/openai.svg",
-    "details": "GPT-2 extends GPT with larger decoder-only Transformers (117M–1.5B parameters) trained on WebText (45M web pages). Use byte-level BPE, context length 1024, GELU, residual/LN structure, and Adam with LR warmup + cosine decay. During inference, perform nucleus (top-p) or top-k sampling with temperature scaling to control creativity; apply repetition penalties to avoid loops. Evaluate zero-shot by crafting prompts for downstream tasks. Fine-tuning can be done via supervised objectives, but GPT-2 highlighted the power of zero-shot prompting on diverse benchmarks."
+    "details": "GPT-2 extends GPT with larger decoder-only Transformers (117M–1.5B parameters) trained on WebText (45M web pages). Use byte-level BPE, context length 1024, GELU, residual/LN structure, and Adam with LR warmup + cosine decay. During inference, perform nucleus (top-p) or top-k sampling with temperature scaling to control creativity; apply repetition penalties to avoid loops. Evaluate zero-shot by crafting prompts for downstream tasks. Fine-tuning can be done via supervised objectives, but GPT-2 highlighted the power of zero-shot prompting on diverse benchmarks.",
+    "repo": "https://github.com/openai/gpt-2"
   },
   {
     "id": "T5",
@@ -568,7 +581,8 @@
     ],
     "description": "T5 unified all NLP tasks into a text-to-text format where both inputs and outputs are text strings. It systematically explored transfer learning techniques including pre-training objectives, architectures, datasets, and fine-tuning methods. T5's encoder-decoder architecture and comprehensive evaluation provided insights into what makes transfer learning effective. The unified framework simplified multi-task learning and became influential for instruction-following models.",
     "icon": "ml/google.png",
-    "details": "Convert every supervised task into a text prompt (e.g., “translate English to German: ...”) and train a Transformer encoder-decoder with relative position embeddings using span-corruption: mask contiguous spans and have the decoder reconstruct them. Use Adafactor optimizer, learning-rate warmup then inverse-square decay, dropout 0.1, and gradient checkpointing for large models. Fine-tune by continuing text-to-text training on task data, optionally with adapters or LoRA for efficiency. Evaluate outputs with beam search and task-specific metrics."
+    "details": "Convert every supervised task into a text prompt (e.g., “translate English to German: ...”) and train a Transformer encoder-decoder with relative position embeddings using span-corruption: mask contiguous spans and have the decoder reconstruct them. Use Adafactor optimizer, learning-rate warmup then inverse-square decay, dropout 0.1, and gradient checkpointing for large models. Fine-tune by continuing text-to-text training on task data, optionally with adapters or LoRA for efficiency. Evaluate outputs with beam search and task-specific metrics.",
+    "repo": "https://github.com/google-research/text-to-text-transfer-transformer"
   },
   {
     "id": "Bitter_Lesson",
@@ -666,7 +680,8 @@
     ],
     "description": "ZeRO eliminated memory redundancies in data-parallel distributed training by partitioning optimizer states, gradients, and parameters across devices rather than replicating them. ZeRO enabled training models with trillions of parameters by dramatically reducing per-device memory requirements while maintaining computational efficiency. This optimization became crucial for training large language models and is implemented in DeepSpeed, enabling the scale of models like GPT-3 and beyond.",
     "icon": "ml/microsoft.png",
-    "details": "Implement ZeRO in stages: Stage 1 shards optimizer states (momentum/variance) across ranks; Stage 2 additionally shards gradients; Stage 3 partitions parameters themselves. Use DeepSpeed or FairScale to manage communication (reduce-scatter/all-gather) during forward/backward passes. Enable offloading to CPU/NVMe for very large models, and combine with activation checkpointing + mixed precision. Monitor memory by inspecting per-rank statistics; ZeRO lets you scale model size roughly linearly with number of GPUs without replicating optimizer state on each device."
+    "details": "Implement ZeRO in stages: Stage 1 shards optimizer states (momentum/variance) across ranks; Stage 2 additionally shards gradients; Stage 3 partitions parameters themselves. Use DeepSpeed or FairScale to manage communication (reduce-scatter/all-gather) during forward/backward passes. Enable offloading to CPU/NVMe for very large models, and combine with activation checkpointing + mixed precision. Monitor memory by inspecting per-rank statistics; ZeRO lets you scale model size roughly linearly with number of GPUs without replicating optimizer state on each device.",
+    "repo": "https://github.com/microsoft/DeepSpeed"
   },
   {
     "id": "RoPE",
@@ -685,7 +700,8 @@
     ],
     "description": "Rotary Position Embedding (RoPE) encodes position information by rotating word embeddings based on their absolute positions, while naturally encoding relative position information through the rotation properties. RoPE provided better extrapolation to longer sequences than previous position encoding methods while being computationally efficient. It was adopted by influential models including PaLM, LLaMA, and many other modern LLMs, becoming a preferred position encoding technique.",
     "icon": "ml/zhuiyi.png",
-    "details": "To add RoPE, pair embedding dimensions into complex numbers and rotate each pair by angle θ = pos · base^{-2i/d}, where i indexes the pair and base is typically 10,000. Implementation: for queries/keys in attention, reshape to (seq, heads, d/2, 2) and apply rotation matrix [[cosθ, −sinθ],[sinθ, cosθ]]. This injects relative positional info without extra parameters. For long-context extrapolation, scale θ via linear interpolation or NTK scaling. Libraries like xformers and transformers provide rotary_embedding APIs—enable by setting rotary_emb_fraction and applying to Q/K before dot products."
+    "details": "To add RoPE, pair embedding dimensions into complex numbers and rotate each pair by angle θ = pos · base^{-2i/d}, where i indexes the pair and base is typically 10,000. Implementation: for queries/keys in attention, reshape to (seq, heads, d/2, 2) and apply rotation matrix [[cosθ, −sinθ],[sinθ, cosθ]]. This injects relative positional info without extra parameters. For long-context extrapolation, scale θ via linear interpolation or NTK scaling. Libraries like xformers and transformers provide rotary_embedding APIs—enable by setting rotary_emb_fraction and applying to Q/K before dot products.",
+    "repo": "https://github.com/ZhuiyiTechnology/roformer"
   },
   {
     "id": "LoRA",
@@ -706,7 +722,8 @@
     ],
     "description": "LoRA enabled efficient fine-tuning of large language models by training low-rank decomposition matrices that are added to frozen pre-trained weights. This reduced trainable parameters by 10,000x and memory requirements by 3x while maintaining or exceeding full fine-tuning performance. LoRA made it practical to customize large models for specific tasks with limited compute resources, democratizing access to fine-tuning and enabling rapid adaptation of foundation models.",
     "icon": "ml/microsoft.png",
-    "details": "To apply LoRA on a weight matrix W ∈ ℝ^{d_out×d_in}, freeze W and learn low-rank adapters: replace Wx with Wx + BAx, where B ∈ ℝ^{d_out×r}, A ∈ ℝ^{r×d_in} with r ≪ d. Initialize A randomly and B to zeros so the adapter starts as no-op. Train only A, B (and biases/LayerNorms) using standard optimizer; memory usage shrinks by ~d·r instead of d·d. At inference, merge BA into W if desired or keep separate. Frameworks like PEFT/HF provide APIs to inject LoRA into attention/query/value or MLP projections with a few lines of code."
+    "details": "To apply LoRA on a weight matrix W ∈ ℝ^{d_out×d_in}, freeze W and learn low-rank adapters: replace Wx with Wx + BAx, where B ∈ ℝ^{d_out×r}, A ∈ ℝ^{r×d_in} with r ≪ d. Initialize A randomly and B to zeros so the adapter starts as no-op. Train only A, B (and biases/LayerNorms) using standard optimizer; memory usage shrinks by ~d·r instead of d·d. At inference, merge BA into W if desired or keep separate. Frameworks like PEFT/HF provide APIs to inject LoRA into attention/query/value or MLP projections with a few lines of code.",
+    "repo": "https://github.com/microsoft/LoRA"
   },
   {
     "id": "InstructGPT",
@@ -779,7 +796,8 @@
     ],
     "description": "FlashAttention optimized the attention mechanism by accounting for GPU memory hierarchy, using tiling to reduce data movement between GPU memory levels. This IO-aware algorithm achieved exact attention with significantly reduced memory usage and 2-4x speedup compared to standard implementations. FlashAttention enabled training transformers with much longer context lengths and became widely adopted, fundamentally improving the efficiency of transformer models.",
     "icon": "ml/stanford.png",
-    "details": "FlashAttention computes attention via tiled blocks: split Q/K/V into tiles that fit in SRAM, compute softmax incrementally while maintaining running max/sum for numerical stability, and write outputs back to HBM only once. Use libraries (flash-attn, PyTorch 2’s SDPA) to enable by setting supported head dimensions (multiples of 8/16) and contiguous memory layouts. When implementing manually, fuse operations (QKᵗ, softmax, AV) into a single kernel to minimize memory traffic. Validate by comparing outputs to standard attention and measuring speedups for long sequences."
+    "details": "FlashAttention computes attention via tiled blocks: split Q/K/V into tiles that fit in SRAM, compute softmax incrementally while maintaining running max/sum for numerical stability, and write outputs back to HBM only once. Use libraries (flash-attn, PyTorch 2’s SDPA) to enable by setting supported head dimensions (multiples of 8/16) and contiguous memory layouts. When implementing manually, fuse operations (QKᵗ, softmax, AV) into a single kernel to minimize memory traffic. Validate by comparing outputs to standard attention and measuring speedups for long sequences.",
+    "repo": "https://github.com/Dao-AILab/flash-attention"
   },
   {
     "id": "Constitutional_AI",
@@ -862,7 +880,8 @@
     ],
     "description": "DPO simplified preference learning by directly optimizing language models on human preferences without requiring a separate reward model or reinforcement learning. It reformulated RLHF as a classification problem over preference pairs, making training more stable and efficient. DPO achieved comparable or better results than RLHF while being simpler to implement and tune, becoming a popular alternative for aligning language models with human preferences.",
     "icon": "ml/stanford.png",
-    "details": "DPO objective: given preference pairs (y_w, y_l) for prompt x, maximize log σ(β(log πθ(y_w|x) − log πθ(y_l|x)) − Δ), where Δ is log ratio under reference policy π_ref. Implementation steps: compute log-probs for both samples, subtract reference log-probs, apply logistic loss. Use the same architecture as the base LM; no separate reward model or RL loop is needed. Train with standard optimizers on preference datasets, apply KL regularization via reference log-probs, and evaluate alignment by measuring preference accuracy and safety benchmarks. DPO is stochastic-gradient friendly and integrates easily with PEFT or LoRA adapters."
+    "details": "DPO objective: given preference pairs (y_w, y_l) for prompt x, maximize log σ(β(log πθ(y_w|x) − log πθ(y_l|x)) − Δ), where Δ is log ratio under reference policy π_ref. Implementation steps: compute log-probs for both samples, subtract reference log-probs, apply logistic loss. Use the same architecture as the base LM; no separate reward model or RL loop is needed. Train with standard optimizers on preference datasets, apply KL regularization via reference log-probs, and evaluate alignment by measuring preference accuracy and safety benchmarks. DPO is stochastic-gradient friendly and integrates easily with PEFT or LoRA adapters.",
+    "repo": "https://github.com/eric-mitchell/direct-preference-optimization"
   },
   {
     "id": "QLoRA",
@@ -879,7 +898,8 @@
     ],
     "description": "QLoRA combined quantization with LoRA to enable fine-tuning of extremely large models on consumer hardware. It quantized the base model to 4-bit precision while using LoRA adapters in higher precision, maintaining full fine-tuning performance. QLoRA made it possible to fine-tune a 65B parameter model on a single GPU with 48GB memory, dramatically democratizing access to fine-tuning large language models and enabling researchers with limited resources to customize state-of-the-art models.",
     "icon": "ml/washington.png",
-    "details": "Implement QLoRA by loading the base model in 4-bit NF4 or FP4 quantization (e.g., bitsandbytes) to save memory, while inserting LoRA adapters (rank 8–64) on key/value and feedforward projections. During fine-tuning, only the LoRA parameters (and optionally LayerNorms/biases) are updated; quantized weights remain frozen, so gradients skip them. Use double quantization to compress quantization constants, and apply paged optimizers to handle long sequences. After training, merge LoRA adapters into the quantized model or keep them separate for modular deployment."
+    "details": "Implement QLoRA by loading the base model in 4-bit NF4 or FP4 quantization (e.g., bitsandbytes) to save memory, while inserting LoRA adapters (rank 8–64) on key/value and feedforward projections. During fine-tuning, only the LoRA parameters (and optionally LayerNorms/biases) are updated; quantized weights remain frozen, so gradients skip them. Use double quantization to compress quantization constants, and apply paged optimizers to handle long sequences. After training, merge LoRA adapters into the quantized model or keep them separate for modular deployment.",
+    "repo": "https://github.com/artidoro/qlora"
   },
   {
     "id": "MoE_Test_Time",

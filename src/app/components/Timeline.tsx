@@ -12,6 +12,7 @@ type Entry = {
   org?: string;
   location?: string;
   paperTitle?: string;
+  repo?: string;
   description: string;
   details?: string;
   icon?: string; // filename inside public/img, e.g. 'jgi.webp'
@@ -125,6 +126,20 @@ function ExpandableAuthors({ authors }: { authors: string[] }) {
 export default function Timeline({ items }: { items: Entry[] }) {
   const [activeEntry, setActiveEntry] = useState<Entry | null>(null);
 
+  const getRepoParts = (repoUrl: string) => {
+    try {
+      const url = new URL(repoUrl);
+      if (url.hostname.includes('github.com')) {
+        const parts = url.pathname.split('/').filter(Boolean);
+        const repoName = parts.pop() || 'repository';
+        return { prefix: 'GitHub repo:', text: repoName };
+      }
+      return { prefix: 'Repo:', text: url.hostname };
+    } catch {
+      return { prefix: 'Repo:', text: repoUrl };
+    }
+  };
+
   const handleOpenDetails = (entry: Entry) => {
     if (entry.details) {
       setActiveEntry(entry);
@@ -202,6 +217,21 @@ export default function Timeline({ items }: { items: Entry[] }) {
                         Paper: <a href={item.location} target="_blank" rel="noopener noreferrer" className="text-sky-600 dark:text-sky-400 hover:underline">
                           {item.paperTitle}
                         </a>
+                      </p>
+                    )}
+                    {item.repo && (
+                      <p className="text-xs mt-1">
+                        {(() => {
+                          const { prefix, text } = getRepoParts(item.repo as string);
+                          return (
+                            <>
+                              <span>{prefix} </span>
+                              <a href={item.repo} target="_blank" rel="noopener noreferrer" className="text-sky-600 dark:text-sky-400 hover:underline">
+                                {text}
+                              </a>
+                            </>
+                          );
+                        })()}
                       </p>
                     )}
                     <p className="mt-2 whitespace-pre-line">{item.description}</p>
