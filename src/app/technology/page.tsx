@@ -203,7 +203,23 @@ const TechnologyPage = () => {
                     </li>
                   </ol>
                 </li>
-                <li>Use of AI agents for coding is encouraged. The same controls apply to generated code as to normal code. All code must be secure, maintainable, etc. You MUST understand the code you commit. This includes security fixes, complicated regex, and other code that an agent may be used for. Generated code must match our conventions. Pay specific attention to comments. In general we discourage comments in the code. Instead, write code that documents itself by use of clear variable, function, and type names.</li>
+                <li>Use of AI agents for coding is encouraged
+                  <ol>
+                    <li>The same controls apply to generated code
+                    as to normal code. All code must be secure, maintainable, etc. You MUST understand the
+                    code you commit. This includes security fixes, complicated regex, and other code that
+                    an agent may be used for. Generated code must match our conventions.
+                    </li>
+                    <li>Pay specific attention
+                    to comments. In general we discourage comments in the code. Instead, write code that documents
+                    itself by use of clear variable, function, and type names.</li>
+                    <li>When using an agent we encourage
+                    you to keep track of what an agent has tried, so that you can have it continue after
+                    a restart, and not repeat what was tried. This can be done by instructing the agent to write
+                    two files with things it tried: one json file and one text file. Then have include instructions
+                    in future prompts to read and use the files.</li>
+                  </ol>
+                </li>
                 <li>SAST – Static Application Security Scanning
                   <ol>
                     <li>Check GitHub Advanced Security for any code vulnerabilities.</li>
