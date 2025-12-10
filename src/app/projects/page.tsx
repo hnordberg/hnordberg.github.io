@@ -42,26 +42,26 @@ const ProjectsPage = () => {
   ]
 
   const mathContentRef = useRef<HTMLDivElement>(null);
+  const hasRenderedRef = useRef(false);
 
   useEffect(() => {
-    let hasRendered = false;
-    
     const renderMath = () => {
-      if (hasRendered) return; // Prevent multiple renders
+      if (hasRenderedRef.current) return; // Prevent multiple renders
       if (typeof window !== 'undefined' && (window as any).MathJax && mathContentRef.current) {
         const MathJax = (window as any).MathJax;
         
         // Check if typesetPromise exists, otherwise use typeset
         if (typeof MathJax.typesetPromise === 'function') {
+          hasRenderedRef.current = true;
           MathJax.typesetPromise([mathContentRef.current]).then(() => {
-            hasRendered = true;
           }).catch((err: any) => {
+            hasRenderedRef.current = false;
             console.error('MathJax typeset error:', err);
           });
         } else if (typeof MathJax.typeset === 'function') {
           // Fallback to typeset if typesetPromise doesn't exist
           MathJax.typeset([mathContentRef.current]);
-          hasRendered = true;
+          hasRenderedRef.current = true;
         } else {
           // Wait a bit more if MathJax isn't fully ready
           setTimeout(() => renderMath(), 200);
@@ -71,7 +71,7 @@ const ProjectsPage = () => {
     
     // Wait for both MathJax to load and the ref to be set
     const checkAndRender = () => {
-      if (hasRendered) return true;
+      if (hasRenderedRef.current) return true;
       if (typeof window !== 'undefined' && (window as any).MathJax && mathContentRef.current) {
         const MathJax = (window as any).MathJax;
         // Check if MathJax is ready (has startup property or typesetPromise)
@@ -136,29 +136,40 @@ const ProjectsPage = () => {
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
         strategy="lazyOnload"
         onLoad={() => {
+          if (hasRenderedRef.current) return;
           // MathJax is loaded, trigger rendering
           if (mathContentRef.current && typeof window !== 'undefined' && (window as any).MathJax) {
             const MathJax = (window as any).MathJax;
             // Wait for MathJax to be ready
             if (MathJax.startup && MathJax.startup.promise) {
               MathJax.startup.promise.then(() => {
+                if (hasRenderedRef.current) return;
                 if (typeof MathJax.typesetPromise === 'function') {
-                  MathJax.typesetPromise([mathContentRef.current]).catch((err: any) => {
+                  hasRenderedRef.current = true;
+                  MathJax.typesetPromise([mathContentRef.current]).then(() => {
+                  }).catch((err: any) => {
+                    hasRenderedRef.current = false;
                     console.error('MathJax typeset error:', err);
                   });
                 } else if (typeof MathJax.typeset === 'function') {
                   MathJax.typeset([mathContentRef.current]);
+                  hasRenderedRef.current = true;
                 }
               });
             } else {
               // Fallback: try after a short delay
               setTimeout(() => {
+                if (hasRenderedRef.current) return;
                 if (typeof MathJax.typesetPromise === 'function') {
-                  MathJax.typesetPromise([mathContentRef.current]).catch((err: any) => {
+                    hasRenderedRef.current = true;
+                    MathJax.typesetPromise([mathContentRef.current]).then(() => {
+                    }).catch((err: any) => {
+                      hasRenderedRef.current = false;
                     console.error('MathJax typeset error:', err);
                   });
                 } else if (typeof MathJax.typeset === 'function') {
                   MathJax.typeset([mathContentRef.current]);
+                  hasRenderedRef.current = true;
                 }
               }, 500);
             }
