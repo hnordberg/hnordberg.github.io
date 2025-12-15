@@ -687,6 +687,12 @@ body.dark-mode .card .block-quote {
         break-after: avoid;
     }
 
+    /* Prevent breaks before content that follows headings */
+    h1 + *, h2 + *, h3 + *, h4 + *, h5 + *, h6 + * {
+        page-break-before: avoid;
+        break-before: avoid;
+    }
+
     /* Images: constrain size and prevent breaks */
     img {
         max-width: 100% !important;
