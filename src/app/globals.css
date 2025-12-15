@@ -752,4 +752,17 @@ body.dark-mode .card .block-quote {
         border: 0;
         background: transparent;
     }
+
+    /* Show URL after external links when printing */
+    a[href^="http"]:not([href*="hnordberg.github.io"])::after {
+        content: " (" attr(href) ")";
+        font-size: 0.85em;
+        word-break: break-all;
+    }
+
+    /* Don't show URL for links where the text IS the URL */
+    a[href^="http"]:not([href*="hnordberg.github.io"])[href]:where([href=""]):after,
+    a[href^="http"]:not([href*="hnordberg.github.io"]):empty::after {
+        content: none;
+    }
 }
