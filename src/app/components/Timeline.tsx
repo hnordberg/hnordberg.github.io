@@ -129,7 +129,7 @@ export default function Timeline({ items }: { items: Entry[] }) {
   const getRepoParts = (repoUrl: string) => {
     try {
       const url = new URL(repoUrl);
-      if (url.hostname.includes('github.com')) {
+      if (url.hostname === 'github.com') {
         const parts = url.pathname.split('/').filter(Boolean);
         const repoName = parts.pop() || 'repository';
         return { prefix: 'GitHub repo:', text: repoName };
