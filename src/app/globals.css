@@ -651,3 +651,47 @@ body.dark-mode .card .block-quote {
         font-size: 0.85rem;
     }
 }
+
+/* Print layout: single column, hide navigation */
+@media print {
+    header,
+    footer,
+    #main-nav,
+    .nav-mobile-header,
+    .hamburger-menu {
+        display: none;
+    }
+
+    body {
+        background: #fff;
+        color: #000;
+    }
+
+    main,
+    main.page-with-contents {
+        max-width: none;
+        padding: 0;
+        margin: 0;
+        display: block;
+    }
+
+    main.page-with-contents .content-container,
+    main.page-with-contents .card-grid {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    main.page-with-contents .card-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .card {
+        box-shadow: none;
+        border: 0;
+        background: transparent;
+        page-break-inside: avoid;
+    }
+}

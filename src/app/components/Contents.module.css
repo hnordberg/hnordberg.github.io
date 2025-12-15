@@ -55,6 +55,12 @@
   opacity: 0.7;
 }
 
+@media print {
+  .contents {
+    display: none;
+  }
+}
+
 /* Mobile view */
 @media (max-width: 768px) {
   .contents {
