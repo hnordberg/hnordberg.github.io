@@ -659,7 +659,7 @@ body.dark-mode .card .block-quote {
     #main-nav,
     .nav-mobile-header,
     .hamburger-menu {
-        display: none;
+        display: none !important;
     }
 
     body {
@@ -667,12 +667,49 @@ body.dark-mode .card .block-quote {
         color: #000;
     }
 
+    /* Reset all layouts to simple block for Firefox compatibility */
+    * {
+        float: none !important;
+        position: static !important;
+    }
+
+    /* Prevent awkward page breaks within text */
+    p, li, h1, h2, h3, h4, h5, h6 {
+        orphans: 3;
+        widows: 3;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Keep headings with following content */
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    /* Images: constrain size and prevent breaks */
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        page-break-before: auto;
+        page-break-after: auto;
+    }
+
+    /* Figure elements containing images */
+    figure, .image-container {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        display: block;
+    }
+
     main,
     main.page-with-contents {
         max-width: none;
         padding: 0;
         margin: 0;
-        display: block;
+        display: block !important;
     }
 
     main.page-with-contents .content-container,
@@ -681,11 +718,7 @@ body.dark-mode .card .block-quote {
         max-width: none;
         padding: 0;
         margin: 0;
-    }
-
-    main.page-with-contents .card-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+        display: block !important;
     }
 
     main.full-bleed .content-container section,
@@ -693,6 +726,7 @@ body.dark-mode .card .block-quote {
         border: 0;
         padding-bottom: 0;
         margin-bottom: 2rem;
+        display: block;
     }
 
     main.page-with-contents .card {
@@ -700,9 +734,11 @@ body.dark-mode .card .block-quote {
         border: 0;
         background: transparent;
         page-break-inside: avoid;
+        break-inside: avoid;
         border-radius: 0;
         padding: 0;
         margin: 0 0 2rem 0;
+        display: block !important;
     }
 
     main.page-with-contents .card * {
