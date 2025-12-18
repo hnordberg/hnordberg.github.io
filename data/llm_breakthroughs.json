@@ -1035,6 +1035,25 @@
     ],
     "description": "This study dissects out-of-context reasoning (OOCR) and finds that many reported cases arise because LoRA fine-tuning effectively adds a constant steering vector that pushes models toward latent concepts. By extracting or directly training such steering vectors, the authors reproduce OOCR across risky/safe decision, function, location, and backdoor benchmarks, showing that unconditional steering can even implement conditional behaviors. The results provide a simple mechanistic account of why fine-tuned LLMs can generalize far beyond their training distribution and highlight the alignment implications of steering-vector interventions.",
     "icon": "ml/mit.png",
-    "details": "To experiment with OOCR steering vectors, compute the mean delta between a LoRA-fine-tuned model’s activations and the base model at a chosen layer, averaged over training prompts. Treat this delta as a steering vector v. During inference with the base model, modify activations h by h′ = h + α·v (or subtract to disable behavior). Sweep α to control strength and observe out-of-context behaviors on evaluation suites (risky/safe, function, location tasks). Alternatively, directly optimize v by gradient descent to maximize a target objective while keeping base weights frozen. Monitor side effects by checking alignment metrics and add gating so steering only activates for specific prompts."
+    "details": "To experiment with OOCR steering vectors, compute the mean delta between a LoRA-fine-tuned model's activations and the base model at a chosen layer, averaged over training prompts. Treat this delta as a steering vector v. During inference with the base model, modify activations h by h′ = h + α·v (or subtract to disable behavior). Sweep α to control strength and observe out-of-context behaviors on evaluation suites (risky/safe, function, location tasks). Alternatively, directly optimize v by gradient descent to maximize a target objective while keeping base weights frozen. Monitor side effects by checking alignment metrics and add gating so steering only activates for specific prompts."
+  },
+  {
+    "id": "CTM",
+    "period": "2025",
+    "title": "Continuous Thought Machines (CTM)",
+    "org": "Sakana AI",
+    "location": "https://arxiv.org/pdf/2505.05522.pdf",
+    "paperTitle": "Continuous Thought Machines",
+    "authors": [
+      "Luke Darlow",
+      "Ciaran Regan",
+      "Sebastian Risi",
+      "Jeffrey Seely",
+      "Llion Jones"
+    ],
+    "description": "The Continuous Thought Machine (CTM) introduces a novel neural network architecture that integrates neuron-level temporal processing and neural synchronization to reintroduce neural timing as a foundational element in artificial intelligence. Unlike standard neural networks that ignore the complexity of individual neurons, the CTM leverages neural dynamics as its core representation through two key innovations: neuron-level temporal processing where each neuron uses unique weight parameters to process incoming signal histories, and neural synchronization as a latent representation. The CTM demonstrates strong performance across diverse tasks including ImageNet-1K classification, 2D maze solving, sorting, parity computation, question-answering, and reinforcement learning, while naturally supporting adaptive computation where it can stop earlier for simpler tasks or continue processing for more challenging instances.",
+    "icon": "ml/sakana.jpg",
+    "details": "To implement a CTM, design neurons that maintain temporal state and process histories of incoming signals using unique per-neuron weight parameters rather than shared weights. Implement neural synchronization by tracking phase relationships between neuron activations over time and using these synchronization patterns as the model's latent representation. The CTM operates iteratively: at each step, neurons update based on their input history and current synchronization state, producing outputs when synchronization converges or a compute budget is exhausted. For adaptive computation, monitor synchronization entropy or output stability to decide when to halt early on simple inputs. Train end-to-end with backpropagation through time, applying gradient clipping for stability. Evaluate on sequential reasoning tasks (mazes, sorting) where temporal dynamics provide clear benefits, and visualize internal synchronization patterns to interpret model behavior.",
+    "repo": "https://github.com/SakanaAI/ctm"
   }
 ]
