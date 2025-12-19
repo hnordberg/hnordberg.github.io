@@ -212,7 +212,8 @@ const TechnologyPage = () => {
                     </li>
                     <li>Pay specific attention
                     to comments. In general we discourage comments in the code. Instead, write code that documents
-                    itself by use of clear variable, function, and type names.</li>
+                    itself by use of clear variable, function, and type names. Clarification: Use comments to 
+                    explain algorithms and to describe business rules. Avoid comments that say what a variable is for.</li>
                     <li>When using an agent we encourage
                     you to keep track of what an agent has tried, so that you can have it continue after
                     a restart, and not repeat what was tried. This can be done by instructing the agent to write
