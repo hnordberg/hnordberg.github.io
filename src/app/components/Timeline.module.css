@@ -158,3 +158,16 @@ body.dark-mode .logoContainer {
 :global(body.dark-mode) .yearMobile {
     color: #9ca3af; /* gray-400 - lighter for dark mode */
 }
+
+/* Filter slider - subtle styling */
+.filterSlider {
+    flex: 1;
+    height: 4px;
+    border-radius: 9999px;
+    cursor: pointer;
+    accent-color: #94a3b8; /* slate-400 - subtle gray */
+}
+
+:global(body.dark-mode) .filterSlider {
+    accent-color: #0ea5e9; /* sky-500 */
+}

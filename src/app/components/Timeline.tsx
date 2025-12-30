@@ -123,8 +123,39 @@ function ExpandableAuthors({ authors }: { authors: string[] }) {
 }
 
 // The component receives items as a prop.
-export default function Timeline({ items }: { items: Entry[] }) {
+export default function Timeline({ items, filterBy = '' }: { items: Entry[]; filterBy?: string }) {
   const [activeEntry, setActiveEntry] = useState<Entry | null>(null);
+  const [visibleCount, setVisibleCount] = useState(items.length);
+
+  // Filter items by the filterBy attribute threshold, keeping original chronological order
+  const filteredItems = React.useMemo(() => {
+    if (!filterBy) return items;
+
+    // Get all values for the filterBy attribute and sort them descending
+    const values = items
+      .map((item) => (item as Record<string, unknown>)[filterBy])
+      .filter((v): v is number | string => v !== undefined)
+      .sort((a, b) => {
+        if (typeof a === 'number' && typeof b === 'number') return b - a;
+        if (typeof a === 'string' && typeof b === 'string') return b.localeCompare(a);
+        return 0;
+      });
+
+    // Get the threshold value (the Nth highest value)
+    const threshold = values[visibleCount - 1];
+
+    // Filter items that meet the threshold, preserving original order
+    return items.filter((item) => {
+      const val = (item as Record<string, unknown>)[filterBy];
+      if (typeof val === 'number' && typeof threshold === 'number') {
+        return val >= threshold;
+      }
+      if (typeof val === 'string' && typeof threshold === 'string') {
+        return val.localeCompare(threshold) >= 0;
+      }
+      return false;
+    });
+  }, [items, filterBy, visibleCount]);
 
   const getRepoParts = (repoUrl: string) => {
     try {
@@ -168,10 +199,26 @@ export default function Timeline({ items }: { items: Entry[] }) {
 
   return (
     <section aria-label="Timeline" className="container mx-auto px-4 py-8">
+      {filterBy && (
+        <div className="mb-6 p-4 flex items-center gap-4">
+          <label htmlFor="timeline-filter-slider" className="text-sm font-medium text-gray-400 dark:text-gray-500 whitespace-nowrap">
+            Show top {visibleCount} of {items.length}
+          </label>
+          <input
+            id="timeline-filter-slider"
+            type="range"
+            min={1}
+            max={items.length}
+            value={visibleCount}
+            onChange={(e) => setVisibleCount(Number(e.target.value))}
+            className={styles.filterSlider}
+          />
+        </div>
+      )}
       <div className="relative">
         {/* vertical line - left edge on mobile, positioned at 7rem on desktop */}
         <div aria-hidden="true" className={`${styles.line} z-10`} />
-        {items.map((item) => {
+        {filteredItems.map((item) => {
           const year = item.period;
           return (
             <div key={item.id} className={`mb-10 ${styles.rowGrid}`}>

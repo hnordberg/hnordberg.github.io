@@ -12,10 +12,10 @@ const MLTimelinePage = () => {
             <div className="text-center pt-8 pb-4">
                 <h1 className="text-4xl font-bold">History of Machine Learning & LLMs</h1>
                 <p className="text-lg text-gray-600 dark:text-gray-400">
-                    Disclaimer: I used various LLMs to generate the data for this timeline.
+                    Disclaimer: I used various LLMs to generate some of the data for this timeline.
                 </p>
             </div>
-            <Timeline items={timeline} />
+            <Timeline items={timeline} filterBy="citations" />
         </main>
     )
 }
