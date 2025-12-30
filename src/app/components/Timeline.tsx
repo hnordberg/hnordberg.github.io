@@ -126,36 +126,50 @@ function ExpandableAuthors({ authors }: { authors: string[] }) {
 export default function Timeline({ items, filterBy = '' }: { items: Entry[]; filterBy?: string }) {
   const [activeEntry, setActiveEntry] = useState<Entry | null>(null);
   const [visibleCount, setVisibleCount] = useState(items.length);
+  const [recencyBias, setRecencyBias] = useState(false);
+
+  // Calculate recency boost: 10^max(0, 3 - 0.6 × Δt)
+  // Gives 1000x boost at Δt=0, decaying to 1x at Δt=5
+  const getEffectiveScore = (item: Entry, baseValue: number): number => {
+    if (!recencyBias) return baseValue;
+    
+    const currentYear = new Date().getFullYear();
+    const pubYear = parseInt(item.period, 10);
+    if (isNaN(pubYear)) return baseValue;
+    
+    const age = currentYear - pubYear;
+    const boost = Math.pow(10, Math.max(0, 3 - 0.6 * age));
+    return baseValue * boost;
+  };
 
   // Filter items by the filterBy attribute threshold, keeping original chronological order
   const filteredItems = React.useMemo(() => {
     if (!filterBy) return items;
 
-    // Get all values for the filterBy attribute and sort them descending
-    const values = items
-      .map((item) => (item as Record<string, unknown>)[filterBy])
-      .filter((v): v is number | string => v !== undefined)
-      .sort((a, b) => {
-        if (typeof a === 'number' && typeof b === 'number') return b - a;
-        if (typeof a === 'string' && typeof b === 'string') return b.localeCompare(a);
-        return 0;
-      });
+    // Get all effective scores and sort them descending
+    const scores = items
+      .map((item) => {
+        const val = (item as Record<string, unknown>)[filterBy];
+        if (typeof val === 'number') {
+          return getEffectiveScore(item, val);
+        }
+        return undefined;
+      })
+      .filter((v): v is number => v !== undefined)
+      .sort((a, b) => b - a);
 
-    // Get the threshold value (the Nth highest value)
-    const threshold = values[visibleCount - 1];
+    // Get the threshold score (the Nth highest)
+    const threshold = scores[visibleCount - 1] ?? 0;
 
     // Filter items that meet the threshold, preserving original order
     return items.filter((item) => {
       const val = (item as Record<string, unknown>)[filterBy];
-      if (typeof val === 'number' && typeof threshold === 'number') {
-        return val >= threshold;
-      }
-      if (typeof val === 'string' && typeof threshold === 'string') {
-        return val.localeCompare(threshold) >= 0;
+      if (typeof val === 'number') {
+        return getEffectiveScore(item, val) >= threshold;
       }
       return false;
     });
-  }, [items, filterBy, visibleCount]);
+  }, [items, filterBy, visibleCount, recencyBias]);
 
   const getRepoParts = (repoUrl: string) => {
     try {
@@ -213,6 +227,18 @@ export default function Timeline({ items, filterBy = '' }: { items: Entry[]; fil
             onChange={(e) => setVisibleCount(Number(e.target.value))}
             className={styles.filterSlider}
           />
+          <label 
+            className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500 whitespace-nowrap cursor-pointer"
+            title="Boosts recent papers to compensate for fewer citations. Papers from the current year get up to 1000× boost, decaying to 1× after 5 years."
+          >
+            <input
+              type="checkbox"
+              checked={recencyBias}
+              onChange={(e) => setRecencyBias(e.target.checked)}
+              className="accent-slate-400 dark:accent-sky-500"
+            />
+            Recency Bias
+          </label>
         </div>
       )}
       <div className="relative">
