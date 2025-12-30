@@ -434,7 +434,7 @@
     ],
     "description": "Key-Value Memory Networks introduced a memory architecture that separates keys (used for addressing) from values (used for reading), enabling more effective question answering by directly reading documents. This separation allowed the model to use different encodings for matching queries to memory slots versus returning information, significantly improving performance on knowledge base and document-based QA tasks. The architecture influenced subsequent memory-augmented networks and retrieval-augmented generation systems.",
     "citations": 1318,
-    "icon": "ml/meta.svg",
+    "icon": "ml/meta.png",
     "details": "Implement Key-Value Memory Networks by storing documents as (key, value) pairs in memory. Keys are encoded representations optimized for matching against the query, while values contain the information to be retrieved. Given a query q, compute attention weights over keys: α_i = softmax(q · k_i), then read from memory by computing the weighted sum of values: o = Σ α_i v_i. The output is combined with the query for answer prediction. For document QA, keys might encode article titles or sentences while values encode the full text. Train end-to-end with supervision on QA pairs. Extend to multiple hops by using the output o to requery memory iteratively, refining the answer. Evaluate on WikiQA, WikiMovies, or bAbI tasks."
   },
   {
