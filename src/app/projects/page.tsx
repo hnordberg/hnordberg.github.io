@@ -34,6 +34,7 @@ const ProjectsPage = () => {
       id: 'cosmic-microwave-background-cmb-spectrum-analysis',
       title: 'Cosmic Microwave Background (CMB) Spectrum Analysis'
     },
+    { id: 'epic-testing', title: 'Automated Testing for Epic EMR' },
     { id: 'payment-gateway', title: 'Payment Gateway' },
     { id: 'isotope-explorer', title: 'Isotope Explorer' },
     { id: 'batmud', title: 'BatMUD' },
@@ -43,7 +44,9 @@ const ProjectsPage = () => {
   ]
 
   const mathContentRef = useRef<HTMLDivElement>(null);
+  const mermaidRef = useRef<HTMLDivElement>(null);
   const hasRenderedRef = useRef(false);
+  const hasMermaidRenderedRef = useRef(false);
 
   useEffect(() => {
     const renderMath = () => {
@@ -111,6 +114,45 @@ const ProjectsPage = () => {
     };
   }, []); // Only run once on mount
 
+  // Mermaid rendering
+  useEffect(() => {
+    const renderMermaid = () => {
+      if (hasMermaidRenderedRef.current) return;
+      if (typeof window !== 'undefined' && (window as any).mermaid && mermaidRef.current) {
+        hasMermaidRenderedRef.current = true;
+        (window as any).mermaid.run({ nodes: [mermaidRef.current] }).catch((err: any) => {
+          hasMermaidRenderedRef.current = false;
+          console.error('Mermaid render error:', err);
+        });
+      }
+    };
+
+    const checkAndRender = () => {
+      if (hasMermaidRenderedRef.current) return true;
+      if (typeof window !== 'undefined' && (window as any).mermaid && mermaidRef.current) {
+        renderMermaid();
+        return true;
+      }
+      return false;
+    };
+
+    if (checkAndRender()) return;
+
+    const interval = setInterval(() => {
+      if (checkAndRender()) clearInterval(interval);
+    }, 100);
+
+    const timeout = setTimeout(() => {
+      checkAndRender();
+      clearInterval(interval);
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
     <main className="page-with-contents">
       <Script
@@ -173,6 +215,23 @@ const ProjectsPage = () => {
                   hasRenderedRef.current = true;
                 }
               }, 500);
+            }
+          }
+        }}
+      />
+      <Script
+        src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
+        strategy="lazyOnload"
+        onLoad={() => {
+          if (hasMermaidRenderedRef.current) return;
+          if (typeof window !== 'undefined' && (window as any).mermaid) {
+            (window as any).mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+            if (mermaidRef.current) {
+              hasMermaidRenderedRef.current = true;
+              (window as any).mermaid.run({ nodes: [mermaidRef.current] }).catch((err: any) => {
+                hasMermaidRenderedRef.current = false;
+                console.error('Mermaid render error:', err);
+              });
             }
           }
         }}
@@ -623,9 +682,93 @@ const ProjectsPage = () => {
           </div>
         </div>
 
+        <div className="card" id="epic-testing">
+          <div className="card-title">Automated Testing for Epic EMR workflows</div>
+          <div className="card-title-subtitle">2024 - 2025 • JavaScript • Playwright</div>
+          <div className="card-text">
+            Epic is an Electronic Medical Record (EMR) system used by hospitals to manage patient data,
+            and run hospital operations. Think scheduling, billing, and patient care. It's a large system,
+            made even more complex by the fact that hospitals usually configure it to their own needs,
+            creating a set of workflows. Epic is now on a quarterly release cycle, and incentivises hospitals
+            to stay up to date with the latest version. Behind the scenes, there is a lot of testing going on
+            for every release. We designed and built a system where this testing could be automated. 
+          </div>
+          <div className="card-subtitle pt-4">How it works</div>
+          <div className="card-text">
+            The tests were already managed by ALM (formerly HP ALM, now managed by Opentext). In ALM
+            you have the test descriptions, instances, outcomes, and defects. Using a small VBScript
+            we were able to add a button to the ALM UI that kicked off a test or set of tests
+            by calling a GitHub API that runs a GitHub Actions workflow. We passed in the test ID to the workflow,
+            and it ran a JavaScript program that retrieved the test details from ALM, and
+            then located and executed the matching Playwright script. When the script finished, it
+            created a test run in ALM and attached the results. If it failed, it would also create an ALM
+            defect and attach a screenshot of the failure and a video of the run (if so configured).
+            It would also email the screenshot, video, and failure message to the user that kicked off
+            the test. For troubleshooting purposes, the emails contain a secret link that takes you to
+            the GitHub run. Useful if something unexpected happened.
+          </div>
+          <div className="card-subtitle pt-4">Workflow Diagram</div>
+          <div className="card-text">
+            <div ref={mermaidRef} className="mermaid" style={{ backgroundColor: 'transparent' }}>
+{`flowchart TD
+    USER(["👤 User"])
+    BUTTON["Click 'Run Test' Button<br/>in ALM UI"]
+    VBSCRIPT["VBScript executes"]
+    API["Call GitHub API<br/>with Test ID"]
+    ACTIONS["GitHub Actions<br/>Workflow Starts"]
+    JAVASCRIPT["JavaScript Program Runs"]
+    FETCH["Retrieve Test Details<br/>from ALM"]
+    LOCATE["Locate Matching<br/>Playwright Script"]
+    PLAYWRIGHT["Execute Playwright Script"]
+    EPIC[("Epic EMR<br/>Test Environment")]
+    DONE["Test Completes"]
+    PASSED{Passed?}
+    TESTRUN["Create Test Run in ALM<br/>Attach Results"]
+    DEFECT["Create Defect in ALM"]
+    ATTACH["Attach Screenshot 📸<br/>Attach Video 🎬"]
+    EMAIL["📧 Send Email Notification<br/>Include link to GitHub run"]
+
+    USER --> BUTTON
+    BUTTON --> VBSCRIPT
+    VBSCRIPT --> API
+    API --> ACTIONS
+    ACTIONS --> JAVASCRIPT
+    JAVASCRIPT --> FETCH
+    FETCH --> LOCATE
+    LOCATE --> PLAYWRIGHT
+    PLAYWRIGHT <--> EPIC
+    PLAYWRIGHT --> DONE
+    DONE --> PASSED
+    PASSED -->|"✅ Yes"| TESTRUN
+    PASSED -->|"❌ No"| DEFECT
+    DEFECT --> ATTACH
+    TESTRUN --> EMAIL
+    ATTACH --> EMAIL
+    EMAIL --> USER
+
+    style USER fill:#6366f1,stroke:#818cf8,stroke-width:2px,color:#fff
+    style BUTTON fill:#1e3a5f,stroke:#4a90d9,stroke-width:2px,color:#fff
+    style VBSCRIPT fill:#1e3a5f,stroke:#4a90d9,stroke-width:2px,color:#fff
+    style API fill:#24292e,stroke:#6e7681,stroke-width:2px,color:#fff
+    style ACTIONS fill:#24292e,stroke:#6e7681,stroke-width:2px,color:#fff
+    style JAVASCRIPT fill:#24292e,stroke:#6e7681,stroke-width:2px,color:#fff
+    style FETCH fill:#1e3a5f,stroke:#4a90d9,stroke-width:2px,color:#fff
+    style LOCATE fill:#2d4a3e,stroke:#45b26b,stroke-width:2px,color:#fff
+    style PLAYWRIGHT fill:#2d4a3e,stroke:#45b26b,stroke-width:2px,color:#fff
+    style EPIC fill:#7c3aed,stroke:#a78bfa,stroke-width:2px,color:#fff
+    style DONE fill:#374151,stroke:#6b7280,stroke-width:2px,color:#fff
+    style PASSED fill:#1f2937,stroke:#9ca3af,stroke-width:2px,color:#fff
+    style TESTRUN fill:#065f46,stroke:#34d399,stroke-width:2px,color:#fff
+    style DEFECT fill:#7f1d1d,stroke:#f87171,stroke-width:2px,color:#fff
+    style ATTACH fill:#7f1d1d,stroke:#f87171,stroke-width:2px,color:#fff
+    style EMAIL fill:#d97706,stroke:#fbbf24,stroke-width:2px,color:#fff`}
+            </div>
+          </div>
+        </div>
+
         <div className="card" id="payment-gateway">
           <div className="card-title">Payment Gateway</div>
-          <div className="card-title-subtitle">2023 • TypeScript</div>
+          <div className="card-title-subtitle">2023 • TypeScript • Express.js</div>
           <div className="card-text">
             John Muir Health needed a way to handle payments for both accepting donations to their foundation
             and accepting payments on invoices in the internal Workday system. Since we wanted to avoid handling
