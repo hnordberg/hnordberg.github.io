@@ -34,6 +34,7 @@ const ProjectsPage = () => {
       id: 'cosmic-microwave-background-cmb-spectrum-analysis',
       title: 'Cosmic Microwave Background (CMB) Spectrum Analysis'
     },
+    { id: 'payment-gateway', title: 'Payment Gateway' },
     { id: 'isotope-explorer', title: 'Isotope Explorer' },
     { id: 'batmud', title: 'BatMUD' },
     { id: 'copy-that', title: 'Firefox extension: Copy That' },
@@ -622,10 +623,36 @@ const ProjectsPage = () => {
           </div>
         </div>
 
+        <div className="card" id="payment-gateway">
+          <div className="card-title">Payment Gateway</div>
+          <div className="card-title-subtitle">2023 • TypeScript</div>
+          <div className="card-text">
+            John Muir Health needed a way to handle payments for both accepting donations to their foundation
+            and accepting payments on invoices in the internal Workday system. Since we wanted to avoid handling
+            credit cards and all the PCI regulations that come with that, we decided to implement a payment
+            gateway. We selected JP Morgan Chase's payment tech offering.
+          </div>
+          <div className="card-subtitle pt-4">How it works</div>
+          <div className="card-text">
+            There are two entrypoints:
+              <ul className="list">
+                <li>Donations from the website</li>
+                <li>Invoices from Workday</li>
+              </ul>
+            For donations, we have a form on the website that collects demographic information, which gets posted
+            to the payment gateway API. For Workday, we configured it to call the payment gateway API with the
+            invoice information. The API then redirects the browser to the Chase API and provides a simple form with a known string that
+            Chase replaces with the actual credit card form fields. The user fills in the payment details, 
+            while still being on the Chase domain, and when they click submit Chase attempts to charge the payment
+            and then redirects back to our API and we can render a result based on whether the payment succeeded.
+            It's a simple way of completely offloading the sensitive payment details to a payment provider.
+          </div>
+        </div>
+
         <div className="card" id="isotope-explorer">
           <div className="card-title">Isotope Explorer</div>
           <div className="card-title-subtitle">1995 • C++, Borland OWL, Microsoft MFC</div>
-          <div className="card-text">In 1995 I moved to Berkeley to work on a visualization tool for nuclei of isotopes 
+          <div className="card-text">In 1995 I moved from Sweden to Berkeley to work on a visualization tool for nuclei of isotopes 
             at Lawrence Berkeley Laboratory.
             Originally called VuENSDF, it is a tool for exploring the nuclear data from the ENSDF database. Up till then,
             when you needed to access nuclear energy level data, you used the Table of Isotopes (ToI), which was a thick book.
