@@ -695,7 +695,7 @@ const ProjectsPage = () => {
           </div>
           <div className="card-subtitle pt-4">How it works</div>
           <div className="card-text">
-            The tests were already managed by ALM (formerly HP ALM, now managed by Opentext). In ALM
+            The test steps were already managed by ALM (formerly HP ALM, now managed by Opentext). In ALM
             you have the test descriptions, instances, outcomes, and defects. Using a small VBScript
             we were able to add a button to the ALM UI that kicked off a test or set of tests
             by calling a GitHub API that runs a GitHub Actions workflow. We passed in the test ID to the workflow,
@@ -782,7 +782,7 @@ const ProjectsPage = () => {
                 <li>Donations from the website</li>
                 <li>Invoices from Workday</li>
               </ul>
-            For donations, we have a form on the website that collects demographic information, which gets posted
+            For donations, we have a form on the website that collects information about the donor, which gets posted
             to the payment gateway API. For Workday, we configured it to call the payment gateway API with the
             invoice information. The API then redirects the browser to the Chase API and provides a simple form with a known string that
             Chase replaces with the actual credit card form fields. The user fills in the payment details, 
