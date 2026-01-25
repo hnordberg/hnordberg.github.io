@@ -31,7 +31,7 @@ const ContactPage = () => {
   return (
     <main>
       <div className="contact-container">
-        <Image src='/img/henrik.avatar.2024.jpeg' width="100" height="100" alt="Photo of Henrik Nordberg" title="Photo of Henrik Nordberg" />
+        <Image src='/img/henrik.avatar.2025.png' width="100" height="100" alt="Photo of Henrik Nordberg" title="Photo of Henrik Nordberg" />
         <div className="contact-details">
           {email ? (
             <a href={`mailto:${email}`}>{email}</a>
