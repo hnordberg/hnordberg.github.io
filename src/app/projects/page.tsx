@@ -304,7 +304,7 @@ const ProjectsPage = () => {
             </div>
             <div className="card-subtitle pt-4">Technology</div>
             <div className="card-text">
-              Elviz is written in AngularJS, JavaScript, and WebGL. Try it out 
+              Elviz is written in AngularJS, JavaScript, d3.js, and WebGL. Try it out 
               at <a href="https://genome.jgi.doe.gov/viz">genome.jgi.doe.gov/viz</a>. We published a paper on
               it in BMC Bioinformatics in 2015: <a href="https://doi.org/10.1186/s12859-015-0566-4">Elviz – exploration
               of metagenome assemblies with an interactive visualization tool</a>.
