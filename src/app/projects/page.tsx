@@ -60,7 +60,7 @@ const ProjectsPage = () => {
     { id: 'payment-gateway', title: 'Payment Gateway' },
     { id: 'isotope-explorer', title: 'Isotope Explorer' },
     { id: 'batmud', title: 'BatMUD' },
-    { id: 'copy-that', title: 'Firefox extension: Copy That' },
+    { id: 'copy-that', title: 'Browser extension: Copy That' },
     { id: 'photostats', title: 'Photo Stats: A Python EXIF scanner' },
     { id: 'webscan', title: 'WebScan: A product / price / availability scanner' }
   ]
@@ -784,10 +784,12 @@ const ProjectsPage = () => {
         </div>
 
         <div className="card" id="copy-that">
-          <div className="card-title">Firefox extension: Copy That</div>
-          <div className="card-title-subtitle">2025 • JavaScript • <a href="https://github.com/hnordberg/copy-that">GitHub Repository</a></div>
+          <div className="card-title">Browser extension: Copy That</div>
+          <div className="card-title-subtitle">2025 - 2026 • JavaScript • <a href="https://github.com/hnordberg/copy-that">GitHub Repository</a></div>
           <div className="card-text">
-            Copy-That is a Firefox extension that allows you to copy text or HTML from an element on the page to the clipboard.
+            Copy-That is a browser extension that allows you to copy text or HTML from an element on the page to the clipboard. It now
+            supports math equations so you can copy them from the web and paste into Microsoft applications (Word, PowerPoint, etc.) and
+            have them rendered correctly.
             <ul className="list">
               <li>Element Selection: Click the extension icon to activate, then hover over any element to see it highlighted</li>
               <li>Plain Text Copy: Click an element to copy its innerText (plain text content)</li>
@@ -799,7 +801,9 @@ const ProjectsPage = () => {
                 className="pt-4 pb-4"
                 caption="Blue outline shows what element is being selected"
               />
-              <li>HTML Copy Mode: Hold Shift while clicking to copy the element's innerHTML as rich HTML (with plain text fallback)</li>
+              <li>HTML Copy Mode: Hold Shift while clicking to copy the element's innerHTML as rich HTML (with plain text fallback). 
+                Math equations are also supported.
+              </li>
               <li>Visual Feedback:
                 <ul className="list">
                   <li>Red outline for normal mode</li>
