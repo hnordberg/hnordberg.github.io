@@ -6,6 +6,9 @@ import ThemeSwitcher from './components/ThemeSwitcher'
 export const metadata: Metadata = {
   title: 'Henrik Nordberg, Principal Engineer',
   description: 'Henrik Nordberg\'s project showcase',
+  verification: {
+    google: 'dSCg0rCRcZOPSbSef9V6h5pLtxGs_osM0t7viz7yKUk',
+  },
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
