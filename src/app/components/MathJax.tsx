@@ -7,11 +7,27 @@ import {
   useMemo,
   useRef,
   type MutableRefObject,
+  type ReactElement,
   type RefObject,
 } from "react";
 
 const MATHJAX_SRC =
   "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+
+type MathJaxGlobal = {
+  version?: string;
+  typesetPromise?: (nodes: HTMLElement[]) => Promise<unknown>;
+  tex?: typeof defaultMathJaxConfig.tex;
+  svg?: typeof defaultMathJaxConfig.svg;
+  startup?: {
+    promise?: Promise<unknown>;
+    typeset?: boolean;
+  };
+};
+
+type MathJaxWindow = Window & {
+  MathJax?: MathJaxGlobal;
+};
 
 export const defaultMathJaxConfig = {
   tex: {
@@ -33,7 +49,7 @@ export function configureMathJax(
   config: Partial<typeof defaultMathJaxConfig> = {}
 ): void {
   if (typeof window === "undefined") return;
-  const w = window as Window & { MathJax?: { version?: string }; [k: string]: unknown };
+  const w = window as MathJaxWindow;
   if (w.MathJax?.version) return;
   w.MathJax = {
     ...defaultMathJaxConfig,
@@ -49,7 +65,7 @@ function typeset(
   hasRenderedRef: MutableRefObject<boolean>
 ): void {
   if (hasRenderedRef.current) return;
-  const MathJax = (window as Window & { MathJax?: { typesetPromise?: (nodes: HTMLElement[]) => Promise<unknown> } }).MathJax;
+  const MathJax = (window as MathJaxWindow).MathJax;
   if (!MathJax?.typesetPromise || !containerRef.current) return;
   hasRenderedRef.current = true;
   MathJax.typesetPromise([containerRef.current]).catch((err: unknown) => {
@@ -75,7 +91,7 @@ function typeset(
  */
 export function useMathJax(
   containerRef: RefObject<HTMLElement | null>
-): { MathJaxScript: () => JSX.Element } {
+): { MathJaxScript: () => ReactElement } {
   configureMathJax();
 
   const hasRenderedRef = useRef(false);
@@ -87,7 +103,7 @@ export function useMathJax(
   useEffect(() => {
     const tryTypeset = () => {
       if (hasRenderedRef.current) return true;
-      const MathJax = (window as Window & { MathJax?: { typesetPromise?: (nodes: HTMLElement[]) => Promise<unknown> } }).MathJax;
+      const MathJax = (window as MathJaxWindow).MathJax;
       if (!MathJax?.typesetPromise || !containerRef.current) return false;
       doTypeset();
       return true;
@@ -108,12 +124,7 @@ export function useMathJax(
 
   const handleScriptLoad = useCallback(() => {
     if (hasRenderedRef.current) return;
-    const MathJax = (window as Window & {
-      MathJax?: {
-        typesetPromise?: (nodes: HTMLElement[]) => Promise<unknown>;
-        startup?: { promise?: Promise<unknown> };
-      };
-    }).MathJax;
+    const MathJax = (window as MathJaxWindow).MathJax;
     if (!MathJax || !containerRef.current) return;
     const run = () => doTypeset();
     if (MathJax.startup?.promise) {

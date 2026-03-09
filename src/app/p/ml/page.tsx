@@ -5,6 +5,15 @@ import Timeline from '../../components/Timeline';
 type TimelineEntry = {
     id: string;
     period: string;
+    title: string;
+    description: string;
+    authors?: string[];
+    org?: string;
+    location?: string;
+    paperTitle?: string;
+    repo?: string;
+    details?: string;
+    icon?: string;
     citations?: number;
     impactScore?: number;
     [key: string]: unknown;
