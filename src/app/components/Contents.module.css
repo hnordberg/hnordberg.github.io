@@ -6,8 +6,8 @@
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-/* Desktop: sticky on left side */
-@media (min-width: 769px) {
+/* Wide-screen: sticky on left side */
+@media (min-width: 1200px) {
   .contents {
     position: sticky;
     top: 2rem;
