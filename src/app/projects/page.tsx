@@ -2,31 +2,10 @@
 
 import Contents from '../components/Contents'
 import LightboxImage from '../components/LightboxImage';
+import { useMathJax } from '../components/MathJax';
 import Script from 'next/script';
 import { useEffect, useRef } from 'react';
 import { mathContent } from './mathContent';
-
-// Configure MathJax at module level so it's guaranteed to be set before the
-// lazyOnload script executes. The beforeInteractive Script strategy only works
-// in the root layout in App Router, which caused the config to sometimes be
-// missing during client-side navigation — breaking inline math ($...$).
-if (typeof window !== 'undefined' && !(window as any).MathJax?.version) {
-  (window as any).MathJax = {
-    tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']],
-      displayMath: [['$$', '$$'], ['\\[', '\\]']],
-      processEscapes: true,
-      processEnvironments: true,
-      tags: 'ams'
-    },
-    svg: {
-      fontCache: 'global'
-    },
-    startup: {
-      typeset: false
-    }
-  };
-}
 
 const ProjectsPage = () => {
   const articles = [
@@ -67,40 +46,8 @@ const ProjectsPage = () => {
 
   const mathContentRef = useRef<HTMLDivElement>(null);
   const mermaidRef = useRef<HTMLDivElement>(null);
-  const hasRenderedRef = useRef(false);
+  const { MathJaxScript } = useMathJax(mathContentRef);
   const hasMermaidRenderedRef = useRef(false);
-
-  useEffect(() => {
-    const tryTypeset = () => {
-      if (hasRenderedRef.current) return true;
-      const MathJax = (window as any).MathJax;
-      if (!MathJax || !mathContentRef.current) return false;
-      if (typeof MathJax.typesetPromise !== 'function') return false;
-
-      hasRenderedRef.current = true;
-      MathJax.typesetPromise([mathContentRef.current]).catch((err: any) => {
-        hasRenderedRef.current = false;
-        console.error('MathJax typeset error:', err);
-      });
-      return true;
-    };
-
-    if (tryTypeset()) return;
-
-    const interval = setInterval(() => {
-      if (tryTypeset()) clearInterval(interval);
-    }, 200);
-
-    const timeout = setTimeout(() => {
-      tryTypeset();
-      clearInterval(interval);
-    }, 5000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, []);
 
   // Mermaid rendering
   useEffect(() => {
@@ -143,30 +90,7 @@ const ProjectsPage = () => {
 
   return (
     <main className="page-with-contents">
-      <Script
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-        strategy="lazyOnload"
-        onLoad={() => {
-          if (hasRenderedRef.current) return;
-          const MathJax = (window as any).MathJax;
-          if (!MathJax || !mathContentRef.current) return;
-
-          const doTypeset = () => {
-            if (hasRenderedRef.current) return;
-            hasRenderedRef.current = true;
-            MathJax.typesetPromise([mathContentRef.current]).catch((err: any) => {
-              hasRenderedRef.current = false;
-              console.error('MathJax typeset error:', err);
-            });
-          };
-
-          if (MathJax.startup?.promise) {
-            MathJax.startup.promise.then(doTypeset);
-          } else if (typeof MathJax.typesetPromise === 'function') {
-            doTypeset();
-          }
-        }}
-      />
+      <MathJaxScript />
       <Script
         src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
         strategy="lazyOnload"

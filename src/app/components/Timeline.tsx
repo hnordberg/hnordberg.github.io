@@ -16,7 +16,13 @@ type Entry = {
   description: string;
   details?: string;
   icon?: string; // filename inside public/img, e.g. 'jgi.webp'
+  citations?: number;
+  impactScore?: number;
 };
+
+const numberFormatter = new Intl.NumberFormat('en-US');
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 function ExpandableAuthors({ authors }: { authors: string[] }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -123,53 +129,74 @@ function ExpandableAuthors({ authors }: { authors: string[] }) {
 }
 
 // The component receives items as a prop.
-export default function Timeline({ items, filterBy = '' }: { items: Entry[]; filterBy?: string }) {
+export default function Timeline({
+  items,
+  filterBy = '',
+  filterLabel,
+  defaultFilterCutoff,
+}: {
+  items: Entry[];
+  filterBy?: string;
+  filterLabel?: string;
+  defaultFilterCutoff?: number;
+}) {
   const [activeEntry, setActiveEntry] = useState<Entry | null>(null);
-  const [visibleCount, setVisibleCount] = useState(items.length);
-  const [recencyBias, setRecencyBias] = useState(false);
+  const numericValues = React.useMemo(() => {
+    if (!filterBy) {
+      return [];
+    }
 
-  // Calculate recency boost: 10^max(0, 3 - 0.6 × Δt)
-  // Gives 1000x boost at Δt=0, decaying to 1x at Δt=5
-  const getEffectiveScore = (item: Entry, baseValue: number): number => {
-    if (!recencyBias) return baseValue;
-    
-    const currentYear = new Date().getFullYear();
-    const pubYear = parseInt(item.period, 10);
-    if (isNaN(pubYear)) return baseValue;
-    
-    const age = currentYear - pubYear;
-    const boost = Math.pow(10, Math.max(0, 3 - 0.6 * age));
-    return baseValue * boost;
-  };
+    return items
+      .map((item) => {
+        const val = (item as Record<string, unknown>)[filterBy];
+        return typeof val === 'number' ? val : undefined;
+      })
+      .filter((value): value is number => value !== undefined);
+  }, [items, filterBy]);
+
+  const minAvailableValue = React.useMemo(() => {
+    if (numericValues.length === 0) {
+      return 0;
+    }
+    return Math.floor(Math.min(...numericValues));
+  }, [numericValues]);
+
+  const maxAvailableValue = React.useMemo(() => {
+    if (numericValues.length === 0) {
+      return 0;
+    }
+    return Math.ceil(Math.max(...numericValues));
+  }, [numericValues]);
+
+  const [filterCutoff, setFilterCutoff] = useState(
+    defaultFilterCutoff ?? minAvailableValue
+  );
+
+  useEffect(() => {
+    if (!filterBy) {
+      return;
+    }
+
+    const nextCutoff = clamp(
+      defaultFilterCutoff ?? minAvailableValue,
+      minAvailableValue,
+      maxAvailableValue
+    );
+    setFilterCutoff(nextCutoff);
+  }, [defaultFilterCutoff, filterBy, maxAvailableValue, minAvailableValue]);
 
   // Filter items by the filterBy attribute threshold, keeping original chronological order
   const filteredItems = React.useMemo(() => {
     if (!filterBy) return items;
 
-    // Get all effective scores and sort them descending
-    const scores = items
-      .map((item) => {
-        const val = (item as Record<string, unknown>)[filterBy];
-        if (typeof val === 'number') {
-          return getEffectiveScore(item, val);
-        }
-        return undefined;
-      })
-      .filter((v): v is number => v !== undefined)
-      .sort((a, b) => b - a);
-
-    // Get the threshold score (the Nth highest)
-    const threshold = scores[visibleCount - 1] ?? 0;
-
-    // Filter items that meet the threshold, preserving original order
     return items.filter((item) => {
       const val = (item as Record<string, unknown>)[filterBy];
       if (typeof val === 'number') {
-        return getEffectiveScore(item, val) >= threshold;
+        return val >= filterCutoff;
       }
       return false;
     });
-  }, [items, filterBy, visibleCount, recencyBias]);
+  }, [filterBy, filterCutoff, items]);
 
   const getRepoParts = (repoUrl: string) => {
     try {
@@ -216,29 +243,20 @@ export default function Timeline({ items, filterBy = '' }: { items: Entry[]; fil
       {filterBy && (
         <div className="mb-6 p-4 flex items-center gap-4">
           <label htmlFor="timeline-filter-slider" className="text-sm font-medium text-gray-400 dark:text-gray-500 whitespace-nowrap">
-            Show top {visibleCount} of {items.length}
+            Show {filteredItems.length} of {items.length}
           </label>
           <input
             id="timeline-filter-slider"
             type="range"
-            min={1}
-            max={items.length}
-            value={visibleCount}
-            onChange={(e) => setVisibleCount(Number(e.target.value))}
+            min={minAvailableValue}
+            max={maxAvailableValue}
+            value={filterCutoff}
+            onChange={(e) => setFilterCutoff(Number(e.target.value))}
             className={styles.filterSlider}
           />
-          <label 
-            className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500 whitespace-nowrap cursor-pointer"
-            title="Boosts recent papers to compensate for fewer citations. Papers from the current year get up to 1000× boost, decaying to 1× after 5 years."
-          >
-            <input
-              type="checkbox"
-              checked={recencyBias}
-              onChange={(e) => setRecencyBias(e.target.checked)}
-              className="accent-slate-400 dark:accent-sky-500"
-            />
-            Recency Bias
-          </label>
+          <span className="text-sm text-gray-400 dark:text-gray-500 whitespace-nowrap">
+            Min {filterLabel ?? filterBy}: {filterCutoff}
+          </span>
         </div>
       )}
       <div className="relative">
@@ -285,6 +303,19 @@ export default function Timeline({ items, filterBy = '' }: { items: Entry[]; fil
                     <h3 className="font-semibold text-lg">{item.title}</h3>
                     {item.org && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{item.org}</p>}
                     {item.authors && item.authors.length > 0 && <ExpandableAuthors authors={item.authors} />}
+                    {(typeof item.impactScore === 'number' || typeof item.citations === 'number') && (
+                      <p className="text-xs mt-1 text-gray-500 dark:text-gray-400">
+                        {typeof item.impactScore === 'number' && (
+                          <span>Impact {item.impactScore}</span>
+                        )}
+                        {typeof item.impactScore === 'number' && typeof item.citations === 'number' && (
+                          <span> · </span>
+                        )}
+                        {typeof item.citations === 'number' && (
+                          <span>{numberFormatter.format(item.citations)} citations</span>
+                        )}
+                      </p>
+                    )}
                     {item.paperTitle && (
                       <p className="text-xs mt-1">
                         Paper: <a href={item.location} target="_blank" rel="noopener noreferrer" className="text-sky-600 dark:text-sky-400 hover:underline">
