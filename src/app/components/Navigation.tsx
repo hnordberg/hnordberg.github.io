@@ -12,6 +12,7 @@ export default function Navigation() {
     // { href: '/resume', label: 'Resume' },
     { href: '/projects', label: 'Projects' },
     { href: '/technology', label: 'Technology' },
+    { href: '/ml', label: 'Machine Learning' },
     { href: '/leadership', label: 'Leadership' },
     { href: '/publications', label: 'Publications' },
     { href: '/contact', label: 'Contact' },

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from 'react';
-import { useMathJax } from '../../../components/MathJax';
+import { useMathJax } from '../../components/MathJax';
 
 const MLTheoryPage = () => {
   const mathRef = useRef<HTMLParagraphElement>(null);
