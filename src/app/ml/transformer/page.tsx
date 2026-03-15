@@ -54,18 +54,19 @@ const TransformerPage = () => {
             and where they appear in relation to the current word. People
             (Dzmitri Bahdanau) working on translation using RNNs came up with
             the concept of words attending to other words to confer context and
-            meaning. They where comparing the words to each other using scaled
-            dot product (scaled by {'$\\sqrt{d_k}$'} to prevent values from getting too
-            large) and using the word the resulting vector pointed to, in the
-            translated text. The Transformer takes this one step further by
+            meaning. They where comparing the words to each other using a small
+            MLP that added up contributions from each word to the current word.
+            The Transformer takes this one step further by
             creating three distinct vectors (Query, Key, Value) by multiplying
             the input embedding by three different learned weight matrices
             ($W_Q$, $W_K$, $W_V$). Key -- representing the type of word it is (e.g., a
             verb); Value -- representing what that word means (e.g., the
-            semantic meaning of the verb).  For each token, we gather the
+            semantic meaning of the verb). For each token, we gather the
             different amounts of the value vectors based on the similarity of
             the Query vector of that token with the Key vectors of the other
-            tokens, and add them up.
+            tokens, and add them up. The dot product of the Query vector and
+            the Key vector is scaled by {'$\\sqrt{d_k}$'} to prevent values 
+            from getting too large. $d_k$ is the dimension of the embedding.
             <br />
             <br />
             On a more technical level, we take the embedding matrix that
@@ -133,12 +134,12 @@ const TransformerPage = () => {
           <div className="card-text">
             The output of each pass through the Transformer is a probability
             distribution over the vocabulary.
-            The word with the highest probability is chosen as the next token.
-            This process is repeated for the number of tokens to generate.
-            A parameter called the temperature is used to tweak the output.
+            The model then samples from this probability distribution to choose
+            the next token. A parameter called the temperature is used to tweak the output.
             The higher the temperature, the more chance to choose a lower
             probability word. This allows the model to generate different
-            output for different invokations of the model.
+            output for different invocations of the model.
+            This process is repeated for the number of tokens to generate.
           </div>
 
         </div>
