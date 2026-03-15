@@ -13,7 +13,17 @@ const TransformerPage = () => {
       <div className="pt-8 pb-4" ref={mathRef}>
         <h1 className="text-4xl font-bold">Transformer</h1>
         <div className="text-lg text-gray-600 dark:text-gray-400">
-          <div className="card-subtitle pt-4">Parallel Compute</div>
+
+          <div className="card-subtitle pt-4">Motivation</div>
+          <div className="card-text">
+            The Transformer is a neural network model that is more efficient to train
+            and run than previous models, and is able to take into account long range
+            relationships in text. It is an auto-regressive model, meaning after
+            generating the first token, the generated token sequence is fed back into
+            the model to generate the next token.
+          </div>
+
+          <div className="card-subtitle pt-4">Parallel Compute & the Vanishing Gradient Problem</div>
           <div className="card-text">
             The point of the Transformer was to be able to parallelize compute,
             to handle the vanishing gradient problem, and to capture long range
@@ -28,12 +38,14 @@ const TransformerPage = () => {
 
           <div className="card-subtitle pt-4">Tokenization</div>
           <div className="card-text">
-            Tokenization method chosen independently of the Transformer.
+            Tokenization is a way to divide up the data before it is processed through
+            the network. The tokenization method is chosen independently of the Transformer.
           </div>
 
           <div className="card-subtitle pt-4">Embedding</div>
           <div className="card-text">
-            Embedding chosen independently of the Transformer.
+            Embedding is a way to represent words as vectors. The embedding is chosen
+            independently of the Transformer.
           </div>
 
           <div className="card-subtitle pt-4">Attention</div>
@@ -42,10 +54,10 @@ const TransformerPage = () => {
             and where they appear in relation to the current word. People
             (Dzmitri Bahdanau) working on translation using RNNs came up with
             the concept of words attending to other words to confer context and
-            meaning. People where comparing the words to each other using scaled
+            meaning. They where comparing the words to each other using scaled
             dot product (scaled by {'$\\sqrt{d_k}$'} to prevent values from getting too
             large) and using the word the resulting vector pointed to, in the
-            translated text. The Transformer takes this one step farther by
+            translated text. The Transformer takes this one step further by
             creating three distinct vectors (Query, Key, Value) by multiplying
             the input embedding by three different learned weight matrices
             ($W_Q$, $W_K$, $W_V$). Key -- representing the type of word it is (e.g., a
@@ -54,6 +66,13 @@ const TransformerPage = () => {
             different amounts of the value vectors based on the similarity of
             the Query vector of that token with the Key vectors of the other
             tokens, and add them up.
+            <br />
+            <br />
+            On a more technical level, we take the embedding matrix that
+            consists of the embedding vectors for all the tokens in the sequence,
+            and multiply it by the weight matrices $W_Q$, $W_K$, $W_V$ to get the
+            Query, Key, and Value vectors for each token. Each row of the embedding
+            matrix is a token, and each column is a dimension of the embedding.
           </div>
 
           <div className="card-subtitle pt-4">Masking</div>
@@ -99,10 +118,33 @@ const TransformerPage = () => {
             LayerNorm (which subtracts the mean and divides by the standard
             deviation) was used instead.
           </div>
-      </div>
+
+          <div className="card-subtitle pt-4">Multi-layer Perceptron</div>
+          <div className="card-text">
+            The output vectors from the attention and normalization steps
+            are each fed through a Multi-layer Perceptron (MLP).
+            The MLP is a simple network that is applied to
+            each token after the attention and normalization. It is a two layer
+            MLP with a ReLU activation function. The MLP is used as a sort of
+            memory bank to store facts from the training data.
+          </div>
+
+          <div className="card-subtitle pt-4">Model Output</div>
+          <div className="card-text">
+            The output of each pass through the Transformer is a probability
+            distribution over the vocabulary.
+            The word with the highest probability is chosen as the next token.
+            This process is repeated for the number of tokens to generate.
+            A parameter called the temperature is used to tweak the output.
+            The higher the temperature, the more chance to choose a lower
+            probability word. This allows the model to generate different
+            output for different invokations of the model.
+          </div>
+
+        </div>
       </div>
     </main>
   );
-}
+};
 
-export default TransformerPage
+export default TransformerPage;
