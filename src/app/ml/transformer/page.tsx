@@ -31,16 +31,16 @@ const TransformerPage = () => {
             acts on text) or time steps (if it acts on time series data, like 
             audio or video), in the current step. This means the steps have to
             be computed one after another and cannot be done in parallel. The 
-            Transformer runs on the full data set every iteration, and therefor
+            Transformer runs on the full data set every iteration, and therefore
             has to encode position information another way. This is done using an
             explicit encoding, such as RoPE.
             The fact that the Transformer can process data in parallel has enabled
             training on much larger data sets than previous models. This turns
             out to have unlocked a whole new level of capabilities for natural
             language processing. Nearly all research of language models has focused
-            on the Transformer since it's release in 2017. This has led to new
+            on the Transformer since its release in 2017. This has led to new
             products and major NLP advancements, but it also has come at the expense
-            of not exploring other options model architectures that may hold promise.
+            of not exploring other model architectures that may hold promise.
           </div>
 
           <div className="card-subtitle pt-4">Tokenization</div>
@@ -73,7 +73,7 @@ const TransformerPage = () => {
             the Query vector of that token with the Key vectors of the other
             tokens, and add them up. The dot product of the Query vector and
             the Key vector is scaled by {'$\\sqrt{d_k}$'} to prevent values 
-            from getting too large. $d_k$ is the dimension of the embedding.
+            from getting too large. $d_k$ is the dimension of the key vector.
             <br />
             <br />
             On a more technical level, we take the embedding matrix that
@@ -111,8 +111,12 @@ const TransformerPage = () => {
             of attention in parallel, with each head ending up representing
             different kinds of information (syntactic, semantic, long range).
             All tokens are processed by each head, but the embedding dimension
-            is divided across the heads., and they are then concatenated back
-            up to the full size. n is in the range of 64 - 128.
+            is divided across the heads, and they are then concatenated back
+            up to the full size. In massive, state-of-the-art models, the
+            number of heads (n) is typically 64 to 128, though smaller models
+            often use 8 to 32. Coincidentally, the dimension of each individual
+            head is also usually 64 or 128, as these sizes are highly optimized
+            for GPU matrix operations.
           </div>
 
           <div className="card-subtitle pt-4">Residual Connections</div>
