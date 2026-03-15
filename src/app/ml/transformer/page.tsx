@@ -19,7 +19,7 @@ const TransformerPage = () => {
             The Transformer is a neural network model that is more efficient to train
             and run than previous models, and is able to take into account long range
             relationships in text. It is an auto-regressive model, meaning after
-            generating the first token, the generated token sequence is fed back into
+            generating a token, the generated token sequence is fed back into
             the model to generate the next token.
           </div>
 
@@ -32,7 +32,7 @@ const TransformerPage = () => {
             audio or video), in the current step. This means the steps have to
             be computed one after another and cannot be done in parallel. The 
             Transformer runs on the full data set every iteration, and therefor
-            has to encode position information another way. This is done an
+            has to encode position information another way. This is done using an
             explicit encoding, such as RoPE.
           </div>
 
@@ -44,7 +44,7 @@ const TransformerPage = () => {
 
           <div className="card-subtitle pt-4">Embedding</div>
           <div className="card-text">
-            Embedding is a way to represent words as vectors. The embedding is chosen
+            Embedding is a way to represent tokens as vectors. The embedding is chosen
             independently of the Transformer.
           </div>
 
