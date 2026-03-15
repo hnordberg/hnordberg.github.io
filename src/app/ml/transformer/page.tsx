@@ -34,6 +34,13 @@ const TransformerPage = () => {
             Transformer runs on the full data set every iteration, and therefor
             has to encode position information another way. This is done using an
             explicit encoding, such as RoPE.
+            The fact that the Transformer can process data in parallel has enabled
+            training on much larger data sets than previous models. This turns
+            out to have unlocked a whole new level of capabilities for natural
+            language processing. Nearly all research of language models has focused
+            on the Transformer since it's release in 2017. This has led to new
+            products and major NLP advancements, but it also has come at the expense
+            of not exploring other options model architectures that may hold promise.
           </div>
 
           <div className="card-subtitle pt-4">Tokenization</div>
@@ -79,7 +86,13 @@ const TransformerPage = () => {
           <div className="card-subtitle pt-4">Masking</div>
           <div className="card-text">
             Masking is used to zero out the attention weights for future tokens
-            so that predicting token N only relies on tokens 1 through N−1.
+            so that predicting token N only relies on tokens 1 through N−1. During
+            training, this enforces the auto-regressive rule: the model must learn
+            to predict the next word using only past context. During inference, even
+            when the model is reading a fully provided prompt, this causal mask must
+            still be applied. If the mask were dropped to let words look ahead, it
+            would feed the network a bidirectional mathematical structure it has
+            never seen before.
           </div>
 
           <div className="card-subtitle pt-4">Positional Encoding</div>
