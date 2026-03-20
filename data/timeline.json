@@ -1,5 +1,14 @@
 [
   {
+    "id": "lbnl",
+    "period": "2026 – present",
+    "title": "ScienceIT Consultant",
+    "org": "Lawrence Berkeley National Laboratory",
+    "location": "Berkeley, CA",
+    "description": "Help scientists use compute resources efficiently and effectively.",
+    "icon": "berkeley_lab.png"
+  },
+  {
     "id": "optum",
     "period": "2019 – 2025",
     "title": "Principal Software Engineer",
