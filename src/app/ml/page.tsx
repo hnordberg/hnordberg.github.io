@@ -14,7 +14,9 @@ const MLPage = () => {
         <div className="card" id="papers">
           <div className="card-title">Papers</div>
           <div className="card-text">
-              <p><a href="/ml/papers">History of Machine Learning & LLMs</a></p>
+            <p>
+              <a href="/ml/papers">Papers</a> — LLM timeline, interesting papers, and more.
+            </p>
           </div>
         </div>
         <div className="card" id="transformer">
