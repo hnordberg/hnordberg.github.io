@@ -1004,5 +1004,435 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "xavier-glorot-initialization",
+    "title": "Xavier/Glorot Initialization",
+    "summary": "A structured weight initialization scheme drawing weights from robust distributions inherently scaled directly by input and output bounds, maintaining highly consistent sequential activation variance bounds universally enabling unexplodi…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "imagenet-dataset",
+      "next-token-prediction-objective-causal-language-modeling"
+    ],
+    "updatedAt": "2026-04-14",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2010 · Xavier Glorot, Yoshua Bengio · Understanding the Difficulty of Training Deep Feedforward Neural Networks",
+        "url": "https://arxiv.org/abs/1006.0446"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A structured weight initialization scheme drawing weights from robust distributions inherently scaled directly by input and output bounds, maintaining highly consistent sequential activation variance bounds universally enabling unexploding stable deep gradient training.</p>\n\n  <svg viewBox=\"0 0 650 240\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <defs>\n      <marker id=\"arrow_1771711353410\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ecc94b\"></path>\n      </marker>\n    </defs>\n    <text x=\"325\" y=\"25\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">Variance Propagation &amp; Initialization Constraints</text>\n\n    <!-- Normal Init -->\n    <rect x=\"50\" y=\"60\" width=\"220\" height=\"150\" rx=\"8\" fill=\"#2d3748\" stroke=\"#4a5568\"></rect>\n    <text x=\"160\" y=\"85\" fill=\"#e2e8f0\" font-size=\"14\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">Standard Normal Init \\(\\mathcal{N}(0, 1)\\)</text>\n    \n    <!-- Exploding Variance -->\n    <path d=\"M 90 120 L 120 120\" stroke=\"#ecc94b\" stroke-width=\"2\"></path>\n    <path d=\"M 120 120 L 150 110\" stroke=\"#ecc94b\" stroke-width=\"3\"></path>\n    <path d=\"M 150 110 L 180 90\" stroke=\"#ecc94b\" stroke-width=\"4\"></path>\n    <path d=\"M 180 90 L 210 50\" stroke=\"#ecc94b\" stroke-width=\"5\" marker-end=\"url(#arrow_1771711353410)\"></path>\n    \n    <!-- Vanishing Gradients -->\n    <path d=\"M 210 160 L 180 160\" stroke=\"#c05621\" stroke-width=\"1\"></path>\n    <path d=\"M 180 160 L 150 165\" stroke=\"#c05621\" stroke-width=\"1\"></path>\n    <path d=\"M 150 165 L 120 170\" stroke=\"#c05621\" stroke-width=\"1\"></path>\n    <path d=\"M 120 170 L 90 170\" stroke=\"#c05621\" stroke-width=\"1\" marker-end=\"url(#arrow_1771711353410)\"></path>\n    \n    <text x=\"160\" y=\"195\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Variance Explodes/Vanishes</text>\n\n    <!-- Xavier Init -->\n    <rect x=\"330\" y=\"60\" width=\"280\" height=\"150\" rx=\"8\" fill=\"#2d3748\" stroke=\"#4a5568\"></rect>\n    <text x=\"470\" y=\"85\" fill=\"#e2e8f0\" font-size=\"14\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">Xavier/Glorot Init \\(\\mathcal{N}(0, \\frac{2}{n_{in} + n_{out}})\\)</text>\n    \n    <!-- Stable Variance -->\n    <path d=\"M 380 120 L 420 120\" stroke=\"#ecc94b\" stroke-width=\"3\"></path>\n    <path d=\"M 420 120 L 460 120\" stroke=\"#ecc94b\" stroke-width=\"3\"></path>\n    <path d=\"M 460 120 L 500 120\" stroke=\"#ecc94b\" stroke-width=\"3\"></path>\n    <path d=\"M 500 120 L 540 120\" stroke=\"#ecc94b\" stroke-width=\"3\" marker-end=\"url(#arrow_1771711353410)\"></path>\n    \n    <path d=\"M 540 160 L 500 160\" stroke=\"#c05621\" stroke-width=\"3\"></path>\n    <path d=\"M 500 160 L 460 160\" stroke=\"#c05621\" stroke-width=\"3\"></path>\n    <path d=\"M 460 160 L 420 160\" stroke=\"#c05621\" stroke-width=\"3\"></path>\n    <path d=\"M 420 160 L 380 160\" stroke=\"#c05621\" stroke-width=\"3\" marker-end=\"url(#arrow_1771711353410)\"></path>\n    \n    <text x=\"470\" y=\"195\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">\\(\\text{Var}(y) \\approx \\text{Var}(x)\\) (Stable propagation)</text>\n\n  </svg><p>Before Xavier mechanisms precisely bound network capacities, deep feedforward topologies invariably exploded or entirely collapsed mapping sequentially stochastic matrices derived haphazardly. Glorot definitively mathematically solved sequential preservation strictly forcing linear layer parameters conforming exactly to inputs mappings over bounded uniform or normal distributions.</p>\n\n  <p>To preserve bounds mathematically across symmetric linear transformations maintaining exactly \\(\\text{Var}(y) = \\text{Var}(x)\\), the mapping matrix scale bounds inherently demand parameters explicitly compensating directly against exact specific nodes connected (fan-in and fan-out parameters). Normalizing against both forward bounding limits \\(\\text{Var}(W) = \\frac{1}{n_{\\text{in}}}\\) and matching backpropagation requirements equally firmly \\(\\text{Var}(W) = \\frac{1}{n_{\\text{out}}}\\), the distribution averages directly to:</p>\n\n  \\[ W_{ij} \\sim \\mathcal{N}\\!\\left(0,\\; \\frac{2}{n_{\\text{in}} + n_{\\text{out}}}\\right) \\quad \\text{or uniform} \\quad W_{ij} \\sim \\mathcal{U}\\!\\left[-\\sqrt{\\frac{6}{n_{\\text{in}} + n_{\\text{out}}}},\\; \\sqrt{\\frac{6}{n_{\\text{in}} + n_{\\text{out}}}}\\right] \\]\n\n  <p>For symmetric operations processing values (ex: Tanh, Sigmoid), this explicitly permanently stabilizes deep gradients bounding limits dynamically. For inherently asymmetric nodes discarding half properties structurally (ReLU zeroing maps out), Kaiming/He initialization directly supersedes it replacing constants doubling constraints tracking ReLU cut bounds strictly \\( \\mathcal{N}(0, \\frac{2}{n_{\\text{in}}}) \\).</p><details>\n    <summary>Derivations</summary>\n    <p>Forward pass expansion evaluating sum variance bounds precisely isolates components:\n    \\[ \\text{Var}(y_i) = \\text{Var}\\left(\\sum_{j=1}^{n_{\\text{in}}} W_{ij} x_j\\right) = n_{\\text{in}} \\cdot \\text{Var}(W_{ij}) \\cdot \\text{Var}(x) \\]\n    Setting identical propagation limits \\( \\text{Var}(y) = \\text{Var}(x) \\) identically isolates forward constraint parameters evaluating purely: \\( \\text{Var}(W) = \\frac{1}{n_{\\text{in}}} \\). Matching backward requirements maps symmetric requirements directly yielding the combined average target bound \\(\\frac{2}{n_{\\text{in}} + n_{\\text{out}}}\\). For uniform distributions parameterized as \\(U[-a, a]\\), matching standard target limits maps algebraically \\( \\frac{a^2}{3} = \\frac{2}{n_{in} + n_{out}} \\rightarrow a = \\sqrt{\\frac{6}{n_{in} + n_{out}}} \\).</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "imagenet-dataset",
+    "title": "ImageNet Dataset",
+    "summary": "A massive hierarchical standardized image dataset organizing 14+ million categorically labeled parameters fueling rigorous competitive ILSVRC events acting as the foundational spark permanently instigating the deep learning hardware revo…",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "cv",
+      "foundational",
+      "landmark",
+      "ml",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "neural-probabilistic-language-model",
+      "xavier-glorot-initialization"
+    ],
+    "updatedAt": "2026-04-14",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2009 · Jia Deng, Li-Jia Li, Kai Li, Li Fei-Fei et al. · ImageNet: A Large-Scale Hierarchical Image Database",
+        "url": "https://www.image-net.org/static_files/papers/imagenet_cvpr09.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A massive hierarchical standardized image dataset organizing 14+ million categorically labeled parameters fueling rigorous competitive ILSVRC events acting as the foundational spark permanently instigating the deep learning hardware revolution globally.</p>\n\n  <svg viewBox=\"0 0 650 200\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <defs>\n      <marker id=\"arrow_1771711353443\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ecc94b\"></path>\n      </marker>\n    </defs>\n    <text x=\"325\" y=\"25\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">The AlexNet 2012 Deep Learning Breakthrough (ILSVRC Error %)</text>\n\n    <!-- axes -->\n    <line x1=\"80\" y1=\"170\" x2=\"550\" y2=\"170\" stroke=\"#a0aec0\" stroke-width=\"2\"></line>\n    <line x1=\"80\" y1=\"170\" x2=\"80\" y2=\"50\" stroke=\"#a0aec0\" stroke-width=\"2\"></line>\n\n    <!-- 2010 -->\n    <circle cx=\"150\" cy=\"65\" r=\"5\" fill=\"#4a5568\"></circle>\n    <text x=\"150\" y=\"55\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">28%</text>\n    <text x=\"150\" y=\"190\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2010</text>\n\n    <!-- 2011 -->\n    <circle cx=\"250\" cy=\"75\" r=\"5\" fill=\"#4a5568\"></circle>\n    <text x=\"250\" y=\"65\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">25% (SVM)</text>\n    <text x=\"250\" y=\"190\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2011</text>\n\n    <!-- 2012 Drop -->\n    <circle cx=\"350\" cy=\"115\" r=\"8\" fill=\"#e53e3e\"></circle>\n    <path d=\"M 255 77 L 340 110\" stroke=\"#e53e3e\" stroke-width=\"3\" marker-end=\"url(#arrow_1771711353443)\"></path>\n    <text x=\"350\" y=\"135\" fill=\"#e53e3e\" font-size=\"12\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">15.3% (AlexNet)</text>\n    <text x=\"350\" y=\"190\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2012</text>\n\n    <!-- 2014 & 2015 -->\n    <circle cx=\"450\" cy=\"150\" r=\"5\" fill=\"#3182ce\"></circle>\n    <path d=\"M 355 120 L 440 148\" stroke=\"#3182ce\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353443)\"></path>\n    <text x=\"450\" y=\"140\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6.7%</text>\n    <text x=\"450\" y=\"190\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2014 (Inception)</text>\n\n    <circle cx=\"550\" cy=\"160\" r=\"5\" fill=\"#3182ce\"></circle>\n    <path d=\"M 455 152 L 540 159\" stroke=\"#3182ce\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353443)\"></path>\n    <text x=\"550\" y=\"150\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3.6%</text>\n    <text x=\"550\" y=\"190\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2015 (ResNet)</text>\n  </svg><p>Conceived by Fei-Fei Li addressing intrinsic stagnation tracking toy data metrics, ImageNet forced algorithms adapting entirely mapping structural representations directly without manual Feature SVM tuning operations using massive labeled crowdsourced arrays categorized tightly defining the global competitive visual standard benchmark known natively globally.</p>\n\n  <p>The standard subset defining the ILSVRC competition tracked purely explicitly bounds classifying exact targets across 1,000 dense hierarchical array definitions processing effectively ~1.2 million RGB matrix properties fundamentally mapping images structurally over 256 physical dimension bounds determining exact matches computing Top-5 probability metrics directly.</p>\n\n  <table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Year</th>\n      <th style=\"padding:6px; text-align:left;\">Model</th>\n      <th style=\"padding:6px; text-align:left;\">Error Drop</th>\n      <th style=\"padding:6px; text-align:left;\">Hardware/Innovation</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">2012</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">AlexNet</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">15.3%</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Deep CNNs + Dual Cuda GPU Scaling</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">2014</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">GoogLeNet</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">6.7%</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Inception parameter shrinking</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">2015</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">ResNet</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">3.6%</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Deep skip connections bypassing limits</td></tr>\n  </tbody></table>\n\n  <p>The exact 10 point massive cliff explicitly demonstrated scaling CNN algorithms over GPU hardware destroyed classic handcrafted approaches perfectly forever. Eventually becoming perfectly saturated with superhuman tracking bounds via ResNet configurations forcing total benchmark retirement functionally defining pure baseline standard initialization metrics globally utilized across vision tasks seamlessly to date.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "neural-probabilistic-language-model",
+    "title": "Neural Probabilistic Language Model",
+    "summary": "The groundbreaking paradigm entirely shifting natural language modeling away from explicit sparse discrete frequency-based counting mechanics to fully continuous learned embedding representations mapping deep networks structurally breaki…",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "landmark",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "weight-tying",
+      "imagenet-dataset"
+    ],
+    "updatedAt": "2026-04-14",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2003 · Yoshua Bengio, Réjean Ducharme, Pascal Vincent, Christian Jauvin · A Neural Probabilistic Language Model",
+        "url": "https://www.jmlr.org/papers/v3/bengio03a.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The groundbreaking paradigm entirely shifting natural language modeling away from explicit sparse discrete frequency-based counting mechanics to fully continuous learned embedding representations mapping deep networks structurally breaking combinatorial curse of dimensionality equations definitively.</p>\n\n  <svg viewBox=\"0 0 650 240\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <defs>\n      <marker id=\"arrow_1771711353472\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ecc94b\"></path>\n      </marker>\n    </defs>\n    <text x=\"325\" y=\"25\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">Neural Probabilistic Language Model Architecture</text>\n\n    <!-- Inputs -->\n    <rect x=\"50\" y=\"60\" width=\"80\" height=\"25\" rx=\"4\" fill=\"#4a5568\"></rect>\n    <text x=\"90\" y=\"77\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">\\(w_{t-2}\\)</text>\n    \n    <rect x=\"50\" y=\"100\" width=\"80\" height=\"25\" rx=\"4\" fill=\"#4a5568\"></rect>\n    <text x=\"90\" y=\"117\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">\\(w_{t-1}\\)</text>\n\n    <text x=\"90\" y=\"150\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">Discrete IDs</text>\n\n    <!-- Embedding Matrix -->\n    <path d=\"M 135 72 L 175 72\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353472)\"></path>\n    <path d=\"M 135 112 L 175 112\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353472)\"></path>\n    \n    <rect x=\"180\" y=\"45\" width=\"80\" height=\"100\" rx=\"4\" fill=\"#c05621\"></rect>\n    <text x=\"220\" y=\"90\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Matrix \\(C\\)</text>\n    <text x=\"220\" y=\"110\" fill=\"#fff\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">(Embeddings)</text>\n\n    <!-- Concat and Hidden -->\n    <path d=\"M 265 92 L 315 92\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353472)\"></path>\n\n    <rect x=\"320\" y=\"60\" width=\"80\" height=\"60\" rx=\"4\" fill=\"#2b6cb0\"></rect>\n    <text x=\"360\" y=\"90\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Hidden \\(\\tanh\\)</text>\n\n    <!-- Output -->\n    <path d=\"M 405 92 L 455 92\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353472)\"></path>\n\n    <!-- Direct connection (Skip connection) -->\n    <path d=\"M 290 92 L 290 170\" stroke=\"#ecc94b\" stroke-dasharray=\"4\" stroke-width=\"2\"></path>\n    <path d=\"M 290 170 L 480 170\" stroke=\"#ecc94b\" stroke-dasharray=\"4\" stroke-width=\"2\"></path>\n    <path d=\"M 480 170 L 480 145\" stroke=\"#ecc94b\" stroke-dasharray=\"4\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353472)\"></path>\n\n    <rect x=\"460\" y=\"60\" width=\"120\" height=\"80\" rx=\"4\" fill=\"#2d3748\" stroke=\"#4a5568\"></rect>\n    <text x=\"520\" y=\"85\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Predict \\(P(w_t)\\)</text>\n    <text x=\"520\" y=\"110\" fill=\"#cbd5e0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Softmax Output</text>\n\n  </svg><p>Traditional explicitly formulated sequence predicting models (n-grams) intrinsically estimated exact target probabilities \\( P(w_t \\mid w_{t-n+1}, \\dots, w_{t-1}) \\) strictly evaluating isolated memory sparse counts. This created absolute combinatorial catastrophes inherently demanding exponential matrices limits scaling via \\( V^{n-1} \\), preventing sequences unobserved during exact counting passes natively.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Architecture modifications.</b> Replacing static symbol lookups definitively, language inputs dynamically pass strictly across learned distributed mapped matrix arrays mapping tokens converting strictly to continuous space metrics. Inputs extract vectors \\(\\mathbb{R}^m\\) merging inputs through linear non-linear projections including bypass components directly formatting output probability domains:</p>\n\n  \\[ y = b + W x + U \\tanh(d + H x) \\]\n\n  <p>where \\( x = [C(w_{t-n+1}); \\dots; C(w_{t-1})] \\) constructs the context array evaluating completely across hidden mapped node representations bounded linearly \\(H\\) projecting non-linear structures \\(\\tanh\\) mapped linearly against probability metrics generating massive \\( V \\) scalar values normalized fully over \\(\\text{softmax}\\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Impact constraint shifting.</b> Transforming discrete operations into bounded similar space definitions permitted mapping unknown sequence phrases easily sharing dense space metrics tracking structurally similarly trained context bounds natively bypassing explicit strict word constraints. This strictly defined pre-training frameworks establishing standard contextualizing mappings explicitly defining paradigms culminating in architectures ranging seamlessly towards Word2Vec and Transformer variants inherently.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "weight-tying",
+    "title": "Weight Tying",
+    "summary": "A mathematically elegant parameter optimizing approach constraining language generation models explicitly sharing internal matrix representations natively linking input domain mapping embeddings tracking uniformly directly against the fi…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "gradient-checkpointing-activation-recomputation",
+      "neural-probabilistic-language-model"
+    ],
+    "updatedAt": "2026-04-14",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Ofir Press, Lior Wolf · Using the Output Embedding to Improve Language Models",
+        "url": "https://arxiv.org/abs/1608.05859"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A mathematically elegant parameter optimizing approach constraining language generation models explicitly sharing internal matrix representations natively linking input domain mapping embeddings tracking uniformly directly against the final generative pre-softmax scaling transformation layers universally reducing parameters significantly.</p>\n\n  <svg viewBox=\"0 0 650 200\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <defs>\n      <marker id=\"arrow_1771711353601\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ecc94b\" />\n      </marker>\n    </defs>\n    <text x=\"325\" y=\"25\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">Weight Tying: E = W^T</text>\n\n    <!-- Bottom: Input Embeddings -->\n    <rect x=\"50\" y=\"140\" width=\"120\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#cbd5e0\"/>\n    <text x=\"110\" y=\"155\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Input Tokens</text>\n    <text x=\"110\" y=\"170\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">(V vocab space)</text>\n\n    <path d=\"M 110 135 L 110 105\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353601)\"/>\n\n    <rect x=\"50\" y=\"60\" width=\"120\" height=\"40\" rx=\"4\" fill=\"#c05621\"/>\n    <text x=\"110\" y=\"75\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Embedding Matrix</text>\n    <text x=\"110\" y=\"90\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">E \\(\\in \\mathbb{R}^{V \\times d}\\)</text>\n\n    <!-- Model -->\n    <path d=\"M 180 80 L 260 80\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353601)\"/>\n    <text x=\"220\" y=\"75\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">Dense \\(h_t\\)</text>\n\n    <rect x=\"270\" y=\"50\" width=\"100\" height=\"100\" rx=\"8\" fill=\"#2b6cb0\"/>\n    <text x=\"320\" y=\"105\" fill=\"#fff\" font-size=\"14\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">Transformer</text>\n\n    <!-- Final projection mapping BACK through the shared matrix transpose -->\n    <path d=\"M 380 80 L 460 80\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353601)\"/>\n    <text x=\"420\" y=\"75\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">Dense \\(h_T\\)</text>\n\n    <!-- Sharing connection -->\n    <path d=\"M 110 55 L 110 30 L 530 30 L 530 55\" stroke=\"#ecc94b\" stroke-width=\"3\" stroke-dasharray=\"6\" marker-end=\"url(#arrow_1771711353601)\"/>\n    <text x=\"320\" y=\"20\" fill=\"#ecc94b\" font-size=\"12\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">Tied Weights (Shared Parameter Space)</text>\n\n    <rect x=\"470\" y=\"60\" width=\"120\" height=\"40\" rx=\"4\" fill=\"#c05621\"/>\n    <text x=\"530\" y=\"75\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Output Projection</text>\n    <text x=\"530\" y=\"90\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">W = E\\(^\\top\\)</text>\n\n    <path d=\"M 530 105 L 530 135\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353601)\"/>\n\n    <rect x=\"470\" y=\"140\" width=\"120\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#cbd5e0\"/>\n    <text x=\"530\" y=\"155\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Logits</text>\n    <text x=\"530\" y=\"170\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">(V vocab space)</text>\n  </svg><p>Massive language generation applications construct huge uncompressed dimensional parameter mappings tracking entirely independent arrays indexing raw inputs \\( E \\in \\mathbb{R}^{V \\times d} \\) completely matching final predictions transforming hidden dimensions \\( W \\in \\mathbb{R}^{d \\times V} \\) dynamically. Tracking 50k token definitions intrinsically consumes upwards of ~38M parameters structurally across components creating redundancy intrinsically mapping inputs against outputs completely needlessly.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Constraint Formulation.</b> Connecting mapping components natively requires structuring identical matrices tracking parameter variables linearly bounded tying completely forcing exactly \\( W = E^\\top \\). Consequently tracking predicted outputs structures cleanly via specific standard mathematical similarity alignment metric mappings universally:</p>\n\n  \\[ z_i = h_t^\\top \\, e_i \\]\n\n  <p>where evaluating predicting outputs structurally determines direct bounded cosine distance metrics against exactly generated hidden sequence vectors tracking explicitly matching mapping embeddings dynamically updating uniformly universally.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Benefits explicitly bounded over constraints",
+        "body": "<ul>\n    <li><b>Eliminating Parameter Bloating:</b> Scaling arrays unconditionally reduces total matrices significantly preventing smaller architecture layers losing representation properties.</li>\n    <li><b>Implicit Loss Regularization:</b> Coupling prediction vectors universally feeds forward and backward loss metrics preventing token sparsity degradation bounding representations uniformly cleanly.</li>\n    <li><b>Unified Convergence Bounds:</b> Unifying matrices drives metrics stabilizing properties inherently operating over GPT/T5 mapping environments cleanly.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "gradient-checkpointing-activation-recomputation",
+    "title": "Gradient Checkpointing (Activation Recomputation)",
+    "summary": "A critical engineering mechanism exchanging minor parameter computational reconstruction steps actively bypassing total memory allocation matrices bounds selectively retaining isolated node segment values actively purging continuous tens…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "pagedattention",
+      "weight-tying"
+    ],
+    "updatedAt": "2026-04-14",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2016 · Tianqi Chen, Bing Xu, Chiyuan Zhang, Carlos Guestrin · Training Deep Nets with Sublinear Memory Cost",
+        "url": "https://arxiv.org/abs/1604.06174"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A critical engineering mechanism exchanging minor parameter computational reconstruction steps actively bypassing total memory allocation matrices bounds selectively retaining isolated node segment values actively purging continuous tensors actively throughout forward passes structurally minimizing total parameter demands heavily.</p>\n\n  <svg viewBox=\"0 0 650 240\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <defs>\n      <marker id=\"arrow_1771711353635\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ecc94b\"></path>\n      </marker>\n    </defs>\n    <text x=\"325\" y=\"25\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">Gradient Checkpointing Operations</text>\n\n    <text x=\"50\" y=\"65\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\">Standard Array</text>\n    <rect x=\"150\" y=\"55\" width=\"40\" height=\"15\" fill=\"#9b2c2c\"></rect>\n    <rect x=\"230\" y=\"55\" width=\"40\" height=\"15\" fill=\"#9b2c2c\"></rect>\n    <rect x=\"310\" y=\"55\" width=\"40\" height=\"15\" fill=\"#9b2c2c\"></rect>\n    <rect x=\"390\" y=\"55\" width=\"40\" height=\"15\" fill=\"#9b2c2c\"></rect>\n    <rect x=\"470\" y=\"55\" width=\"40\" height=\"15\" fill=\"#9b2c2c\"></rect>\n    <path d=\"M 195 62 L 225 62\" stroke=\"#e2e8f0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353635)\"></path>\n    <path d=\"M 275 62 L 305 62\" stroke=\"#e2e8f0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353635)\"></path>\n    <path d=\"M 355 62 L 385 62\" stroke=\"#e2e8f0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353635)\"></path>\n    <path d=\"M 435 62 L 465 62\" stroke=\"#e2e8f0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353635)\"></path>\n    <text x=\"530\" y=\"66\" fill=\"#ecc94b\" font-size=\"10\" font-family=\"sans-serif\">Memory O(N)</text>\n\n\n    <text x=\"50\" y=\"115\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\">Checkpointing</text>\n    <rect x=\"150\" y=\"105\" width=\"40\" height=\"15\" fill=\"#9b2c2c\"></rect>\n    <rect x=\"230\" y=\"105\" width=\"40\" height=\"15\" fill=\"#4a5568\"></rect> <!-- dropped -->\n    <rect x=\"310\" y=\"105\" width=\"40\" height=\"15\" fill=\"#9b2c2c\"></rect> <!-- Checkpoint -->\n    <rect x=\"390\" y=\"105\" width=\"40\" height=\"15\" fill=\"#4a5568\"></rect> <!-- dropped -->\n    <rect x=\"470\" y=\"105\" width=\"40\" height=\"15\" fill=\"#9b2c2c\"></rect>\n    \n    <!-- Arrows displaying dropping -->\n    <path d=\"M 195 112 L 225 112\" stroke=\"#e2e8f0\" stroke-width=\"2\" stroke-dasharray=\"2\" marker-end=\"url(#arrow_1771711353635)\"></path>\n    <path d=\"M 275 112 L 305 112\" stroke=\"#e2e8f0\" stroke-width=\"2\" stroke-dasharray=\"2\" marker-end=\"url(#arrow_1771711353635)\"></path>\n    <path d=\"M 355 112 L 385 112\" stroke=\"#e2e8f0\" stroke-width=\"2\" stroke-dasharray=\"2\" marker-end=\"url(#arrow_1771711353635)\"></path>\n    <text x=\"250\" y=\"135\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">Discarded</text>\n    <text x=\"530\" y=\"116\" fill=\"#ecc94b\" font-size=\"10\" font-family=\"sans-serif\">Memory O(√N)</text>\n\n    <!-- Backward recomputation -->\n    <text x=\"50\" y=\"185\" fill=\"#cbd5e0\" font-size=\"12\" font-family=\"sans-serif\">Backward Pass</text>\n    <rect x=\"310\" y=\"175\" width=\"40\" height=\"15\" fill=\"#9b2c2c\"></rect> <!-- Start from check -->\n    <path d=\"M 355 182 L 385 182\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353635)\"></path>\n    <rect x=\"390\" y=\"175\" width=\"40\" height=\"15\" fill=\"#2b6cb0\"></rect> <!-- Recompute -->\n    <text x=\"410\" y=\"205\" fill=\"#ecc94b\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">Recomputes using check</text>\n\n  </svg><p>Standard network training limits intrinsically scale directly storing continuous matrices mapped consistently defining \\( O(N) \\) allocations maintaining massive tensor metrics uniformly. Transforming limits bypassing hard constraints enables training exceptionally large Transformer scale LLMs functionally managing GPU VRAM effectively fundamentally redefining matrix persistence limitations fundamentally linearly exchanging components exactly selectively targeting parameters optimally mapping exactly \\( O(\\sqrt{N}) \\) requirements actively saving bounds completely without scaling arrays linearly fundamentally mapping identically.</p>\n\n  <table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Strategy</th>\n      <th style=\"padding:6px; text-align:left;\">Peak Memory Map</th>\n      <th style=\"padding:6px; text-align:left;\">Overhead Scaling</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">No checkpointing</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( O(N) \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( O(N) \\)</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Optimal Strategy Nodes</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( O(\\sqrt{N}) \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\sim 33\\% \\) Overhead pass</td></tr>\n  </tbody></table>\n\n  <p>Dynamically executing sequences correctly inherently maps values natively tracking selective layers completely storing states fully fundamentally allowing precise reconstruction mechanisms tracking back propagation metrics exactly. Discarding intermediate tensor mapping components reduces matrices substantially defining precise boundaries tracking precisely through layers reconstructing targets natively generating exact calculations functionally operating across frameworks effectively defining limits flawlessly.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "pagedattention",
+    "title": "PagedAttention",
+    "summary": "A sophisticated memory fragmentation management methodology algorithm fundamentally mimicking OS Virtual Memory structures natively storing scaling dynamic KV Cache constraints effectively breaking non-contiguous blocks accelerating gene…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "attention",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "speculative-decoding",
+      "gradient-checkpointing-activation-recomputation"
+    ],
+    "updatedAt": "2026-04-14",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Woosuk Kwon, Zhuohan Li, Siyuan Zhuang et al. · Efficient Memory Management for Large Language Model Serving with PagedAttention",
+        "url": "https://arxiv.org/abs/2309.06180"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A sophisticated memory fragmentation management methodology algorithm fundamentally mimicking OS Virtual Memory structures natively storing scaling dynamic KV Cache constraints effectively breaking non-contiguous blocks accelerating generation serving throughput bounds drastically.</p>\n\n  <svg viewBox=\"0 0 650 240\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <defs>\n      <marker id=\"arrow_1771711353660\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ecc94b\" />\n      </marker>\n    </defs>\n    <text x=\"325\" y=\"25\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">PagedAttention KV Cache Layout</text>\n\n    <!-- Request 1 (Logical) -->\n    <rect x=\"50\" y=\"50\" width=\"120\" height=\"25\" rx=\"4\" fill=\"#2d3748\" stroke=\"#cbd5e0\"/>\n    <text x=\"110\" y=\"67\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Seq 1 Logical</text>\n    \n    <rect x=\"70\" y=\"85\" width=\"20\" height=\"20\" fill=\"#2b6cb0\"/>\n    <rect x=\"95\" y=\"85\" width=\"20\" height=\"20\" fill=\"#c05621\"/>\n    <rect x=\"120\" y=\"85\" width=\"20\" height=\"20\" fill=\"#9b2c2c\"/>\n\n    <!-- Request 2 (Logical) -->\n    <rect x=\"50\" y=\"140\" width=\"120\" height=\"25\" rx=\"4\" fill=\"#2d3748\" stroke=\"#cbd5e0\"/>\n    <text x=\"110\" y=\"157\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Seq 2 Logical</text>\n    \n    <rect x=\"70\" y=\"175\" width=\"20\" height=\"20\" fill=\"#2b6cb0\"/> <!-- shared system prompt block -->\n    <rect x=\"95\" y=\"175\" width=\"20\" height=\"20\" fill=\"#2f855a\"/>\n\n    <!-- Block Table -->\n    <path d=\"M 150 95 L 200 95\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353660)\"/>\n    <path d=\"M 150 185 L 200 135\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353660)\"/>\n\n    <rect x=\"210\" y=\"50\" width=\"120\" height=\"150\" rx=\"8\" fill=\"#4a5568\"/>\n    <text x=\"270\" y=\"75\" fill=\"#fff\" font-size=\"14\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">Block Table</text>\n    \n    <rect x=\"230\" y=\"90\" width=\"80\" height=\"20\" fill=\"#2d3748\"/>\n    <text x=\"270\" y=\"104\" fill=\"#cbd5e0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">Map to Physical</text>\n\n    <rect x=\"230\" y=\"120\" width=\"80\" height=\"20\" fill=\"#2d3748\"/>\n    <text x=\"270\" y=\"134\" fill=\"#cbd5e0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">Map to Physical</text>\n\n    <path d=\"M 340 100 L 390 100\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353660)\"/>\n    \n    <!-- Physical Memory -->\n    <rect x=\"400\" y=\"50\" width=\"200\" height=\"150\" rx=\"4\" fill=\"#2d3748\" stroke=\"#4a5568\"/>\n    <text x=\"500\" y=\"75\" fill=\"#e2e8f0\" font-size=\"14\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">Physical VRAM</text>\n\n    <!-- Physical blocks non-contiguous -->\n    <rect x=\"420\" y=\"90\" width=\"20\" height=\"20\" fill=\"#9b2c2c\"/>\n    <rect x=\"450\" y=\"90\" width=\"20\" height=\"20\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-dasharray=\"2\"/> <!-- free -->\n    <rect x=\"480\" y=\"90\" width=\"20\" height=\"20\" fill=\"#2b6cb0\"/> <!-- shared mapped physically once -->\n    <rect x=\"510\" y=\"90\" width=\"20\" height=\"20\" fill=\"#2f855a\"/>\n    <rect x=\"540\" y=\"90\" width=\"20\" height=\"20\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-dasharray=\"2\"/> \n\n    <rect x=\"420\" y=\"120\" width=\"20\" height=\"20\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-dasharray=\"2\"/> \n    <rect x=\"450\" y=\"120\" width=\"20\" height=\"20\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-dasharray=\"2\"/>\n    <rect x=\"480\" y=\"120\" width=\"20\" height=\"20\" fill=\"#c05621\"/>\n    <rect x=\"510\" y=\"120\" width=\"20\" height=\"20\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-dasharray=\"2\"/>\n\n    <!-- Shared block pointer lines -->\n    <path d=\"M 90 195 L 90 220 L 490 220 L 490 115\" stroke=\"#2b6cb0\" stroke-width=\"2\" stroke-dasharray=\"4\" marker-end=\"url(#arrow_1771711353660)\"/>\n\n  </svg>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The KV cache fragmentation problem.</b> Native generation systems allocate continuously scaling arrays explicitly locking sequences maintaining completely fully blocked memory representations defining 2048 token boundaries irrespective directly towards mapping short values intrinsically completely wasting 80% boundaries dynamically limiting matrix serving limits inherently.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>How PagedAttention works.</b> Structurally mimicking purely explicit operating system layouts:</p>\n  <ol>\n    <li>Cache parameters map fundamentally partitioning completely into distinct small <b>blocks</b> evaluating fixed limits tracking pure subsets bounding lengths natively.</li>\n    <li>A central routing <b>Block Table</b> maps active logical sequences traversing active bounds evaluating dynamically generating explicit physical maps structurally.</li>\n    <li>Physical arrays allocate purely tracking dynamic parameters mapping non-contiguously natively bridging boundaries selectively.</li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Explicit Constraints / Copy-on-Write:</b> Defining boundaries precisely constructs metrics enabling explicit shared parameter arrays processing common structures natively duplicating constraints conditionally mapping shared prompt templates bounding limits seamlessly tracking completely bridging limits fully effectively mapping inference outputs dynamically.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "speculative-decoding",
+    "title": "Speculative Decoding",
+    "summary": "A mathematically guaranteed generative acceleration algorithm systematically predicting sequence boundaries using isolated highly optimized minimal drafting models feeding entire candidate vectors against parallelized target model verifi…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "kl-divergence-penalty-in-rlhf",
+      "pagedattention"
+    ],
+    "updatedAt": "2026-04-14",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Yaniv Leviathan, Matan Kalman, Yossi Matias · Fast Inference from Transformers via Speculative Decoding",
+        "url": "https://arxiv.org/abs/2211.17192"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A mathematically guaranteed generative acceleration algorithm systematically predicting sequence boundaries using isolated highly optimized minimal drafting models feeding entire candidate vectors against parallelized target model verifications fully bypassing strict autoregressive latency barriers completely.</p>\n\n  <svg viewBox=\"0 0 650 240\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <defs>\n      <marker id=\"arrow_1771711353693\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ecc94b\" />\n      </marker>\n    </defs>\n    <text x=\"325\" y=\"25\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">Speculative Decoding Pipeline</text>\n\n    <!-- Draft Model -->\n    <rect x=\"50\" y=\"60\" width=\"120\" height=\"40\" rx=\"8\" fill=\"#4a5568\"/>\n    <text x=\"110\" y=\"77\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Draft Model</text>\n    <text x=\"110\" y=\"92\" fill=\"#cbd5e0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">(Fast, 125M params)</text>\n\n    <path d=\"M 110 105 L 110 135\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353693)\"/>\n    <text x=\"50\" y=\"125\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\">Autoregressive K steps</text>\n\n    <!-- Draft sequence -->\n    <rect x=\"50\" y=\"140\" width=\"30\" height=\"30\" rx=\"4\" fill=\"#2b6cb0\"/>\n    <rect x=\"85\" y=\"140\" width=\"30\" height=\"30\" rx=\"4\" fill=\"#2b6cb0\"/>\n    <rect x=\"120\" y=\"140\" width=\"30\" height=\"30\" rx=\"4\" fill=\"#2b6cb0\"/>\n    <rect x=\"155\" y=\"140\" width=\"30\" height=\"30\" rx=\"4\" fill=\"#c05621\"/>\n    <rect x=\"190\" y=\"140\" width=\"30\" height=\"30\" rx=\"4\" fill=\"#2d3748\" stroke=\"#4a5568\"/>\n    \n    <text x=\"135\" y=\"190\" fill=\"#cbd5e0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Generated K candidate tokens</text>\n\n\n    <!-- Target Model parallel check -->\n    <path d=\"M 230 155 L 280 155\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353693)\"/>\n    <text x=\"255\" y=\"145\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">Batch pass</text>\n\n    <rect x=\"300\" y=\"130\" width=\"120\" height=\"50\" rx=\"8\" fill=\"#c05621\"/>\n    <text x=\"360\" y=\"152\" fill=\"#fff\" font-size=\"14\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">Target Model</text>\n    <text x=\"360\" y=\"170\" fill=\"#fff\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">(Slow, 70B params)</text>\n\n    <path d=\"M 430 155 L 480 155\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353693)\"/>\n\n    <!-- Logic Evaluation -->\n    <rect x=\"500\" y=\"120\" width=\"120\" height=\"70\" rx=\"4\" fill=\"#2d3748\" stroke=\"#4a5568\"/>\n    <text x=\"560\" y=\"140\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Rejection Sampler</text>\n    <text x=\"560\" y=\"160\" fill=\"#48bb78\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3 Accept \\(\\checkmark\\)</text>\n    <text x=\"560\" y=\"180\" fill=\"#e53e3e\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1 Reject \\(\\times\\)</text>\n    \n  </svg>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Constraint Analysis.</b> Autoregressive prediction systems fundamentally lock latency directly tracking purely explicit static memory limits bottlenecking parameters loading consistently natively limiting compute array components fully. Processing single sequence nodes strictly natively locks hardware tracking matrices constantly.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Algorithmic execution methodology",
+        "body": "<ol>\n    <li>Structural parameters explicitly configure small isolated independent <b>draft models</b> rapidly defining sequence matrices iteratively executing token boundaries mapping \\( K \\) limits quickly bypassing latency.</li>\n    <li>Main architecture arrays execute explicit evaluations analyzing \\( K \\) completely statically processing entire blocks resolving constraints <b>parallelized simultaneously</b> computing complete bounds instantly natively bypassing boundaries perfectly.</li>\n    <li>Evaluating outputs determines exact metric validity bounding vectors defining strict probability ratio models parsing accept ratios: \\( \\min\\!\\left(1,\\; \\frac{p_{\\text{target}}(x)}{p_{\\text{draft}}(x)}\\right) \\).</li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Probabilistic Guarantees:</b> Generating sequences actively mathematically assures tracking completely identical identical mapping distribution definitions fully mirroring complete target parameters unconditionally bridging constraints. Utilizing arrays effectively accelerates tracking bounds fundamentally mapping 3x performance metrics precisely perfectly.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "kl-divergence-penalty-in-rlhf",
+    "title": "KL-Divergence Penalty in RLHF",
+    "summary": "The mathematically constrained scaling bounds anchoring policy network arrays structurally preventing unbounded target distribution collapses optimizing precisely tracking explicitly defining safe reinforcement learning fine-tuning bound…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "nlp",
+      "reinforcement",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "proximal-policy-optimization-ppo",
+      "speculative-decoding"
+    ],
+    "updatedAt": "2026-04-14",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Long Ouyang, Jeff Wu, Xu Jiang et al. · Training Language Models to Follow Instructions with Human Feedback",
+        "url": "https://arxiv.org/abs/2203.02155"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The mathematically constrained scaling bounds anchoring policy network arrays structurally preventing unbounded target distribution collapses optimizing precisely tracking explicitly defining safe reinforcement learning fine-tuning bounds exactly securely.</p>\n\n  <svg viewBox=\"0 0 650 240\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <defs>\n      <marker id=\"arrow_1771711353854\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ecc94b\"></path>\n      </marker>\n      <!-- dashed arrow -->\n      <marker id=\"arrow_d_1771711353854\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#e2e8f0\"></path>\n      </marker>\n    </defs>\n    <text x=\"325\" y=\"25\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">Reward vs Reference Divergence Trade-off</text>\n\n    <!-- Base SFT -->\n    <circle cx=\"150\" cy=\"180\" r=\"4\" fill=\"#3182ce\"></circle>\n    <circle cx=\"150\" cy=\"180\" r=\"30\" fill=\"transparent\" stroke=\"#3182ce\" stroke-width=\"2\" stroke-dasharray=\"4\"></circle>\n    <text x=\"150\" y=\"230\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">SFT Reference Model \\(\\pi_{ref}\\)</text>\n    <text x=\"150\" y=\"160\" fill=\"#3182ce\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">High Fluency</text>\n    \n    <!-- Reward hacking point -->\n    <circle cx=\"500\" cy=\"60\" r=\"4\" fill=\"#e53e3e\"></circle>\n    <text x=\"500\" y=\"45\" fill=\"#e53e3e\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Reward Hacker \\(\\pi_\\theta\\)</text>\n    <text x=\"500\" y=\"80\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">Max Reward, Zero Fluency</text>\n\n    <!-- Optimization Vector -->\n    <path d=\"M 160 170 L 485 65\" stroke=\"#4a5568\" stroke-width=\"2\" marker-end=\"url(#arrow_d_1771711353854)\"></path>\n    <text x=\"325\" y=\"110\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Raw Reward Optimization \\(r(x,y)\\)</text>\n\n    <!-- Anchored Vector -->\n    <path d=\"M 155 175 L 280 135\" stroke=\"#ecc94b\" stroke-width=\"3\" marker-end=\"url(#arrow_1771711353854)\"></path>\n    <circle cx=\"290\" cy=\"130\" r=\"6\" fill=\"#ecc94b\"></circle>\n    <text x=\"310\" y=\"145\" fill=\"#ecc94b\" font-size=\"12\" font-family=\"sans-serif\" font-weight=\"bold\">RLHF Target Bounds</text>\n    \n    <!-- KL Penalty pulling back -->\n    <path d=\"M 490 70 L 305 125\" stroke=\"#c05621\" stroke-width=\"2\" stroke-dasharray=\"2\" marker-end=\"url(#arrow_1771711353854)\"></path>\n    <text x=\"420\" y=\"115\" fill=\"#c05621\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">\\(-\\beta D_{KL}\\)</text>\n  </svg>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The structural deviation issue.</b> Executing pure reinforcement metrics fundamentally tracking policy \\( \\pi_\\theta \\) strictly targets bounded objective arrays tracking scalar models \\( r(x, y) \\). Optimizing purely creates catastrophic bounds completely breaking syntactic boundaries locating extreme parameter outliers strictly defined via \"reward hacking\"—generating grammatically nonsensical inputs perfectly matching matrix scores entirely breaking practical usage.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The constrained objective constraint explicitly",
+        "body": "\\[ R(x, y) = r(x, y) - \\beta \\, D_{\\text{KL}}\\!\\left(\\pi_\\theta(\\cdot \\mid x) \\;\\|\\; \\pi_{\\text{ref}}(\\cdot \\mid x)\\right) \\]\n\n  <p>where evaluating models maps closely precisely against frozen pre-trained boundaries \\(\\pi_{\\text{ref}}\\). The scalar array constraints \\(\\beta &gt; 0\\) fundamentally define explicitly targeting precise divergence. Calculated mapping sequence tracking explicitly targets:</p>\n\n  \\[ D_{\\text{KL}}^{(t)} = \\log \\frac{\\pi_\\theta(y_t \\mid x, y_{&lt;t})}{\\pi_{\\text{ref}}(y_t \\mid x, y_{&lt;t})} \\]\n\n  <p>Adjusting metrics systematically regulates completely controlling deviation arrays scaling exactly determining specific generation attributes fundamentally tracking structurally resolving metrics uniformly preventing optimization collapse securely bridging safe alignment parameters optimally driving exactly modern DPO formulation derivations strictly bypassing components completely uniformly globally.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "proximal-policy-optimization-ppo",
+    "title": "Proximal Policy Optimization (PPO)",
+    "summary": "Proximal Policy Optimization explicitly bounds parameter gradient operations directly bounding probability variance steps avoiding catastrophic model destruction dynamically resolving trust region limits uniformly simply optimizing succe…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "reinforcement",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "next-token-prediction-objective-causal-language-modeling",
+      "kl-divergence-penalty-in-rlhf"
+    ],
+    "updatedAt": "2026-04-14",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, Oleg Klimov · Proximal Policy Optimization Algorithms",
+        "url": "https://arxiv.org/abs/1707.06347"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Proximal Policy Optimization explicitly bounds parameter gradient operations directly bounding probability variance steps avoiding catastrophic model destruction dynamically resolving trust region limits uniformly simply optimizing successfully globally.</p>\n\n  <svg viewBox=\"0 0 650 240\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <defs>\n      <marker id=\"arrow_1771711353943\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ecc94b\" />\n      </marker>\n    </defs>\n    <text x=\"325\" y=\"25\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">PPO Objective Function Surrogate Clipping</text>\n\n    <!-- Axes -->\n    <line x1=\"100\" y1=\"200\" x2=\"550\" y2=\"200\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n    <line x1=\"325\" y1=\"200\" x2=\"325\" y2=\"50\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n    <text x=\"500\" y=\"215\" fill=\"#a0aec0\" font-size=\"12\" font-family=\"sans-serif\">Ratio \\(r_t(\\theta)\\)</text>\n    <text x=\"100\" y=\"215\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\">Pessimistic</text>\n    <text x=\"325\" y=\"215\" fill=\"#e2e8f0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1.0 (Old Policy)</text>\n    \n    <!-- Clipping bounds -->\n    <line x1=\"225\" y1=\"200\" x2=\"225\" y2=\"60\" stroke=\"#cbd5e0\" stroke-width=\"1\" stroke-dasharray=\"4\"/>\n    <line x1=\"425\" y1=\"200\" x2=\"425\" y2=\"60\" stroke=\"#cbd5e0\" stroke-width=\"1\" stroke-dasharray=\"4\"/>\n    <text x=\"225\" y=\"215\" fill=\"#cbd5e0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">\\(1 - \\epsilon\\)</text>\n    <text x=\"425\" y=\"215\" fill=\"#cbd5e0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">\\(1 + \\epsilon\\)</text>\n\n    <!-- Positive Advantage Curve -->\n    <path d=\"M 125 180 L 425 90 L 525 90\" stroke=\"#48bb78\" stroke-width=\"3\" fill=\"none\"/>\n    <text x=\"500\" y=\"80\" fill=\"#48bb78\" font-size=\"12\" font-family=\"sans-serif\" font-weight=\"bold\">\\(A > 0\\)</text>\n\n    <!-- Negative Advantage Curve -->\n    <path d=\"M 125 140 L 225 140 L 525 50\" stroke=\"#e53e3e\" stroke-width=\"3\" fill=\"none\" opacity=\"0.8\"/>\n    <text x=\"500\" y=\"40\" fill=\"#e53e3e\" font-size=\"12\" font-family=\"sans-serif\" font-weight=\"bold\">\\(A < 0\\)</text>\n\n    <!-- Area labels -->\n    <text x=\"475\" y=\"110\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\">Clipped (Max Step)</text>\n    <text x=\"175\" y=\"130\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\">Clipped</text>\n  </svg>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Constraint Analysis.</b> Pure array mapping vectors navigating explicitly via gradients consistently defining standard REINFORCE mechanisms inherently crash catastrophically mapping large trajectory matrix definitions blindly natively limiting precise evaluation metrics actively causing policy destruction explicitly.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The clipped objective parameter mathematically bounded directly",
+        "body": "\\[ r_t(\\theta) = \\frac{\\pi_\\theta(a_t \\mid s_t)}{\\pi_{\\theta_{\\text{old}}}(a_t \\mid s_t)} \\]\n\n  <p>Applying the pessimistic structurally evaluating boundary constraints evaluating:</p>\n\n  \\[ L^{\\text{CLIP}}(\\theta) = \\hat{\\mathbb{E}}_t \\left[ \\min\\!\\left( r_t(\\theta) \\, \\hat{A}_t, \\; \\text{clip}(r_t(\\theta),\\, 1-\\epsilon,\\, 1+\\epsilon) \\, \\hat{A}_t \\right) \\right] \\]\n\n  <p>Where bounding metrics \\( \\epsilon \\) actively constrain probability gradients explicitly evaluating limits conditionally natively mapping matrices directly explicitly controlling constraints accurately structurally safely tracking limits correctly maintaining completely identical boundaries.</p>\n  <ul>\n    <li>Evaluating \\( \\hat{A}_t > 0 \\) maps directly halting bounds mapping \\( 1 + \\epsilon \\) accurately preventing destruction.</li>\n    <li>Tracking \\( \\hat{A}_t < 0 \\) constraints halts parameters bounded explicitly evaluating perfectly explicitly natively safely \\( 1 - \\epsilon \\).</li>\n  </ul><details>\n    <summary>Python Formulated Execution</summary>\n    <pre><code>def ppo_clip_loss(log_probs, old_log_probs, advantages, epsilon=0.2):\n    ratio = (log_probs - old_log_probs).exp()\n    clipped = ratio.clamp(1 - epsilon, 1 + epsilon)\n    loss = -torch.min(ratio * advantages, clipped * advantages).mean()\n    return loss</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "next-token-prediction-objective-causal-language-modeling",
+    "title": "Next-Token Prediction Objective (Causal Language Modeling)",
+    "summary": "The core foundational causal language modeling training architecture driving autoregressive text generators optimizing exactly evaluating negative log-likelihood bounds determining accurate prediction representations maximizing sequentia…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "xavier-glorot-initialization",
+      "proximal-policy-optimization-ppo"
+    ],
+    "updatedAt": "2026-04-14",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "The autoregressive language modeling objective has a long history, from Shannon's original work on information theory (1948) through n-gram models to neural language models (Bengio et al., 2003).",
+        "url": "https://www.jmlr.org/papers/v3/bengio03a.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The core foundational causal language modeling training architecture driving autoregressive text generators optimizing exactly evaluating negative log-likelihood bounds determining accurate prediction representations maximizing sequentially.</p>\n\n  <svg viewBox=\"0 0 650 240\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <defs>\n      <marker id=\"arrow_1771711353977\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n        <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ecc94b\" />\n      </marker>\n    </defs>\n    <text x=\"325\" y=\"25\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">Autoregressive Next-Token Objective</text>\n\n    <!-- Context Window -->\n    <rect x=\"50\" y=\"60\" width=\"80\" height=\"30\" rx=\"4\" fill=\"#4a5568\"/>\n    <text x=\"90\" y=\"80\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">The</text>\n    \n    <rect x=\"140\" y=\"60\" width=\"80\" height=\"30\" rx=\"4\" fill=\"#4a5568\"/>\n    <text x=\"180\" y=\"80\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">cat</text>\n\n    <rect x=\"230\" y=\"60\" width=\"80\" height=\"30\" rx=\"4\" fill=\"#4a5568\"/>\n    <text x=\"270\" y=\"80\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">sat</text>\n\n    <!-- Model -->\n    <path d=\"M 180 95 L 180 135\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353977)\"/>\n\n    <rect x=\"100\" y=\"140\" width=\"160\" height=\"60\" rx=\"8\" fill=\"#2b6cb0\"/>\n    <text x=\"180\" y=\"165\" fill=\"#fff\" font-size=\"14\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">Transformer</text>\n    <text x=\"180\" y=\"185\" fill=\"#cbd5e0\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">\\(P_\\theta(w_t \\mid w_{<t})\\)</text>\n\n    <!-- Prediction -->\n    <path d=\"M 265 170 L 335 170\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353977)\"/>\n\n    <!-- Logits Probability -->\n    <rect x=\"345\" y=\"110\" width=\"140\" height=\"120\" rx=\"8\" fill=\"#2d3748\" stroke=\"#cbd5e0\"/>\n    <text x=\"415\" y=\"130\" fill=\"#e2e8f0\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">Logits / Softmax</text>\n    \n    <rect x=\"365\" y=\"145\" width=\"100\" height=\"15\" fill=\"#c05621\"/> <!-- Ground truth -->\n    <text x=\"365\" y=\"157\" fill=\"#fff\" font-size=\"10\" font-family=\"sans-serif\">\"on\" (0.8)</text>\n\n    <rect x=\"365\" y=\"165\" width=\"20\" height=\"15\" fill=\"#4a5568\"/>\n    <text x=\"365\" y=\"177\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\">\"the\" (0.1)</text>\n\n    <rect x=\"365\" y=\"185\" width=\"10\" height=\"15\" fill=\"#4a5568\"/>\n    <text x=\"365\" y=\"197\" fill=\"#a0aec0\" font-size=\"10\" font-family=\"sans-serif\">\"down\" (0.05)</text>\n\n    <!-- Loss -->\n    <path d=\"M 490 170 L 520 170\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1771711353977)\"/>\n\n    <rect x=\"530\" y=\"150\" width=\"80\" height=\"40\" rx=\"4\" fill=\"#e53e3e\"/>\n    <text x=\"570\" y=\"165\" fill=\"#fff\" font-size=\"12\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">Loss \\(\\mathcal{L}(\\theta)\\)</text>\n    <text x=\"570\" y=\"180\" fill=\"#fff\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">\\(-\\log(0.8)\\)</text>\n\n  </svg>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Formulation.</b> Given a sequence of tokens \\( w_1, w_2, \\ldots, w_T \\), the joint probabilistic sequence is factorized via the chain rule of purely directional probability metrics uniformly:</p>\n\n  \\[ P(w_1, \\ldots, w_T) = \\prod_{t=1}^{T} P_\\theta(w_t \\mid w_1, \\ldots, w_{t-1}) \\]\n\n  <p>The training loss converges targeting strictly the overall average negative log-likelihood metrics calculating precisely parallelized positions:</p>\n\n  \\[ \\mathcal{L}(\\theta) = -\\frac{1}{T} \\sum_{t=1}^{T} \\log P_\\theta(w_t \\mid w_{<t}) \\]\n\n  <p>where evaluating models bounds precisely exactly determining specific sequential likelihood \\(\\theta\\) mapping constraints fully defining arrays scaling parameters structurally directly bounding representations completely cleanly.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Mechanism.</b> Evaluating hidden states \\( h_t \\in \\mathbb{R}^d \\) dynamically tracks arrays converting limits mapping exactly across output logits \\( z_t = W h_t + b \\). Evaluating scalar constraints purely tracks generating arrays evaluating Softmax values explicitly evaluating cross-entropy constraints against real target tokens natively.</p>"
+      }
+    ],
+    "cards": []
   }
 ]
