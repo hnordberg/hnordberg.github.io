@@ -3,7 +3,8 @@ import Contents from '../components/Contents'
 const MLPage = () => {
   const articles = [
     { id: 'papers', title: 'Papers' },
-    { id: 'transformer', title: 'Transformer' }
+    { id: 'transformer', title: 'Transformer' },
+    { id: 'wiki', title: 'ML Wiki' },
     //{ id: 'theory', title: 'Theory' }
   ]
 
@@ -24,6 +25,18 @@ const MLPage = () => {
           <div className="card-text">
             <p>Overview of the Transformer architecture: parallel compute, attention, masking, and more.</p>
             <p><a href="/ml/transformer">Read more →</a></p>
+          </div>
+        </div>
+        <div className="card" id="wiki">
+          <div className="card-title">ML Wiki</div>
+          <div className="card-text">
+            <p>
+              Theory-first mini-wiki with topics, tags, equations, figures, and
+              learning paths (see the wiki home for how it ties to your study deck).
+            </p>
+            <p>
+              <a href="/ml/wiki">Open the wiki →</a>
+            </p>
           </div>
         </div>
         <div className="card hidden" id="theory">

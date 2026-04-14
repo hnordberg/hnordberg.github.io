@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "ml-wiki:validate": "node scripts/ml-wiki/validate-content.mjs",
+    "ml-wiki:seed-five": "node scripts/ml-wiki/seed-five-notes.mjs",
+    "ml-wiki:import-batch": "node scripts/ml-wiki/import-anki-batch.mjs"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.18",
