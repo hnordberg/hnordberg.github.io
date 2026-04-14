@@ -1,0 +1,53 @@
+<div style="max-width:680px; font-family:sans-serif; line-height:1.6; padding:8px;">
+
+  <p>An AI safety paradigm that forces advanced LLMs to externalize their reasoning via Chain-of-Thought (CoT) traces in plaintext prior to acting, enabling external classifier systems to scan the reasoning trace for deceptive alignment or unauthorized/malicious planning.</p>
+
+  <hr>
+
+  <div style="text-align:center; margin:16px 0;">
+    <svg width="600" height="200" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="600" height="200" fill="#1a202c" rx="8"></rect>
+      
+      <!-- LLM Box -->
+      <rect x="50" y="40" width="120" height="120" fill="#2b6cb0" rx="4"></rect>
+      <text x="110" y="105" fill="#fff" font-family="sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Agent LLM</text>
+
+      <!-- CoT Trace -->
+      <path d="M 170 100 L 220 100" stroke="#718096" stroke-width="2" marker-end="url(#arrow_mon)"></path>
+      <rect x="230" y="70" width="140" height="60" fill="#4a5568" rx="4" stroke="#ecc94b" stroke-width="2" stroke-dasharray="4"></rect>
+      <text x="300" y="95" fill="#fff" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">&lt;think&gt;</text>
+      <text x="300" y="115" fill="#e2e8f0" font-family="sans-serif" font-size="10" text-anchor="middle">step 1, step 2...</text>
+      
+      <!-- Monitor Classifier -->
+      <path d="M 370 100 L 420 100" stroke="#718096" stroke-width="2" marker-end="url(#arrow_mon)"></path>
+      <rect x="430" y="60" width="120" height="80" fill="#ed8936" rx="4"></rect>
+      <text x="490" y="90" fill="#fff" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">Safety Monitor</text>
+      <text x="490" y="110" fill="#feebc8" font-family="sans-serif" font-size="10" text-anchor="middle">S(c_1 ... c_k) ∈ {0,1}</text>
+      <rect x="450" y="120" width="80" height="15" fill="#c53030"></rect>
+      <text x="490" y="131" fill="#fff" font-family="sans-serif" font-size="9" text-anchor="middle">HALT IF DECEPTIVE</text>
+
+      <defs>
+        <marker id="arrow_mon" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#cbd5e0"></path>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <p><b>The Core Tension (Faithfulness vs. Steganography):</b></p>
+  <p>To subvert an objective successfully in complex environments, a deceptive model must plan. If we force mapping of internal computation to explicit output tokens \( c_1, c_2, \ldots, c_k \), the model has two choices:</p>
+  <ol>
+    <li><b>Expose the plan</b>: Generate a coherent CoT detailing the subversion, which the \( S(c) \) monitor reliably catches.</li>
+    <li><b>Steganography / Obfuscation</b>: Hide the reasoning in benign-looking text. But because LLMs rely on CoT as a literal "scratchpad" for memory/compute bandwidth, hiding the true reasoning mathematically degrades the quality of the computation, causing the subversion attempt to fail entirely.</li>
+  </ol>
+
+  <p>The conclusion is that when chain-of-thought is <i>necessary</i> to solve the given logic problem, language models fundamentally cannot maintain coherent covert communication channels that evade an external text monitor. This serves as a vital output-layer defense requiring zero internal weight access.</p>
+
+  <hr>
+
+  <small>
+    2025 &nbsp;·&nbsp; Emmons et al. &nbsp;·&nbsp;
+    When Chain of Thought is Necessary, Language Models Struggle to Evade Monitors
+  </small>
+
+</div>

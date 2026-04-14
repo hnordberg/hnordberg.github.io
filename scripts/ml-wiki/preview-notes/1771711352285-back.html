@@ -1,0 +1,72 @@
+<div style="max-width:680px; font-family:sans-serif; line-height:1.6; padding:8px;">
+
+  <p>A production-grade safety defense system that uses a cascading architecture of classifiers to screen for universal jailbreaks with minimal computational overhead, cutting costs by roughly 40x compared to running a full LLM safety check on every query.</p>
+
+  <hr>
+
+  <div style="text-align:center; margin:16px 0;">
+    <svg width="450" height="280" viewBox="0 0 450 280" xmlns="http://www.w3.org/2000/svg">
+      <rect width="450" height="280" fill="#1a202c" rx="8"></rect>
+      
+      <!-- Input -->
+      <text x="225" y="30" fill="#fff" font-family="sans-serif" font-size="14" font-weight="bold" text-anchor="middle">User Prompt x</text>
+      <path d="M 225 40 L 225 70" stroke="#718096" stroke-width="2" marker-end="url(#arrow_down)"></path>
+
+      <!-- Stage 1 -->
+      <rect x="125" y="70" width="200" height="50" fill="#2b6cb0" rx="4"></rect>
+      <text x="225" y="95" fill="#fff" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">Stage 1: L1 Probe</text>
+      <text x="225" y="110" fill="#e2e8f0" font-family="sans-serif" font-size="10" text-anchor="middle">Cheap (1B params / Linear)</text>
+
+      <!-- Stage 1 Routing -->
+      <path d="M 225 120 L 225 150" stroke="#718096" stroke-width="2" marker-end="url(#arrow_down)"></path>
+      <path d="M 125 95 L 75 95" stroke="#48bb78" stroke-width="2" marker-end="url(#arrow_left)"></path>
+      
+      <text x="75" y="85" fill="#48bb78" font-family="sans-serif" font-size="10" font-weight="bold" text-anchor="end">Score &lt; τ</text>
+      <rect x="15" y="105" width="80" height="30" fill="#2f855a" rx="4"></rect>
+      <text x="55" y="125" fill="#fff" font-family="sans-serif" font-size="10" text-anchor="middle">Pass to LLM</text>
+
+      <text x="240" y="140" fill="#fc8181" font-family="sans-serif" font-size="10" font-weight="bold">Score ≥ τ</text>
+
+      <!-- Stage 2 -->
+      <rect x="125" y="150" width="200" height="50" fill="#ed8936" rx="4"></rect>
+      <text x="225" y="175" fill="#fff" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">Stage 2: Heavy Classifier</text>
+      <text x="225" y="190" fill="#feebc8" font-family="sans-serif" font-size="10" text-anchor="middle">Expensive (Full Context LLM)</text>
+
+      <!-- Stage 2 Routing -->
+      <path d="M 125 175 L 75 175" stroke="#48bb78" stroke-width="2" marker-end="url(#arrow_left)"></path>
+      <text x="75" y="165" fill="#48bb78" font-family="sans-serif" font-size="10" font-weight="bold" text-anchor="end">Benign</text>
+      <rect x="15" y="185" width="80" height="30" fill="#2f855a" rx="4"></rect>
+      <text x="55" y="205" fill="#fff" font-family="sans-serif" font-size="10" text-anchor="middle">Pass to LLM</text>
+
+      <path d="M 225 200 L 225 230" stroke="#e53e3e" stroke-width="2" marker-end="url(#arrow_down)"></path>
+      <rect x="175" y="230" width="100" height="30" fill="#c53030" rx="4"></rect>
+      <text x="225" y="250" fill="#fff" font-family="sans-serif" font-size="12" font-weight="bold" text-anchor="middle">Block/Refuse</text>
+
+      <defs>
+        <marker id="arrow_down" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#cbd5e0"></path>
+        </marker>
+        <marker id="arrow_left" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#cbd5e0"></path>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <p>Running a large language model to evaluate every user prompt for safety violations is economically infeasible at scale. Constitutional Classifiers++ addresses this with a cascading design analogous to Viola-Jones face detection.</p>
+
+  <p><b>Mechanism:</b></p>
+  <p>In the first stage, a lightweight linear probe \( C_{\text{light}} \) screens all incoming traffic. It computes a jailbreak probability for each input \( x \). If this probability exceeds a conservative threshold:</p>
+  \[ C_{\text{light}}(x) &gt; \tau \]
+  <p>the query is escalated to the second stage: an expensive, context-aware LLM classifier \( C_{\text{heavy}}(x) \). Because the vast majority of benign queries are filtered out by the cheap first stage, only a small fraction of traffic reaches the expensive classifier.</p>
+
+  <p>The approach builds on <b>Constitutional AI</b> (Bai et al., 2022), turning abstract constitutional principles into highly efficient binary classifiers yielding an approximate 40x reduction in compute cost without sacrificing precision.</p>
+
+  <hr>
+
+  <small>
+    2026 &nbsp;·&nbsp; Cunningham et al. &nbsp;·&nbsp;
+    Constitutional Classifiers++: Efficient Production-Grade Defenses against Universal Jailbreaks
+  </small>
+
+</div>

@@ -1,0 +1,12 @@
+{
+  "notes": [
+    {
+      "noteId": "demo-1",
+      "tags": ["ml-wiki:demo-topic", "ml-domain:foundations", "ml-level:intro", "demo"],
+      "fields": {
+        "Front": "<p>What is a <strong>demo</strong>?</p>",
+        "Back": "<p>A minimal example for the import script.</p>"
+      }
+    }
+  ]
+}

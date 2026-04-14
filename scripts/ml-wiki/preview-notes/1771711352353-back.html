@@ -1,0 +1,26 @@
+<div style="max-width:680px; font-family:sans-serif; line-height:1.6; padding:8px;">
+
+  <p>A mechanistic interpretability finding showing that Out-of-Context Reasoning (OOCR) — where models exhibit new behavioral profiles drastically outside their finetuning data — often occurs because the finetuning simply learned to inject a constant, single-direction steering vector into the residual stream at every pass.</p>
+
+  <hr>
+
+  <p>When an LLM undergoes RLHF or specific behavioral SFT (e.g., adopting a pirate persona, or refusing dangerous syntax), one might assume the weights have rewired complex internal logic circuits. However, analysis reveals that for many behaviors, the fine-tuned hidden state at layer \( L \) can be closely approximated by:</p>
+
+  \[ h_L(x) \approx h_L^{\text{base}}(x) + \vec{v}_{\text{steer}} \]
+
+  <p>Where \( \vec{v}_{\text{steer}} \) is a fixed steering vector completely <i>independent</i> of the input context \( x \).</p>
+
+  <p><b>Implications for OOCR:</b></p>
+  <p>Because the shift is unconditional, it applies universally. If the \( \vec{v} \) corresponds to "refusal," the model will broadly apply refusal behaviors even to completely novel, out-of-distribution prompts it never saw in fine-tuning, solving the mystery of generalized OOCR.</p>
+
+  <p><b>Reversing the Effect:</b></p>
+  <p>Researchers verified this by computing the mean difference via PCA: \( \vec{v} = \mathbb{E}[h^{\text{tuned}}] - \mathbb{E}[h^{\text{base}}] \). When this vector is manually injected into the <i>untuned</i> base model at inference time, the base model perfectly mimics the finetuned behavior. Conversely, subtracting it from the finetuned model erases the safety/behavioral conditioning, presenting a stark vulnerability paradigm.</p>
+
+  <hr>
+
+  <small>
+    2025 &nbsp;·&nbsp; Wang et al. &nbsp;·&nbsp;
+    Simple Mechanistic Explanations for Out-Of-Context Reasoning
+  </small>
+
+</div>

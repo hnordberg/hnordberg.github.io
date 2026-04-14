@@ -1,0 +1,58 @@
+<div style="max-width:680px; font-family:sans-serif; line-height:1.6; padding:8px;">
+
+  <p>A neural architecture that replaces discrete layer-by-layer computation with continuous-time dynamical systems, allowing neurons to process temporal signal histories and the network to adaptively allocate continuous computation time (depth) based on input complexity.</p>
+
+  <hr>
+
+  <div style="text-align:center; margin:16px 0;">
+    <svg width="600" height="180" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
+      <rect width="600" height="180" fill="#1a202c" rx="8"></rect>
+      
+      <text x="150" y="30" fill="#fff" font-family="sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Discrete Layers (Traditional)</text>
+      <text x="450" y="30" fill="#fff" font-family="sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Continuous Time (CTM)</text>
+
+      <line x1="300" y1="10" x2="300" y2="170" stroke="#4a5568" stroke-width="2" stroke-dasharray="5,5"></line>
+
+      <!-- Discrete -->
+      <circle cx="80" cy="120" r="15" fill="#4a5568"></circle>
+      <circle cx="150" cy="120" r="15" fill="#3182ce"></circle>
+      <circle cx="220" cy="120" r="15" fill="#2b6cb0"></circle>
+      <path d="M 95 120 L 135 120" stroke="#718096" stroke-width="2" marker-end="url(#arrow_ctm)"></path>
+      <path d="M 165 120 L 205 120" stroke="#718096" stroke-width="2" marker-end="url(#arrow_ctm)"></path>
+      <text x="150" y="155" fill="#e2e8f0" font-family="sans-serif" font-size="12" text-anchor="middle">h_{l+1} = f(W h_l)</text>
+
+      <!-- Continuous -->
+      <circle cx="360" cy="120" r="15" fill="#4a5568"></circle>
+      <rect x="410" y="105" width="130" height="30" fill="url(#grad1)" rx="15"></rect>
+      <circle cx="475" cy="120" r="4" fill="#fff"></circle>
+      <path d="M 375 120 L 410 120" stroke="#718096" stroke-width="2" marker-end="url(#arrow_ctm)"></path>
+      
+      <text x="475" y="155" fill="#e2e8f0" font-family="sans-serif" font-size="12" text-anchor="middle">dh(t)/dt = -h(t)/τ + f(W x(t))</text>
+      <text x="475" y="90" fill="#ed8936" font-family="sans-serif" font-size="10" text-anchor="middle">State naturally evolves over continuous time</text>
+
+      <defs>
+        <marker id="arrow_ctm" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#cbd5e0"></path>
+        </marker>
+        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#3182ce;stop-opacity:1"></stop>
+          <stop offset="100%" style="stop-color:#2c5282;stop-opacity:1"></stop>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <p>Standard neural networks compute representations through strict spatial sequences \( h_{l+1} = f(W h_l) \). The CTM leverages the framework of <b>Neural ODEs</b> to process hidden states via differential equations:</p>
+
+  \[ \frac{dh(t)}{dt} = -\frac{h(t)}{\tau} + f(W x(t)) \]
+
+  <p>Where \( \tau \) manages the decay rate. The primary advantage of replacing structural depth with continuous time is <b>adaptive computation</b>. The network natively supports halting processing at early integration limits \( t_{\text{early}} \) for trivial tasks, and churning until \( t_{\text{late}} \) for deeply complex analytical routing.</p>
+
+  <hr>
+
+  <small>
+    2025 &nbsp;·&nbsp; Darlow et al. &nbsp;·&nbsp;
+    Continuous Thought Machines
+  </small>
+
+</div>

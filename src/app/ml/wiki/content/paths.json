@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "paths": [
+    {
+      "slug": "core-foundations",
+      "title": "Core foundations",
+      "description": "Start with linear models, then connect to generalization and the bias–variance picture.",
+      "topicSlugs": ["linear-regression-basics", "bias-variance-tradeoff"],
+      "estimatedMinutes": 45
+    },
+    {
+      "slug": "math-first",
+      "title": "Math-first path",
+      "description": "Same topics ordered for readers who prefer error decomposition before supervised setup details.",
+      "topicSlugs": ["bias-variance-tradeoff", "linear-regression-basics"],
+      "estimatedMinutes": 40
+    },
+    {
+      "slug": "llm-practical-theory",
+      "title": "LLM practical theory (placeholder)",
+      "description": "Reserved for future topics on scaling laws, attention, and training objectives. Add topics to the wiki and extend this list.",
+      "topicSlugs": ["linear-regression-basics"],
+      "estimatedMinutes": 20
+    }
+  ]
+}

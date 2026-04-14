@@ -1,0 +1,25 @@
+<div style="max-width:680px; font-family:sans-serif; line-height:1.6; padding:8px;">
+
+  <p>A parameter-efficient fine-tuning (PEFT) methodology that abandons updating the model's weight matrices (like LoRA does), and instead learns a low-rank adapter to directly edit the "critical states" in the residual stream responsible for gating mathematical or logical reasoning.</p>
+
+  <hr>
+
+  <p>Standard PEFT mechanisms like LoRA apply sparse, low-rank updates (\( \Delta W = AB \)) uniformly across weight matrices (Attn \( Q, K, V \) or MLP projections). CRFT posits that reasoning bottlenecks occur at highly specific token positions in the residual stream.</p>
+
+  <p>CRFT identifies these "critical" token states \( h_{\text{critical}} \) via information-flow tracing. It then applies a learned, position-specific low-rank perturbation strictly to those active hidden states:</p>
+
+  \[ h'_{\text{critical}} = h_{\text{critical}} + BA x \]
+
+  <p>Where \( B \in \mathbb{R}^{d \times r} \) and \( A \in \mathbb{R}^{r \times d} \) are the learned low-rank matrices (with rank \( r \ll d \)). All billions of original parameters \( \theta \) remain rigorously frozen.</p>
+
+  <p><b>Why It Matters:</b></p>
+  <p>By concentrating the entire parameter budget exclusively on high-leverage representation points rather than diluting edits across network weights, CRFT yields massive chain-of-thought accuracy improvements in logic benchmarks using a fraction of the parameter footprint required by standard LoRA. It aligns heavily with the <i>Tuned Lens</i> hypothesis that certain sequences act as discrete information routing hubs.</p>
+
+  <hr>
+
+  <small>
+    2025 &nbsp;&middot;&nbsp; Huang et al. &nbsp;&middot;&nbsp;
+    Enhancing Chain-of-Thought Reasoning with Critical Representation Fine-tuning
+  </small>
+
+</div>
