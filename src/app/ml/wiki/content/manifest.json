@@ -7192,6 +7192,225 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "learning-rate-schedule",
+      "title": "Learning Rate Schedule",
+      "summary": "A predefined mathematical function that dictates how the learning rate \\( \\eta_t \\) changes at each training step \\( t \\). Proper scheduling is critical for stable convergence and escaping local minima, especially in large-scale models l…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "warmup",
+        "inference-optimization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "warmup",
+      "title": "Warmup",
+      "summary": "A learning rate scheduling phase at the beginning of training during which the learning rate \\( \\eta_t \\) is linearly increased from roughly zero to its target peak value \\( \\eta_{\\text{max}} \\) over a specified number of steps \\( T_w \\).",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "cosine-annealing",
+        "learning-rate-schedule"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "cosine-annealing",
+      "title": "Cosine Annealing",
+      "summary": "A continuous learning rate schedule that decays the step size mapped onto a cosine curve. From a peak rate \\( \\eta_{\\text{max}} \\) (often achieved following warmup), it smoothly descends to a final rate \\( \\eta_{\\text{min}} \\) over the c…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "weight-initialization",
+        "warmup"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "weight-initialization",
+      "title": "Weight Initialization",
+      "summary": "The practice of meticulously initializing a neural network's parameter tensors \\( W \\) before optimization. Because deep networks rely on chained multiplications during both forward activations and backpropagation, misguided initializati…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "he-initialization-kaiming-initialization",
+        "cosine-annealing"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "he-initialization-kaiming-initialization",
+      "title": "He Initialization (Kaiming Initialization)",
+      "summary": "A carefully targeted weight initialization configuration engineered exclusively for arbitrarily deep networks using ReLU (Rectified Linear Unit) activations. It perfectly offsets the fact that a ReLU filter permanently zeroes out half of…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "cv",
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "label-smoothing",
+        "weight-initialization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "label-smoothing",
+      "title": "Label Smoothing",
+      "summary": "An explicit regularization and uncertainty calibration technique that softens \"hard\" one-hot classification targets by distributing a fractional probability mass \\( \\alpha \\) evenly across all incorrect target classes. This artificially…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "tokenization-pipeline",
+        "he-initialization-kaiming-initialization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "tokenization-pipeline",
+      "title": "Tokenization Pipeline",
+      "summary": "The systematic architectural sequence of distinct preprocessing transformations executed to losslessly (up to predetermined rules) convert continuous, raw string text into discrete numerical array IDs that a language model ingests native…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "gpu-acceleration",
+        "label-smoothing"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gpu-acceleration",
+      "title": "GPU Acceleration",
+      "summary": "The practice of migrating massive, profoundly parallelizable computational workloads—primarily continuous matrix multiplications and tensor convolutions—onto a Graphics Processing Unit (GPU). GPUs constitute the physical engine of the mo…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "cuda",
+        "tokenization-pipeline"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "cuda",
+      "title": "CUDA",
+      "summary": "CUDA (Compute Unified Device Architecture) is an all-encompassing parallel array programming platform and compiled C-extension API engineered natively by NVIDIA. It operates as the unyielding translation bedrock empowering developers to…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "inference-optimization",
+        "gpu-acceleration"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "inference-optimization",
+      "title": "Inference Optimization",
+      "summary": "A rigorous suite of highly engineered deployment scaling techniques fundamentally designed to systematically crush latency curves, decimate VRAM layout footprint sizes, and structurally shear down dollar-cost expenditures heavily mapping…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "learning-rate-schedule",
+        "cuda"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
