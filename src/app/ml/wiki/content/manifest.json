@@ -3396,6 +3396,224 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "negative-log-likelihood",
+      "title": "Negative log-likelihood",
+      "summary": "The negation of the log-likelihood, used as a loss function so that maximizing likelihood is recast as a minimization problem compatible with gradient descent — the dominant training objective across deep learning.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "maximum-likelihood-estimate-mle",
+        "binary-cross-entropy"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "maximum-likelihood-estimate-mle",
+      "title": "Maximum likelihood estimate (MLE)",
+      "summary": "A parameter estimation method that selects the parameter values under which the observed data is most probable, providing the theoretical foundation for most neural network training objectives.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "laplace-smoothing",
+        "negative-log-likelihood"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "laplace-smoothing",
+      "title": "Laplace smoothing",
+      "summary": "A simple smoothing technique that adds a small constant to every count in a probability estimate, ensuring no event has zero probability — the earliest and most intuitive form of Bayesian regularization for discrete distributions.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "conditional-probability",
+        "maximum-likelihood-estimate-mle"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "conditional-probability",
+      "title": "Conditional probability",
+      "summary": "The probability of an event occurring given that another event has already occurred, forming the mathematical basis of Bayesian inference and all autoregressive sequence models.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "probability-distribution",
+        "laplace-smoothing"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "probability-distribution",
+      "title": "Probability distribution",
+      "summary": "A mathematical function that assigns probabilities to all possible outcomes of a random variable, fully describing the uncertainty in its value — the central object in statistical machine learning, since models learn to approximate or sa…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "discrete-probability-distribution",
+        "conditional-probability"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "discrete-probability-distribution",
+      "title": "Discrete probability distribution",
+      "summary": "A probability distribution over a countable set of outcomes, described by a probability mass function (PMF) that assigns a non-negative probability to each outcome summing to one — the distribution family behind every classification outp…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "backoff-n-gram-backoff",
+        "probability-distribution"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "backoff-n-gram-backoff",
+      "title": "Backoff (N-gram backoff)",
+      "summary": "A smoothing strategy for n-gram language models that estimates the probability of an unseen n-gram by \"backing off\" to a shorter, lower-order n-gram that has been observed — a key technique for handling data sparsity in pre-neural langua…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "zipf-s-law",
+        "discrete-probability-distribution"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "zipf-s-law",
+      "title": "Zipf's law",
+      "summary": "An empirical law stating that the frequency of a word in a corpus is approximately inversely proportional to its rank in the frequency table, producing a characteristic long-tailed distribution that profoundly shapes the design of NLP sy…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "cross-entropy",
+        "backoff-n-gram-backoff"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "cross-entropy",
+      "title": "Cross-entropy",
+      "summary": "An information-theoretic measure of the average number of bits needed to encode events from a true distribution \\( p \\) using an approximate distribution \\( q \\) — the standard training loss for classification and language modeling, and…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "binary-cross-entropy",
+        "zipf-s-law"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "binary-cross-entropy",
+      "title": "Binary cross-entropy",
+      "summary": "The cross-entropy loss specialized for binary classification, measuring the divergence between a Bernoulli ground truth and the model's predicted probability — also the standard loss for multi-label classification where each label is an…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "negative-log-likelihood",
+        "cross-entropy"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

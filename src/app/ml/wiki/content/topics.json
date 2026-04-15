@@ -7434,5 +7434,530 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "negative-log-likelihood",
+    "title": "Negative log-likelihood",
+    "summary": "The negation of the log-likelihood, used as a loss function so that maximizing likelihood is recast as a minimization problem compatible with gradient descent — the dominant training objective across deep learning.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "maximum-likelihood-estimate-mle",
+      "binary-cross-entropy"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1922 · R.A. Fisher"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The negation of the log-likelihood, used as a loss function so that maximizing likelihood is recast as a minimization problem compatible with gradient descent — the dominant training objective across deep learning.</p><p>Given a dataset \\( \\mathcal{D} = \\{x_1, \\ldots, x_N\\} \\) drawn i.i.d. from an unknown distribution, and a parametric model \\( P_\\theta \\), the NLL loss is:</p>\n\n  <p>\\[ \\text{NLL}(\\theta) = -\\sum_{i=1}^{N} \\log P_\\theta(x_i) \\]</p>\n\n  <p>For supervised classification, where the model outputs a probability vector \\( \\hat{y} = \\text{softmax}(z) \\) and the true label is class \\( c \\), the per-sample NLL reduces to:</p>\n\n  <p>\\[ \\ell = -\\log \\hat{y}_c = -\\log P_\\theta(y = c \\mid x) \\]</p>\n\n  <p>which is exactly the categorical cross-entropy loss with one-hot targets. The connection to information theory is direct: minimizing NLL is equivalent to minimizing the cross-entropy \\( H(p_{\\text{data}}, p_\\theta) \\), which in turn equals \\( H(p_{\\text{data}}) + D_{\\text{KL}}(p_{\\text{data}} \\| p_\\theta) \\). Since the data entropy is constant w.r.t. \\( \\theta \\), NLL minimization is equivalent to KL divergence minimization.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>NLL in language modeling.</b> For autoregressive language models (including Transformers like GPT), the training objective is the average per-token NLL over a sequence \\( w_1, \\ldots, w_T \\):</p>\n\n  <p>\\[ \\mathcal{L} = -\\frac{1}{T} \\sum_{t=1}^{T} \\log P_\\theta(w_t \\mid w_{<t}) \\]</p>\n\n  <p>Perplexity — the standard evaluation metric for language models — is the exponentiated average NLL: \\( \\text{PPL} = \\exp(\\mathcal{L}) \\). A perplexity of \\( k \\) means the model is on average as uncertain as a uniform distribution over \\( k \\) tokens.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Numerical considerations.</b> In practice, NLL is computed via <code>log_softmax</code> rather than taking \\( \\log(\\text{softmax}(z)) \\) separately, because the latter is numerically unstable: for large logits, softmax saturates and the log of a near-zero value underflows. The log-sum-exp trick avoids this: \\( \\log \\text{softmax}(z_c) = z_c - \\log \\sum_k e^{z_k} \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Gradient.</b> The gradient of per-sample NLL w.r.t. the logits \\( z \\) has the elegant form \\( \\nabla_z \\ell = \\hat{y} - y \\), where \\( y \\) is the one-hot target — making it cheap to compute and well-behaved early in training.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "maximum-likelihood-estimate-mle",
+    "title": "Maximum likelihood estimate (MLE)",
+    "summary": "A parameter estimation method that selects the parameter values under which the observed data is most probable, providing the theoretical foundation for most neural network training objectives.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "laplace-smoothing",
+      "negative-log-likelihood"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1922 · R.A. Fisher · On the Mathematical Foundations of Theoretical Statistics"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A parameter estimation method that selects the parameter values under which the observed data is most probable, providing the theoretical foundation for most neural network training objectives.</p><p>Given observations \\( \\mathcal{D} = \\{x_1, \\ldots, x_N\\} \\) assumed to be i.i.d. from a distribution \\( P(x \\mid \\theta) \\), the MLE is:</p>\n\n  <p>\\[ \\hat{\\theta}_{\\text{MLE}} = \\arg\\max_{\\theta} \\prod_{i=1}^{N} P(x_i \\mid \\theta) = \\arg\\max_{\\theta} \\sum_{i=1}^{N} \\log P(x_i \\mid \\theta) \\]</p>\n\n  <p>The log transformation converts the product into a sum (more numerically stable and analytically tractable) and preserves the argmax since log is monotonic.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key statistical properties",
+        "body": "<ul>\n    <li><b>Consistency:</b> \\( \\hat{\\theta}_{\\text{MLE}} \\xrightarrow{p} \\theta^* \\) as \\( N \\to \\infty \\) — the estimate converges to the true parameter</li>\n    <li><b>Asymptotic efficiency:</b> achieves the Cramér–Rao lower bound — no unbiased estimator has lower variance for large \\( N \\)</li>\n    <li><b>Asymptotic normality:</b> \\( \\sqrt{N}(\\hat{\\theta}_{\\text{MLE}} - \\theta^*) \\xrightarrow{d} \\mathcal{N}(0, I(\\theta^*)^{-1}) \\) where \\( I(\\theta) = -\\mathbb{E}\\left[\\frac{\\partial^2}{\\partial \\theta^2} \\log P(x \\mid \\theta)\\right] \\) is the Fisher information</li>\n    <li><b>Invariance:</b> if \\( \\hat{\\theta} \\) is the MLE of \\( \\theta \\), then \\( g(\\hat{\\theta}) \\) is the MLE of \\( g(\\theta) \\) for any function \\( g \\)</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>MLE and deep learning.</b> Training a neural network with cross-entropy loss is precisely MLE: minimizing NLL is maximizing the likelihood of the training data under the model. This holds for classifiers (categorical cross-entropy), language models (per-token NLL), and regression with Gaussian noise assumptions (MSE loss corresponds to MLE under \\( P(y \\mid x) = \\mathcal{N}(f_\\theta(x), \\sigma^2) \\)).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Limitations and extensions.</b> MLE has no built-in regularization and can overfit on finite data, motivating several extensions:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Method</th>\n      <th style=\"padding:6px; text-align:left;\">Modification</th>\n      <th style=\"padding:6px; text-align:left;\">Effect</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">MAP estimation</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\arg\\max_\\theta P(\\theta \\mid \\mathcal{D}) \\propto P(\\mathcal{D} \\mid \\theta) P(\\theta) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Gaussian prior \\( \\Rightarrow \\) L2 regularization</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Full Bayesian</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Integrate over \\( P(\\theta \\mid \\mathcal{D}) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Uncertainty estimates, better calibration</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Penalized MLE</td>\n      <td style=\"padding:6px;\">\\( \\arg\\max_\\theta \\ell(\\theta) - \\lambda \\Omega(\\theta) \\)</td>\n      <td style=\"padding:6px;\">Laplace prior \\( \\Rightarrow \\) L1 / sparsity</td>\n    </tr>\n  </tbody></table><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>MLE for Gaussian mean:</b> Given \\( x_i \\sim \\mathcal{N}(\\mu, \\sigma^2) \\) with known \\( \\sigma^2 \\):</p>\n    <p>\\[ \\ell(\\mu) = -\\frac{N}{2}\\log(2\\pi\\sigma^2) - \\frac{1}{2\\sigma^2}\\sum_{i=1}^N (x_i - \\mu)^2 \\]</p>\n    <p>Setting \\( \\frac{\\partial \\ell}{\\partial \\mu} = \\frac{1}{\\sigma^2}\\sum_{i=1}^N (x_i - \\mu) = 0 \\) gives:</p>\n    <p>\\[ \\hat{\\mu}_{\\text{MLE}} = \\frac{1}{N}\\sum_{i=1}^N x_i = \\bar{x} \\]</p>\n    <p>the sample mean — confirming that MLE recovers the intuitive estimator for Gaussian data.</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "laplace-smoothing",
+    "title": "Laplace smoothing",
+    "summary": "A simple smoothing technique that adds a small constant to every count in a probability estimate, ensuring no event has zero probability — the earliest and most intuitive form of Bayesian regularization for discrete distributions.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "conditional-probability",
+      "maximum-likelihood-estimate-mle"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1814 · Pierre-Simon Laplace · Essai philosophique sur les probabilités"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A simple smoothing technique that adds a small constant to every count in a probability estimate, ensuring no event has zero probability — the earliest and most intuitive form of Bayesian regularization for discrete distributions.</p><p>For a categorical distribution with \\( K \\) outcomes observed \\( N \\) times with counts \\( C_1, \\ldots, C_K \\), the MLE probability is \\( \\hat{p}_k = C_k / N \\). Laplace smoothing (add-\\( \\alpha \\)) modifies this to:</p>\n\n  <p>\\[ \\hat{p}_k = \\frac{C_k + \\alpha}{N + \\alpha K} \\]</p>\n\n  <p>where \\( \\alpha &gt; 0 \\) is the smoothing parameter. With \\( \\alpha = 1 \\) (add-one smoothing), this is the MAP estimate under a symmetric Dirichlet prior \\( \\text{Dir}(\\alpha, \\ldots, \\alpha) \\). The denominator \\( N + \\alpha K \\) ensures normalization: \\( \\sum_k \\hat{p}_k = 1 \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bayesian interpretation.</b> The Dirichlet distribution is the conjugate prior for the categorical/multinomial likelihood. The posterior is \\( \\text{Dir}(C_1 + \\alpha, \\ldots, C_K + \\alpha) \\), and Laplace smoothing returns its mode (MAP estimate). The hyperparameter \\( \\alpha \\) controls the strength of the uniform prior: \\( \\alpha \\to 0 \\) recovers MLE, while \\( \\alpha \\to \\infty \\) forces a uniform distribution regardless of the data.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Limitations in language modeling.</b> For n-gram models with vocabulary \\( |V| \\), Laplace smoothing is considered crude because it steals too much probability mass from observed events and redistributes it uniformly across \\( |V|^n \\) possible n-grams — most of which will never occur in natural language. Concrete example: in a bigram model with \\( |V| = 50{,}000 \\), add-one smoothing divides mass among 2.5 billion bigrams, dramatically underestimating observed bigram probabilities.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Comparison with better smoothing methods",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Method</th>\n      <th style=\"padding:6px; text-align:left;\">Idea</th>\n      <th style=\"padding:6px; text-align:left;\">Advantage over Laplace</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Good-Turing</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Re-estimate counts using frequency of frequencies</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Data-driven discount, no fixed \\( \\alpha \\)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Kneser-Ney</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Absolute discounting + continuation probability</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Context-aware backoff distribution</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Interpolation</td>\n      <td style=\"padding:6px;\">Weighted mix of n-gram orders</td>\n      <td style=\"padding:6px;\">Always uses all available information</td>\n    </tr>\n  </tbody></table>\n\n  <p>Despite these limitations, Laplace smoothing remains the standard choice for Naive Bayes classifiers, where the feature space is typically small enough that the uniform redistribution is acceptable, and its Bayesian interpretation as a Dirichlet prior is a pedagogical advantage.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "conditional-probability",
+    "title": "Conditional probability",
+    "summary": "The probability of an event occurring given that another event has already occurred, forming the mathematical basis of Bayesian inference and all autoregressive sequence models.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "probability-distribution",
+      "laplace-smoothing"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1763 · Thomas Bayes · An Essay towards Solving a Problem in the Doctrine of Chances"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The probability of an event occurring given that another event has already occurred, forming the mathematical basis of Bayesian inference and all autoregressive sequence models.</p><p>The conditional probability of event \\( A \\) given event \\( B \\) is defined as:</p>\n\n  <p>\\[ P(A \\mid B) = \\frac{P(A \\cap B)}{P(B)}, \\quad P(B) &gt; 0 \\]</p>\n\n  <p>This definition directly yields the <b>product rule</b>: \\( P(A \\cap B) = P(A \\mid B)\\, P(B) \\), and by repeated application, the <b>chain rule of probability</b>:</p>\n\n  <p>\\[ P(x_1, \\ldots, x_n) = \\prod_{t=1}^{n} P(x_t \\mid x_1, \\ldots, x_{t-1}) \\]</p>\n\n  <p>This factorization is exact and assumption-free — it holds for any joint distribution. It is the mathematical justification for autoregressive language modeling, where a Transformer generates tokens left-to-right: \\( P(w_{1:T}) = \\prod_{t=1}^{T} P_\\theta(w_t \\mid w_{<t}) <=\"\" anki-mathjax=\"\">.</t})>\\)</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bayes' theorem</b> follows directly by applying the definition symmetrically:</p>\n\n  <p>\\[ P(A \\mid B) = \\frac{P(B \\mid A)\\, P(A)}{P(B)} \\]</p>\n\n  <p>This \"inversion\" of conditioning is the foundation of Bayesian inference: given a prior \\( P(\\theta) \\) and likelihood \\( P(\\mathcal{D} \\mid \\theta) \\), we obtain the posterior \\( P(\\theta \\mid \\mathcal{D}) \\propto P(\\mathcal{D} \\mid \\theta)\\, P(\\theta) \\). The denominator \\( P(\\mathcal{D}) = \\int P(\\mathcal{D} \\mid \\theta) P(\\theta)\\, d\\theta \\) is the marginal likelihood (model evidence), often intractable for complex models.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Independence and conditional independence.</b> Events \\( A \\) and \\( B \\) are independent iff \\( P(A \\mid B) = P(A) \\), meaning observing \\( B \\) provides no information about \\( A \\). Conditional independence — \\( P(A \\mid B, C) = P(A \\mid C) \\) — is the structural assumption behind graphical models, Naive Bayes (features independent given class), and Markov chains (future independent of past given present).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Discriminative vs. generative models</b> differ in which conditional they model:</p>\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Approach</th>\n      <th style=\"padding:6px; text-align:left;\">Models</th>\n      <th style=\"padding:6px; text-align:left;\">Examples</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Discriminative</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( P(y \\mid x) \\) directly</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Logistic regression, BERT classifier</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Generative</td>\n      <td style=\"padding:6px;\">\\( P(x, y) = P(x \\mid y)\\, P(y) \\)</td>\n      <td style=\"padding:6px;\">Naive Bayes, GPT, VAEs</td>\n    </tr>\n  </tbody></table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "probability-distribution",
+    "title": "Probability distribution",
+    "summary": "A mathematical function that assigns probabilities to all possible outcomes of a random variable, fully describing the uncertainty in its value — the central object in statistical machine learning, since models learn to approximate or sa…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "discrete-probability-distribution",
+      "conditional-probability"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1700s · Various (Bernoulli, de Moivre, Gauss, Kolmogorov)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A mathematical function that assigns probabilities to all possible outcomes of a random variable, fully describing the uncertainty in its value — the central object in statistical machine learning, since models learn to approximate or sample from distributions over data.</p><p>A probability distribution \\( P \\) over a random variable \\( X \\) must satisfy Kolmogorov's axioms: (1) \\( P(x) \\geq 0 \\) for all outcomes \\( x \\), and (2) the total probability equals one. The two major types differ in how this normalization is expressed:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Type</th>\n      <th style=\"padding:6px; text-align:left;\">Described by</th>\n      <th style=\"padding:6px; text-align:left;\">Normalization</th>\n      <th style=\"padding:6px; text-align:left;\">ML example</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Discrete</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">PMF: \\( P(X = x) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\sum_x P(x) = 1 \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Softmax output over vocabulary</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Continuous</td>\n      <td style=\"padding:6px;\">PDF: \\( f(x) \\)</td>\n      <td style=\"padding:6px;\">\\( \\int_{-\\infty}^{\\infty} f(x) \\, dx = 1 \\)</td>\n      <td style=\"padding:6px;\">Gaussian prior on weights</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key distributions and their roles in ML",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Distribution</th>\n      <th style=\"padding:6px; text-align:left;\">Formula</th>\n      <th style=\"padding:6px; text-align:left;\">Parameters</th>\n      <th style=\"padding:6px; text-align:left;\">Where it appears</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Bernoulli</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( P(x) = p^x(1-p)^{1-x} \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( p \\in [0,1] \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Binary classification (sigmoid output)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Categorical</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( P(x=k) = p_k \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\mathbf{p} \\in \\Delta^{K-1} \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Multi-class softmax, token prediction</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Gaussian</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( f(x) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\!\\left(-\\frac{(x-\\mu)^2}{2\\sigma^2}\\right) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\mu, \\sigma^2 \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Weight init, VAE latent prior, noise model</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Uniform</td>\n      <td style=\"padding:6px;\">\\( f(x) = \\frac{1}{b-a} \\) for \\( x \\in [a,b] \\)</td>\n      <td style=\"padding:6px;\">\\( a, b \\)</td>\n      <td style=\"padding:6px;\">Random init, dropout masks, data augmentation</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Moments and summary statistics.</b> Distributions are characterized by their moments: the mean \\( \\mu = \\mathbb{E}[X] \\) (first moment), variance \\( \\sigma^2 = \\mathbb{E}[(X - \\mu)^2] \\) (second central moment), skewness (asymmetry), and kurtosis (tail heaviness). For Gaussian distributions, the first two moments fully determine the distribution — a property exploited by the reparameterization trick in VAEs: \\( z = \\mu + \\sigma \\odot \\epsilon \\), where \\( \\epsilon \\sim \\mathcal{N}(0, I) \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Measuring distance between distributions</b> is central to training: the KL divergence \\( D_{\\text{KL}}(p \\| q) = \\sum_x p(x) \\log \\frac{p(x)}{q(x)} \\) measures how much extra information is needed to encode samples from \\( p \\) using \\( q \\). Minimizing cross-entropy \\( H(p, q) = H(p) + D_{\\text{KL}}(p \\| q) \\) with respect to \\( q \\) is equivalent to minimizing KL divergence, which is equivalent to maximum likelihood estimation. Other distances include the Jensen-Shannon divergence (used in GANs) and the Wasserstein distance (used in WGANs).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The probability simplex.</b> For a categorical distribution over \\( K \\) outcomes, the vector of probabilities \\( \\mathbf{p} = (p_1, \\ldots, p_K) \\) lies on the \\( (K-1) \\)-dimensional probability simplex \\( \\Delta^{K-1} = \\{ \\mathbf{p} \\in \\mathbb{R}^K : p_k \\geq 0, \\sum_k p_k = 1 \\} \\). The softmax function maps arbitrary logits \\( z \\in \\mathbb{R}^K \\) onto this simplex, and temperature scaling \\( \\text{softmax}(z / \\tau) \\) controls the sharpness of the resulting distribution — lower \\( \\tau \\) concentrates mass on the argmax, higher \\( \\tau \\) approaches uniform.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Generative modeling as distribution learning.</b> The goal of most generative models is to learn a parameterized distribution \\( P_\\theta(x) \\) that approximates the true data distribution \\( P_{\\text{data}}(x) \\). Different model families parameterize this differently: autoregressive models factor the joint via the chain rule \\( P_\\theta(x) = \\prod_t P_\\theta(x_t \\mid x_{<t}) <=\"\" anki-mathjax=\"\">, VAEs introduce a latent variable <anki-mathjax> z \\) so that \\( P_\\theta(x) = \\int P_\\theta(x \\mid z) P(z) \\, dz \\), normalizing flows apply invertible transformations to a base distribution, and diffusion models learn to reverse a noise process.</t})></anki-mathjax></p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "discrete-probability-distribution",
+    "title": "Discrete probability distribution",
+    "summary": "A probability distribution over a countable set of outcomes, described by a probability mass function (PMF) that assigns a non-negative probability to each outcome summing to one — the distribution family behind every classification outp…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "backoff-n-gram-backoff",
+      "probability-distribution"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1713 · Jacob Bernoulli · Ars Conjectandi"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A probability distribution over a countable set of outcomes, described by a probability mass function (PMF) that assigns a non-negative probability to each outcome summing to one — the distribution family behind every classification output and token prediction in deep learning.</p><p>A discrete random variable \\( X \\) taking values in \\( \\{x_1, x_2, \\ldots\\} \\) is characterized by its PMF \\( P(X = x_k) = p_k \\) where \\( p_k \\geq 0 \\) and \\( \\sum_k p_k = 1 \\). Its expected value and variance are:</p>\n\n  <p>\\[ \\mathbb{E}[X] = \\sum_k x_k \\, p_k, \\qquad \\text{Var}(X) = \\sum_k (x_k - \\mathbb{E}[X])^2 \\, p_k \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key discrete distributions in ML",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Distribution</th>\n      <th style=\"padding:6px; text-align:left;\">PMF</th>\n      <th style=\"padding:6px; text-align:left;\">Mean / Variance</th>\n      <th style=\"padding:6px; text-align:left;\">ML usage</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Bernoulli(\\( p \\))</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( p^x (1-p)^{1-x} \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( p \\) / \\( p(1-p) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Binary classification, dropout masks</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Categorical(\\( \\mathbf{p} \\))</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( P(x = k) = p_k \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">—</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Softmax over \\( K \\) classes, token prediction</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Multinomial(\\( n, \\mathbf{p} \\))</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\frac{n!}{\\prod_k x_k!} \\prod_k p_k^{x_k} \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( np_k \\) / \\( np_k(1-p_k) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Bag-of-words, topic models</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Poisson(\\( \\lambda \\))</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\frac{\\lambda^k e^{-\\lambda}}{k!} \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\lambda \\) / \\( \\lambda \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Count data, event rate modeling</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Geometric(\\( p \\))</td>\n      <td style=\"padding:6px;\">\\( (1-p)^{k-1} p \\)</td>\n      <td style=\"padding:6px;\">\\( 1/p \\) / \\( (1-p)/p^2 \\)</td>\n      <td style=\"padding:6px;\">Number of trials until first success</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The probability simplex.</b> For a categorical distribution over \\( K \\) outcomes, the parameter vector \\( \\mathbf{p} = (p_1, \\ldots, p_K) \\) lies on the \\( (K-1) \\)-dimensional simplex \\( \\Delta^{K-1} \\). The softmax function \\( \\text{softmax}(z)_k = e^{z_k} / \\sum_j e^{z_j} \\) maps unconstrained logits \\( z \\in \\mathbb{R}^K \\) onto this simplex, ensuring valid probability outputs.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Entropy of discrete distributions.</b> The Shannon entropy \\( H(X) = -\\sum_k p_k \\log p_k \\) quantifies the uncertainty in a discrete distribution. A deterministic distribution (all mass on one outcome) has entropy 0; the uniform distribution over \\( K \\) outcomes has maximum entropy \\( \\log K \\). In language modeling, perplexity \\( = \\exp(H) \\) converts per-token entropy into an interpretable measure: how many tokens the model is \"choosing between\" on average.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Sampling from discrete distributions</b> is essential for inference in language models. Common strategies include:</p>\n  <ul>\n    <li><b>Greedy decoding:</b> always pick \\( \\arg\\max_k p_k \\) — deterministic but repetitive</li>\n    <li><b>Temperature sampling:</b> sample from \\( \\text{softmax}(z / \\tau) \\) — \\( \\tau < 1 \\) sharpens, \\( \\tau > 1 \\) flattens</li>\n    <li><b>Top-k sampling:</b> zero out all but the \\( k \\) highest-probability tokens, then renormalize and sample</li>\n    <li><b>Nucleus (top-p) sampling:</b> keep the smallest set of tokens whose cumulative probability exceeds \\( p \\), then renormalize — adapts the number of candidates to the entropy of the distribution</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Conjugate priors.</b> In Bayesian inference, discrete distributions have natural conjugate priors: the Beta distribution is conjugate to the Bernoulli/Binomial, and the Dirichlet distribution is conjugate to the Categorical/Multinomial. This means the posterior has the same functional form as the prior, enabling closed-form Bayesian updates — the mathematical basis of Laplace smoothing.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "backoff-n-gram-backoff",
+    "title": "Backoff (N-gram backoff)",
+    "summary": "A smoothing strategy for n-gram language models that estimates the probability of an unseen n-gram by \"backing off\" to a shorter, lower-order n-gram that has been observed — a key technique for handling data sparsity in pre-neural langua…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "zipf-s-law",
+      "discrete-probability-distribution"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1987 · Slava Katz · Estimation of Probabilities from Sparse Data for the Language Model Component of a Speech Recognizer"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A smoothing strategy for n-gram language models that estimates the probability of an unseen n-gram by \"backing off\" to a shorter, lower-order n-gram that has been observed — a key technique for handling data sparsity in pre-neural language modeling.</p><p>The fundamental problem: in a corpus of even billions of words, most possible n-grams for \\( n \\geq 3 \\) are never observed, yet they may be perfectly valid. An unsmoothed model assigns zero probability to these, making it useless for any downstream task that requires non-zero probabilities (speech recognition, machine translation).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Katz backoff</b> formalizes the intuition of falling back to shorter contexts:</p>\n\n  <p>\\[ P_{\\text{bo}}(w_t \\mid w_{t-n+1:t-1}) = \\begin{cases} d_{C} \\cdot \\dfrac{C(w_{t-n+1:t})}{C(w_{t-n+1:t-1})} &amp; \\text{if } C(w_{t-n+1:t}) &gt; 0 \\\\[8pt] \\alpha(w_{t-n+1:t-1}) \\cdot P_{\\text{bo}}(w_t \\mid w_{t-n+2:t-1}) &amp; \\text{otherwise} \\end{cases} \\]</p>\n\n  <p>where \\( C(\\cdot) \\) is the count, \\( d_C \\) is a discount factor derived from Good-Turing estimation that reduces the probability of observed n-grams to free up mass for unseen ones, and \\( \\alpha(w_{t-n+1:t-1}) \\) is a normalization constant ensuring the distribution sums to 1. The recursion bottoms out at the unigram level (or a uniform distribution).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Concrete example.</b> Suppose we have a trigram model and encounter \"the cat purrs\" for the first time. Katz backoff proceeds:</p>\n  <ol>\n    <li>Look up \\( C(\\text{the, cat, purrs}) \\) — count is 0, so back off</li>\n    <li>Look up \\( C(\\text{cat, purrs}) \\) — suppose count is 3, so use discounted bigram: \\( P_{\\text{bo}}(\\text{purrs} \\mid \\text{cat}) = d_3 \\cdot 3 / C(\\text{cat, *}) \\)</li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Backoff vs. interpolation",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Strategy</th>\n      <th style=\"padding:6px; text-align:left;\">Formula</th>\n      <th style=\"padding:6px; text-align:left;\">When lower-order is used</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Backoff</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Use highest-order n-gram with nonzero count; fall back only if count is 0</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Only when higher-order is missing</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Interpolation</td>\n      <td style=\"padding:6px;\">\\( P(w_t \\mid w_{t-2:t-1}) = \\lambda_3 P_3 + \\lambda_2 P_2 + \\lambda_1 P_1 \\) with \\( \\sum \\lambda = 1 \\)</td>\n      <td style=\"padding:6px;\">Always — all orders contribute</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Kneser-Ney smoothing</b> is the gold standard for n-gram smoothing and uses absolute discounting (subtract a fixed \\( d \\approx 0.75 \\) from each count) with a modified backoff distribution. The key insight: the lower-order distribution should not be the raw unigram probability but the <i>continuation probability</i> — how many distinct contexts a word appears in. For example, \"Francisco\" has high unigram count but appears almost exclusively after \"San\", so its continuation probability is low, correctly reducing its backoff weight.</p>\n\n  <p>\\[ P_{\\text{KN}}(w \\mid w_{t-1}) = \\frac{\\max(C(w_{t-1}, w) - d, 0)}{C(w_{t-1})} + \\lambda(w_{t-1}) \\cdot P_{\\text{continuation}}(w) \\]</p>\n\n  <p>where \\( P_{\\text{continuation}}(w) = \\frac{|\\{v : C(v, w) &gt; 0\\}|}{|\\{(v', w') : C(v', w') &gt; 0\\}|} \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Historical context.</b> Backoff and interpolation were the dominant techniques in statistical NLP from the late 1980s through the 2010s. Neural language models (RNNs, Transformers) implicitly handle unseen n-grams through continuous representations, eliminating the need for explicit smoothing — though understanding these techniques remains essential for grasping why neural LMs were such a breakthrough.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "zipf-s-law",
+    "title": "Zipf's law",
+    "summary": "An empirical law stating that the frequency of a word in a corpus is approximately inversely proportional to its rank in the frequency table, producing a characteristic long-tailed distribution that profoundly shapes the design of NLP sy…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "cross-entropy",
+      "backoff-n-gram-backoff"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1935 · George Kingsley Zipf · The Psycho-Biology of Language"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An empirical law stating that the frequency of a word in a corpus is approximately inversely proportional to its rank in the frequency table, producing a characteristic long-tailed distribution that profoundly shapes the design of NLP systems.</p><p>If words are sorted by decreasing frequency, the frequency of the word at rank \\( r \\) is approximately:</p>\n\n  <p>\\[ f(r) \\propto \\frac{1}{r^\\alpha}, \\quad \\alpha \\approx 1 \\]</p>\n\n  <p>Equivalently, \\( \\log f(r) = -\\alpha \\log r + C \\), so a log-log plot of frequency vs. rank is approximately linear with slope \\( -\\alpha \\). Mandelbrot generalized this to \\( f(r) \\propto \\frac{1}{(r + \\beta)^\\alpha} \\), which better fits the head of the distribution (the few most frequent words).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Concrete numbers.</b> In a typical English corpus:</p>\n  <ul>\n    <li>The top 10 words (~0.01% of vocabulary) account for ~25% of all tokens</li>\n    <li>The top 100 words (~0.1%) account for ~50% of all tokens</li>\n    <li>Over 50% of word types appear only once (<i>hapax legomena</i>)</li>\n  </ul>\n  <p>This extreme skew means that even very large corpora leave most of the vocabulary poorly estimated, a challenge known as the <b>long tail problem</b>.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Implications for NLP system design",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Component</th>\n      <th style=\"padding:6px; text-align:left;\">How Zipf's law affects it</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Tokenization (BPE/WordPiece)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Frequent words get single tokens; rare words are split into subword units — directly motivated by the frequency distribution</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Vocabulary size</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Diminishing returns from larger vocabularies because new entries are increasingly rare — GPT-2 uses 50,257 BPE tokens as a practical compromise</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">N-gram smoothing</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Most n-grams have zero counts; smoothing (Kneser-Ney, backoff) is essential to handle the vast unseen tail</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Word embeddings</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Rare words have few training contexts, leading to poor embeddings — subword approaches (fastText, BPE) mitigate this</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Softmax computation</td>\n      <td style=\"padding:6px;\">Full softmax over large vocabularies is expensive; techniques like adaptive softmax exploit frequency classes for efficiency</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Zipf's law and information theory.</b> There is a connection between Zipf's law and optimal coding: if a language were optimally encoded (Shannon's source coding theorem), the code length for a symbol of probability \\( p \\) would be \\( -\\log_2 p \\) bits. Under Zipf's law, this means common words are short and rare words are long — which is approximately true of natural language and is explicitly implemented by BPE tokenization.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Beyond language.</b> Zipf's law (more generally, power-law distributions) appears in many domains: city populations, website traffic, gene expression frequencies, and the degree distribution of scale-free networks. In ML, understanding power laws is essential for designing systems that handle skewed data gracefully.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "cross-entropy",
+    "title": "Cross-entropy",
+    "summary": "An information-theoretic measure of the average number of bits needed to encode events from a true distribution \\( p \\) using an approximate distribution \\( q \\) — the standard training loss for classification and language modeling, and…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "binary-cross-entropy",
+      "zipf-s-law"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1948 · Claude Shannon · A Mathematical Theory of Communication",
+        "url": "https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An information-theoretic measure of the average number of bits needed to encode events from a true distribution \\( p \\) using an approximate distribution \\( q \\) — the standard training loss for classification and language modeling, and the single most important loss function in deep learning.</p><p>For discrete distributions \\( p \\) and \\( q \\) over outcomes \\( x \\):</p>\n\n  <p>\\[ H(p, q) = -\\sum_{x} p(x) \\log q(x) \\]</p>\n\n  <p>For continuous distributions, the sum becomes an integral. Cross-entropy decomposes as:</p>\n\n  <p>\\[ H(p, q) = H(p) + D_{\\text{KL}}(p \\| q) \\]</p>\n\n  <p>where \\( H(p) = -\\sum_x p(x) \\log p(x) \\) is the entropy of the true distribution and \\( D_{\\text{KL}}(p \\| q) = \\sum_x p(x) \\log \\frac{p(x)}{q(x)} \\geq 0 \\) is the KL divergence. Since \\( H(p) \\) is constant with respect to model parameters, minimizing cross-entropy is equivalent to minimizing KL divergence, which is equivalent to maximum likelihood estimation.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Multi-class classification.</b> With one-hot true labels \\( y \\) (all zeros except \\( y_c = 1 \\) for the correct class \\( c \\)), the cross-entropy simplifies dramatically:</p>\n\n  <p>\\[ H(y, \\hat{y}) = -\\sum_{k=1}^{K} y_k \\log \\hat{y}_k = -\\log \\hat{y}_c \\]</p>\n\n  <p>where \\( \\hat{y} = \\text{softmax}(z) \\) and \\( z \\) are the logits. This is the negative log-likelihood of the correct class.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Gradient.</b> The gradient of the cross-entropy loss with respect to the logits has a remarkably clean form:</p>\n\n  <p>\\[ \\frac{\\partial \\mathcal{L}}{\\partial z_k} = \\hat{y}_k - y_k \\]</p>\n\n  <p>For the correct class \\( c \\), this is \\( \\hat{y}_c - 1 \\) (pushing the logit up); for all other classes, it is \\( \\hat{y}_k \\) (pushing their logits down). The gradient magnitude is proportional to the prediction error, providing natural adaptive learning — confident correct predictions produce small gradients while mistakes produce large ones.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Cross-entropy in language modeling.</b> For autoregressive models (GPT, etc.), the training loss is the average per-token cross-entropy over a sequence:</p>\n\n  <p>\\[ \\mathcal{L} = -\\frac{1}{T} \\sum_{t=1}^{T} \\log P_\\theta(w_t \\mid w_{<t}) \\]</p>\n\n  <p>Perplexity is the exponentiated cross-entropy: \\( \\text{PPL} = \\exp(\\mathcal{L}) \\). A perplexity of \\( k \\) means the model is on average as uncertain as a uniform distribution over \\( k \\) tokens.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Numerical stability.</b> Computing \\( -\\log(\\text{softmax}(z)_c) \\) naively is dangerous: for large logits, softmax saturates and the log of a near-zero probability underflows. The standard solution combines the operations:</p>\n\n  <p>\\[ -\\log \\text{softmax}(z)_c = -z_c + \\log \\sum_k e^{z_k} \\]</p>\n\n  <p>which is computed stably via the log-sum-exp trick: \\( \\log \\sum_k e^{z_k} = m + \\log \\sum_k e^{z_k - m} \\) where \\( m = \\max_k z_k \\). This is why PyTorch's <code>nn.CrossEntropyLoss</code> takes raw logits, not softmax probabilities.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Variants and extensions",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Variant</th>\n      <th style=\"padding:6px; text-align:left;\">Modification</th>\n      <th style=\"padding:6px; text-align:left;\">Use case</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Binary CE</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( -[y \\log \\hat{y} + (1-y)\\log(1-\\hat{y})] \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Binary / multi-label classification</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Label smoothing</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Replace one-hot \\( y \\) with \\( (1-\\epsilon) y + \\epsilon / K \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Prevents overconfidence, used in Transformers</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Focal loss</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( -(1-\\hat{y}_c)^\\gamma \\log \\hat{y}_c \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Class imbalance (object detection)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Knowledge distillation</td>\n      <td style=\"padding:6px;\">CE between student and teacher soft outputs</td>\n      <td style=\"padding:6px;\">Model compression</td>\n    </tr>\n  </table><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "title": "Equivalence of cross-entropy minimization and MLE",
+        "body": "<p>The MLE objective is \\( \\hat{\\theta} = \\arg\\max_\\theta \\sum_{i=1}^N \\log P_\\theta(x_i) \\). Dividing by \\( N \\) and taking the limit:</p>\n    <p>\\[ \\hat{\\theta} = \\arg\\max_\\theta \\frac{1}{N} \\sum_{i=1}^N \\log P_\\theta(x_i) \\xrightarrow{N \\to \\infty} \\arg\\max_\\theta \\mathbb{E}_{p_{\\text{data}}}[\\log P_\\theta(x)] \\]</p>\n    <p>\\[ = \\arg\\min_\\theta \\left( -\\mathbb{E}_{p_{\\text{data}}}[\\log P_\\theta(x)] \\right) = \\arg\\min_\\theta H(p_{\\text{data}}, P_\\theta) \\]</p>\n    <p>which is exactly the cross-entropy between the data distribution and the model.</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "binary-cross-entropy",
+    "title": "Binary cross-entropy",
+    "summary": "The cross-entropy loss specialized for binary classification, measuring the divergence between a Bernoulli ground truth and the model's predicted probability — also the standard loss for multi-label classification where each label is an…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "negative-log-likelihood",
+      "cross-entropy"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1948 · Claude Shannon · A Mathematical Theory of Communication"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The cross-entropy loss specialized for binary classification, measuring the divergence between a Bernoulli ground truth and the model's predicted probability — also the standard loss for multi-label classification where each label is an independent binary decision.</p><p>For a single example with true label \\( y \\in \\{0, 1\\} \\) and predicted probability \\( \\hat{y} = \\sigma(z) = P(y=1 \\mid x) \\in (0, 1) \\), where \\( \\sigma \\) is the sigmoid function and \\( z \\) is the logit:</p>\n\n  <p>\\[ \\text{BCE} = -[y \\log \\hat{y} + (1 - y) \\log(1 - \\hat{y})] \\]</p>\n\n  <p>Over a dataset of \\( N \\) examples:</p>\n\n  <p>\\[ \\mathcal{L} = -\\frac{1}{N} \\sum_{i=1}^{N} [y_i \\log \\hat{y}_i + (1 - y_i) \\log(1 - \\hat{y}_i)] \\]</p>\n\n  <p>This is the negative log-likelihood of a Bernoulli distribution: if \\( y \\sim \\text{Bernoulli}(\\hat{y}) \\), then \\( \\log P(y \\mid \\hat{y}) = y \\log \\hat{y} + (1-y) \\log(1-\\hat{y}) \\), making BCE minimization equivalent to MLE.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Gradient.</b> The gradient with respect to the logit \\( z \\) has the same elegant form as categorical cross-entropy:</p>\n\n  <p>\\[ \\frac{\\partial \\text{BCE}}{\\partial z} = \\hat{y} - y = \\sigma(z) - y \\]</p>\n\n  <p>This means the gradient is simply the prediction error. When \\( y = 1 \\), the gradient is \\( \\sigma(z) - 1 &lt; 0 \\), pushing \\( z \\) up (increasing predicted probability). When \\( y = 0 \\), the gradient is \\( \\sigma(z) &gt; 0 \\), pushing \\( z \\) down. The magnitude is largest when the prediction is most wrong.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to logistic regression.</b> Logistic regression is precisely a linear model \\( z = w^\\top x + b \\) trained with BCE loss. The decision boundary is the hyperplane \\( w^\\top x + b = 0 \\). BCE + sigmoid is to binary classification what categorical CE + softmax is to multi-class classification.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Multi-class vs. multi-label",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Setting</th>\n      <th style=\"padding:6px; text-align:left;\">Output activation</th>\n      <th style=\"padding:6px; text-align:left;\">Loss</th>\n      <th style=\"padding:6px; text-align:left;\">Constraint</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Multi-class (one label)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Softmax</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Categorical CE</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Probabilities sum to 1</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Multi-label (many labels)</td>\n      <td style=\"padding:6px;\">Per-class sigmoid</td>\n      <td style=\"padding:6px;\">BCE per class</td>\n      <td style=\"padding:6px;\">Each class independent</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Numerical stability.</b> Computing \\( \\log(\\sigma(z)) \\) directly is numerically dangerous for large negative \\( z \\) (where \\( \\sigma(z) \\approx 0 \\)). The stable formulation combines the sigmoid and log:</p>\n\n  <p>\\[ \\text{BCE}(z, y) = \\max(z, 0) - yz + \\log(1 + e^{-|z|}) \\]</p>\n\n  <p>This is why PyTorch's <code>nn.BCEWithLogitsLoss</code> (which takes raw logits) is preferred over <code>nn.BCELoss</code> (which takes probabilities).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Variants.</b> Focal loss modifies BCE with a modulating factor \\( (1-\\hat{y})^\\gamma \\) for positive examples, down-weighting easy examples and focusing on hard ones — introduced for object detection where background examples vastly outnumber foreground. Weighted BCE applies class-specific weights to handle imbalanced datasets.</p><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "title": "Gradient of BCE w.r.t. logit \\( z \\)",
+        "body": "<p>Let \\( \\hat{y} = \\sigma(z) \\), so \\( \\frac{d\\hat{y}}{dz} = \\hat{y}(1-\\hat{y}) \\).</p>\n    <p>\\[ \\frac{\\partial \\text{BCE}}{\\partial z} = \\frac{\\partial \\text{BCE}}{\\partial \\hat{y}} \\cdot \\frac{d\\hat{y}}{dz} = \\left(-\\frac{y}{\\hat{y}} + \\frac{1-y}{1-\\hat{y}}\\right) \\cdot \\hat{y}(1-\\hat{y}) \\]</p>\n    <p>\\[ = -y(1-\\hat{y}) + (1-y)\\hat{y} = \\hat{y} - y \\]</p>\n  </details>\n\n  <details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef binary_cross_entropy(y_true, y_pred, eps=1e-7):\n    \"\"\"BCE from probabilities (numerically naive).\"\"\"\n    y_pred = np.clip(y_pred, eps, 1 - eps)\n    return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))\n\ndef bce_with_logits(y_true, logits):\n    \"\"\"BCE from logits (numerically stable).\"\"\"\n    return np.mean(np.maximum(logits, 0) - y_true * logits + np.log(1 + np.exp(-np.abs(logits))))</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
   }
 ]
