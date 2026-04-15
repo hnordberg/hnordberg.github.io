@@ -17506,5 +17506,503 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "scaling-laws",
+    "title": "Scaling Laws",
+    "summary": "Empirical power-law relationships between a language model's performance (measured by cross-entropy loss) and three core factors: model size (number of parameters \\( N \\)), dataset size (number of tokens \\( D \\)), and compute budget (FLO…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "what-are-emergent-capabilities-in-large-language-models",
+      "beam-search"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Kaplan et al. · Scaling Laws for Neural Language Models",
+        "url": "https://arxiv.org/abs/2001.08361"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Empirical power-law relationships between a language model's performance (measured by cross-entropy loss) and three core factors: model size (number of parameters \\( N \\)), dataset size (number of tokens \\( D \\)), and compute budget (FLOPs \\( C \\)).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"250\" viewBox=\"0 0 400 250\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"250\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Axes -->\n      <line x1=\"60\" y1=\"200\" x2=\"350\" y2=\"200\" stroke=\"#cbd5e0\" stroke-width=\"2\"/>\n      <line x1=\"60\" y1=\"40\" x2=\"60\" y2=\"200\" stroke=\"#cbd5e0\" stroke-width=\"2\"/>\n      <text x=\"205\" y=\"235\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Compute (C) [Log Scale]</text>\n      <text x=\"25\" y=\"120\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" transform=\"rotate(-90 25 120)\" text-anchor=\"middle\">Test Loss [Log Scale]</text>\n      <!-- Power Law Line -->\n      <line x1=\"80\" y1=\"50\" x2=\"330\" y2=\"180\" stroke=\"#63b3ed\" stroke-width=\"3\"/>\n      <!-- Points -->\n      <circle cx=\"120\" cy=\"71\" r=\"4\" fill=\"#63b3ed\"/>\n      <circle cx=\"180\" cy=\"102\" r=\"4\" fill=\"#63b3ed\"/>\n      <circle cx=\"250\" cy=\"138\" r=\"4\" fill=\"#63b3ed\"/>\n      <circle cx=\"310\" cy=\"170\" r=\"4\" fill=\"#63b3ed\"/>\n      <!-- Equation annotation -->\n      <text x=\"250\" y=\"80\" fill=\"#63b3ed\" font-family=\"sans-serif\" font-size=\"16\">L(C) ∝ C^{-α}</text>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Log-log plot of test loss vs. compute demonstrating a linear trend, indicative of a power law.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Kaplan et al. (2020) at OpenAI discovered that language model loss follows remarkably smooth power laws over several orders of magnitude:</p>\n\n  \\[ L(N) \\propto N^{-\\alpha_N}, \\quad L(D) \\propto D^{-\\alpha_D}, \\quad L(C) \\propto C^{-\\alpha_C} \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Key Findings and The Chinchilla Revision",
+        "body": "<ul>\n    <li><b>Kaplan et al. (2020):</b> Argued that larger models are asymptotically more sample-efficient. Suggested allocating most compute to increasing model size rather than dataset size.</li>\n    <li><b>Chinchilla (Hoffmann et al., 2022):</b> Revised the optimal allocation. They demonstrated that model size and data should be scaled <b>equally</b>. To train a model optimally for a given compute budget, you need about 20 tokens per parameter. This implied existing models like GPT-3 (175B parameters, 300B tokens) were massively undertrained on data.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Limitations:</b> Scaling laws accurately predict the cross-entropy loss, but they <b>do not predictably translate to downstream task performance</b> or zero-shot abilities, which often exhibit sudden \"emergent\" improvements.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Derivations",
+        "body": "<details>\n    <summary>Derivations</summary>\n    <p><b>Chinchilla optimal allocation:</b> For a compute budget \\( C \\) (in FLOPs), the optimal model size \\( N_{\\text{opt}} \\) and token count \\( D_{\\text{opt}} \\) scale as:</p>\n    \\[ N_{\\text{opt}} \\propto C^{a}, \\quad D_{\\text{opt}} \\propto C^{b} \\]\n    <p>where empirical fits yield \\( a \\approx 0.50 \\) and \\( b \\approx 0.50 \\). Since compute requirements for Transformer forward-backward passes are roughly \\( C \\approx 6ND \\), we distribute the budget equally between \\( N \\) and \\( D \\).</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "what-are-emergent-capabilities-in-large-language-models",
+    "title": "What are emergent capabilities in large language models?",
+    "summary": "Abilities that are absent or perform at random chance in smaller models, but abruptly appear once a model reaches a critical scale (in parameters or training compute), seemingly jumping discontinuously rather than improving smoothly.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "zero-shot-learning",
+      "scaling-laws"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Wei et al. · Emergent Abilities of Large Language Models",
+        "url": "https://arxiv.org/abs/2206.07682"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Abilities that are absent or perform at random chance in smaller models, but abruptly appear once a model reaches a critical scale (in parameters or training compute), seemingly jumping discontinuously rather than improving smoothly.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"250\" viewBox=\"0 0 400 250\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"250\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Axes -->\n      <line x1=\"60\" y1=\"200\" x2=\"350\" y2=\"200\" stroke=\"#cbd5e0\" stroke-width=\"2\"/>\n      <line x1=\"60\" y1=\"40\" x2=\"60\" y2=\"200\" stroke=\"#cbd5e0\" stroke-width=\"2\"/>\n      <text x=\"205\" y=\"235\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Model Scale (Compute / Params)</text>\n      <text x=\"25\" y=\"120\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" transform=\"rotate(-90 25 120)\" text-anchor=\"middle\">Task Accuracy</text>\n      <!-- Predictable smooth curve -->\n      <path d=\"M 60 200 Q 200 150 350 50\" stroke=\"#4a5568\" stroke-width=\"2\" stroke-dasharray=\"4\" fill=\"none\"/>\n      <text x=\"320\" y=\"40\" fill=\"#4a5568\" font-size=\"12\">Loss (Smooth)</text>\n      <!-- Emergent curve -->\n      <path d=\"M 60 190 L 180 190 Q 200 190 210 170 L 250 80 Q 260 50 350 50\" stroke=\"#f6ad55\" stroke-width=\"3\" fill=\"none\"/>\n      <text x=\"270\" y=\"70\" fill=\"#f6ad55\" font-family=\"sans-serif\" font-size=\"14\">Emergent Skill</text>\n      <!-- Threshold marker -->\n      <line x1=\"200\" y1=\"200\" x2=\"200\" y2=\"180\" stroke=\"#fc8181\" stroke-width=\"2\"/>\n      <text x=\"200\" y=\"215\" fill=\"#fc8181\" font-size=\"12\" text-anchor=\"middle\">Threshold</text>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Accuracy on a specific task remains at chance until a threshold scale is reached, where it rapidly improves.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Wei et al. (2022) documented this phenomenon across numerous tasks. While the next-token prediction loss follows smooth power-law scaling, downstream task performance (like 3-digit addition or chain-of-thought reasoning) does not.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Notable Emergent Capabilities",
+        "body": "<ul>\n    <li><b>Arithmetic and Logic:</b> Solving multi-step math problems or unscrambling words.</li>\n    <li><b>Chain-of-Thought (CoT) Reasoning:</b> The ability to benefit from step-by-step reasoning prompts only appears in LLMs larger than ~60B parameters; smaller models' performance degrades when forced to use CoT.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "The \"Mirage\" Debate",
+        "body": "<p>Schaeffer et al. (2023) argued that emergence might be a <b>mirage caused by the observer's choice of metric</b>. Non-linear, discontinuous metrics like \"Exact String Match\" or \"Multiple-Choice Accuracy\" require a model to be perfectly correct to score anything. If you change the metric to a continuous measure like Token-Level Brier Score or Log-Likelihood, the models' partial progress becomes visible, and improvements scale smoothly and predictably rather than abruptly.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "zero-shot-learning",
+    "title": "Zero-Shot Learning",
+    "summary": "The ability of a model to perform a target task using only a natural-language instruction detailing the task, without having been explicitly fine-tuned on the task and without receiving any demonstration examples in its context window.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "one-shot-learning",
+      "what-are-emergent-capabilities-in-large-language-models"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Brown et al. · Language Models are Few-Shot Learners",
+        "url": "https://arxiv.org/abs/2005.14165"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The ability of a model to perform a target task using only a natural-language instruction detailing the task, without having been explicitly fine-tuned on the task and without receiving any demonstration examples in its context window.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"150\" viewBox=\"0 0 450 150\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"150\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Prompt Box -->\n      <rect x=\"20\" y=\"30\" width=\"160\" height=\"90\" fill=\"#2d3748\" rx=\"4\" stroke=\"#4a5568\"/>\n      <text x=\"30\" y=\"55\" fill=\"#cbd5e0\" font-family=\"monospace\" font-size=\"12\">Instruction:</text>\n      <text x=\"30\" y=\"75\" fill=\"#e2e8f0\" font-family=\"monospace\" font-size=\"12\">Translate to French.</text>\n      <text x=\"30\" y=\"105\" fill=\"#cbd5e0\" font-family=\"monospace\" font-size=\"12\">Input: Hello</text>\n      <!-- Arrow -->\n      <path d=\"M 190 75 L 240 75\" stroke=\"#63b3ed\" stroke-width=\"3\" fill=\"none\" marker-end=\"url(#arrow_1772520979237)\"/>\n      <!-- Model -->\n      <circle cx=\"280\" cy=\"75\" r=\"30\" fill=\"#4a5568\" stroke=\"#cbd5e0\" stroke-width=\"2\"/>\n      <text x=\"280\" y=\"80\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">LLM</text>\n      <!-- Arrow -->\n      <path d=\"M 320 75 L 360 75\" stroke=\"#68d391\" stroke-width=\"3\" fill=\"none\" marker-end=\"url(#arrow_1772520979237)\"/>\n      <!-- Output -->\n      <text x=\"370\" y=\"80\" fill=\"#68d391\" font-family=\"monospace\" font-size=\"14\">Bonjour</text>\n      \n      <defs>\n        <marker id=\"arrow_1772520979237\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Zero-shot generalization: solely relying on the instruction to produce the output.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Zero-shot learning tests a model's intrinsic ability to generalize its pre-trained knowledge to novel formatting and logic requirements. It heavily relies on the model having implicitly gathered similar data patterns during massive unsupervised pre-training.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Comparisons of In-Context Learning",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Setup</th>\n      <th style=\"padding:6px; text-align:left;\">Examples Given</th>\n      <th style=\"padding:6px; text-align:left;\">Context Usage</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Zero-Shot</b></td>\n      <td style=\"padding:6px;\">\\( k = 0 \\)</td>\n      <td style=\"padding:6px;\">Instruction + Input query</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>One-Shot</b></td>\n      <td style=\"padding:6px;\">\\( k = 1 \\)</td>\n      <td style=\"padding:6px;\">Instruction + 1 Example + Input</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Few-Shot</b></td>\n      <td style=\"padding:6px;\">\\( k \\ge 2 \\)</td>\n      <td style=\"padding:6px;\">Instruction + Multiple Examples + Input</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Enhancement via Instruction Tuning:</b> Because raw base-LLMs are trained solely for next-token prediction on web text, their raw zero-shot ability is weak (they naturally want to simply continue the document). **Instruction Tuning (SFT) / FLAN** fine-tunes the model explicitly on a dataset of instruction-response pairs to drastically boost its zero-shot interaction capabilities.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Vision Domain Distinction:</b> In Computer Vision, Zero-Shot Learning (ZSL) has a slightly different meaning: classifying unseen test classes by leveraging side-information or semantic embeddings (like text descriptions or attributes) mapping image features to a shared latent space.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "one-shot-learning",
+    "title": "One-Shot Learning",
+    "summary": "The ability of an algorithm or model to learn information about a task or object from a **single demonstration example** (or a very small handful), mimicking human cognitive abilities to rapidly acquire new concepts.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "transfer-learning",
+      "zero-shot-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2015 · Koch et al. · Siamese Neural Networks for One-shot Image Recognition"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The ability of an algorithm or model to learn information about a task or object from a **single demonstration example** (or a very small handful), mimicking human cognitive abilities to rapidly acquire new concepts.</p><p>In modern ML, \"One-Shot\" takes distinct forms depending on the domain: </p>\n\n  <p><b>1. Natural Language Processing (LLMs):</b></p>\n  <p>Providing exactly one input-output pair in the text prompt to condition the model's generation format via in-context learning.</p>\n  <pre style=\"background:#2d3748; color:#e2e8f0; padding:10px; border-radius:4px;\">Instruction: Classify sentiment.\nExample: \"I loved the food!\" -&gt; Positive\nInput: \"The service was awful.\" -&gt; </pre>\n\n  <p><b>2. Computer Vision / Meta-Learning:</b></p>\n  <p>Learning a classifier robust enough to categorize novel classes given just one image per new class. Traditional models (like deep CNNs) severely overfit on a single example, so One-Shot Learning relies on <b>Metric Learning</b> or Meta-Learning architectures:</p>\n  <ul>\n    <li><b>Siamese Networks:</b> Train two identical feature extractors to output a distance metric \\( D(x_1, x_2) \\). To classify a new \"1-shot\" image, measure its distance to the single support example.</li>\n    <li><b>Prototypical Networks:</b> Encode the single support example into an embedding space; new queries are classified based on nearest-neighbor distance to the single prototype.</li>\n    <li><b>MAML (Model-Agnostic Meta-Learning):</b> Train the network's initialization such that a single gradient descent step on one example effectively adapts the weights to the new class without destroying generalization.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"180\" viewBox=\"0 0 450 180\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"180\" fill=\"#1a202c\" rx=\"8\"></rect>\n      <!-- Support Image -->\n      <rect x=\"30\" y=\"20\" width=\"50\" height=\"50\" fill=\"#4a5568\" rx=\"4\"></rect>\n      <text x=\"55\" y=\"50\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Img A</text>\n      <text x=\"55\" y=\"85\" fill=\"#a0aec0\" text-anchor=\"middle\" font-size=\"10\">Support (1-shot)</text>\n      <!-- Query Image -->\n      <rect x=\"30\" y=\"100\" width=\"50\" height=\"50\" fill=\"#2d3748\" rx=\"4\" stroke=\"#e2e8f0\"></rect>\n      <text x=\"55\" y=\"130\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Img B</text>\n      <text x=\"55\" y=\"165\" fill=\"#a0aec0\" text-anchor=\"middle\" font-size=\"10\">Query</text>\n      <!-- Siamese Network -->\n      <path d=\"M 90 45 L 140 45\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521002163)\"></path>\n      <path d=\"M 90 125 L 140 125\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521002163)\"></path>\n      <rect x=\"150\" y=\"25\" width=\"80\" height=\"40\" fill=\"#3182ce\" rx=\"4\"></rect>\n      <text x=\"190\" y=\"50\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">CNN f(x)</text>\n      <rect x=\"150\" y=\"105\" width=\"80\" height=\"40\" fill=\"#3182ce\" rx=\"4\"></rect>\n      <text x=\"190\" y=\"130\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">CNN f(x)</text>\n      <!-- Vectors & Distance -->\n      <path d=\"M 240 45 L 290 70\" stroke=\"#cbd5e0\" stroke-width=\"2\"></path>\n      <path d=\"M 240 125 L 290 100\" stroke=\"#cbd5e0\" stroke-width=\"2\"></path>\n      <circle cx=\"310\" cy=\"85\" r=\"25\" fill=\"#dd6b20\"></circle>\n      <text x=\"310\" y=\"90\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Dist</text>\n      <path d=\"M 345 85 L 390 85\" stroke=\"#f6ad55\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521002163)\"></path>\n      <text x=\"415\" y=\"90\" fill=\"#f6ad55\" text-anchor=\"middle\" font-size=\"14\">Sim</text>\n      \n      <defs>\n        <marker id=\"arrow_1772521002163\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Siamese architecture learning representation for one-shot computer vision inference.</i></p>\n  </div></div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "transfer-learning",
+    "title": "Transfer Learning",
+    "summary": "The core technique of taking knowledge learned by a model on a large, generic source dataset/task and adapting (transferring) that learned representation to perform well on a smaller, more specific target task.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "data-augmentation",
+      "one-shot-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2014 · Yosinski et al. · How Transferable are Features in Deep Neural Networks?",
+        "url": "https://arxiv.org/abs/1411.1792"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The core technique of taking knowledge learned by a model on a large, generic source dataset/task and adapting (transferring) that learned representation to perform well on a smaller, more specific target task.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Source Task -->\n      <rect x=\"20\" y=\"40\" width=\"100\" height=\"120\" fill=\"#4a5568\" rx=\"4\"/>\n      <text x=\"70\" y=\"65\" fill=\"#fff\" text-anchor=\"middle\" font-weight=\"bold\">Source Task</text>\n      <text x=\"70\" y=\"85\" fill=\"#cbd5e0\" text-anchor=\"middle\" font-size=\"11\">Massive Data</text>\n      <text x=\"70\" y=\"105\" fill=\"#cbd5e0\" text-anchor=\"middle\" font-size=\"11\">(e.g. ImageNet)</text>\n      <!-- Pretraining Arrow -->\n      <path d=\"M 130 100 L 180 100\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521015969)\"/>\n      <text x=\"155\" y=\"90\" fill=\"#a0aec0\" text-anchor=\"middle\" font-size=\"10\">Pretrain</text>\n      <!-- Knowledge representation -->\n      <circle cx=\"230\" cy=\"100\" r=\"40\" fill=\"#3182ce\" stroke=\"#90cdf4\" stroke-width=\"2\"/>\n      <text x=\"230\" y=\"95\" fill=\"#fff\" text-anchor=\"middle\" font-weight=\"bold\">Learned</text>\n      <text x=\"230\" y=\"115\" fill=\"#fff\" text-anchor=\"middle\" font-weight=\"bold\">Weights</text>\n      <!-- Finetuning Arrow -->\n      <path d=\"M 280 100 L 330 100\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521015969)\"/>\n      <text x=\"305\" y=\"90\" fill=\"#a0aec0\" text-anchor=\"middle\" font-size=\"10\">Fine-tune</text>\n      <!-- Target Task -->\n      <rect x=\"340\" y=\"60\" width=\"90\" height=\"80\" fill=\"#2f855a\" rx=\"4\"/>\n      <text x=\"385\" y=\"95\" fill=\"#fff\" text-anchor=\"middle\" font-weight=\"bold\">Target Task</text>\n      <text x=\"385\" y=\"115\" fill=\"#c6f6d5\" text-anchor=\"middle\" font-size=\"11\">Small Data</text>\n      \n      <defs>\n        <marker id=\"arrow_1772521015969\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Transferring representations to sidestep the requirement for massive target-domain datasets.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Rather than randomly initializing weights \\( \\theta \\) and training from scratch, we initialize the model with weights \\( \\theta_{src} \\) pre-trained on a massive source domain (like ImageNet or the entire web). This enables deep networks to converge faster, generalize better, and avoid overfitting when target data is scarce.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Modes of Transfer",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Method</th>\n      <th style=\"padding:6px; text-align:left;\">Mechanism</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Linear Probing (Feature Extraction)</b></td>\n      <td style=\"padding:6px;\">Freeze the entire feature backbone. Swap out the final head and train <b>only</b> the new linear classifier head.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Full Fine-Tuning</b></td>\n      <td style=\"padding:6px;\">Initialize with pre-trained weights, then update <b>all</b> weights end-to-end on the target task.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Parameter-Efficient (PEFT)</b></td>\n      <td style=\"padding:6px;\">Freeze the backbone but inject small learned modules (like LoRA adapters). Huge memory savings.</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why it works (Vision):</b> Lower layers in CNNs behave like generic Gabor filters (detecting edges, color blobs) applicable to any visual task. Higher layers capture task-specific semantic parts.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Negative Transfer:</b> Occurs when the source domain is so intrinsically unrelated or contradictory to the target domain that initializing with pre-trained weights actually degrades target performance worse than training from scratch.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "data-augmentation",
+    "title": "Data Augmentation",
+    "summary": "Artificially expanding the size and diversity of a training dataset by applying label-preserving programmatic transformations to the existing data points, acting as a strong implicit regularizer.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "active-learning",
+      "transfer-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Data Augmentation"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Artificially expanding the size and diversity of a training dataset by applying label-preserving programmatic transformations to the existing data points, acting as a strong implicit regularizer.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"200\" viewBox=\"0 0 400 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"200\" fill=\"#1a202c\" rx=\"8\"></rect>\n      <!-- Original Image -->\n      <rect x=\"30\" y=\"70\" width=\"60\" height=\"60\" fill=\"#4a5568\" rx=\"4\"></rect>\n      <circle cx=\"60\" cy=\"100\" r=\"15\" fill=\"#e2e8f0\"></circle>\n      <text x=\"60\" y=\"150\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Original (Cat)</text>\n      \n      <!-- Arrows out -->\n      <path d=\"M 100 100 L 150 40\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521027151)\"></path>\n      <path d=\"M 100 100 L 150 100\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521027151)\"></path>\n      <path d=\"M 100 100 L 150 160\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521027151)\"></path>\n      \n      <!-- Augmented Images -->\n      <g transform=\"translate(170, 10)\">\n        <rect x=\"0\" y=\"0\" width=\"60\" height=\"60\" fill=\"#4a5568\" rx=\"4\" transform=\"matrix(-1 0 0 1 60 0)\"></rect>\n        <circle cx=\"30\" cy=\"30\" r=\"15\" fill=\"#e2e8f0\"></circle>\n        <text x=\"90\" y=\"35\" fill=\"#a0aec0\" font-size=\"12\">Flip</text>\n      </g>\n      \n      <g transform=\"translate(170, 70)\">\n        <rect x=\"0\" y=\"0\" width=\"60\" height=\"60\" fill=\"#2b6cb0\" rx=\"4\"></rect>\n        <circle cx=\"30\" cy=\"30\" r=\"15\" fill=\"#bee3f8\"></circle>\n        <text x=\"90\" y=\"35\" fill=\"#a0aec0\" font-size=\"12\">Color Jitter</text>\n      </g>\n      \n      <g transform=\"translate(170, 130)\">\n        <rect x=\"0\" y=\"0\" width=\"60\" height=\"60\" fill=\"#4a5568\" rx=\"4\"></rect>\n        <circle cx=\"30\" cy=\"30\" r=\"15\" fill=\"#e2e8f0\"></circle>\n        <rect x=\"15\" y=\"15\" width=\"20\" height=\"20\" fill=\"#000\"></rect>\n        <text x=\"90\" y=\"35\" fill=\"#a0aec0\" font-size=\"12\">Cutout</text>\n      </g>\n      \n      <text x=\"350\" y=\"105\" fill=\"#68d391\" text-anchor=\"middle\" font-weight=\"bold\" font-size=\"14\">All Label: Cat</text>\n      \n      <defs>\n        <marker id=\"arrow_1772521027151\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Creating varied training instances forces the model to learn invariant representations.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>By preventing the network from seeing the exact same pixel values twice, data augmentation forces the model to learn fundamental concepts (e.g., shape of a cat) rather than memorizing high-frequency noise or exact pixel coordinates, massively reducing overfitting.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Advanced Augmentations",
+        "body": "<ul>\n    <li><b>Mixup:</b> Creating purely synthetic examples and softly labeled targets by interpolating between two unrelated images. \\( \\tilde{x} = \\lambda x_1 + (1-\\lambda)x_2 \\) and \\( \\tilde{y} = \\lambda y_1 + (1-\\lambda)y_2 \\).</li>\n    <li><b>CutMix:</b> Pasting a bounding box patch of Image B onto Image A, mixing labels proportionally to the box area.</li>\n    <li><b>AutoAugment / RandAugment:</b> Automating the search for the optimal sequence and magnitude of augmentations (e.g., shear, scale, contrast).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Modality Differences:</b> Augmentation is universally essential in Computer Vision and Audio (time stretching, pitch shifting, noise injection). It is fundamentally more difficult in NLP because changing a single word (e.g., synonym replacement or dropping words) can completely destroy or invert the semantic meaning of a sentence.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "active-learning",
+    "title": "Active Learning",
+    "summary": "A semi-supervised framework where the learning algorithm is allowed to interactively interrogate a human oracle, selectively asking it to label only the most profoundly informative data points from a large pool of unlabeled data.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "classification-head",
+      "data-augmentation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Active Learning"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A semi-supervised framework where the learning algorithm is allowed to interactively interrogate a human oracle, selectively asking it to label only the most profoundly informative data points from a large pool of unlabeled data.</p><p>In domains where obtaining unannotated data is cheap (e.g., scraping medical scans, autonomous driving footage) but expert human labeling is extremely expensive, Active Learning aims to achieve maximum model accuracy utilizing the absolute minimum number of labels.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"220\" viewBox=\"0 0 450 220\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"220\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Unlabeled Pool -->\n      <rect x=\"30\" y=\"80\" width=\"80\" height=\"60\" fill=\"#4a5568\" rx=\"4\"/>\n      <text x=\"70\" y=\"105\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Unlabeled</text>\n      <text x=\"70\" y=\"125\" fill=\"#cbd5e0\" text-anchor=\"middle\" font-size=\"12\">Data Pool</text>\n      <!-- Query Process -->\n      <path d=\"M 110 50 Q 150 20 200 40\" stroke=\"#68d391\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow)\"/>\n      <text x=\"160\" y=\"30\" fill=\"#68d391\" text-anchor=\"middle\" font-size=\"11\">Select highly uncertain target</text>\n      <!-- Oracle -->\n      <circle cx=\"230\" cy=\"50\" r=\"30\" fill=\"#dd6b20\"/>\n      <text x=\"230\" y=\"55\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"13\">Oracle</text>\n      <!-- Labels provided -->\n      <path d=\"M 260 55 Q 350 40 370 70\" stroke=\"#f6e05e\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow)\"/>\n      <text x=\"320\" y=\"45\" fill=\"#f6e05e\" text-anchor=\"middle\" font-size=\"11\">Annotations</text>\n      <!-- Labeled Set -->\n      <rect x=\"340\" y=\"80\" width=\"80\" height=\"60\" fill=\"#2f855a\" rx=\"4\"/>\n      <text x=\"380\" y=\"105\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Labeled</text>\n      <text x=\"380\" y=\"125\" fill=\"#c6f6d5\" text-anchor=\"middle\" font-size=\"12\">Training Set</text>\n      <!-- Train Model -->\n      <path d=\"M 380 140 Q 380 180 300 180\" stroke=\"#63b3ed\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow)\"/>\n      <text x=\"350\" y=\"195\" fill=\"#63b3ed\" text-anchor=\"middle\" font-size=\"11\">Trains</text>\n      <!-- Model -->\n      <rect x=\"200\" y=\"150\" width=\"90\" height=\"50\" fill=\"#3182ce\" rx=\"4\"/>\n      <text x=\"245\" y=\"180\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"14\">ML Model</text>\n      <path d=\"M 200 175 C 100 170 80 150 70 145\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow)\"/>\n      <text x=\"130\" y=\"195\" fill=\"#cbd5e0\" text-anchor=\"middle\" font-size=\"11\">Evaluates uncertainty</text>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>The Active Learning feedback loop querying human annotation for the most ambiguous samples.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Querying Strategies",
+        "body": "<ul>\n    <li><b>Uncertainty Sampling:</b> The most common approach. The model asks for labels on samples where its predictive confidence is the lowest. Measuring proximity to a decision boundary, or calculating entropy: \\( H(X) = - \\sum p_i \\log p_i \\).</li>\n    <li><b>Query-By-Committee (QBC):</b> Maintain an ensemble of models. The strategy queries data points where the variance or disagreement among the ensemble members' predictions is highest.</li>\n    <li><b>Expected Model Change:</b> Query the instance that would impart the largest magnitude gradient update to the current model parameters.</li>\n    <li><b>Core-set / Diversity Sampling:</b> Query samples across highly segregated multi-dimensional clusters to map the entire space uniformly, avoiding redundant dense regions.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "classification-head",
+    "title": "Classification Head",
+    "summary": "An interchangeable classification layer (typically a fully connected Linear network + Softmax) affixed to the very top outputs of a frozen pre-trained feature backbone network.",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "implementation",
+      "intermediate",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "softmax-head",
+      "active-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Classification Head"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An interchangeable classification layer (typically a fully connected Linear network + Softmax) affixed to the very top outputs of a frozen pre-trained feature backbone network.</p><p>Deep Learning networks conceptually isolate into a <b>Feature Extractor Backbone</b> (which processes raw input \\( X \\) into a dense representation vector \\( h \\)) and the <b>Task Head</b> (which maps \\( h \\) into human-interpretable logits).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"250\" viewBox=\"0 0 400 250\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"250\" fill=\"#1a202c\" rx=\"8\"/>\n      <rect x=\"150\" y=\"20\" width=\"100\" height=\"30\" fill=\"#e53e3e\" rx=\"4\"/>\n      <text x=\"200\" y=\"40\" fill=\"#fff\" text-anchor=\"middle\" font-weight=\"bold\">Logits / Probs</text>\n      <path d=\"M 200 65 L 200 55\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n      <rect x=\"130\" y=\"70\" width=\"140\" height=\"50\" fill=\"#dd6b20\" rx=\"4\"/>\n      <text x=\"200\" y=\"90\" fill=\"#fff\" text-anchor=\"middle\" font-weight=\"bold\">Linear Head</text>\n      <text x=\"200\" y=\"110\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">W * X + b</text>\n      <path d=\"M 200 135 L 200 125\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n      <rect x=\"100\" y=\"140\" width=\"200\" height=\"80\" fill=\"#3182ce\" rx=\"4\"/>\n      <text x=\"200\" y=\"170\" fill=\"#fff\" text-anchor=\"middle\" font-weight=\"bold\">Transformer / CNN Base</text>\n      <text x=\"200\" y=\"190\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">(Pre-Trained Backbone)</text>\n      <text x=\"200\" y=\"210\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"10\">Outputs embedding vector 'h'</text>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>The classification head receives embedding outputs to yield specific predictions.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Mechanism:</b> Given backbone representation vector \\( h \\in \\mathbb{R}^d \\), the head compresses it to the exact number of classes \\( C \\):</p>\n  \\[ z = W \\cdot h + b, \\quad \\hat{y} = \\text{softmax}(z) \\]\n  <p>where \\( W \\in \\mathbb{R}^{C \\times d} \\). </p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Standard Implementations",
+        "body": "<ul>\n    <li><b>Vision Models (ResNet, ViT):</b> Often perform Global Average Pooling on the final convolutional features to obtain a 1D vector \\( h \\), then attach the classification head.</li>\n    <li><b>NLP Models (BERT):</b> An explicit `[CLS]` (Classification) token is placed at the very start of the sequence. The model forces the entire sentence's contextual interpretation into the final hidden representation of this `[CLS]` token. The linear head connects exclusively to this token's dimension.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "softmax-head",
+    "title": "Softmax Head",
+    "summary": "The specialized final unembedding layer combined with a softmax activation attached to an Auto-Regressive Language Model specifically mapped to output a bounded probability distribution over the entire vocabulary.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "beam-search",
+      "classification-head"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Softmax Head"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The specialized final unembedding layer combined with a softmax activation attached to an Auto-Regressive Language Model specifically mapped to output a bounded probability distribution over the entire vocabulary.</p><p>Often utilized interchangeably with \"Language Modeling Head\", it serves the precise role of decoding the neural network's internal dense hidden state space dimension \\( d \\) back into discrete word/token identifiers.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mathematical Formulation",
+        "body": "<p>For a final hidden state vector \\( h \\) and vocabulary \\( V \\):</p>\n  \\[ P(w_i \\mid \\text{context}) = \\text{Softmax}(W_{U} \\cdot h) = \\frac{\\exp(e_i^T h / \\tau)}{\\sum_{j=1}^{|V|} \\exp(e_j^T h / \\tau)} \\]\n  <p>where \\( W_{U} \\in \\mathbb{R}^{|V| \\times d} \\) is the unembedding matrix, \\( e_i \\) represents the transpose row of the specific token, and \\( \\tau \\) is decoding temperature.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Critical Engineering Specifics",
+        "body": "<ul>\n    <li><b>Weight Tying:</b> To drastically cull parameter bloat, many models (GPT-2, canonical Transformers) force the Softmax Unembedding matrix \\( W_U \\) to be identically transposed to the original Input Embedding Matrix \\( W_E \\). I.e., \\( W_U = W_E^T \\).</li>\n    <li><b>Massive Computational Bottleneck:</b> Executing this multiplication across an enormous token vocabulary (e.g. 100,000+ words) forces the LM head parameters to become a massive constraint memory-wise.</li>\n    <li><b>Logit Lens Interpretability:</b> Because \\( W_U \\) acts as a clean mapping from embedding space to human text, interpretability researchers will \"trick\" the model by projecting middle-layer activations directly through the LM head to analyze what the model believes the next token is halfway through execution.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "beam-search",
+    "title": "Beam Search",
+    "summary": "A deterministic text generation decoding heuristic that maintains a set width of the top-\\( k \\) most probable overall sequences at each generating step rather than aggressively locking into just the singular most probable next word (gre…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "scaling-laws",
+      "softmax-head"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Beam Search"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A deterministic text generation decoding heuristic that maintains a set width of the top-\\( k \\) most probable overall sequences at each generating step rather than aggressively locking into just the singular most probable next word (greedy search).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"280\" viewBox=\"0 0 450 280\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"280\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- t=0 -->\n      <circle cx=\"225\" cy=\"30\" r=\"15\" fill=\"#4a5568\"/>\n      <text x=\"225\" y=\"35\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Start</text>\n      \n      <!-- Beam Width K=2 lines -->\n      <path d=\"M 225 45 L 140 100\" stroke=\"#68d391\" stroke-width=\"2\"/>\n      <path d=\"M 225 45 L 310 100\" stroke=\"#68d391\" stroke-width=\"2\"/>\n      \n      <!-- t=1 -->\n      <circle cx=\"140\" cy=\"115\" r=\"18\" fill=\"#2f855a\"/>\n      <text x=\"140\" y=\"120\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">\"I\"</text>\n      <text x=\"100\" y=\"115\" fill=\"#68d391\" font-size=\"10\">P=0.6</text>\n      \n      <circle cx=\"310\" cy=\"115\" r=\"18\" fill=\"#2f855a\"/>\n      <text x=\"310\" y=\"120\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">\"We\"</text>\n      <text x=\"340\" y=\"115\" fill=\"#68d391\" font-size=\"10\">P=0.3</text>\n      \n      <!-- Expansion from node 1 -->\n      <path d=\"M 140 133 L 70 200\" stroke=\"#cbd5e0\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <path d=\"M 140 133 L 140 200\" stroke=\"#68d391\" stroke-width=\"2\"/> <!-- Kept -->\n      <!-- Expansion from node 2 -->\n      <path d=\"M 310 133 L 310 200\" stroke=\"#cbd5e0\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n      <path d=\"M 310 133 L 380 200\" stroke=\"#68d391\" stroke-width=\"2\"/> <!-- Kept -->\n      \n      <!-- t=2 -->\n      <!-- Pruned branch -->\n      <circle cx=\"70\" cy=\"215\" r=\"18\" fill=\"#e53e3e\"/>\n      <text x=\"70\" y=\"220\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">\"saw\"</text>\n      <text x=\"70\" y=\"245\" fill=\"#e53e3e\" text-anchor=\"middle\" font-size=\"10\">0.6*0.1=0.06</text>\n      \n      <!-- Kept branch A -->\n      <circle cx=\"140\" cy=\"215\" r=\"18\" fill=\"#2f855a\"/>\n      <text x=\"140\" y=\"220\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">\"think\"</text>\n      <text x=\"140\" y=\"245\" fill=\"#68d391\" text-anchor=\"middle\" font-size=\"10\">0.6*0.5=0.30</text>\n      \n      <!-- Pruned branch -->\n      <circle cx=\"310\" cy=\"215\" r=\"18\" fill=\"#e53e3e\"/>\n      <text x=\"310\" y=\"220\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">\"will\"</text>\n      <text x=\"310\" y=\"245\" fill=\"#e53e3e\" text-anchor=\"middle\" font-size=\"10\">0.3*0.2=0.06</text>\n      \n      <!-- Kept branch B -->\n      <circle cx=\"380\" cy=\"215\" r=\"18\" fill=\"#2f855a\"/>\n      <text x=\"380\" y=\"220\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">\"are\"</text>\n      <text x=\"380\" y=\"245\" fill=\"#68d391\" text-anchor=\"middle\" font-size=\"10\">0.3*0.8=0.24</text>\n      \n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Beam Search with Beam Width \\( k = 2 \\). Lower probability paths are consistently pruned to manage combinatorics.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>In greedy decoding, a model picks the best token, but sometimes a slightly suboptimal word early on mathematically allows for an overwhelmingly superior sequence of words later on. Beam Search circumvents this blind spot by simultaneously tracking multiple paths.</p>\n\n  <p>At time step \\( t \\):</p>\n  <ol>\n    <li>Expand all \\( k \\) current sequence hypotheses against the entire vocabulary.</li>\n    <li>Calculate cumulative sequence log-probabilities: \\( \\text{Score}_{total} = \\sum_{i=1}^t \\log P(w_i \\mid w_{1..i-1}) \\).</li>\n    <li>Strictly prune and discard all sequences down to only the highest scoring \\( k \\) paths.</li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Length Penalty Problem:</b> Because log-probabilities are continuously negative, longer sequences organically suffer a heavy score reduction purely for being long. To combat this, Beam Search almost always includes a normalization factor \\( \\alpha \\) to penalize shortness, dividing the score by the total token length.</p>\n\n  <p>While standard for Machine Translation and rigidly structured NLG tasks, Beam Search is almost entirely abandoned in modern generative conversational LLMs in favor of stochastic nucleus sampling (Top-P) because Beam Search notoriously produces very safe, bland, and repetitive text loops devoid of human-like diverse novelty.</p>"
+      }
+    ],
+    "cards": []
   }
 ]

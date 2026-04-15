@@ -8055,6 +8055,224 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "scaling-laws",
+      "title": "Scaling Laws",
+      "summary": "Empirical power-law relationships between a language model's performance (measured by cross-entropy loss) and three core factors: model size (number of parameters \\( N \\)), dataset size (number of tokens \\( D \\)), and compute budget (FLO…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "what-are-emergent-capabilities-in-large-language-models",
+        "beam-search"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "what-are-emergent-capabilities-in-large-language-models",
+      "title": "What are emergent capabilities in large language models?",
+      "summary": "Abilities that are absent or perform at random chance in smaller models, but abruptly appear once a model reaches a critical scale (in parameters or training compute), seemingly jumping discontinuously rather than improving smoothly.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "zero-shot-learning",
+        "scaling-laws"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "zero-shot-learning",
+      "title": "Zero-Shot Learning",
+      "summary": "The ability of a model to perform a target task using only a natural-language instruction detailing the task, without having been explicitly fine-tuned on the task and without receiving any demonstration examples in its context window.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "one-shot-learning",
+        "what-are-emergent-capabilities-in-large-language-models"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "one-shot-learning",
+      "title": "One-Shot Learning",
+      "summary": "The ability of an algorithm or model to learn information about a task or object from a **single demonstration example** (or a very small handful), mimicking human cognitive abilities to rapidly acquire new concepts.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "transfer-learning",
+        "zero-shot-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "transfer-learning",
+      "title": "Transfer Learning",
+      "summary": "The core technique of taking knowledge learned by a model on a large, generic source dataset/task and adapting (transferring) that learned representation to perform well on a smaller, more specific target task.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "data-augmentation",
+        "one-shot-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "data-augmentation",
+      "title": "Data Augmentation",
+      "summary": "Artificially expanding the size and diversity of a training dataset by applying label-preserving programmatic transformations to the existing data points, acting as a strong implicit regularizer.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "active-learning",
+        "transfer-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "active-learning",
+      "title": "Active Learning",
+      "summary": "A semi-supervised framework where the learning algorithm is allowed to interactively interrogate a human oracle, selectively asking it to label only the most profoundly informative data points from a large pool of unlabeled data.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "classification-head",
+        "data-augmentation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "classification-head",
+      "title": "Classification Head",
+      "summary": "An interchangeable classification layer (typically a fully connected Linear network + Softmax) affixed to the very top outputs of a frozen pre-trained feature backbone network.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "implementation",
+        "intermediate",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "softmax-head",
+        "active-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "softmax-head",
+      "title": "Softmax Head",
+      "summary": "The specialized final unembedding layer combined with a softmax activation attached to an Auto-Regressive Language Model specifically mapped to output a bounded probability distribution over the entire vocabulary.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "beam-search",
+        "classification-head"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "beam-search",
+      "title": "Beam Search",
+      "summary": "A deterministic text generation decoding heuristic that maintains a set width of the top-\\( k \\) most probable overall sequences at each generating step rather than aggressively locking into just the singular most probable next word (gre…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "scaling-laws",
+        "softmax-head"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
