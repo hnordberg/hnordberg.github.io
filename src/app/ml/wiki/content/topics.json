@@ -9784,7 +9784,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Concept formalised with GPT-2/GPT-3 · Radford et al. (2019) · Brown et al. (2020)",
+        "citation": "2019 · Radford et al. · Language Models are Unsupervised Multitask Learners",
+        "url": "https://arxiv.org/abs/2005.14165"
+      },
+      {
+        "citation": "2020 · Brown et al. · Language Models are Few-Shot Learners",
         "url": "https://arxiv.org/abs/2005.14165"
       }
     ],
@@ -10548,7 +10552,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Standard machine learning practice; distinguished from PEFT methods as LLM scale made full updates increasingly expensive (2020s). See also: ZeRO (Rajbhandari et al., 2020)",
+        "citation": "2020 · Rajbhandari et al. · ZeRO: Memory Optimizations Toward Training Trillion Parameter Models",
+        "url": "https://arxiv.org/abs/1910.02054"
+      },
+      {
+        "citation": "Standard machine learning practice; full-parameter finetuning contrasted with PEFT as model scale increased in the 2020s",
         "url": "https://arxiv.org/abs/1910.02054"
       }
     ],
@@ -10598,7 +10606,15 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2019-2021 · Adapters: Houlsby et al. (2019) ; LoRA: Hu et al. (2021) ; Prefix tuning: Li & Liang (2021)",
+        "citation": "2019 · Houlsby et al. · Parameter-Efficient Transfer Learning for NLP",
+        "url": "https://arxiv.org/abs/1902.00751"
+      },
+      {
+        "citation": "2021 · Hu et al. · LoRA: Low-Rank Adaptation of Large Language Models",
+        "url": "https://arxiv.org/abs/1902.00751"
+      },
+      {
+        "citation": "2021 · Li and Liang · Prefix-Tuning: Optimizing Continuous Prompts for Generation",
         "url": "https://arxiv.org/abs/1902.00751"
       }
     ],
@@ -11313,7 +11329,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2016 · Bolukbasi et al. · Man is to Computer Programmer as Woman is to Homemaker? · See also Barocas & Selbst (2016)",
+        "citation": "2016 · Bolukbasi et al. · Man is to Computer Programmer as Woman is to Homemaker?",
+        "url": "https://arxiv.org/abs/1607.06520"
+      },
+      {
+        "citation": "2016 · Barocas and Selbst · Big Data's Disparate Impact",
         "url": "https://arxiv.org/abs/1607.06520"
       }
     ],
@@ -12466,7 +12486,15 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2022 · Ouyang et al. · Training language models to follow instructions with human feedback (InstructGPT/RLHF); Rafailov et al. (2023) · Direct Preference Optimization ; Bai et al. (2022) · Constitutional AI",
+        "citation": "2022 · Ouyang et al. · Training Language Models to Follow Instructions with Human Feedback",
+        "url": "https://arxiv.org/abs/2203.02155"
+      },
+      {
+        "citation": "2023 · Rafailov et al. · Direct Preference Optimization: Your Language Model is Secretly a Reward Model",
+        "url": "https://arxiv.org/abs/2203.02155"
+      },
+      {
+        "citation": "2022 · Bai et al. · Constitutional AI: Harmlessness from AI Feedback",
         "url": "https://arxiv.org/abs/2203.02155"
       }
     ],
@@ -12649,7 +12677,15 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2022 · Bai et al. (Constitutional AI) · Constitutional AI: Harmlessness from AI Feedback ; Madaan et al. (2023) · Self-Refine: Iterative Refinement with Self-Feedback ; Shinn et al. (2023) · Reflexion",
+        "citation": "2022 · Bai et al. · Constitutional AI: Harmlessness from AI Feedback",
+        "url": "https://arxiv.org/abs/2212.08073"
+      },
+      {
+        "citation": "2023 · Madaan et al. · Self-Refine: Iterative Refinement with Self-Feedback",
+        "url": "https://arxiv.org/abs/2212.08073"
+      },
+      {
+        "citation": "2023 · Shinn et al. · Reflexion: Language Agents with Verbal Reinforcement Learning",
         "url": "https://arxiv.org/abs/2212.08073"
       }
     ],
@@ -14079,7 +14115,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2023 · Greg Kamradt (original test); Liu, Lin, Hewitt, Paranjape, Bevilacqua, Petroni, Liang · Lost in the Middle: How Language Models Use Long Contexts",
+        "citation": "2023 · Greg Kamradt · Needle in a Haystack test (original eval popularization)",
+        "url": "https://arxiv.org/abs/2307.03172"
+      },
+      {
+        "citation": "2023 · Liu et al. · Lost in the Middle: How Language Models Use Long Contexts",
         "url": "https://arxiv.org/abs/2307.03172"
       }
     ],
@@ -15123,7 +15163,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "TruthfulQA: Lin et al. (2022); FActScore: Min et al. (2023) · FActScore: Fine-grained Atomic Evaluation of Factual Precision",
+        "citation": "2022 · Lin et al. · TruthfulQA: Measuring How Models Mimic Human Falsehoods",
+        "url": "https://arxiv.org/abs/2305.14251"
+      },
+      {
+        "citation": "2023 · Min et al. · FActScore: Fine-grained Atomic Evaluation of Factual Precision",
         "url": "https://arxiv.org/abs/2305.14251"
       }
     ],
