@@ -8273,6 +8273,222 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "repetition-penalty",
+      "title": "Repetition Penalty",
+      "summary": "A decoding-time heuristic modification algebraically applied to token logits that penalizes the probability of generating tokens that have already appeared in the current generation or prompt, mitigating the severe autoregressive failure…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "encoder-transformer",
+        "domain-specific-pretraining"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "encoder-transformer",
+      "title": "Encoder (Transformer)",
+      "summary": "The half of the original Transformer architecture dedicated definitively to understanding : it processes the entirety of an input sequence bidirectionally in parallel using unmasked multi-head self-attention to generate deeply contextual…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "decoder-transformer",
+        "repetition-penalty"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "decoder-transformer",
+      "title": "Decoder (Transformer)",
+      "summary": "The component of a Transformer architecture responsible for generative sequence modeling . It enforces autoregressive generation by using causal (masked) self-attention to strictly prevent tokens from looking forward into the future.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "neural-language-model",
+        "encoder-transformer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "neural-language-model",
+      "title": "Neural Language Model",
+      "summary": "An autoregressive model that estimates the probability distribution over a sequence of words using Neural Networks, resolving the curse of dimensionality found in naive statistical N-Gram models by leveraging dense, continuous vector emb…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "semantic-space",
+        "decoder-transformer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "semantic-space",
+      "title": "Semantic Space",
+      "summary": "A continuous, high-dimensional mathematical vector space where human concepts (words, sentences, or images) are mapped as points such that geometric relationships like spatial proximity and directional vectors directly correspond to sema…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "information-retrieval",
+        "neural-language-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "information-retrieval",
+      "title": "Information Retrieval",
+      "summary": "The academic and engineering discipline of searching for information in a document, or searching for documents themselves within a massive unstructured repository in order to satisfy a specific user query or information need.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "logit-adjustment",
+        "semantic-space"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "logit-adjustment",
+      "title": "Logit Adjustment",
+      "summary": "A suite of techniques executed immediately prior to the Softmax function that add or subtract specific algebraic biases directly to the raw output logits, enabling post-hoc control, debiasing, or constraint enforcement without necessitat…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "softmax-normalization",
+        "information-retrieval"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "softmax-normalization",
+      "title": "Softmax Normalization",
+      "summary": "The standard algebraic function used as the final layer in classification neural networks, responsible for mapping a vector of arbitrarily scaled real-valued numbers (logits) into a mathematically valid, normalized probability distribution.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "over-parameterization",
+        "logit-adjustment"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "over-parameterization",
+      "title": "Over-Parameterization",
+      "summary": "The mathematical paradigm defining modern Deep Learning where a model houses dramatically more trainable parameters than the total number of data training points it sees, yet contradicts classical statistical theory by demonstrating elit…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "domain-specific-pretraining",
+        "softmax-normalization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "domain-specific-pretraining",
+      "title": "Domain-Specific Pretraining",
+      "summary": "The secondary phase executed immediately following general internet pre-training, where a Language Model is trained autoregressively on a gigantic specialized corpus (e.g. Biomedical Data) utilizing self-supervised loss, prior to supervi…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "repetition-penalty",
+        "over-parameterization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

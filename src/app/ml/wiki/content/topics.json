@@ -18004,5 +18004,478 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "repetition-penalty",
+    "title": "Repetition Penalty",
+    "summary": "A decoding-time heuristic modification algebraically applied to token logits that penalizes the probability of generating tokens that have already appeared in the current generation or prompt, mitigating the severe autoregressive failure…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "encoder-transformer",
+      "domain-specific-pretraining"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Keskar et al. · CTRL: A Conditional Transformer Language Model for Controllable Generation",
+        "url": "https://arxiv.org/abs/1909.05858"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A decoding-time heuristic modification algebraically applied to token logits that penalizes the probability of generating tokens that have already appeared in the current generation or prompt, mitigating the severe autoregressive failure mode of degenerate repetition loops.</p><p>Standard language models frequently fall into cyclic repetition (e.g., \"I don't know, I don't know, I don't know...\"). This occurs because predicting a token naturally increases the likelihood of predicting context-adjacent tokens, creating a runaway positive feedback loop once a phrase repeats even once.</p>\n\n  <p><b>Implementation (Keskar et al., 2019):</b> Before the softmax distribution is calculated, the raw logit \\( z_i \\) of every token \\( i \\) that is already present in the generated sequence is penalized by a multiplicative factor \\( \\theta > 1 \\) (typically 1.1 to 1.3):</p>\n\n  \\[ z_i' = \\begin{cases} z_i / \\theta & \\text{if } z_i > 0 \\text{ and } i \\in \\text{generated} \\\\ z_i \\cdot \\theta & \\text{if } z_i < 0 \\text{ and } i \\in \\text{generated} \\\\ z_i & \\text{otherwise} \\end{cases} \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Context -->\n      <text x=\"225\" y=\"40\" fill=\"#cbd5e0\" text-anchor=\"middle\" font-size=\"12\">Generated Context: \"... because the dog ran to the\"</text>\n      <!-- Logits Pre-Penalty -->\n      <rect x=\"50\" y=\"70\" width=\"140\" height=\"100\" fill=\"#2d3748\" rx=\"4\"/>\n      <text x=\"120\" y=\"90\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Raw Logits</text>\n      <text x=\"120\" y=\"115\" fill=\"#e2e8f0\" text-anchor=\"middle\" font-size=\"11\">\"dog\" : 5.0</text>\n      <text x=\"120\" y=\"135\" fill=\"#e2e8f0\" text-anchor=\"middle\" font-size=\"11\">\"park\" : 4.5</text>\n      <text x=\"120\" y=\"155\" fill=\"#e2e8f0\" text-anchor=\"middle\" font-size=\"11\">\"cat\" : -2.0</text>\n      <!-- Arrow -->\n      <path d=\"M 195 120 L 255 120\" stroke=\"#f6ad55\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521087736)\"/>\n      <text x=\"225\" y=\"110\" fill=\"#f6ad55\" text-anchor=\"middle\" font-size=\"10\">Penalty (θ=1.2)</text>\n      <!-- Logits Post-Penalty -->\n      <rect x=\"260\" y=\"70\" width=\"140\" height=\"100\" fill=\"#2d3748\" rx=\"4\"/>\n      <text x=\"330\" y=\"90\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Adjusted Logits</text>\n      <text x=\"330\" y=\"115\" fill=\"#fc8181\" text-anchor=\"middle\" font-size=\"11\">\"dog\" : 4.16</text>\n      <text x=\"330\" y=\"135\" fill=\"#68d391\" text-anchor=\"middle\" font-size=\"11\">\"park\" : 4.5</text>\n      <text x=\"330\" y=\"155\" fill=\"#fc8181\" text-anchor=\"middle\" font-size=\"11\">\"cat\" : -2.4</text>\n      \n      <defs>\n        <marker id=\"arrow_1772521087736\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Because \"dog\" was in the context, its positive logit is divided by \\( \\theta \\). A negative logit like \"cat\" (if it were in context) would be multiplied. Unseen tokens like \"park\" are untouched.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Variations",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Method</th>\n      <th style=\"padding:6px; text-align:left;\">Equation</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Frequency Penalty</b></td>\n      <td style=\"padding:6px;\">\\( z_i' = z_i - \\alpha \\cdot \\text{count}(i) \\) — penalty scales up the more it's repeated.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Presence Penalty</b></td>\n      <td style=\"padding:6px;\">\\( z_i' = z_i - \\beta \\cdot \\mathbb{1}[\\text{count}(i) > 0] \\) — constant penalty just for existing.</td>\n    </tr>\n  </table>\n\n  <p>Tuning is delicate. High repetition penalties severely degrade human-like syntax because structural words (the, a, is) are naturally meant to be repeated heavily.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "encoder-transformer",
+    "title": "Encoder (Transformer)",
+    "summary": "The half of the original Transformer architecture dedicated definitively to understanding : it processes the entirety of an input sequence bidirectionally in parallel using unmasked multi-head self-attention to generate deeply contextual…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "decoder-transformer",
+      "repetition-penalty"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The half of the original Transformer architecture dedicated definitively to <b>understanding</b>: it processes the entirety of an input sequence bidirectionally in parallel using unmasked multi-head self-attention to generate deeply contextualized vector representations of every token.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"350\" height=\"280\" viewBox=\"0 0 350 280\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"350\" height=\"280\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Block -->\n      <rect x=\"75\" y=\"40\" width=\"200\" height=\"200\" fill=\"#2d3748\" stroke=\"#4a5568\" stroke-width=\"2\" rx=\"4\"/>\n      <text x=\"175\" y=\"30\" fill=\"#fff\" font-weight=\"bold\" text-anchor=\"middle\">Encoder Layer Stack (xN)</text>\n      <!-- Sublayers -->\n      <rect x=\"100\" y=\"160\" width=\"150\" height=\"40\" fill=\"#e53e3e\" rx=\"4\"/>\n      <text x=\"175\" y=\"185\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Multi-Head Self-Attention</text>\n      \n      <rect x=\"100\" y=\"80\" width=\"150\" height=\"40\" fill=\"#dd6b20\" rx=\"4\"/>\n      <text x=\"175\" y=\"105\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">Feed-Forward Network</text>\n      \n      <!-- Residuals -->\n      <path d=\"M 175 220 L 175 200\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521098933)\"/>\n      <path d=\"M 175 160 L 175 120\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521098933)\"/>\n      <path d=\"M 175 80 L 175 60\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521098933)\"/>\n      \n      <!-- Skip connections -->\n      <path d=\"M 175 210 Q 80 210 80 180 Q 80 150 175 150\" stroke=\"#63b3ed\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772521098933)\"/>\n      <path d=\"M 175 130 Q 80 130 80 100 Q 80 70 175 70\" stroke=\"#63b3ed\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772521098933)\"/>\n      <text x=\"50\" y=\"140\" fill=\"#63b3ed\" font-size=\"10\" transform=\"rotate(-90 50 140)\">Add &amp; Norm</text>\n      \n      <defs>\n        <marker id=\"arrow_1772521098933\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>A single standard Transformer Encoder block layout. There is NO causal masking.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Inside the Encoder, the Multi-Head Self-Attention (MHSA) allows every single token to query and attend to <b>every other token in the sequence</b> simultaneously. The attention matrix is completely dense/unmasked. Because of this, it can flawlessly resolve forward and backward dependencies like pronouns or grammar structures.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Encoder-Only Models (e.g., BERT, RoBERTa)",
+        "body": "<p>By discarding the Decoder half entirely, you create an architecture strictly meant for analyzing text and outputting classification/regression labels. BERT trains this encoder via Masked Language Modeling (MLM)—randomly hiding tokens and forcing the bidirectional encoder to predict them based on surrounding forward and backward context.</p>\n\n  <p>Encoders are overwhelmingly superior to decoders at tasks that require reading comprehension, like Sentiment Analysis, Named Entity Recognition, or producing dense text embeddings (sentence-transformers).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "decoder-transformer",
+    "title": "Decoder (Transformer)",
+    "summary": "The component of a Transformer architecture responsible for generative sequence modeling . It enforces autoregressive generation by using causal (masked) self-attention to strictly prevent tokens from looking forward into the future.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "neural-language-model",
+      "encoder-transformer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Decoder (Transformer)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The component of a Transformer architecture responsible for <b>generative sequence modeling</b>. It enforces autoregressive generation by using <b>causal (masked) self-attention</b> to strictly prevent tokens from looking forward into the future.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"300\" viewBox=\"0 0 450 300\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"300\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Decoder-Only Stack -->\n      <rect x=\"40\" y=\"40\" width=\"160\" height=\"220\" fill=\"#2d3748\" rx=\"4\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n      <text x=\"120\" y=\"60\" fill=\"#fff\" font-weight=\"bold\" text-anchor=\"middle\" font-size=\"14\">Decoder-Only (GPT)</text>\n      <rect x=\"60\" y=\"90\" width=\"120\" height=\"40\" fill=\"#dd6b20\" rx=\"4\"/>\n      <text x=\"120\" y=\"115\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">Feed-Forward</text>\n      <rect x=\"60\" y=\"180\" width=\"120\" height=\"40\" fill=\"#e53e3e\" rx=\"4\"/>\n      <text x=\"120\" y=\"200\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">Masked</text>\n      <text x=\"120\" y=\"215\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">Self-Attention</text>\n      <path d=\"M 120 180 L 120 130\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521110965)\"/>\n      <path d=\"M 120 240 L 120 220\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521110965)\"/>\n      <path d=\"M 120 90 L 120 70\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521110965)\"/>\n      \n      <!-- Encoder-Decoder Stack -->\n      <rect x=\"250\" y=\"40\" width=\"160\" height=\"220\" fill=\"#2d3748\" rx=\"4\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n      <text x=\"330\" y=\"60\" fill=\"#fff\" font-weight=\"bold\" text-anchor=\"middle\" font-size=\"14\">Enc-Dec Decoder (T5)</text>\n      <rect x=\"270\" y=\"75\" width=\"120\" height=\"35\" fill=\"#dd6b20\" rx=\"4\"/>\n      <text x=\"330\" y=\"97\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">Feed-Forward</text>\n      <rect x=\"270\" y=\"130\" width=\"120\" height=\"35\" fill=\"#3182ce\" rx=\"4\"/>\n      <text x=\"330\" y=\"152\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">Cross-Attention</text>\n      <rect x=\"270\" y=\"185\" width=\"120\" height=\"35\" fill=\"#e53e3e\" rx=\"4\"/>\n      <text x=\"330\" y=\"207\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"11\">Masked Self-Attn</text>\n      \n      <path d=\"M 330 185 L 330 165\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521110965)\"/>\n      <path d=\"M 330 130 L 330 110\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521110965)\"/>\n      <path d=\"M 450 147 Q 410 147 390 147\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521110965)\"/>\n      <text x=\"430\" y=\"140\" fill=\"#68d391\" font-size=\"10\">From Encoder</text>\n\n      <defs>\n        <marker id=\"arrow_1772521110965\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Left: Modern Decoder-only block (GPT family). Right: Original Sequence-to-Sequence Decoder block containing the Cross-Attention mechanism.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mechanism of Causal Masking",
+        "body": "<p>To prevent cheating during training (predicting word \\( t \\) by just looking at word \\( t+1 \\)), an upper-triangular matrix of \\( -\\infty \\) is added to the pre-softmax attention query-key dot products. This forces token \\( i \\) to only attend to tokens \\( j \\le i \\).</p>\n  \\[ \\text{Attention}(Q,K,V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}} + M\\right)V \\]\n  <p>where \\( M_{ij} = -\\infty \\) for \\( j > i \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Variations",
+        "body": "<ul>\n    <li><b>Encoder-Decoder Decoders (T5, BART):</b> The decoder features an extra <b>Cross-Attention</b> layer right after the Masked Self-Attention. It uses its own hidden states as Queries (Q) but pulls Keys (K) and Values (V) from the final output of the isolated Encoder block. Ideal for Translation/Summarization.</li>\n    <li><b>Decoder-Only (GPT, Llama, Claude):</b> The entire model is just decoders. Prompt instructions are simply placed at the beginning of the sequence. It's vastly easier to scale and optimize via KV-Caching, leading to its total dominance in the LLM era.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "neural-language-model",
+    "title": "Neural Language Model",
+    "summary": "An autoregressive model that estimates the probability distribution over a sequence of words using Neural Networks, resolving the curse of dimensionality found in naive statistical N-Gram models by leveraging dense, continuous vector emb…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "semantic-space",
+      "decoder-transformer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2003 · Bengio et al. · A Neural Probabilistic Language Model",
+        "url": "https://jmlr.org/papers/volume3/bengio03a/bengio03a.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An autoregressive model that estimates the probability distribution over a sequence of words using Neural Networks, resolving the curse of dimensionality found in naive statistical N-Gram models by leveraging dense, continuous vector embeddings.</p><p>Before 2003, statistical Language Models simply counted word occurrence frequencies in text (N-Grams) and calculated Markov probabilities. If an exact 4-word phrase was never seen in training (which happens constantly due to the combinatorial explosion of language), its probability defaulted to zero.</p>\n\n  <p>Bengio's 2003 breakthrough introduced the <b>Neural Probabilistic Language Model</b>. By mapping every word vocabulary id \\( w_i \\) to a dense continuous vector (Word Embedding) via a lookup matrix \\( C(w_i) \\), similar words (like \"dog\" and \"cat\") are plotted close together in semantic space. Thus, if the network learned that \"the dog is running\", it will mathematically generalize to assign high probability to \"the cat is running\" even if it never saw that phrase during training.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Fundamental Objective",
+        "body": "<p>A Neural Language Model calculates the joint probability of a sequence as the product of conditional probabilities. The network is trained with Cross-Entropy Loss to predict the very next token:</p>\n  \\[ P(w_{1:T}) = \\prod_{t=1}^T P(w_t \\mid w_1, w_2, \\dots, w_{t-1}; \\theta) \\]\n\n  <table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Architecture Timeline</th>\n      <th style=\"padding:6px; text-align:left;\">Context Mechanism</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Feedforward NN (2003)</b></td>\n      <td style=\"padding:6px;\">Fixed-width sliding window. Context \\( n \\) is hardcoded.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>RNN / LSTM (2010-2015)</b></td>\n      <td style=\"padding:6px;\">Hidden state recurrently carried forward. Theoretically infinite context, but gradients vanish.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Transformer (2017+)</b></td>\n      <td style=\"padding:6px;\">Self-attention directly queries any historical token without sequential decay. Massive parallelization.</td>\n    </tr>\n  </tbody></table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "semantic-space",
+    "title": "Semantic Space",
+    "summary": "A continuous, high-dimensional mathematical vector space where human concepts (words, sentences, or images) are mapped as points such that geometric relationships like spatial proximity and directional vectors directly correspond to sema…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "information-retrieval",
+      "neural-language-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2013 · Mikolov et al. · Efficient Estimation of Word Representations in Vector Space",
+        "url": "https://arxiv.org/abs/1301.3781"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A continuous, high-dimensional mathematical vector space where human concepts (words, sentences, or images) are mapped as points such that geometric relationships like spatial proximity and directional vectors directly correspond to semantic meaning and relationships.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"250\" viewBox=\"0 0 400 250\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"250\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Axes -->\n      <line x1=\"200\" y1=\"20\" x2=\"200\" y2=\"230\" stroke=\"#4a5568\" stroke-width=\"1\"/>\n      <line x1=\"20\" y1=\"125\" x2=\"380\" y2=\"125\" stroke=\"#4a5568\" stroke-width=\"1\"/>\n      \n      <!-- Word2Vec Famous Analogy -->\n      <circle cx=\"80\" cy=\"180\" r=\"4\" fill=\"#63b3ed\"/>\n      <text x=\"80\" y=\"200\" fill=\"#63b3ed\" text-anchor=\"middle\" font-size=\"12\">Man</text>\n      <circle cx=\"280\" cy=\"180\" r=\"4\" fill=\"#fc8181\"/>\n      <text x=\"280\" y=\"200\" fill=\"#fc8181\" text-anchor=\"middle\" font-size=\"12\">Woman</text>\n      \n      <circle cx=\"120\" cy=\"60\" r=\"4\" fill=\"#63b3ed\"/>\n      <text x=\"120\" y=\"50\" fill=\"#63b3ed\" text-anchor=\"middle\" font-size=\"12\">King</text>\n      <circle cx=\"320\" cy=\"60\" r=\"4\" fill=\"#fc8181\"/>\n      <text x=\"320\" y=\"50\" fill=\"#fc8181\" text-anchor=\"middle\" font-size=\"12\">Queen</text>\n      \n      <!-- Vectors (Gender direction) -->\n      <path d=\"M 80 180 L 275 180\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521142537)\"/>\n      <path d=\"M 120 60 L 315 60\" stroke=\"#ecc94b\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521142537)\"/>\n      \n      <!-- Vectors (Royalty direction) -->\n      <path d=\"M 80 180 L 117 65\" stroke=\"#9ae6b4\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521142537)\"/>\n      <path d=\"M 280 180 L 317 65\" stroke=\"#9ae6b4\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521142537)\"/>\n\n      <defs>\n        <marker id=\"arrow_1772521142537\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fff\"/>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Translating the \"gender\" vector from \"King\" geometrically lands on \"Queen\". Spatial parallelism encodes semantic logic.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Semantic spaces computationally realize the <b>Distributional Hypothesis</b> of linguistics (Firth, 1957): <i>\"You shall know a word by the company it keeps.\"</i> Because similar terms appear in similar textual contexts across the internet, embedding networks assign them similar coordinates.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mathematical Properties",
+        "body": "<ul>\n    <li><b>Cosine Similarity:</b> Meaning similarity is measured via the angle between vectors (Cosine Similarity) rather than Euclidean distance to mitigate frequency sizing effects.</li>\n    <li><b>Compositional Algebra:</b> The space enables linear arithmetic. Most famously from Mikolov's Word2Vec: \\( \\vec{V}_{\\text{King}} - \\vec{V}_{\\text{Man}} + \\vec{V}_{\\text{Woman}} \\approx \\vec{V}_{\\text{Queen}} \\)</li>\n    <li><b>Cross-Lingual & Cross-Modal:</b> Encoders like CLIP map images and text into the exact same unified semantic space to perform Zero-Shot classification and image retrieval.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Static vs. Contextual Spaces:</b> FastText and Word2Vec are <i>Static</i>; the word \"bank\" occupies exactly one coordinate. Transformer embeddings (BERT, GPT) are <i>Contextual</i>; the output vector for \"bank\" dynamically moves through the semantic space based on the surrounding sentence (river vs. financial).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "information-retrieval",
+    "title": "Information Retrieval",
+    "summary": "The academic and engineering discipline of searching for information in a document, or searching for documents themselves within a massive unstructured repository in order to satisfy a specific user query or information need.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "logit-adjustment",
+      "semantic-space"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Information Retrieval"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The academic and engineering discipline of searching for information in a document, or searching for documents themselves within a massive unstructured repository in order to satisfy a specific user query or information need.</p><p>While IR is decades old, it has recently become the foundational pillar of the <b>RAG (Retrieval-Augmented Generation)</b> ecosystem for LLMs, allowing models to sidestep hallucination by verifying dynamic facts against a search database mid-generation.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Two Dominant Paradigms",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Method</th>\n      <th style=\"padding:6px; text-align:left;\">Mechanism</th>\n      <th style=\"padding:6px; text-align:left;\">Pros & Cons</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Sparse Retrieval (Lexical)</b></td>\n      <td style=\"padding:6px;\">Term-frequency statistics like <b>BM25</b> and TF-IDF against an Inverted Index.</td>\n      <td style=\"padding:6px;\">Extremely fast. Interpretable. Matches exact jargon/IDs. Terrible at synonyms or semantic intent.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Dense Retrieval (Semantic)</b></td>\n      <td style=\"padding:6px;\">Passing queries and documents through an Embedding Model (e.g., Bi-Encoder) and performing Approximate Nearest Neighbor via Cosine Similarity in Semantic Space.</td>\n      <td style=\"padding:6px;\">Understands profound context and synonyms. Slow. Fails on exact arbitrary alphanumeric keyword lookups.</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Hybrid Search:</b> State-of-the-Art systems use both algorithms parallelly, merging their sorted ranking lists mathematically utilizing Reciprocal Rank Fusion (RRF).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Evaluation Metrics",
+        "body": "<ul>\n    <li><b>Precision@k:</b> The percentage of the retrieved top-\\k documents that are actually relevant.</li>\n    <li><b>Recall@k:</b> The percentage of total relevant documents existing in the database that successfully appeared in the top-\\k.</li>\n    <li><b>NDCG (Normalized Discounted Cumulative Gain):</b> A metric assigning heavy value to putting the highly relevant results at the very top (Rank 1/2) as opposed to Rank 9/10, modeling human attention span.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "logit-adjustment",
+    "title": "Logit Adjustment",
+    "summary": "A suite of techniques executed immediately prior to the Softmax function that add or subtract specific algebraic biases directly to the raw output logits, enabling post-hoc control, debiasing, or constraint enforcement without necessitat…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "softmax-normalization",
+      "information-retrieval"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2021 · Menon et al. · Long-Tail Learning via Logit Adjustment",
+        "url": "https://arxiv.org/abs/2007.07314"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A suite of techniques executed immediately prior to the Softmax function that add or subtract specific algebraic biases directly to the raw output logits, enabling post-hoc control, debiasing, or constraint enforcement without necessitating any model retraining.</p><p>The beauty of the neural network logit space \\( z_i \\) is that it is fundamentally additive. Intervening directly on logits is a fast, computationally negligible, interpretation-friendly method to override standard behavior.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "1. Correcting Long-Tail Class Imbalance (Menon et al., 2021)",
+        "body": "<p>Standard training forces a neural network to wildly over-predict the majority class. If you know the prior training distribution probabilities \\( \\pi_y \\) for every class \\( y \\), you can subtract the log-prior from the logit at evaluation time to construct a Bayes-Optimal balanced classifier algebraically:</p>\n  \\[ z_y' = z_y - \\tau \\log \\pi_y \\]\n  <p>Rare classes possess tiny negative logarithms, making \\( - \\log \\pi_y \\) a massive positive value that pushes up the raw logit score, saving the class.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "2. Autoregressive Constrained Decoding",
+        "body": "<p>To mathematically force an LLM to output valid JSON or adhere to a specific grammar, parsers (like Outlines/Guidance) run a finite state machine algorithm mid-generation. If generating a specific alphabetical token violates the schema, the platform simply overwrites that token's logit:</p>\n  \\[ z_{\\text{invalid}} = -\\infty \\]\n  <p>Post-softmax, the probability is precisely \\( 0.0 \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "3. Advanced Inference Controls",
+        "body": "<ul>\n    <li><b>Classifier-Free Guidance (CFG):</b> Very common in Diffusion models (Stable Diffusion) but extending to text. Subtracts unconditional logits from conditional logits \\( (Z_{cond} - Z_{uncond}) \\cdot W \\) to force the generator to amplify whatever uniquely defines the prompt.</li>\n    <li><b>Contrastive Decoding:</b> Subtracting a \"small dumb model's\" logits from a \"large smart model's\" logits to force the large model to output only sophisticated, high-quality tokens.</li>\n    <li><b>Repetition Penalties:</b> Dividing or subtracting generated token logits via simple heuristics.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "softmax-normalization",
+    "title": "Softmax Normalization",
+    "summary": "The standard algebraic function used as the final layer in classification neural networks, responsible for mapping a vector of arbitrarily scaled real-valued numbers (logits) into a mathematically valid, normalized probability distribution.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "over-parameterization",
+      "logit-adjustment"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Softmax Normalization"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The standard algebraic function used as the final layer in classification neural networks, responsible for mapping a vector of arbitrarily scaled real-valued numbers (logits) into a mathematically valid, normalized probability distribution.</p><p>Given a vector of raw logits \\( z \\) output from the last layer, the Softmax function for the \\( i \\)-th class is:</p>\n  \\[ \\sigma(z_i) = \\frac{e^{z_i}}{\\sum_{j=1}^{K} e^{z_j}} \\]\n  \n  <p>By exponentially amplifying \\( e^{z} \\), it ensures all values are strictly positive. The division by the denominator sum guarantees the entire vector adds up to precisely \\( 1.0 \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"150\" viewBox=\"0 0 450 150\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"150\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Logits -->\n      <rect x=\"30\" y=\"40\" width=\"80\" height=\"70\" fill=\"#2d3748\" rx=\"4\" stroke=\"#4a5568\"/>\n      <text x=\"70\" y=\"60\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">z1: 2.0</text>\n      <text x=\"70\" y=\"80\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">z2: 1.0</text>\n      <text x=\"70\" y=\"100\" fill=\"#fc8181\" text-anchor=\"middle\" font-size=\"12\">z3: -0.5</text>\n      <text x=\"70\" y=\"25\" fill=\"#a0aec0\" text-anchor=\"middle\" font-size=\"11\">Raw Logits</text>\n      <!-- e^z -->\n      <path d=\"M 120 75 Q 140 75 160 50\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772521179280)\"/>\n      <path d=\"M 120 75 L 160 75\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521179280)\"/>\n      <path d=\"M 120 75 Q 140 75 160 100\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772521179280)\"/>\n      \n      <rect x=\"170\" y=\"40\" width=\"80\" height=\"70\" fill=\"#4a5568\" rx=\"4\"/>\n      <text x=\"210\" y=\"60\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">7.39</text>\n      <text x=\"210\" y=\"80\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">2.72</text>\n      <text x=\"210\" y=\"100\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">0.61</text>\n      <text x=\"210\" y=\"25\" fill=\"#a0aec0\" text-anchor=\"middle\" font-size=\"11\">Exponentiate</text>\n      \n      <!-- Normalize -->\n      <path d=\"M 260 75 L 300 75\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521179280)\"/>\n      <text x=\"280\" y=\"65\" fill=\"#63b3ed\" text-anchor=\"middle\" font-size=\"10\">/ Sum (10.72)</text>\n      \n      <!-- Probabilities -->\n      <rect x=\"310\" y=\"40\" width=\"100\" height=\"70\" fill=\"#2f855a\" rx=\"4\"/>\n      <text x=\"360\" y=\"60\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">p1: 69.0%</text>\n      <text x=\"360\" y=\"80\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">p2: 25.3%</text>\n      <text x=\"360\" y=\"100\" fill=\"#fff\" text-anchor=\"middle\" font-size=\"12\">p3:  5.6%</text>\n      <text x=\"360\" y=\"25\" fill=\"#a0aec0\" text-anchor=\"middle\" font-size=\"11\">Probabilities</text>\n      \n      <defs>\n        <marker id=\"arrow_1772521179280\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Softmax heavily amplifies the highest value due to exponential operations.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Translation Invariance Trick (Numerical Stability)",
+        "body": "<p>Exponentiating standard model logits regularly causes \\( e^{300} \\) `float32` Overflow (Infinity/NaN errors) during code implementation. Because Softmax divides the exponent by the algebraic sum array, subtracting a uniform constant from all \\( z \\) values identically preserves the output probabilities. Frameworks like PyTorch execute a <b>log-sum-exp trick</b>: subtract the maximum logit \\( \\max(z) \\) from every input prior to exponentiation.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Temperature Scaling",
+        "body": "<p>Dividing all logits by a temperature scalar \\( \\tau \\) before softmax modifies distribution shape:</p>\n  \\[ \\sigma(z_i; \\tau) = \\frac{e^{z_i / \\tau}}{\\sum_j e^{z_j / \\tau}} \\]\n  <ul>\n    <li>High \\( \\tau \\) (\\( > 1 \\)): Flattens the distribution towards uniform entropy. Extensively used in Knowledge Distillation arrays (Hinton).</li>\n    <li>Low \\( \\tau \\) (\\( < 1 \\)): Artificially sharpens the dominant highest values. Approaching \\( \\tau = 0.0 \\) renders Softmax to a strict `argmax` one-hot configuration.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "over-parameterization",
+    "title": "Over-Parameterization",
+    "summary": "The mathematical paradigm defining modern Deep Learning where a model houses dramatically more trainable parameters than the total number of data training points it sees, yet contradicts classical statistical theory by demonstrating elit…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "domain-specific-pretraining",
+      "softmax-normalization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Belkin et al. · Reconciling modern machine-learning practice and the bias-variance trade-off",
+        "url": "https://arxiv.org/abs/1812.11118"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The mathematical paradigm defining modern Deep Learning where a model houses dramatically more trainable parameters than the total number of data training points it sees, yet contradicts classical statistical theory by demonstrating elite generalization rather than catastrophic overfitting.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"250\" viewBox=\"0 0 450 250\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"250\" fill=\"#1a202c\" rx=\"8\"></rect>\n      <!-- Axes -->\n      <line x1=\"50\" y1=\"200\" x2=\"400\" y2=\"200\" stroke=\"#cbd5e0\" stroke-width=\"2\"></line>\n      <line x1=\"50\" y1=\"30\" x2=\"50\" y2=\"200\" stroke=\"#cbd5e0\" stroke-width=\"2\"></line>\n      \n      <text x=\"225\" y=\"235\" fill=\"#cbd5e0\" text-anchor=\"middle\" font-size=\"14\">Model Expressive Capacity (Parameters)</text>\n      <text x=\"25\" y=\"115\" fill=\"#cbd5e0\" font-size=\"14\" transform=\"rotate(-90 25 115)\" text-anchor=\"middle\">Test Error</text>\n      \n      <!-- Classical Curve -->\n      <path d=\"M 50 60 Q 120 180 180 100\" stroke=\"#fc8181\" stroke-width=\"3\" fill=\"none\" stroke-dasharray=\"4\"></path>\n      \n      <!-- Modern DL Double Descent Curve -->\n      <path d=\"M 180 100 Q 200 40 220 100\" stroke=\"#63b3ed\" stroke-width=\"3\" fill=\"none\"></path>\n      <path d=\"M 220 100 Q 280 180 390 190\" stroke=\"#68d391\" stroke-width=\"3\" fill=\"none\"></path>\n      \n      <!-- Zones -->\n      <line x1=\"200\" y1=\"30\" x2=\"200\" y2=\"200\" stroke=\"#a0aec0\" stroke-width=\"1\" stroke-dasharray=\"2\"></line>\n      <text x=\"125\" y=\"45\" fill=\"#fc8181\" text-anchor=\"middle\" font-size=\"12\">Classical U-Shape</text>\n      <text x=\"300\" y=\"45\" fill=\"#68d391\" text-anchor=\"middle\" font-size=\"12\">Modern Over-Parameterization</text>\n      \n      <!-- Labels -->\n      <text x=\"200\" y=\"20\" fill=\"#cbd5e0\" text-anchor=\"middle\" font-size=\"10\">Interpolation</text>\n      <text x=\"200\" y=\"215\" fill=\"#cbd5e0\" text-anchor=\"middle\" font-size=\"10\">Threshold</text>\n      \n      <text x=\"280\" y=\"100\" fill=\"#63b3ed\" font-size=\"12\" font-style=\"italic\">Double Descent</text>\n    </svg>\n    <p style=\"margin-top:8px; font-size:0.9em; color:#555;\"><i>Belkin's \"Double Descent\" curve showing test error decreasing as networks grow vastly beyond classical limits.</i></p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Classical statistical theory posits the <b>Bias-Variance Trade-off</b>: simpler algorithms underfit (bias), complex algorithms eventually fit exactly through noise (overfit/variance), forming a U-shape curve. </p>\n\n  <p>However, Belkin et al. (2019) quantified the <b>Double Descent</b> phenomenon. Once a neural network reaches the \"Interpolation Threshold\" (possessing just enough parameters to blindly memorize and perfectly fit 100% of training data exactly), adding even *more* parameters causes Test Error to ironically plummet a second time.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Reasons for Generalization in Over-Parameterization",
+        "body": "<ul>\n    <li><b>Implicit Regularization:</b> Gradient Descent implicitly prefers the widest, smoothest, and most minimal-norm solutions among the theoretically infinite configurations that yield zero training loss.</li>\n    <li><b>Lottery Ticket Hypothesis:</b> The bigger the network randomly initialized, the far higher probability it contains a smaller \"sub-network\" perfectly positioned to rapidly optimize the task logic gradient.</li>\n    <li><b>Smooth Loss Landscaping:</b> Huge parameter dimensions provide optimizer routes to navigate around gradient dead-ends, reducing local minima traps.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "domain-specific-pretraining",
+    "title": "Domain-Specific Pretraining",
+    "summary": "The secondary phase executed immediately following general internet pre-training, where a Language Model is trained autoregressively on a gigantic specialized corpus (e.g. Biomedical Data) utilizing self-supervised loss, prior to supervi…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "repetition-penalty",
+      "over-parameterization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Gururangan et al. · Don't Stop Pretraining: Adapt Language Models to Domains and Tasks",
+        "url": "https://arxiv.org/abs/2004.10964"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The secondary phase executed immediately following general internet pre-training, where a Language Model is trained autoregressively on a gigantic specialized corpus (e.g. Biomedical Data) utilizing self-supervised loss, prior to supervised instruction tuning.</p><p>Also recognized under the acronym **DAPT** (Domain-Adaptive PreTraining). While standard generic models like baseline Llama 3 comprehend general English syntax perfectly, they mathematically drown trying to reason through esoteric hyper-academic syntax, advanced Python syntax trees, or clinical genomic abbreviations.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The 3-Step LLM Training Lifecycle",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Phase</th>\n      <th style=\"padding:6px; text-align:left;\">Data Type</th>\n      <th style=\"padding:6px; text-align:left;\">Goal</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>1. General Pre-Training</b></td>\n      <td style=\"padding:6px;\">1-20 Trillion Tokens (CommonCrawl Web)</td>\n      <td style=\"padding:6px;\">Language syntax, grammar, general facts.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px; font-weight:bold; color:#2b6cb0;\">2. Domain Pre-Training</td>\n      <td style=\"padding:6px;\">500 Billion Tokens (PubMed / GitHub / LexisNexis)</td>\n      <td style=\"padding:6px;\">Injecting niche lexicon, professional syntax structures, and deep context alignment.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>3. Fine-Tuning (SFT / RLHF)</b></td>\n      <td style=\"padding:6px;\">10k - 100k curated Q&amp;A Pairs</td>\n      <td style=\"padding:6px;\">Instruction following, formatting, and safety guardrails.</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mechanisms of Improvement",
+        "body": "<ul>\n    <li><b>Vocabulary Shifting:</b> Distributional meanings shift violently across domains. The word \"positive\" is uplifting in a generic dataset, but highly concerning in medical records. DAPT aligns semantic vector spaces to the target industry's expectation.</li>\n    <li><b>Tokenizer Expansion:</b> Often engineers deliberately inject hundreds of new niche acronyms/tokens to the tokenizer during DAPT so the network avoids violently shattering terminology into individual meaningless subwords.</li>\n  </ul>\n\n  <p>Notable historic examples of this progression include extracting <b>CodeLlama</b> heavily from Llama 2 via DAPT on parsed codebases, and establishing <b>BioBERT / SciBERT / LegalBERT</b>.</p>"
+      }
+    ],
+    "cards": []
   }
 ]
