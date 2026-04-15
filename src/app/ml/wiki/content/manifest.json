@@ -4964,6 +4964,231 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "qlora-quantized-lora",
+      "title": "QLoRA (Quantized LoRA)",
+      "summary": "A parameter-efficient fine-tuning method that combines 4-bit quantisation of the frozen base model with LoRA adapters trained in higher precision (BFloat16). QLoRA enables fine-tuning of 65B+ parameter models on a single 48GB GPU with ne…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "optimization",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "base-model",
+        "hallucination"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "base-model",
+      "title": "Base Model",
+      "summary": "A pretrained language model before any supervised fine-tuning or alignment. The base model is trained solely on next-token prediction over a large corpus and produces raw text completions — it does not inherently follow instructions, eng…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "open-weight-model",
+        "qlora-quantized-lora"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "open-weight-model",
+      "title": "Open-Weight Model",
+      "summary": "A model whose trained weights are publicly released, allowing anyone to download, run, fine-tune, and inspect the model. The term \"open-weight\" is more precise than \"open-source,\" as most released models do not include training code, dat…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "sampling-in-language-models",
+        "base-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sampling-in-language-models",
+      "title": "Sampling (in Language Models)",
+      "summary": "The process of selecting the next token from the model's predicted probability distribution during text generation. Different sampling strategies (greedy, top-k, top-p, temperature) trade off between diversity and quality, and their corr…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "greedy-decoding",
+        "open-weight-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "greedy-decoding",
+      "title": "Greedy Decoding",
+      "summary": "A deterministic decoding strategy that always selects the token with the highest probability at each generation step. It is the simplest decoding method but often produces repetitive, degenerate text because it never explores lower-proba…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "top-k-sampling",
+        "sampling-in-language-models"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "top-k-sampling",
+      "title": "Top-k Sampling",
+      "summary": "A sampling strategy that restricts the next-token choice to the \\( k \\) most probable tokens, then renormalises the distribution and samples from it. This prevents the model from selecting very low-probability (often nonsensical) tokens…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "top-p-sampling-nucleus-sampling",
+        "greedy-decoding"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "top-p-sampling-nucleus-sampling",
+      "title": "Top-p Sampling (Nucleus Sampling)",
+      "summary": "A sampling strategy that selects from the smallest set of tokens whose cumulative probability exceeds a threshold \\( p \\). Unlike top-k (which uses a fixed number of tokens), top-p adapts the candidate set to the shape of the distributio…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "frequency-penalty",
+        "top-k-sampling"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "frequency-penalty",
+      "title": "Frequency Penalty",
+      "summary": "A decoding-time parameter that reduces the logit of a token proportionally to how many times it has already appeared in the generated text. It penalises repeated tokens more heavily the more often they occur, encouraging lexical diversit…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "presence-penalty",
+        "top-p-sampling-nucleus-sampling"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "presence-penalty",
+      "title": "Presence Penalty",
+      "summary": "A decoding-time parameter that applies a flat penalty to any token that has appeared at least once in the generated text, regardless of how many times it occurred. Unlike frequency penalty (which scales with count), presence penalty is b…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "hallucination",
+        "frequency-penalty"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "hallucination",
+      "title": "Hallucination",
+      "summary": "The generation of text that is fluent and confident but factually incorrect, unsupported by the input, or internally inconsistent. Hallucinations are a fundamental challenge of LLMs because the training objective (next-token prediction)…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "qlora-quantized-lora",
+        "presence-penalty"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

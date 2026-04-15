@@ -10708,5 +10708,519 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "qlora-quantized-lora",
+    "title": "QLoRA (Quantized LoRA)",
+    "summary": "A parameter-efficient fine-tuning method that combines 4-bit quantisation of the frozen base model with LoRA adapters trained in higher precision (BFloat16). QLoRA enables fine-tuning of 65B+ parameter models on a single 48GB GPU with ne…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "optimization",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "base-model",
+      "hallucination"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Tim Dettmers, Artidoro Pagnoni, Ari Holtzman, Luke Zettlemoyer · QLoRA: Efficient Finetuning of Quantized Language Models",
+        "url": "https://arxiv.org/abs/2305.14314"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A parameter-efficient fine-tuning method that combines 4-bit quantisation of the frozen base model with LoRA adapters trained in higher precision (BFloat16). QLoRA enables fine-tuning of 65B+ parameter models on a single 48GB GPU with negligible quality loss compared to full 16-bit fine-tuning.</p><p>QLoRA builds on LoRA's insight — that fine-tuning updates have low intrinsic rank — and adds aggressive quantisation of the frozen base weights to slash memory. It introduces three technical innovations:</p>\n\n<ol>\n<li><b>4-bit NormalFloat (NF4):</b> A quantisation data type that is information-theoretically optimal for normally-distributed values. Neural network weights are approximately Gaussian after pretraining, so NF4 places quantisation bins at the quantiles of \\( \\mathcal{N}(0, 1) \\), ensuring each bin covers equal probability mass. This outperforms both uniform 4-bit quantisation and FP4.</li>\n<li><b>Double quantisation:</b> Standard block-wise quantisation stores one FP32 scale factor per block of 64 weights, adding 0.5 bits/param overhead. Double quantisation quantises these scale factors themselves (from FP32 to FP8 with block size 256), reducing the overhead to ~0.127 bits/param — a net saving of ~0.37 bits/param across the whole model.</li>\n<li><b>Paged optimizers:</b> Uses NVIDIA unified memory (CPU↔GPU automatic paging) to handle optimizer state memory spikes during gradient checkpointing. When a long sequence triggers a memory spike, optimizer states are evicted to CPU RAM and paged back in when needed.</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Forward pass",
+        "body": "\\[ h = W_{\\text{BF16}}x + \\frac{\\alpha}{r}BAx \\quad \\text{where} \\quad W_{\\text{BF16}} = \\text{dequant}(W_{\\text{NF4}}) \\]\n\n<p>where \\( W_{\\text{NF4}} \\) are the frozen base weights stored in 4-bit NF4, dequantised to BF16 for each forward pass; \\( B \\in \\mathbb{R}^{d \\times r} \\) and \\( A \\in \\mathbb{R}^{r \\times k} \\) are the LoRA adapter matrices in BF16; \\( r \\) is the adapter rank (typically 16–64); and \\( \\alpha \\) is the LoRA scaling factor. Only \\( A \\) and \\( B \\) receive gradients — the base weights are never updated.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Memory breakdown",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Base weights</th><th style=\"padding:6px; text-align:left;\">Memory (65B)</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Full fine-tune (FP16)</td><td style=\"padding:6px;\">16-bit + optimizer states</td><td style=\"padding:6px;\">~780 GB</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LoRA (FP16 base)</td><td style=\"padding:6px;\">16-bit frozen</td><td style=\"padding:6px;\">~130 GB</td></tr>\n<tr><td style=\"padding:6px;\">QLoRA (NF4 base)</td><td style=\"padding:6px;\">4-bit frozen + BF16 adapters</td><td style=\"padding:6px;\">~33 GB</td></tr>\n</table>\n\n<p>Dettmers et al. demonstrated that QLoRA matches 16-bit full fine-tuning on the MMLU benchmark across model scales (7B–65B). Their Guanaco model family (QLoRA-tuned LLaMA) achieved 99.3% of ChatGPT performance on the Vicuna benchmark. The practical impact was enormous: researchers could fine-tune the largest open models on consumer GPUs (a single A100 or even an RTX 3090 for smaller models), democratising access to LLM customisation that previously required clusters.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to other methods:</b> QLoRA is complementary to other efficiency techniques. It can be combined with FlashAttention for further memory savings during the forward pass, and with gradient checkpointing (which QLoRA's paged optimizers specifically support). The NF4 format also influenced subsequent quantisation research such as GPTQ and AWQ.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "base-model",
+    "title": "Base Model",
+    "summary": "A pretrained language model before any supervised fine-tuning or alignment. The base model is trained solely on next-token prediction over a large corpus and produces raw text completions — it does not inherently follow instructions, eng…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "open-weight-model",
+      "qlora-quantized-lora"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Concept crystallised with the rise of instruction tuning; formalised by InstructGPT · 2022 · Ouyang et al. · Training language models to follow instructions with human feedback",
+        "url": "https://arxiv.org/abs/2203.02155"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A pretrained language model before any supervised fine-tuning or alignment. The base model is trained solely on next-token prediction over a large corpus and produces raw text completions — it does not inherently follow instructions, engage in dialogue, or exhibit safety behaviours.</p><p>The base model is the product of the pretraining stage, where the model learns to minimise the autoregressive cross-entropy loss:</p>\n\n\\[ \\mathcal{L}_{\\text{pretrain}} = -\\sum_{t=1}^{T} \\log P_\\theta(x_t \\mid x_{&lt;t}) \\]\n\n<p>This objective teaches the model the statistical structure of language — grammar, facts, reasoning patterns, code — but not how to be a helpful assistant. Given a prompt, a base model generates the most likely continuation according to the training distribution. Its behaviour is best understood as \"autocomplete\" rather than \"question answering\":</p>\n\n<ul>\n<li>Given a question, it may continue with more questions (mimicking a quiz format from training data)</li>\n<li>Given a code comment, it may write the corresponding function</li>\n<li>Given a dialogue prefix, it may produce a plausible next turn — but also frequently breaks format</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Base model vs. instruction-tuned model",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Behaviour</th><th style=\"padding:6px; text-align:left;\">Base model</th><th style=\"padding:6px; text-align:left;\">Instruction-tuned</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\"What is the capital of France?\"</td><td style=\"padding:6px;\">May continue with more quiz questions</td><td style=\"padding:6px;\">\"The capital of France is Paris.\"</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Safety</td><td style=\"padding:6px;\">No guardrails</td><td style=\"padding:6px;\">Trained to refuse harmful requests</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Dialogue</td><td style=\"padding:6px;\">Does not naturally take turns</td><td style=\"padding:6px;\">Follows User/Assistant format</td></tr>\n<tr><td style=\"padding:6px;\">Prompting</td><td style=\"padding:6px;\">Requires few-shot or careful formatting</td><td style=\"padding:6px;\">Works well with zero-shot instructions</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The alignment pipeline</b> transforms a base model into an assistant through several stages: (1) supervised fine-tuning (SFT) on instruction–response pairs, (2) reward model training on human preference data, and (3) reinforcement learning from human feedback (RLHF) or direct preference optimisation (DPO). Each stage is relatively cheap compared to pretraining — typically &lt;1% of the pretraining compute.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The superficial alignment hypothesis</b> (Zhou et al., 2023) argues that SFT and RLHF primarily teach the model a <i>format</i> — how to structure helpful, harmless responses — rather than adding new knowledge. Evidence: instruction-tuned models rarely outperform base models on knowledge benchmarks; a few thousand high-quality SFT examples suffice; and base models can be prompted to exhibit aligned behaviour with careful formatting (e.g., the Alpaca prompt template).</p>\n\n<p>Base models are released by organisations as starting points for downstream customisation (e.g., LLaMA, Mistral, Falcon, Gemma). They are also used directly for tasks where raw completion is desirable: perplexity evaluation, text infilling, data augmentation, and research into model internals (mechanistic interpretability studies typically use base models to avoid confounds from alignment training).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "open-weight-model",
+    "title": "Open-Weight Model",
+    "summary": "A model whose trained weights are publicly released, allowing anyone to download, run, fine-tune, and inspect the model. The term \"open-weight\" is more precise than \"open-source,\" as most released models do not include training code, dat…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "sampling-in-language-models",
+      "base-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "LLaMA release (Meta, Feb 2023) catalysed the open-weight movement · LLaMA: Open and Efficient Foundation Language Models",
+        "url": "https://arxiv.org/abs/2302.13971"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A model whose trained weights are publicly released, allowing anyone to download, run, fine-tune, and inspect the model. The term \"open-weight\" is more precise than \"open-source,\" as most released models do not include training code, data, or fully permissive licences.</p><p>The distinction between \"open-source\" and \"open-weight\" became important as large language models were released with restrictions that violated the Open Source Initiative's definition. A truly open-source model would include weights, training code, data, and a permissive licence (OSI-approved). Most \"open\" model releases provide only the weights under a custom licence — hence \"open-weight\" is the accurate descriptor.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The spectrum of model openness",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Level</th><th style=\"padding:6px; text-align:left;\">What's released</th><th style=\"padding:6px; text-align:left;\">Examples</th><th style=\"padding:6px; text-align:left;\">Licence type</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Closed / API-only</td><td style=\"padding:6px;\">Nothing; access via API</td><td style=\"padding:6px;\">GPT-4, Claude, Gemini</td><td style=\"padding:6px;\">Terms of service</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Open-weight (restricted)</td><td style=\"padding:6px;\">Weights + custom licence</td><td style=\"padding:6px;\">LLaMA 1 (non-commercial), Gemma</td><td style=\"padding:6px;\">Custom / community</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Open-weight (permissive)</td><td style=\"padding:6px;\">Weights + permissive licence</td><td style=\"padding:6px;\">LLaMA 3, Mistral, Qwen 2</td><td style=\"padding:6px;\">Meta licence, Apache 2.0</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Open-weight + data</td><td style=\"padding:6px;\">Weights + training data details</td><td style=\"padding:6px;\">OLMo (Dolma dataset)</td><td style=\"padding:6px;\">Apache 2.0</td></tr>\n<tr><td style=\"padding:6px;\">Fully open source</td><td style=\"padding:6px;\">Weights + code + data + OSI licence</td><td style=\"padding:6px;\">Pythia, OLMo</td><td style=\"padding:6px;\">Apache 2.0</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Licence landscape:</b> LLaMA 1 (Feb 2023) was leaked rather than openly released, but its weights spread rapidly, catalysing an ecosystem of fine-tunes (Alpaca, Vicuna). LLaMA 2 (Jul 2023) was officially released with a commercial licence that prohibited use by companies with &gt;700M monthly active users. Mistral released its 7B model under Apache 2.0, establishing a more permissive precedent. The licence choice significantly affects downstream adoption: Apache 2.0 and MIT models see far more community fine-tuning and deployment than restricted-licence models.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Why open-weight models matter for ML research",
+        "body": "<ul>\n<li><b>Mechanistic interpretability:</b> Researchers need weight access to study internal representations, attention patterns, and circuits</li>\n<li><b>Fine-tuning and adaptation:</b> QLoRA, LoRA, and full fine-tuning require weight access</li>\n<li><b>Safety research:</b> Red-teaming, alignment research, and jailbreak analysis require inspecting model internals</li>\n<li><b>Reproducibility:</b> API-only models can change without notice; local weights are immutable</li>\n<li><b>Cost:</b> Self-hosting eliminates per-token API fees at scale</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Safety tension:</b> Open weights are irreversible — once published, they cannot be recalled. This creates a dual-use concern: the same openness that enables safety research also enables misuse without guardrails. This debate shaped Meta's staged approach (LLaMA 1 restricted → LLaMA 3 more permissive) and informs ongoing policy discussions about model release practices.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "sampling-in-language-models",
+    "title": "Sampling (in Language Models)",
+    "summary": "The process of selecting the next token from the model's predicted probability distribution during text generation. Different sampling strategies (greedy, top-k, top-p, temperature) trade off between diversity and quality, and their corr…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "greedy-decoding",
+      "open-weight-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Ari Holtzman, Jan Buys, Li Du, Maxwell Forbes, Yejin Choi · The Curious Case of Neural Text Degeneration",
+        "url": "https://arxiv.org/abs/1904.09751"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The process of selecting the next token from the model's predicted probability distribution during text generation. Different sampling strategies (greedy, top-k, top-p, temperature) trade off between diversity and quality, and their correct configuration is critical for practical LLM deployment.</p><p>At each autoregressive generation step \\( t \\), the model outputs logits \\( z \\in \\mathbb{R}^{|V|} \\) over the vocabulary \\( V \\). These are converted to probabilities via softmax with temperature \\( T \\):</p>\n\n\\[ P(x_t = v \\mid x_{&lt;t}) = \\frac{\\exp(z_v / T)}{\\sum_{v' \\in V} \\exp(z_{v'} / T)} \\]\n\n<p>where \\( T &gt; 0 \\) is the temperature parameter. As \\( T \\to 0 \\), the distribution collapses to a point mass on the argmax (greedy decoding). As \\( T \\to \\infty \\), the distribution approaches uniform.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Common sampling strategies",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Strategy</th><th style=\"padding:6px; text-align:left;\">Mechanism</th><th style=\"padding:6px; text-align:left;\">Key parameter</th><th style=\"padding:6px; text-align:left;\">Diversity</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Greedy</td><td style=\"padding:6px;\">\\( x_t = \\arg\\max_v P(v) \\)</td><td style=\"padding:6px;\">—</td><td style=\"padding:6px;\">None</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Beam search</td><td style=\"padding:6px;\">Maintain top-\\(B\\) sequence hypotheses</td><td style=\"padding:6px;\">\\( B \\) (beam width)</td><td style=\"padding:6px;\">Low</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Temperature</td><td style=\"padding:6px;\">Scale logits by \\( 1/T \\)</td><td style=\"padding:6px;\">\\( T \\in (0, \\infty) \\)</td><td style=\"padding:6px;\">Tunable</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Top-k</td><td style=\"padding:6px;\">Restrict to \\( k \\) highest-prob tokens, renormalise</td><td style=\"padding:6px;\">\\( k \\) (e.g., 40–100)</td><td style=\"padding:6px;\">Moderate</td></tr>\n<tr><td style=\"padding:6px;\">Top-p (nucleus)</td><td style=\"padding:6px;\">Restrict to smallest set with cumulative prob \\( \\geq p \\)</td><td style=\"padding:6px;\">\\( p \\) (e.g., 0.9–0.95)</td><td style=\"padding:6px;\">Adaptive</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Typical inference pipeline:</b> These strategies are composed sequentially: (1) compute logits, (2) apply temperature scaling, (3) apply top-k filtering, (4) apply top-p filtering within the remaining candidates, (5) apply repetition/frequency/presence penalties, (6) sample from the resulting distribution. The order matters — temperature before filtering changes how many tokens survive the cutoff.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why greedy/beam search fail for open-ended generation:</b> Holtzman et al. (2020) showed that human-written text has surprisingly high per-token perplexity — humans routinely choose tokens outside the top-1 or top-10. Maximisation-based decoding produces text that is unnaturally peaked and repetitive, falling into a \"degeneration\" loop. Nucleus sampling was proposed specifically to match the entropy profile of human language.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Practical guidance:</b> For factual/structured tasks (classification, extraction, code with tests), low temperature or greedy decoding is preferred for reliability. For creative/conversational tasks, \\( T \\approx 0.7\\text{–}1.0 \\) with \\( p \\approx 0.9 \\) is a common default. Setting both \\( k \\) and \\( p \\) provides a safety net: top-k prevents extreme tail sampling; top-p adapts the effective candidate set to confidence.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "greedy-decoding",
+    "title": "Greedy Decoding",
+    "summary": "A deterministic decoding strategy that always selects the token with the highest probability at each generation step. It is the simplest decoding method but often produces repetitive, degenerate text because it never explores lower-proba…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "top-k-sampling",
+      "sampling-in-language-models"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Fundamental decoding strategy; degeneration formally analysed · 2020 · Holtzman et al. · The Curious Case of Neural Text Degeneration",
+        "url": "https://arxiv.org/abs/1904.09751"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A deterministic decoding strategy that always selects the token with the highest probability at each generation step. It is the simplest decoding method but often produces repetitive, degenerate text because it never explores lower-probability alternatives that may lead to globally better sequences.</p><p>At each step \\( t \\), greedy decoding selects:</p>\n\n\\[ x_t = \\arg\\max_{v \\in V} P(v \\mid x_{&lt;t}) \\]\n\n<p>This is equivalent to sampling with temperature \\( T \\to 0 \\). The full sequence is built left-to-right, committing irrevocably to each choice — there is no backtracking or reranking.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why greedy decoding degenerates:</b> Holtzman et al. (2020) showed that greedy (and beam search) decoding produces text with far lower per-token entropy than human writing. Human-written text regularly selects tokens outside the top-1 — we choose surprising words for emphasis, variety, and style. Maximisation-based decoding cannot reproduce this, leading to:</p>\n\n<ul>\n<li><b>Repetition loops:</b> The model gets stuck in self-reinforcing cycles (\"The cat sat on the mat. The cat sat on the mat...\") because repeating a phrase increases its conditional probability</li>\n<li><b>Blandness:</b> Always choosing the most likely token produces generic, hedging language (\"It is important to note that...\")</li>\n<li><b>Global suboptimality:</b> A locally suboptimal token at step \\( t \\) may unlock a much better continuation. Greedy decoding cannot discover this because it never explores alternatives. For example, choosing the second-most-likely word might lead to a more coherent paragraph</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Comparison with other decoding strategies",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Explores alternatives?</th><th style=\"padding:6px; text-align:left;\">Deterministic?</th><th style=\"padding:6px; text-align:left;\">Cost per step</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Greedy</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">\\( O(|V|) \\)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Beam search (\\( B \\) beams)</td><td style=\"padding:6px;\">Yes (top \\( B \\) prefixes)</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">\\( O(B \\cdot |V|) \\)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Top-k sampling</td><td style=\"padding:6px;\">Yes (stochastic, fixed \\( k \\))</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">\\( O(|V|) \\)</td></tr>\n<tr><td style=\"padding:6px;\">Top-p sampling</td><td style=\"padding:6px;\">Yes (stochastic, adaptive)</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">\\( O(|V| \\log |V|) \\)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>When greedy decoding is appropriate:</b> Despite its limitations for open-ended generation, greedy decoding remains the method of choice when (1) the task has a single correct answer (classification, entity extraction, arithmetic), (2) determinism is required for reproducibility, or (3) the output is verified by an external oracle (code generation with unit tests, where incorrect completions are discarded). Many LLM evaluation benchmarks use greedy decoding to eliminate sampling variance.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Relationship to beam search:</b> Beam search generalises greedy decoding by maintaining the top \\( B \\) candidate sequences at each step. Greedy decoding is beam search with \\( B = 1 \\). However, beam search also suffers from degeneration for open-ended generation — it merely delays the problem by exploring a slightly wider frontier.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "top-k-sampling",
+    "title": "Top-k Sampling",
+    "summary": "A sampling strategy that restricts the next-token choice to the \\( k \\) most probable tokens, then renormalises the distribution and samples from it. This prevents the model from selecting very low-probability (often nonsensical) tokens…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "top-p-sampling-nucleus-sampling",
+      "greedy-decoding"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2018 · Angela Fan, Mike Lewis, Yann Dauphin · Hierarchical Neural Story Generation",
+        "url": "https://arxiv.org/abs/1805.04833"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A sampling strategy that restricts the next-token choice to the \\( k \\) most probable tokens, then renormalises the distribution and samples from it. This prevents the model from selecting very low-probability (often nonsensical) tokens while preserving diversity within the top candidates.</p><p>At each step, the model produces a probability distribution \\( P(v \\mid x_{&lt;t}) \\) over the full vocabulary \\( V \\). Top-k sampling proceeds as follows:</p>\n<ol>\n<li>Sort tokens by probability in descending order</li>\n<li>Identify the set \\( V_k \\) of the \\( k \\) highest-probability tokens</li>\n<li>Set the probability of all tokens \\( v \\notin V_k \\) to zero</li>\n<li>Renormalise the remaining probabilities to sum to 1</li>\n<li>Sample from the truncated distribution</li>\n</ol>\n\n<p>Formally:</p>\n\\[ P_{\\text{top-k}}(v \\mid x_{&lt;t}) = \\begin{cases} \\frac{P(v \\mid x_{&lt;t})}{\\sum_{v' \\in V_k} P(v' \\mid x_{&lt;t})} & \\text{if } v \\in V_k \\\\ 0 & \\text{otherwise} \\end{cases} \\]\n\n<p>where \\( V_k = \\{ v_1, v_2, \\ldots, v_k \\} \\) ordered such that \\( P(v_1) \\geq P(v_2) \\geq \\cdots \\geq P(v_k) \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The fixed-\\( k \\) problem:</b> The key limitation of top-k sampling is that the optimal number of candidates varies dramatically across contexts. Consider two scenarios:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Context</th><th style=\"padding:6px; text-align:left;\">Distribution shape</th><th style=\"padding:6px; text-align:left;\">Problem with \\( k = 40 \\)</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\"The Eiffel Tower is in ___\"</td><td style=\"padding:6px;\">Peaked (one dominant answer)</td><td style=\"padding:6px;\">Includes 39 implausible completions (\"London\", \"Mars\"...)</td></tr>\n<tr><td style=\"padding:6px;\">\"I like to eat ___\"</td><td style=\"padding:6px;\">Flat (many valid answers)</td><td style=\"padding:6px;\">Excludes many perfectly reasonable foods</td></tr>\n</table>\n\n<p>This motivated <b>top-p (nucleus) sampling</b> (Holtzman et al., 2020), which adapts the candidate set size to the distribution's entropy — using fewer tokens when the model is confident and more when uncertain.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Practical usage:</b> Common values range from \\( k = 40 \\) to \\( k = 100 \\). Top-k is almost always combined with temperature scaling (applied before the truncation) and often layered with top-p as a safety net: first truncate to \\( k \\) candidates, then apply nucleus filtering within those. Fan et al. (2018) introduced top-k for neural story generation, showing it produced more coherent and interesting stories than unrestricted sampling or beam search.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Computational cost:</b> Top-k requires a partial sort or selection algorithm over \\( |V| \\) logits, which is \\( O(|V|) \\) with a selection algorithm (e.g., quickselect) — the same asymptotic cost as greedy decoding. This makes it negligibly more expensive than argmax in practice.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "top-p-sampling-nucleus-sampling",
+    "title": "Top-p Sampling (Nucleus Sampling)",
+    "summary": "A sampling strategy that selects from the smallest set of tokens whose cumulative probability exceeds a threshold \\( p \\). Unlike top-k (which uses a fixed number of tokens), top-p adapts the candidate set to the shape of the distributio…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "frequency-penalty",
+      "top-k-sampling"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Ari Holtzman, Jan Buys, Li Du, Maxwell Forbes, Yejin Choi · The Curious Case of Neural Text Degeneration",
+        "url": "https://arxiv.org/abs/1904.09751"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A sampling strategy that selects from the smallest set of tokens whose cumulative probability exceeds a threshold \\( p \\). Unlike top-k (which uses a fixed number of tokens), top-p adapts the candidate set to the shape of the distribution — fewer tokens when the model is confident, more when uncertain.</p><p>Given the probability distribution \\( P(v \\mid x_{&lt;t}) \\) sorted in descending order, nucleus sampling finds the smallest set \\( V_p \\) such that:</p>\n\n\\[ \\sum_{v \\in V_p} P(v \\mid x_{&lt;t}) \\geq p \\]\n\n<p>Then it zeroes out all tokens outside \\( V_p \\), renormalises, and samples. Formally:</p>\n\n\\[ P_{\\text{top-p}}(v \\mid x_{&lt;t}) = \\begin{cases} \\frac{P(v \\mid x_{&lt;t})}{\\sum_{v' \\in V_p} P(v' \\mid x_{&lt;t})} & \\text{if } v \\in V_p \\\\ 0 & \\text{otherwise} \\end{cases} \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Adaptive behaviour — the key insight",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Scenario</th><th style=\"padding:6px; text-align:left;\">Distribution</th><th style=\"padding:6px; text-align:left;\">Nucleus size (\\( p = 0.9 \\))</th><th style=\"padding:6px; text-align:left;\">Effect</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Top token has 95% prob</td><td style=\"padding:6px;\">Peaked</td><td style=\"padding:6px;\">1 token</td><td style=\"padding:6px;\">Near-greedy (model is confident)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Top 5 tokens cover 90%</td><td style=\"padding:6px;\">Moderate</td><td style=\"padding:6px;\">5 tokens</td><td style=\"padding:6px;\">Focused diversity</td></tr>\n<tr><td style=\"padding:6px;\">Top 200 tokens cover 90%</td><td style=\"padding:6px;\">Flat / uncertain</td><td style=\"padding:6px;\">200 tokens</td><td style=\"padding:6px;\">Wide exploration</td></tr>\n</table>\n\n<p>This adaptivity prevents two failure modes of fixed top-k: (1) including nonsensical low-probability tokens when the model is confident (a large \\( k \\) in a peaked distribution), and (2) excluding reasonable alternatives when the model is uncertain (a small \\( k \\) in a flat distribution).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Theoretical motivation:</b> Holtzman et al. (2020) observed that the per-token probability of human-written text follows a wide range — sometimes the chosen word is the most likely, sometimes it is the 50th most likely. Maximisation-based decoding (greedy, beam search) produces text that occupies an unnaturally narrow band of high probability, which paradoxically makes it seem less natural. Nucleus sampling matches the entropy profile of human text by letting the effective candidate set breathe with the model's confidence.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Common configurations:</b> \\( p = 0.9 \\) to \\( 0.95 \\) is the standard range. In production LLM APIs, top-p is typically combined with temperature scaling (applied first to reshape logits, then nucleus filtering truncates the tail). Some APIs also layer top-k as a hard ceiling before top-p as a safety net.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Computational cost:</b> Top-p requires a full sort of the vocabulary probabilities to find the cumulative sum threshold, giving \\( O(|V| \\log |V|) \\) per step — slightly more expensive than top-k's \\( O(|V|) \\) partial sort, but negligible relative to the forward pass cost of a large Transformer.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "frequency-penalty",
+    "title": "Frequency Penalty",
+    "summary": "A decoding-time parameter that reduces the logit of a token proportionally to how many times it has already appeared in the generated text. It penalises repeated tokens more heavily the more often they occur, encouraging lexical diversit…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "presence-penalty",
+      "top-p-sampling-nucleus-sampling"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Popularised by the OpenAI API (2020s) · Related: Keskar et al. (2019) · CTRL: A Conditional Transformer Language Model for Controllable Generation",
+        "url": "https://arxiv.org/abs/1909.05858"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A decoding-time parameter that reduces the logit of a token proportionally to how many times it has already appeared in the generated text. It penalises repeated tokens more heavily the more often they occur, encouraging lexical diversity and reducing repetition loops.</p><p>The frequency penalty modifies the logit of each token \\( v \\) before the softmax is computed:</p>\n\n\\[ z'_v = z_v - \\alpha_{\\text{freq}} \\cdot \\text{count}(v, x_{&lt;t}) \\]\n\n<p>where \\( z_v \\) is the raw logit for token \\( v \\), \\( \\text{count}(v, x_{&lt;t}) \\) is the number of times \\( v \\) has appeared in the generated sequence so far, and \\( \\alpha_{\\text{freq}} \\in [0, 2] \\) is the penalty strength (0 = no penalty).</p>\n\n<p>The penalty is linear in count, so a token used 5 times is penalised 5x as much as one used once:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Count of token \\( v \\)</th><th style=\"padding:6px; text-align:left;\">Logit adjustment (\\( \\alpha = 0.5 \\))</th><th style=\"padding:6px; text-align:left;\">Effect on probability</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">0 (never seen)</td><td style=\"padding:6px;\">0</td><td style=\"padding:6px;\">Unchanged</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">1</td><td style=\"padding:6px;\">−0.5</td><td style=\"padding:6px;\">Mild reduction</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">5</td><td style=\"padding:6px;\">−2.5</td><td style=\"padding:6px;\">Significant reduction</td></tr>\n<tr><td style=\"padding:6px;\">10</td><td style=\"padding:6px;\">−5.0</td><td style=\"padding:6px;\">Near-elimination</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Comparison with presence penalty:</b> The distinction is crucial for choosing the right tool:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">Frequency penalty</th><th style=\"padding:6px; text-align:left;\">Presence penalty</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Formula</td><td style=\"padding:6px;\">\\( -\\alpha \\cdot \\text{count}(v) \\)</td><td style=\"padding:6px;\">\\( -\\alpha \\cdot \\mathbb{1}[\\text{count}(v) > 0] \\)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Scales with repetitions?</td><td style=\"padding:6px;\">Yes (linearly)</td><td style=\"padding:6px;\">No (binary: 0 or 1)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Primary effect</td><td style=\"padding:6px;\">Reduces word-level repetition</td><td style=\"padding:6px;\">Encourages topic diversity</td></tr>\n<tr><td style=\"padding:6px;\">Best use case</td><td style=\"padding:6px;\">Avoiding \"the the the\" in long text</td><td style=\"padding:6px;\">Brainstorming, listing diverse ideas</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Practical considerations:</b> Frequency penalty is applied to all tokens including function words (\"the\", \"is\", \"and\"), which appear frequently in natural text. Setting \\( \\alpha \\) too high forces the model to avoid common words, producing stilted, unnatural prose. A value of \\( 0.1\\text{–}0.5 \\) is typical for long-form generation. For shorter outputs, the penalty is less impactful because few tokens have accumulated high counts.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Related techniques:</b> Frequency penalty is a simpler alternative to n-gram blocking (which hard-prevents any n-gram from repeating) and the repetition penalty of Keskar et al. (2019), which divides the logit by a factor \\( \\theta > 1 \\) for previously seen tokens rather than subtracting. The multiplicative approach penalises high-probability tokens more than low-probability ones in absolute terms.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "presence-penalty",
+    "title": "Presence Penalty",
+    "summary": "A decoding-time parameter that applies a flat penalty to any token that has appeared at least once in the generated text, regardless of how many times it occurred. Unlike frequency penalty (which scales with count), presence penalty is b…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "hallucination",
+      "frequency-penalty"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Popularised by the OpenAI API (2020s); conceptually related to Maximum Marginal Relevance (Carbonell & Goldstein, 1998) for diversity in retrieval."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A decoding-time parameter that applies a flat penalty to any token that has appeared at least once in the generated text, regardless of how many times it occurred. Unlike frequency penalty (which scales with count), presence penalty is binary — it encourages the model to introduce new vocabulary and topics rather than revisiting previously used tokens.</p><p>The presence penalty modifies the logit of token \\( v \\) before softmax:</p>\n\n\\[ z'_v = z_v - \\alpha_{\\text{pres}} \\cdot \\mathbb{1}[\\text{count}(v, x_{&lt;t}) > 0] \\]\n\n<p>where \\( \\alpha_{\\text{pres}} \\in [0, 2] \\) is the penalty strength and \\( \\mathbb{1}[\\cdot] \\) is the indicator function. A token used once receives exactly the same penalty as one used 100 times — the penalty is about <i>novelty</i>, not <i>frequency</i>.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Concrete example:</b> Suppose \\( \\alpha_{\\text{pres}} = 1.0 \\) and the model has generated a paragraph about cats. Every token that appeared (\"cat\", \"fur\", \"the\", \"is\") gets a logit reduction of 1.0, while never-seen tokens (\"dog\", \"ocean\", \"quantum\") retain their original logits. This creates a systematic bias toward unexplored vocabulary, pushing the model to shift topics or use synonyms.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "When to use each penalty",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Task</th><th style=\"padding:6px; text-align:left;\">Recommended penalty</th><th style=\"padding:6px; text-align:left;\">Rationale</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Long-form article writing</td><td style=\"padding:6px;\">Frequency (low \\( \\alpha \\))</td><td style=\"padding:6px;\">Reduce verbatim repetition while allowing reuse of topic words</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Brainstorming / idea generation</td><td style=\"padding:6px;\">Presence (moderate \\( \\alpha \\))</td><td style=\"padding:6px;\">Push model to explore new concepts each time</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Creative writing with varied vocabulary</td><td style=\"padding:6px;\">Both (low \\( \\alpha \\) each)</td><td style=\"padding:6px;\">Reduce repetition + encourage novelty simultaneously</td></tr>\n<tr><td style=\"padding:6px;\">Factual Q&A / code generation</td><td style=\"padding:6px;\">Neither (or very low)</td><td style=\"padding:6px;\">Accuracy matters more than diversity; repetition of key terms is natural</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Interaction with other decoding parameters:</b> Presence penalty is applied to logits before softmax, so it interacts with temperature scaling. At low temperature (sharply peaked distribution), the penalty has a proportionally larger effect because even a small logit shift can change which token wins the argmax. At high temperature (flat distribution), the penalty's effect is diluted. Both frequency and presence penalties can be combined — they simply add their respective logit adjustments independently.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Limitation:</b> Presence penalty penalises <i>all</i> previously seen tokens equally, including function words (\"a\", \"the\", \"is\") that must be reused for grammatical text. High values (\\( \\alpha > 1.0 \\)) can produce ungrammatical output as the model contorts to avoid common words. This is the same issue as frequency penalty but more severe, since even a single use triggers the full penalty.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "hallucination",
+    "title": "Hallucination",
+    "summary": "The generation of text that is fluent and confident but factually incorrect, unsupported by the input, or internally inconsistent. Hallucinations are a fundamental challenge of LLMs because the training objective (next-token prediction)…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "qlora-quantized-lora",
+      "presence-penalty"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Term adopted from NLP summarisation literature · Became a central concern post-GPT-3 (2020+) · Survey: Ji et al. (2023) · Survey of Hallucination in Natural Language Generation",
+        "url": "https://arxiv.org/abs/2202.03629"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The generation of text that is fluent and confident but factually incorrect, unsupported by the input, or internally inconsistent. Hallucinations are a fundamental challenge of LLMs because the training objective (next-token prediction) rewards plausibility, not truthfulness — the model has no internal mechanism to distinguish what it \"knows\" from what it does not.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Taxonomy of hallucination",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Type</th><th style=\"padding:6px; text-align:left;\">Definition</th><th style=\"padding:6px; text-align:left;\">Example</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\"><b>Intrinsic</b></td><td style=\"padding:6px;\">Contradicts the provided source or context</td><td style=\"padding:6px;\">A summary that attributes claims to a paper that never made them</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\"><b>Extrinsic</b></td><td style=\"padding:6px;\">Introduces claims that cannot be verified from the source</td><td style=\"padding:6px;\">Adding fabricated statistics or details not in the source document</td></tr>\n<tr><td style=\"padding:6px;\"><b>Factual</b></td><td style=\"padding:6px;\">States incorrect real-world facts with confidence</td><td style=\"padding:6px;\">Wrong dates, invented citations, non-existent papers, false historical claims</td></tr>\n</tbody></table>\n\n<p>Ji et al. (2023) further distinguish <b>faithfulness hallucination</b> (output diverges from the source input) from <b>factuality hallucination</b> (output diverges from world knowledge), noting that the two require different evaluation approaches.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Root causes",
+        "body": "<ul>\n<li><b>Training objective mismatch:</b> The cross-entropy loss \\( \\mathcal{L} = -\\sum_t \\log P_\\theta(x_t \\mid x_{&lt;t}) \\) rewards assigning high probability to training sequences, not factual accuracy. The model learns correlations, not truth conditions</li>\n<li><b>No epistemic uncertainty:</b> Standard LLMs have no mechanism to express \"I don't know\" — every vocabulary token always receives some probability mass, so the model is forced to generate <i>something</i></li>\n<li><b>Training data noise:</b> The web corpus contains contradictions, outdated facts, and misinformation. The model absorbs all of it without a ground-truth filter</li>\n<li><b>Exposure bias:</b> During autoregressive generation, a single hallucinated token shifts the conditional distribution, making subsequent tokens condition on a false premise — errors compound</li>\n<li><b>Sycophancy:</b> RLHF-trained models learn that agreeing with the user earns higher reward, so they may fabricate supporting evidence for the user's stated belief</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mitigation strategies",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Strategy</th><th style=\"padding:6px; text-align:left;\">Mechanism</th><th style=\"padding:6px; text-align:left;\">Limitation</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Retrieval-Augmented Generation (RAG)</td><td style=\"padding:6px;\">Ground generation in retrieved documents</td><td style=\"padding:6px;\">Model may still ignore or misinterpret retrieved context</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Chain-of-thought prompting</td><td style=\"padding:6px;\">Explicit reasoning steps can catch inconsistencies</td><td style=\"padding:6px;\">Reasoning itself can be hallucinated (\"faithful CoT\" is not guaranteed)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Self-consistency decoding</td><td style=\"padding:6px;\">Sample multiple outputs, take majority vote</td><td style=\"padding:6px;\">Increases cost \\( n \\)-fold; systematic errors persist across samples</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Calibration / abstention training</td><td style=\"padding:6px;\">Train model to output \"I don't know\" when uncertain</td><td style=\"padding:6px;\">Hard to calibrate; models may over- or under-abstain</td></tr>\n<tr><td style=\"padding:6px;\">Citation / attribution</td><td style=\"padding:6px;\">Force model to cite sources for each claim</td><td style=\"padding:6px;\">Citations themselves can be hallucinated</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Evaluation metrics:</b> Measuring hallucination is itself challenging. Common approaches include: (1) <b>FActScore</b> (Min et al., 2023) — decompose a generation into atomic facts and verify each against a knowledge source; (2) <b>human evaluation</b> with attribution judgments; (3) <b>NLI-based detection</b> — use a natural language inference model to check if claims are entailed by a reference. No metric is fully reliable, which makes benchmarking progress difficult.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Surprising finding:</b> Larger models hallucinate differently, not necessarily less. Scaling improves factual recall but can increase <i>confident</i> hallucination — the model becomes more fluent at stating falsehoods convincingly. This has been called the \"calibration-capability gap.\"</p>"
+      }
+    ],
+    "cards": []
   }
 ]
