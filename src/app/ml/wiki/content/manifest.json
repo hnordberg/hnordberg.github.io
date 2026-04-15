@@ -1181,6 +1181,231 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "the-curse-of-dimensionality",
+      "title": "The Curse of Dimensionality",
+      "summary": "A collection of phenomena arising in high-dimensional spaces where the exponential growth of volume makes data sparse, distances nearly uniform, and many intuitions from low-dimensional geometry break down. These effects severely degrade…",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "markov-chain-monte-carlo-mcmc",
+        "gradient-boosting-machines-gbm"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "markov-chain-monte-carlo-mcmc",
+      "title": "Markov Chain Monte Carlo (MCMC)",
+      "summary": "A class of algorithms for sampling from complex probability distributions by constructing a Markov chain whose stationary distribution equals the desired target distribution. MCMC is indispensable in Bayesian inference when the posterior…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "landmark",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "reparameterization-trick-vae",
+        "the-curse-of-dimensionality"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "reparameterization-trick-vae",
+      "title": "Reparameterization Trick (VAE)",
+      "summary": "A technique that enables backpropagation through stochastic sampling nodes by expressing the random variable as a deterministic, differentiable function of the distribution's parameters and an independent noise source. It is essential fo…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "generative",
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "autoencoders",
+        "markov-chain-monte-carlo-mcmc"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "autoencoders",
+      "title": "Autoencoders",
+      "summary": "Neural networks trained to reconstruct their input through a lower-dimensional bottleneck, forcing the model to learn a compressed latent representation that captures the most salient features of the data distribution. They serve as a no…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "landmark",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "gan-minimax-objective",
+        "reparameterization-trick-vae"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gan-minimax-objective",
+      "title": "GAN Minimax Objective",
+      "summary": "The game-theoretic training objective for Generative Adversarial Networks, in which a generator \\(G\\) and discriminator \\(D\\) compete in a two-player minimax game. At the Nash equilibrium, \\(G\\) produces samples indistinguishable from re…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "generative",
+        "intermediate",
+        "landmark",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "q-learning",
+        "autoencoders"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "q-learning",
+      "title": "Q-Learning",
+      "summary": "A model-free, off-policy reinforcement learning algorithm that learns the optimal action-value function \\(Q^*(s, a)\\) directly, without requiring a model of the environment's dynamics. It is the foundation of modern deep RL methods such…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "landmark",
+        "ml",
+        "reinforcement",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "the-bellman-equation",
+        "gan-minimax-objective"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "the-bellman-equation",
+      "title": "The Bellman Equation",
+      "summary": "A recursive equation that decomposes the value of a state (or state-action pair) into the immediate reward plus the discounted value of successor states. It is the mathematical backbone of nearly all reinforcement learning and dynamic pr…",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "reinforcement",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "the-markov-property",
+        "q-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "the-markov-property",
+      "title": "The Markov Property",
+      "summary": "The memoryless property stating that the conditional distribution of future states depends only on the present state and action, not on the history of preceding states. It is the foundational assumption underpinning Markov Decision Proce…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "reinforcement",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "bootstrap-aggregating-bagging",
+        "the-bellman-equation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bootstrap-aggregating-bagging",
+      "title": "Bootstrap Aggregating (Bagging)",
+      "summary": "An ensemble meta-algorithm that reduces variance and mitigates overfitting by training multiple models on bootstrap samples of the training data and aggregating their predictions. Random Forest is its most prominent instantiation.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "gradient-boosting-machines-gbm",
+        "the-markov-property"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gradient-boosting-machines-gbm",
+      "title": "Gradient Boosting Machines (GBM)",
+      "summary": "An ensemble method that builds a strong predictive model by sequentially fitting weak learners (typically shallow decision trees) to the negative gradient of a differentiable loss function. Each new tree corrects the residual errors of t…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "the-curse-of-dimensionality",
+        "bootstrap-aggregating-bagging"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
