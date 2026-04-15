@@ -19,6 +19,25 @@ function formatPaperCitation(citation: string): string {
     .trim();
 }
 
+function splitCitationForLinkedTitle(
+  citation: string
+): { prefix: string; title: string } {
+  const parts = citation
+    .split("·")
+    .map((p) => p.trim())
+    .filter(Boolean);
+
+  // Canonical format is typically: "year · authors · title"
+  if (parts.length >= 3) {
+    const title = parts[parts.length - 1]!;
+    const prefix = `${parts.slice(0, -1).join(" · ")} · `;
+    return { prefix, title };
+  }
+
+  // Fallback: if we cannot reliably split, treat full citation as title.
+  return { prefix: "", title: citation };
+}
+
 export function WikiTopicReferences({ topic }: WikiTopicReferencesProps) {
   const hasHistory = Boolean(topic.historyHtml?.trim());
   const hasRefs = Boolean(topic.referencesHtml?.trim());
@@ -65,16 +84,17 @@ function WikiPaperLine({ paper }: { paper: WikiPaperRef }) {
     paper.url ??
     (doiNorm ? `https://doi.org/${encodeURIComponent(doiNorm)}` : undefined);
   const label = formatPaperCitation(paper.citation);
-  const inner = href ? (
-    <a href={href} rel="noopener noreferrer" target="_blank">
-      {label}
-    </a>
-  ) : (
-    label
-  );
+  const { prefix, title } = splitCitationForLinkedTitle(label);
   return (
     <li className="wiki-papers-item">
-      {inner}
+      {prefix}
+      {href ? (
+        <a href={href} rel="noopener noreferrer" target="_blank">
+          {title}
+        </a>
+      ) : (
+        title
+      )}
       {paper.note ? (
         <span className="wiki-papers-note"> — {paper.note}</span>
       ) : null}
