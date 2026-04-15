@@ -1,6 +1,7 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { typesetMathInSubtree } from "../../../components/MathJax";
 import type { WikiCard } from "../types";
 
 type CardEvidenceProps = {
@@ -28,6 +29,13 @@ export function CardEvidence({ cards }: CardEvidenceProps) {
 
 function CardRow({ card, panelId }: { card: WikiCard; panelId: string }) {
   const [open, setOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    typesetMathInSubtree(panelRef.current);
+  }, [open, card.answer]);
+
   return (
     <li className="wiki-card-item">
       <button
@@ -43,7 +51,7 @@ function CardRow({ card, panelId }: { card: WikiCard; panelId: string }) {
         </span>
       </button>
       {open ? (
-        <div id={panelId} className="wiki-card-panel">
+        <div id={panelId} ref={panelRef} className="wiki-card-panel">
           <div
             className="wiki-card-answer"
             dangerouslySetInnerHTML={{ __html: card.answer }}
