@@ -13287,5 +13287,559 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "vision-encoder",
+    "title": "Vision Encoder",
+    "summary": "A neural network that converts a raw image into a sequence of dense feature vectors (or a single pooled vector) suitable for downstream reasoning. In vision-language models (VLMs), the vision encoder extracts visual representations that…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "cv",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "clip-contrastive-language-image-pre-training",
+      "fully-sharded-data-parallel-fsdp"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Dosovitskiy et al. (ViT); Radford et al. (CLIP, 2021) · An Image is Worth 16×16 Words",
+        "url": "https://arxiv.org/abs/2010.11929"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A neural network that converts a raw image into a sequence of dense feature vectors (or a single pooled vector) suitable for downstream reasoning. In vision-language models (VLMs), the vision encoder extracts visual representations that are projected into the language model's embedding space as \"visual tokens,\" enabling the LLM to reason about image content.</p><p>Early vision encoders were convolutional networks (ResNets, EfficientNets) whose final feature maps were flattened or pooled. Modern VLMs almost universally use <b>Vision Transformers (ViT)</b>, introduced by Dosovitskiy et al. (2020), which treat an image as a sequence of patches — a direct analogy to tokens in NLP.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "ViT patch embedding pipeline",
+        "body": "<ol>\n<li><b>Patchify:</b> Divide an image of size \\( H \\times W \\times C \\) into \\( N = \\frac{H}{P} \\times \\frac{W}{P} \\) non-overlapping patches of size \\( P \\times P \\times C \\).</li>\n<li><b>Linear projection:</b> Flatten each patch into a vector \\( \\mathbf{x}_i^{\\text{patch}} \\in \\mathbb{R}^{P^2 C} \\) and project:\n\\[ \\mathbf{z}_i^{0} = \\mathbf{x}_i^{\\text{patch}} \\mathbf{E} + \\mathbf{e}_i^{\\text{pos}}, \\quad \\mathbf{E} \\in \\mathbb{R}^{P^2 C \\times d} \\]\nwhere \\( d \\) is the Transformer hidden dimension and \\( \\mathbf{e}_i^{\\text{pos}} \\) is a learned (or sinusoidal) positional embedding.</li>\n<li><b>Transformer encoding:</b> Process the sequence \\( [\\mathbf{z}_{\\text{CLS}}; \\mathbf{z}_1^{0}; \\ldots; \\mathbf{z}_N^{0}] \\) through \\( L \\) Transformer encoder layers with multi-head self-attention and FFN sub-layers.</li>\n<li><b>Output:</b> Either the full sequence of \\( N \\) patch embeddings (used in VLMs to preserve spatial information) or the [CLS] token embedding (used for classification).</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Positional encoding:</b> Standard ViT uses learnable 1D positional embeddings. For variable-resolution inputs, 2D interpolation of positional embeddings is common. SigLIP and newer models often use <b>RoPE-2D</b> or <b>NaViT</b>-style packing to handle arbitrary aspect ratios without resizing.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Encoder</th><th style=\"padding:6px; text-align:left;\">Training objective</th><th style=\"padding:6px; text-align:left;\">Key property</th><th style=\"padding:6px; text-align:left;\">Used in</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">CLIP ViT-L/14</td><td style=\"padding:6px;\">Contrastive (image-text)</td><td style=\"padding:6px;\">Strong zero-shot transfer</td><td style=\"padding:6px;\">LLaVA, OpenCLIP VLMs</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">SigLIP</td><td style=\"padding:6px;\">Sigmoid contrastive</td><td style=\"padding:6px;\">No global softmax; scales to large batches</td><td style=\"padding:6px;\">PaLI-X, Gemini-family</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">DINOv2</td><td style=\"padding:6px;\">Self-supervised (self-distillation)</td><td style=\"padding:6px;\">Excellent dense/local features</td><td style=\"padding:6px;\">Dense prediction, retrieval</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">EVA-CLIP</td><td style=\"padding:6px;\">Contrastive + MAE init</td><td style=\"padding:6px;\">Improved representation quality</td><td style=\"padding:6px;\">InternVL, many open VLMs</td></tr>\n<tr><td style=\"padding:6px;\">ConvNeXt</td><td style=\"padding:6px;\">Supervised / CLIP</td><td style=\"padding:6px;\">CNN; no patch artifacts</td><td style=\"padding:6px;\">Some hybrid architectures</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Integration with LLMs:</b> The vision encoder is typically <b>frozen</b> during VLM training — its representations were learned during large-scale pretraining (e.g., CLIP's 400M image-text pairs). A lightweight <b>projection module</b> (linear layer in LLaVA-1.0, MLP in LLaVA-1.5, Q-Former in BLIP-2, Perceiver resampler in Flamingo) maps the encoder's output dimension to the LLM's embedding dimension. The choice of projector architecture controls the trade-off between visual token count, computational cost, and information preservation.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Resolution and token count:</b> A ViT-L/14 at 224×224 produces 256 patch tokens. Increasing resolution to 336×336 yields 576 tokens. Some VLMs (LLaVA-NeXT, InternVL-1.5) use <b>dynamic resolution</b>, tiling the image into multiple crops processed independently, which can produce 1000+ visual tokens — placing pressure on the LLM's context window and motivating token compression techniques.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "clip-contrastive-language-image-pre-training",
+    "title": "CLIP (Contrastive Language-Image Pre-training)",
+    "summary": "A model that learns to align images and text in a shared embedding space using contrastive learning on 400 million image-text pairs scraped from the internet. CLIP enables zero-shot image classification, text-to-image retrieval, and serv…",
+    "domain": "history",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "cv",
+      "intermediate",
+      "landmark",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "program-aided-language-model",
+      "vision-encoder"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2021 · Alec Radford et al. (OpenAI) · Learning Transferable Visual Models From Natural Language Supervision",
+        "url": "https://arxiv.org/abs/2103.00020"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A model that learns to align images and text in a shared embedding space using contrastive learning on 400 million image-text pairs scraped from the internet. CLIP enables zero-shot image classification, text-to-image retrieval, and serves as the vision backbone for many VLMs and text-to-image generation models (Stable Diffusion, DALL-E 2).</p><p>CLIP was a landmark result from OpenAI demonstrating that <b>natural language supervision at scale</b> produces visual representations that transfer broadly — rivaling or exceeding task-specific supervised models on many benchmarks without any fine-tuning.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Architecture:</b> Two parallel encoders trained jointly:</p>\n<ul>\n<li><b>Image encoder:</b> ViT-L/14 (or ResNet-50/101 in early variants) mapping images to \\( \\mathbb{R}^d \\)</li>\n<li><b>Text encoder:</b> 12-layer Transformer (63M parameters) mapping tokenized text to \\( \\mathbb{R}^d \\)</li>\n</ul>\n<p>Both outputs are L2-normalized, so cosine similarity reduces to a dot product.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Contrastive loss:</b> Given a batch of \\( N \\) image-text pairs, the \\( N \\) correct pairs should have high cosine similarity while the \\( N^2 - N \\) incorrect pairings should have low similarity. The symmetric InfoNCE loss is:</p>\n\n\\[ \\mathcal{L} = -\\frac{1}{2N}\\sum_{i=1}^{N}\\!\\left[\\log \\frac{\\exp\\!\\bigl(\\tau \\cdot \\cos(I_i, T_i)\\bigr)}{\\displaystyle\\sum_{j=1}^{N} \\exp\\!\\bigl(\\tau \\cdot \\cos(I_i, T_j)\\bigr)} + \\log \\frac{\\exp\\!\\bigl(\\tau \\cdot \\cos(T_i, I_i)\\bigr)}{\\displaystyle\\sum_{j=1}^{N} \\exp\\!\\bigl(\\tau \\cdot \\cos(T_i, I_j)\\bigr)}\\right] \\]\n\n<p>where \\( \\tau \\) is a <b>learned temperature parameter</b> (initialized to 0.07, learned via log-parameterization to ensure positivity). The first term is image-to-text classification; the second is text-to-image. Large batch sizes (32,768 in the original paper) are critical because they provide more negative pairs per step.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Zero-shot classification:</b> To classify an image into \\( K \\) classes without any training:</p>\n<ol>\n<li>Construct text prompts: \"a photo of a {class}\" for each class</li>\n<li>Encode the image and all \\( K \\) prompts</li>\n<li>Predict class \\( \\hat{k} = \\arg\\max_k \\cos(I, T_k) \\)</li>\n</ol>\n<p>Prompt engineering matters significantly — \"a photo of a {class}, a type of pet\" outperforms bare class names by several points on domain-specific datasets.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Downstream use</th><th style=\"padding:6px; text-align:left;\">How CLIP is used</th><th style=\"padding:6px; text-align:left;\">What's frozen</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">VLMs (LLaVA, etc.)</td><td style=\"padding:6px;\">Vision encoder (frozen feature extractor)</td><td style=\"padding:6px;\">Image encoder</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Stable Diffusion</td><td style=\"padding:6px;\">Text encoder for conditioning the U-Net</td><td style=\"padding:6px;\">Text encoder</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">DALL-E 2</td><td style=\"padding:6px;\">Both encoders; diffusion prior maps text→image embeddings</td><td style=\"padding:6px;\">Both encoders</td></tr>\n<tr><td style=\"padding:6px;\">Image search / retrieval</td><td style=\"padding:6px;\">Embed queries and images into shared space</td><td style=\"padding:6px;\">Both encoders</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Limitations:</b> CLIP struggles with fine-grained spatial reasoning (\"the red cube is to the left of the blue sphere\"), counting, and systematic compositionality. Its web-scraped training data introduces societal biases. SigLIP (Zhai et al., 2023) replaced the softmax-based contrastive loss with a sigmoid per-pair loss, eliminating the need for cross-device negatives and scaling more efficiently to larger batch sizes.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "program-aided-language-model",
+    "title": "Program-Aided Language Model",
+    "summary": "A prompting framework where the language model generates executable code (typically Python) to solve reasoning tasks instead of producing the answer directly in natural language. An external interpreter executes the code, and the result…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "flashattention",
+      "clip-contrastive-language-image-pre-training"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Luyu Gao et al. (Carnegie Mellon) · PAL: Program-aided Language Models",
+        "url": "https://arxiv.org/abs/2211.10435"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A prompting framework where the language model generates executable code (typically Python) to solve reasoning tasks instead of producing the answer directly in natural language. An external interpreter executes the code, and the result is returned as the final answer — offloading computation from the LLM to a reliable runtime.</p><p>Chain-of-thought (CoT) prompting lets LLMs show reasoning steps, but the LLM must also perform the arithmetic and logic itself — a task it does unreliably. PAL separates <b>reasoning decomposition</b> (which LLMs do well) from <b>computation</b> (which interpreters do perfectly).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Example comparison",
+        "body": "<pre style=\"background:#f5f5f5; color:#111; padding:8px; border-radius:4px; font-size:0.9em;\">\nQ: Roger has 5 tennis balls. He buys 2 cans of 3 balls each.\n   How many does he have now?\n\nCoT: Roger starts with 5. He buys 2 × 3 = 6. Total = 5 + 6 = 11.\nPAL:\n  tennis_balls = 5\n  bought = 2 * 3\n  answer = tennis_balls + bought\n  print(answer)  # → 11\n</pre>\n\n<p>The LLM generates the code; a sandboxed Python interpreter executes it. The prompt includes few-shot exemplars demonstrating the code-generation pattern.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Benchmark results (Codex as backbone)",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Benchmark</th><th style=\"padding:6px; text-align:left;\">CoT accuracy</th><th style=\"padding:6px; text-align:left;\">PAL accuracy</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GSM8K (math word problems)</td><td style=\"padding:6px;\">65.6%</td><td style=\"padding:6px;\">72.0%</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">SVAMP</td><td style=\"padding:6px;\">74.4%</td><td style=\"padding:6px;\">79.4%</td></tr>\n<tr><td style=\"padding:6px;\">Date Understanding</td><td style=\"padding:6px;\">67.1%</td><td style=\"padding:6px;\">76.2%</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Advantages over pure CoT",
+        "body": "<ul>\n<li><b>Arithmetic accuracy:</b> LLMs make frequent calculation errors on multi-step problems; code execution is exact</li>\n<li><b>Complex logic:</b> Loops, conditionals, and data structures are natural in code but awkward in prose</li>\n<li><b>Verifiability:</b> Generated code can be inspected, debugged, and unit-tested — natural language reasoning cannot</li>\n<li><b>Composability:</b> Code can call libraries (datetime, sympy) for operations beyond basic arithmetic</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Limitations:</b> PAL requires the LLM to be proficient at code generation — weaker models produce buggy code that fails silently or errors out. It also cannot handle tasks where reasoning is inherently linguistic (ethical dilemmas, subjective judgments). The method assumes the problem is well-specified enough to be programmed, which excludes open-ended or ambiguous questions.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Reasoning medium</th><th style=\"padding:6px; text-align:left;\">Execution</th><th style=\"padding:6px; text-align:left;\">Strength</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Chain of Thought</td><td style=\"padding:6px;\">Natural language</td><td style=\"padding:6px;\">None (LLM internal)</td><td style=\"padding:6px;\">General reasoning</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">PAL</td><td style=\"padding:6px;\">Python code</td><td style=\"padding:6px;\">External interpreter</td><td style=\"padding:6px;\">Precise computation</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">PoT (Program of Thoughts)</td><td style=\"padding:6px;\">Python code</td><td style=\"padding:6px;\">External interpreter</td><td style=\"padding:6px;\">Similar to PAL; concurrent work</td></tr>\n<tr><td style=\"padding:6px;\">ReAct + code tools</td><td style=\"padding:6px;\">NL reasoning + code actions</td><td style=\"padding:6px;\">External interpreter</td><td style=\"padding:6px;\">Multi-step tool use</td></tr>\n</table>\n\n<p>PAL is the conceptual precursor to modern <b>code interpreter</b> tools (ChatGPT Code Interpreter, Claude's tool use) and to agentic frameworks where LLMs write and execute code as part of multi-step problem solving.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "flashattention",
+    "title": "FlashAttention",
+    "summary": "An IO-aware exact attention algorithm that computes standard scaled dot-product attention without materializing the full \\( N \\times N \\) attention matrix in GPU high-bandwidth memory (HBM). By exploiting the GPU memory hierarchy through…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "attention",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "data-parallelism",
+      "program-aided-language-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Tri Dao et al. (Stanford) · FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+        "url": "https://arxiv.org/abs/2205.14135"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An IO-aware exact attention algorithm that computes standard scaled dot-product attention without materializing the full \\( N \\times N \\) attention matrix in GPU high-bandwidth memory (HBM). By exploiting the GPU memory hierarchy through tiling and recomputation, FlashAttention achieves 2--4x wall-clock speedup and reduces memory from \\( O(N^2) \\) to \\( O(N) \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The IO bottleneck:</b> Standard attention computes \\( S = QK^\\top / \\sqrt{d} \\in \\mathbb{R}^{N \\times N} \\), writes \\( S \\) to HBM, reads it back to compute \\( P = \\text{softmax}(S) \\), writes \\( P \\) to HBM, reads it back to compute \\( O = PV \\). For long sequences, the \\( O(N^2) \\) reads and writes to slow HBM dominate runtime — not the FLOPs themselves. This is the key insight of FlashAttention: attention is <b>memory-bandwidth-bound</b>, not compute-bound.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Tiling algorithm",
+        "body": "<ol>\n<li>Divide \\( Q \\) into blocks of \\( B_r \\) rows, and \\( K, V \\) into blocks of \\( B_c \\) rows, sized to fit in GPU SRAM (on-chip, ~20 MB on A100 vs. 40–80 GB HBM)</li>\n<li>For each \\( Q \\)-block, iterate over all \\( K, V \\)-blocks: load them into SRAM, compute the block attention scores \\( S_{ij} = Q_i K_j^\\top / \\sqrt{d} \\)</li>\n<li>Use the <b>online softmax trick</b> to incrementally compute the softmax without needing all scores at once</li>\n<li>Accumulate the output block \\( O_i \\) in SRAM, then write the final result to HBM once</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Online softmax trick:</b> The standard softmax requires a global max and sum over all \\( N \\) keys. The online algorithm maintains running statistics \\( m_i \\) (max so far) and \\( \\ell_i \\) (sum of exponentials so far), updating them as each new \\( K \\)-block arrives:</p>\n\n\\[ m_i^{\\text{new}} = \\max(m_i, \\max(S_{ij})), \\quad \\ell_i^{\\text{new}} = e^{m_i - m_i^{\\text{new}}} \\ell_i + \\sum_k e^{S_{ijk} - m_i^{\\text{new}}} \\]\n\n<p>The partial output is rescaled accordingly, ensuring the final result is numerically identical to standard softmax.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Recomputation in the backward pass:</b> Instead of storing \\( S \\) and \\( P \\) (the \\( O(N^2) \\) matrices) for the backward pass, FlashAttention recomputes them from \\( Q, K, V \\) (which are \\( O(Nd) \\)) on the fly. This trades extra FLOPs for dramatically reduced memory — a favorable trade because the operation is memory-bound anyway.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">Standard attention</th><th style=\"padding:6px; text-align:left;\">FlashAttention</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">HBM memory</td><td style=\"padding:6px;\">\\( O(N^2) \\)</td><td style=\"padding:6px;\">\\( O(N) \\)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">HBM IO complexity</td><td style=\"padding:6px;\">\\( O(N^2 d + N^2) \\)</td><td style=\"padding:6px;\">\\( O(N^2 d^2 / M) \\) where \\( M \\) = SRAM size</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">FLOPs</td><td style=\"padding:6px;\">\\( O(N^2 d) \\)</td><td style=\"padding:6px;\">\\( O(N^2 d) \\) — identical</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Exactness</td><td style=\"padding:6px;\">Exact</td><td style=\"padding:6px;\">Exact (bit-for-bit identical output)</td></tr>\n<tr><td style=\"padding:6px;\">Wall-clock speed</td><td style=\"padding:6px;\">Baseline</td><td style=\"padding:6px;\">2–4x faster (A100)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Impact:</b> FlashAttention is not an approximation — it computes exactly the same result as standard attention via a more IO-efficient access pattern. It has become the default attention kernel in PyTorch (via <code>torch.nn.functional.scaled_dot_product_attention</code>), Hugging Face Transformers, and most training frameworks. It is critical for training and serving models with long context windows (32K–1M+ tokens).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Successors:</b> <b>FlashAttention-2</b> (2023) improved parallelism across sequence length and reduced non-matmul FLOPs, achieving ~2x speedup over FA-1. <b>FlashAttention-3</b> (2024) targets Hopper GPUs (H100), exploiting FP8 tensor cores and asynchronous warp-specialized pipelines.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "data-parallelism",
+    "title": "Data Parallelism",
+    "summary": "A distributed training strategy where the full model is replicated on each GPU and the training data batch is split across GPUs. Each GPU computes gradients on its data shard, gradients are synchronized (all-reduced) across GPUs, and eac…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "model-parallelism",
+      "flashattention"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Standard technique; formalized for deep learning by Dean et al. (2012), Large Scale Distributed Deep Networks .",
+        "url": "https://arxiv.org/abs/1206.5533"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A distributed training strategy where the full model is replicated on each GPU and the training data batch is split across GPUs. Each GPU computes gradients on its data shard, gradients are synchronized (all-reduced) across GPUs, and each GPU updates its local copy of the weights identically. This is the simplest and most widely used form of parallel training.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Workflow for each training step",
+        "body": "<ol>\n<li><b>Scatter data:</b> Split a global batch of size \\( B \\) into \\( B/N \\) examples per GPU (where \\( N \\) = number of GPUs)</li>\n<li><b>Local compute:</b> Each GPU runs forward and backward pass independently on its shard, computing local gradients \\( g_i \\)</li>\n<li><b>All-reduce:</b> Synchronize gradients across GPUs: \\( \\bar{g} = \\frac{1}{N}\\sum_{i=1}^{N} g_i \\)</li>\n<li><b>Update:</b> Each GPU applies the same optimizer step with \\( \\bar{g} \\), keeping weights identical</li>\n</ol>\n\n<p>After the all-reduce, all GPUs have identical weights, maintaining <b>mathematical equivalence</b> to single-GPU training with the full batch \\( B \\). The effective learning rate and batch size semantics are preserved.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>All-reduce implementation:</b> The ring all-reduce algorithm communicates \\( 2(N-1)/N \\) times the gradient size — approximately \\( 2 \\times |\\theta| \\) bytes, independent of the number of GPUs. For a 7B model in FP16, this is ~28 GB per step. Communication and computation can be overlapped by starting the all-reduce for earlier layers while later layers are still computing gradients.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Gradient accumulation:</b> When the desired global batch size exceeds GPU memory, each GPU performs \\( K \\) forward-backward passes on micro-batches of size \\( B/(NK) \\), accumulates gradients locally, and only all-reduces once every \\( K \\) steps. This simulates a larger effective batch without additional memory.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Aspect</th><th style=\"padding:6px; text-align:left;\">Data parallelism</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Memory per GPU</td><td style=\"padding:6px;\">Full model + optimizer states + activations for \\( B/N \\) examples</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Communication volume</td><td style=\"padding:6px;\">\\( \\approx 2 \\times |\\theta| \\) per step (ring all-reduce)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Scaling efficiency</td><td style=\"padding:6px;\">Near-linear up to ~256 GPUs; degrades as communication/compute ratio grows</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Primary limitation</td><td style=\"padding:6px;\">Each GPU must hold the entire model + optimizer states</td></tr>\n<tr><td style=\"padding:6px;\">Throughput scaling</td><td style=\"padding:6px;\">\\( \\approx N \\times \\) single-GPU throughput (ideal)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Memory breakdown for a 70B model (FP16 + Adam):</b> Parameters = 140 GB, Adam states (FP32 copies + first/second moments) = 420 GB, total ~560 GB per GPU — far exceeding any single GPU. This motivates <b>FSDP / ZeRO</b>, which shard the redundant optimizer states, gradients, and parameters across GPUs while preserving data-parallel semantics.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Scaling considerations:</b> As the number of GPUs increases, the per-GPU batch size \\( B/N \\) shrinks. If it becomes too small, the GPU is underutilized (low arithmetic intensity). The solution is to increase the global batch size \\( B \\), but very large batches can degrade generalization (the \"large batch training\" problem), mitigated by learning rate warmup and LARS/LAMB optimizers.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Frameworks:</b> PyTorch DistributedDataParallel (DDP), Horovod, DeepSpeed ZeRO Stage 0, JAX pmap.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "model-parallelism",
+    "title": "Model Parallelism",
+    "summary": "A distributed training strategy where the model itself is split across multiple GPUs, with each GPU holding only a portion of the model's parameters. This enables training models that are too large to fit in a single GPU's memory — a nec…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "pipeline-parallelism",
+      "data-parallelism"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Formalized for modern deep learning by Shoeybi et al. (2020, Megatron-LM ) and Narayanan et al. (2021, pipeline parallelism).",
+        "url": "https://arxiv.org/abs/1909.08053"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A distributed training strategy where the model itself is split across multiple GPUs, with each GPU holding only a portion of the model's parameters. This enables training models that are too large to fit in a single GPU's memory — a necessity for modern LLMs with tens or hundreds of billions of parameters.</p><p>Model parallelism contrasts with data parallelism, where the full model is replicated on every GPU. In model parallelism, each GPU holds a <b>distinct slice</b> of the model and processes the same data flowing through its portion. The key design decision is <b>how to partition</b> the model:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Type</th><th style=\"padding:6px; text-align:left;\">What's split</th><th style=\"padding:6px; text-align:left;\">Communication</th><th style=\"padding:6px; text-align:left;\">Best for</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\"><b>Tensor parallelism</b></td><td style=\"padding:6px;\">Weight matrices within layers (width)</td><td style=\"padding:6px;\">All-reduce within each layer (2 per Transformer layer)</td><td style=\"padding:6px;\">Intra-node (NVLink)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\"><b>Pipeline parallelism</b></td><td style=\"padding:6px;\">Groups of layers (depth)</td><td style=\"padding:6px;\">Activations between adjacent stages</td><td style=\"padding:6px;\">Inter-node (InfiniBand)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\"><b>Context parallelism</b></td><td style=\"padding:6px;\">Sequence length</td><td style=\"padding:6px;\">KV exchange via ring attention</td><td style=\"padding:6px;\">Very long sequences</td></tr>\n<tr><td style=\"padding:6px;\"><b>Expert parallelism</b></td><td style=\"padding:6px;\">MoE experts across GPUs</td><td style=\"padding:6px;\">All-to-all token routing</td><td style=\"padding:6px;\">Mixture-of-Experts models</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why model parallelism is necessary — a concrete example:</b> A 175B parameter model (GPT-3 scale) in FP16 requires 350 GB just for parameters. With Adam optimizer (FP32 copy + two moment buffers), total memory is \\( \\approx 350 + 3 \\times 350 = 1400 \\) GB. A single A100 has 80 GB — so at minimum 18 GPUs are needed just for model state, before accounting for activations.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Trade-offs",
+        "body": "<ul>\n<li><b>Enables larger models:</b> The only way to train models beyond single-GPU memory</li>\n<li><b>Communication overhead:</b> Activations and gradients must be transferred between GPUs at every partition boundary — more partition points mean more communication</li>\n<li><b>Implementation complexity:</b> Correctly partitioning models, handling different communication patterns, and load-balancing across GPUs is significantly harder than data parallelism</li>\n<li><b>Pipeline bubbles:</b> Pipeline parallelism suffers from GPU idle time at batch boundaries (mitigated by micro-batching and interleaved schedules)</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>3D parallelism in practice:</b> Large-scale training (e.g., Llama 3 405B on 16K GPUs) combines all three dimensions simultaneously:</p>\n<ul>\n<li><b>Tensor parallelism (TP=8):</b> within a single node's 8 GPUs (high-bandwidth NVLink)</li>\n<li><b>Pipeline parallelism (PP=16):</b> across nodes (lower-bandwidth InfiniBand)</li>\n<li><b>Data parallelism (DP=128):</b> across groups of TP×PP devices</li>\n</ul>\n<p>Total GPUs = TP × PP × DP = 8 × 16 × 128 = 16,384. The parallelism dimensions are carefully chosen to match the communication bandwidth at each level of the network topology.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "pipeline-parallelism",
+    "title": "Pipeline Parallelism",
+    "summary": "A form of model parallelism that partitions the model's layers into sequential stages across GPUs, with each GPU processing a different stage. Data flows through the pipeline as micro-batches, allowing multiple GPUs to be active simultan…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "optimization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "tensor-parallelism",
+      "model-parallelism"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Huang et al. ( GPipe ); Narayanan et al. ( Megatron-LM pipeline, 2021 )",
+        "url": "https://arxiv.org/abs/1811.06965"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A form of model parallelism that partitions the model's layers into sequential stages across GPUs, with each GPU processing a different stage. Data flows through the pipeline as micro-batches, allowing multiple GPUs to be active simultaneously on different portions of the batch.</p><p>A model with \\( L \\) layers is divided into \\( P \\) stages across \\( P \\) GPUs. Each GPU holds layers \\( [l_{\\text{start}}, l_{\\text{end}}] \\) for its stage. A global batch is split into \\( M \\) <b>micro-batches</b> that flow through the pipeline sequentially.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The pipeline bubble problem:</b> At the start of processing, GPU \\( k \\) must wait for GPUs \\( 1, \\ldots, k-1 \\) to process the first micro-batch before it receives any input. Similarly, at the end, early-stage GPUs go idle while later stages finish. The bubble fraction is:</p>\n\n\\[ \\text{Bubble fraction} = \\frac{P - 1}{M + P - 1} \\]\n\n<p>where \\( P \\) is the number of pipeline stages and \\( M \\) is the number of micro-batches. With \\( P = 16 \\) stages and \\( M = 64 \\) micro-batches, the bubble is \\( 15/79 \\approx 19\\% \\) wasted compute. More micro-batches reduce the bubble but increase memory (must store activations for all in-flight micro-batches).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Pipeline schedules",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Schedule</th><th style=\"padding:6px; text-align:left;\">Description</th><th style=\"padding:6px; text-align:left;\">Bubble</th><th style=\"padding:6px; text-align:left;\">Peak memory</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPipe</td><td style=\"padding:6px;\">All-forward then all-backward</td><td style=\"padding:6px;\">\\( (P-1)/(M+P-1) \\)</td><td style=\"padding:6px;\">\\( O(M) \\) activations</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">1F1B (PipeDream-Flush)</td><td style=\"padding:6px;\">Interleave: 1 forward, 1 backward once pipeline fills</td><td style=\"padding:6px;\">Same</td><td style=\"padding:6px;\">\\( O(P) \\) activations (much lower)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Interleaved 1F1B</td><td style=\"padding:6px;\">Multiple virtual stages per GPU; finer granularity</td><td style=\"padding:6px;\">\\( (P-1)/(M \\cdot V + P - 1) \\) with \\( V \\) virtual stages</td><td style=\"padding:6px;\">\\( O(P) \\)</td></tr>\n<tr><td style=\"padding:6px;\">Zero-bubble (Qi et al., 2024)</td><td style=\"padding:6px;\">Overlaps backward-for-weights with forward of next micro-batch</td><td style=\"padding:6px;\">Near zero</td><td style=\"padding:6px;\">Slightly higher</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>1F1B in detail:</b> In the warm-up phase, each GPU performs forward passes on micro-batches 1 through \\( P \\) (filling the pipeline). Once the pipeline is full, each GPU alternates: perform one backward pass on the oldest in-flight micro-batch, then one forward pass on the next micro-batch. This limits the number of in-flight micro-batches to \\( P \\) (instead of \\( M \\) in GPipe), dramatically reducing activation memory.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Communication:</b> Only activation tensors (and their gradients) are sent between adjacent pipeline stages. For a Transformer layer with hidden dimension \\( d \\) and micro-batch sequence length \\( s \\times b \\), the activation size is \\( \\approx 2sbd \\) bytes (FP16). This is much less than the all-reduce of full gradients required by data parallelism, making pipeline parallelism well-suited for <b>inter-node communication</b> where bandwidth is limited.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Load balancing:</b> Stages should have roughly equal computation. In Transformers with identical layers this is straightforward — assign \\( L/P \\) layers per stage. For heterogeneous architectures (e.g., embedding layers, output heads), careful profiling is needed to avoid stragglers.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "tensor-parallelism",
+    "title": "Tensor Parallelism",
+    "summary": "A form of model parallelism that splits individual layers' weight matrices across multiple GPUs, with each GPU computing a portion of each layer's output. Tensor parallelism distributes the model's width rather than its depth, requiring…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "context-parallelism",
+      "pipeline-parallelism"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Mohammad Shoeybi et al. · Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism",
+        "url": "https://arxiv.org/abs/1909.08053"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A form of model parallelism that splits individual layers' weight matrices across multiple GPUs, with each GPU computing a portion of each layer's output. Tensor parallelism distributes the model's width rather than its depth, requiring high-bandwidth inter-GPU communication within each layer forward and backward pass.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Column-parallel linear layer:</b> For a linear layer \\( Y = XW + b \\) where \\( W \\in \\mathbb{R}^{d \\times k} \\), split \\( W \\) column-wise across \\( N \\) GPUs:</p>\n\n\\[ W = [W_1 \\mid W_2 \\mid \\cdots \\mid W_N], \\quad W_i \\in \\mathbb{R}^{d \\times k/N} \\]\n\n<p>Each GPU \\( i \\) receives the full input \\( X \\) and computes its partial output \\( Y_i = XW_i \\in \\mathbb{R}^{b \\times k/N} \\). The outputs are concatenated (all-gather) to form the full \\( Y \\). Crucially, if the next operation is element-wise (e.g., GeLU activation), it can be applied locally without communication.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Row-parallel linear layer:</b> Split \\( W \\) row-wise: \\( W = [W_1; W_2; \\ldots; W_N] \\), \\( W_i \\in \\mathbb{R}^{d/N \\times k} \\). Each GPU holds a shard of the input \\( X_i \\) and computes \\( Y_i = X_i W_i \\). The partial outputs are summed via <b>all-reduce</b>: \\( Y = \\sum_i Y_i \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Megatron-LM Transformer partitioning:</b> The key insight is to pair column-parallel and row-parallel layers to minimize communication:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Sub-layer</th><th style=\"padding:6px; text-align:left;\">Split strategy</th><th style=\"padding:6px; text-align:left;\">Communication</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">MHA: QKV projection \\( W_{QKV} \\)</td><td style=\"padding:6px;\">Column-split (each GPU gets full heads)</td><td style=\"padding:6px;\">None (GeLU/attention applied locally)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">MHA: Output projection \\( W_O \\)</td><td style=\"padding:6px;\">Row-split</td><td style=\"padding:6px;\"><b>All-reduce</b> (forward); identity (backward)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">FFN: \\( W_1 \\) (up-projection)</td><td style=\"padding:6px;\">Column-split</td><td style=\"padding:6px;\">None (GeLU applied locally)</td></tr>\n<tr><td style=\"padding:6px;\">FFN: \\( W_2 \\) (down-projection)</td><td style=\"padding:6px;\">Row-split</td><td style=\"padding:6px;\"><b>All-reduce</b> (forward); identity (backward)</td></tr>\n</table>\n\n<p>Each Transformer layer requires <b>2 all-reduce operations</b> in the forward pass (one after attention output projection, one after FFN down-projection) and 2 in the backward pass — <b>4 total per layer</b>. Each all-reduce communicates a tensor of shape \\( (b, s, d) \\), where \\( b \\) = micro-batch size, \\( s \\) = sequence length, \\( d \\) = hidden dimension.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Communication cost:</b> For a ring all-reduce, the volume per operation is \\( \\approx 2 \\cdot b \\cdot s \\cdot d \\cdot \\text{sizeof(dtype)} \\). With 4 operations per layer and \\( L \\) layers, the total per step is \\( \\approx 8Lbsd \\cdot \\text{sizeof(dtype)} \\). This is proportional to sequence length, making TP communication-intensive for long sequences.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bandwidth requirements:</b> TP demands high intra-layer communication bandwidth, making it practical only within a single node where GPUs are connected via <b>NVLink</b> (900 GB/s bidirectional on H100) or <b>NVSwitch</b>. Typical TP degree is 8 (one per GPU in a node). Cross-node TP is rarely used due to InfiniBand's ~50x lower bandwidth.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Sequence parallelism (Megatron-LM v3):</b> The LayerNorm and dropout operations between TP regions operate on the full \\( (b, s, d) \\) tensor, redundantly across GPUs. Sequence parallelism splits these operations along the sequence dimension, replacing the all-reduce with all-gather (forward) + reduce-scatter (backward) — same communication volume but eliminating the memory redundancy.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "context-parallelism",
+    "title": "Context Parallelism",
+    "summary": "A parallelism strategy that splits the input sequence along the sequence-length dimension across multiple GPUs. Each GPU processes a contiguous chunk of the sequence, with communication required only during the attention computation (to…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "attention",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "fully-sharded-data-parallel-fsdp",
+      "tensor-parallelism"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Hao Liu et al. (UC Berkeley) · Ring Attention with Blockwise Transformers for Near-Infinite Context",
+        "url": "https://arxiv.org/abs/2310.01889"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A parallelism strategy that splits the input sequence along the sequence-length dimension across multiple GPUs. Each GPU processes a contiguous chunk of the sequence, with communication required only during the attention computation (to exchange key-value pairs). This enables training and inference on very long sequences that would otherwise exceed single-GPU memory.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Motivation:</b> Self-attention memory scales as \\( O(N^2) \\) in sequence length \\( N \\), and activation memory scales as \\( O(N) \\) per layer. For a 1M-token context, even with FlashAttention (which reduces attention memory to \\( O(N) \\)), the total activation memory for a large model can exceed a single GPU's capacity. Context parallelism (CP) distributes this memory across GPUs.</p>\n\n<p>Given a sequence of length \\( N \\) and \\( P \\) GPUs, each GPU holds a contiguous chunk of \\( N/P \\) tokens. For feedforward and normalization layers, each GPU operates independently on its local chunk — no communication needed. The challenge is <b>self-attention</b>, where each token must attend to all positions.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Ring attention algorithm",
+        "body": "<ol>\n<li>Each GPU computes \\( Q_i, K_i, V_i \\) for its local chunk of \\( N/P \\) tokens</li>\n<li>In a ring topology, GPUs pass \\( K, V \\) blocks around:\n  <ul>\n  <li>Step 0: GPU \\( i \\) computes attention of \\( Q_i \\) against its local \\( K_i, V_i \\)</li>\n  <li>Step 1: GPU \\( i \\) receives \\( K_{i+1}, V_{i+1} \\) from the next GPU, computes partial attention, and passes \\( K_i, V_i \\) forward</li>\n  <li>After \\( P-1 \\) steps, each GPU has attended to all positions</li>\n  </ul>\n</li>\n<li>Partial attention outputs are accumulated using the <b>online softmax trick</b> (same as FlashAttention), maintaining numerical correctness</li>\n</ol>\n\n<p>The key insight is that KV communication in step \\( k \\) can be <b>overlapped</b> with attention computation from step \\( k-1 \\), hiding most of the communication latency behind compute.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">Context parallelism</th><th style=\"padding:6px; text-align:left;\">Tensor parallelism</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">What's split</td><td style=\"padding:6px;\">Sequence length (\\( N/P \\) tokens per GPU)</td><td style=\"padding:6px;\">Model width (hidden dim \\( d/P \\))</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Communication pattern</td><td style=\"padding:6px;\">Ring KV exchange (P2P, overlapped)</td><td style=\"padding:6px;\">All-reduce per layer (blocking)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Communication volume per layer</td><td style=\"padding:6px;\">\\( 2(P-1) \\cdot \\frac{N}{P} \\cdot d \\cdot \\text{sizeof} \\)</td><td style=\"padding:6px;\">\\( 2 \\cdot N \\cdot d \\cdot \\text{sizeof} \\) (per all-reduce)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Memory per GPU</td><td style=\"padding:6px;\">Activations for \\( N/P \\) tokens</td><td style=\"padding:6px;\">Parameters \\( \\propto 1/P \\), activations unchanged</td></tr>\n<tr><td style=\"padding:6px;\">Primary benefit</td><td style=\"padding:6px;\">Enables longer sequences</td><td style=\"padding:6px;\">Enables larger models</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Causal attention optimization:</b> For autoregressive models, tokens only attend to earlier positions. GPUs holding later chunks have fewer valid KV blocks to process, creating load imbalance. <b>Striped attention</b> (distributing tokens in a round-robin pattern rather than contiguous chunks) and <b>zigzag scheduling</b> address this by balancing computation across GPUs.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Relationship to other techniques:</b> Context parallelism is complementary to FlashAttention (which optimizes single-GPU attention IO) and tensor parallelism (which splits model width). Llama 3.1 (Meta, 2024) used CP with 8K–128K context lengths, combining it with TP=8 and PP=16 for 405B-parameter training. DeepSeek-V2 similarly uses CP for its 128K context window.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "fully-sharded-data-parallel-fsdp",
+    "title": "Fully Sharded Data Parallel (FSDP)",
+    "summary": "A memory-efficient variant of data parallelism that shards model parameters, gradients, and optimizer states across GPUs instead of replicating them. Each GPU stores only \\( 1/N \\) of the model state, dramatically reducing per-GPU memory…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "optimization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "vision-encoder",
+      "context-parallelism"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Samyam Rajbhandari et al. (Microsoft) · ZeRO: Memory Optimizations Toward Training Trillion Parameter Models",
+        "url": "https://arxiv.org/abs/1910.02054"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A memory-efficient variant of data parallelism that shards model parameters, gradients, and optimizer states across GPUs instead of replicating them. Each GPU stores only \\( 1/N \\) of the model state, dramatically reducing per-GPU memory while preserving the mathematical semantics of data-parallel training.</p><p>In standard data parallelism (DDP), each of \\( N \\) GPUs stores a full copy of parameters, gradients, and optimizer states — massive redundancy. FSDP (equivalent to DeepSpeed ZeRO Stage 3) eliminates this by sharding everything:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Sharding level</th><th style=\"padding:6px; text-align:left;\">What's sharded</th><th style=\"padding:6px; text-align:left;\">Per-GPU memory (vs. DDP)</th><th style=\"padding:6px; text-align:left;\">Equivalent</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Stage 1</td><td style=\"padding:6px;\">Optimizer states only</td><td style=\"padding:6px;\">\\( \\Psi + \\Psi + 12\\Psi/N \\) bytes</td><td style=\"padding:6px;\">ZeRO-1</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Stage 2</td><td style=\"padding:6px;\">+ Gradients</td><td style=\"padding:6px;\">\\( \\Psi + (2 + 12/N)\\Psi \\) bytes</td><td style=\"padding:6px;\">ZeRO-2</td></tr>\n<tr><td style=\"padding:6px;\">Stage 3 / FSDP</td><td style=\"padding:6px;\">+ Parameters</td><td style=\"padding:6px;\">\\( (2 + 2 + 12)\\Psi/N = 16\\Psi/N \\) bytes</td><td style=\"padding:6px;\">ZeRO-3</td></tr>\n</table>\n\n<p>where \\( \\Psi \\) = number of parameters. The \\( 16\\Psi \\) total comes from: 2 bytes (FP16 parameters) + 2 bytes (FP16 gradients) + 4 bytes (FP32 master copy) + 4 bytes (FP32 first moment) + 4 bytes (FP32 second moment) for Adam. With \\( N = 64 \\) GPUs, Stage 3 reduces per-GPU memory by 64x.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "FSDP workflow per layer",
+        "body": "<ol>\n<li><b>All-gather parameters:</b> Before computing a layer's forward pass, temporarily reconstruct the full parameter tensor by gathering shards from all GPUs</li>\n<li><b>Forward pass:</b> Compute with the full parameters, then <b>discard</b> the non-local shards (freeing memory)</li>\n<li><b>All-gather again for backward:</b> Re-gather full parameters for gradient computation</li>\n<li><b>Reduce-scatter gradients:</b> Each GPU receives the gradient shard corresponding to its parameter shard</li>\n<li><b>Local optimizer step:</b> Each GPU updates only its \\( 1/N \\) shard of parameters</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Communication cost:</b> FSDP requires 3x the communication of DDP:</p>\n<ul>\n<li>DDP: 1 all-reduce per step \\( = 2\\Psi \\) bytes (ring all-reduce)</li>\n<li>FSDP: 2 all-gathers (forward + backward) + 1 reduce-scatter \\( = 3 \\times 2\\Psi/N \\times N \\approx 6\\Psi \\) bytes</li>\n</ul>\n<p>This 3x overhead is acceptable because (a) communication overlaps with computation via layer-by-layer scheduling, and (b) the memory savings enable larger batch sizes per GPU, improving compute utilization.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Concrete example:</b> A 70B model with Adam in mixed precision: \\( 16 \\times 70 \\times 10^9 = 1120 \\) GB total model state. With 64 GPUs: DDP needs 1120 GB per GPU (impossible); FSDP Stage 3 needs ~17.5 GB per GPU, leaving ample room for activations.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "FSDP sharding strategies",
+        "body": "<ul>\n<li><b>FULL_SHARD:</b> Parameters, gradients, and optimizer states all sharded (Stage 3)</li>\n<li><b>SHARD_GRAD_OP:</b> Only gradients and optimizer states sharded; parameters stay after forward (Stage 2 — faster, more memory)</li>\n<li><b>HYBRID_SHARD:</b> Full-shard within a node, replicate across nodes — reduces inter-node communication while maintaining intra-node memory efficiency</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Implementations:</b> PyTorch FSDP (torch.distributed.fsdp), DeepSpeed ZeRO (Stages 1–3), PyTorch FSDP2 (torch.distributed 2.x, improved composability with tensor parallelism and compile).</p>"
+      }
+    ],
+    "cards": []
   }
 ]

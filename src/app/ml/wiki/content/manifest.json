@@ -6075,6 +6075,231 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "vision-encoder",
+      "title": "Vision Encoder",
+      "summary": "A neural network that converts a raw image into a sequence of dense feature vectors (or a single pooled vector) suitable for downstream reasoning. In vision-language models (VLMs), the vision encoder extracts visual representations that…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "cv",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "clip-contrastive-language-image-pre-training",
+        "fully-sharded-data-parallel-fsdp"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "clip-contrastive-language-image-pre-training",
+      "title": "CLIP (Contrastive Language-Image Pre-training)",
+      "summary": "A model that learns to align images and text in a shared embedding space using contrastive learning on 400 million image-text pairs scraped from the internet. CLIP enables zero-shot image classification, text-to-image retrieval, and serv…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "cv",
+        "intermediate",
+        "landmark",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "program-aided-language-model",
+        "vision-encoder"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "program-aided-language-model",
+      "title": "Program-Aided Language Model",
+      "summary": "A prompting framework where the language model generates executable code (typically Python) to solve reasoning tasks instead of producing the answer directly in natural language. An external interpreter executes the code, and the result…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "flashattention",
+        "clip-contrastive-language-image-pre-training"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "flashattention",
+      "title": "FlashAttention",
+      "summary": "An IO-aware exact attention algorithm that computes standard scaled dot-product attention without materializing the full \\( N \\times N \\) attention matrix in GPU high-bandwidth memory (HBM). By exploiting the GPU memory hierarchy through…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "data-parallelism",
+        "program-aided-language-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "data-parallelism",
+      "title": "Data Parallelism",
+      "summary": "A distributed training strategy where the full model is replicated on each GPU and the training data batch is split across GPUs. Each GPU computes gradients on its data shard, gradients are synchronized (all-reduced) across GPUs, and eac…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "model-parallelism",
+        "flashattention"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "model-parallelism",
+      "title": "Model Parallelism",
+      "summary": "A distributed training strategy where the model itself is split across multiple GPUs, with each GPU holding only a portion of the model's parameters. This enables training models that are too large to fit in a single GPU's memory — a nec…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "pipeline-parallelism",
+        "data-parallelism"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pipeline-parallelism",
+      "title": "Pipeline Parallelism",
+      "summary": "A form of model parallelism that partitions the model's layers into sequential stages across GPUs, with each GPU processing a different stage. Data flows through the pipeline as micro-batches, allowing multiple GPUs to be active simultan…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "tensor-parallelism",
+        "model-parallelism"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "tensor-parallelism",
+      "title": "Tensor Parallelism",
+      "summary": "A form of model parallelism that splits individual layers' weight matrices across multiple GPUs, with each GPU computing a portion of each layer's output. Tensor parallelism distributes the model's width rather than its depth, requiring…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "context-parallelism",
+        "pipeline-parallelism"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "context-parallelism",
+      "title": "Context Parallelism",
+      "summary": "A parallelism strategy that splits the input sequence along the sequence-length dimension across multiple GPUs. Each GPU processes a contiguous chunk of the sequence, with communication required only during the attention computation (to…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "fully-sharded-data-parallel-fsdp",
+        "tensor-parallelism"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "fully-sharded-data-parallel-fsdp",
+      "title": "Fully Sharded Data Parallel (FSDP)",
+      "summary": "A memory-efficient variant of data parallelism that shards model parameters, gradients, and optimizer states across GPUs instead of replicating them. Each GPU stores only \\( 1/N \\) of the model state, dramatically reducing per-GPU memory…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "vision-encoder",
+        "context-parallelism"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
