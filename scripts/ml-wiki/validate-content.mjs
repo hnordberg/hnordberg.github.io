@@ -97,6 +97,21 @@ function isLikelyTitleOnlyCitation(citation) {
   return parts.length <= 1 && !hasYear && !hasAuthorCue;
 }
 
+function isLikelyUnnormalizedAuthorYearCitation(citation) {
+  const parts = citation
+    .split("·")
+    .map((x) => x.trim())
+    .filter(Boolean);
+  // Canonical expected shape for linked citations is "year · authors · title".
+  // A common import artifact is "Author et al. (YYYY) · Title", which makes
+  // the whole string become link text in the UI.
+  return (
+    parts.length === 2 &&
+    /\bet al\.\s*\(\d{4}\)/i.test(citation) &&
+    !/^\d{4}\b/.test(parts[0])
+  );
+}
+
 function readJson(rel) {
   const p = join(contentDir, rel);
   if (!existsSync(p)) throw new Error(`Missing file: ${p}`);
@@ -330,6 +345,11 @@ function issues() {
             if (isLikelyTitleOnlyCitation(p.citation)) {
               out.push(
                 `Topic ${t.slug}: arXiv-linked paper citation looks title-only; include author and year`
+              );
+            }
+            if (isLikelyUnnormalizedAuthorYearCitation(p.citation)) {
+              out.push(
+                `Topic ${t.slug}: arXiv-linked paper citation should use canonical format "year · authors · title"`
               );
             }
           }

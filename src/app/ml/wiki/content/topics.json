@@ -9534,7 +9534,7 @@
         "url": "https://arxiv.org/abs/1706.03762"
       },
       {
-        "citation": "systematically applied to attention by Vaswani et al. (2017) · Attention Is All You Need",
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
         "url": "https://arxiv.org/abs/1706.03762"
       }
     ],
@@ -12610,7 +12610,7 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2022 · Long Ouyang et al. · Training language models to follow instructions with human feedback (InstructGPT) · landmark",
+        "citation": "2022 · Long Ouyang et al. · Training language models to follow instructions with human feedback (InstructGPT)",
         "url": "https://arxiv.org/abs/2203.02155"
       }
     ],
@@ -12676,7 +12676,7 @@
         "url": "https://arxiv.org/abs/2009.01325"
       },
       {
-        "citation": "Gao et al. (2023) · Scaling Laws for Reward Model Overoptimization",
+        "citation": "2023 · Gao et al. · Scaling Laws for Reward Model Overoptimization",
         "url": "https://arxiv.org/abs/2009.01325"
       }
     ],
@@ -14050,7 +14050,7 @@
         "url": "https://arxiv.org/abs/2001.08361"
       },
       {
-        "citation": "scaling laws by Kaplan et al. (2020) · Scaling Laws for Neural Language Models",
+        "citation": "2020 · Kaplan et al. · Scaling Laws for Neural Language Models",
         "url": "https://arxiv.org/abs/2001.08361"
       }
     ],
@@ -14440,7 +14440,7 @@
         "url": "https://arxiv.org/abs/1508.07909"
       },
       {
-        "citation": "subword tokenization popularised by Sennrich et al. (2016) · Neural Machine Translation of Rare Words with Subword Units",
+        "citation": "2016 · Sennrich et al. · Neural Machine Translation of Rare Words with Subword Units",
         "url": "https://arxiv.org/abs/1508.07909"
       }
     ],
