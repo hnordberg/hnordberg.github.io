@@ -269,10 +269,16 @@ function issues() {
           if (p.doi !== undefined && typeof p.doi !== "string") {
             out.push(`Topic ${t.slug}: paper.doi must be string`);
           }
-          if (p.url === undefined && PACKED_MULTI_CITATION_RE.test(p.citation)) {
-            out.push(
-              `Topic ${t.slug}: papers entry appears to bundle multiple works without URL(s); split into separate paper objects`
-            );
+          if (PACKED_MULTI_CITATION_RE.test(p.citation)) {
+            if (p.url === undefined) {
+              out.push(
+                `Topic ${t.slug}: papers entry appears to bundle multiple works without URL(s); split into separate paper objects`
+              );
+            } else {
+              out.push(
+                `Topic ${t.slug}: papers entry appears to bundle multiple works under one URL; split into separate paper objects with per-paper URLs`
+              );
+            }
           }
         }
       }
