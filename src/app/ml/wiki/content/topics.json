@@ -12223,7 +12223,15 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Applied broadly; LLM examples: Michel et al. (2019, Are Sixteen Heads Really Better than One? ), Voita et al. (2019, Analyzing Multi-Head Self-Attention ), Men et al. (2024, ShortGPT layer pruning).",
+        "citation": "2019 · Michel et al. · Are Sixteen Heads Really Better than One?",
+        "url": "https://arxiv.org/abs/1905.10650"
+      },
+      {
+        "citation": "2019 · Voita et al. · Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting",
+        "url": "https://arxiv.org/abs/1905.10650"
+      },
+      {
+        "citation": "2024 · Men et al. · ShortGPT layer pruning",
         "url": "https://arxiv.org/abs/1905.10650"
       }
     ],
