@@ -3171,6 +3171,231 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "corpus",
+      "title": "Corpus",
+      "summary": "A large, structured collection of text used for training or evaluating language models and NLP systems. The quality, size, and composition of the training corpus fundamentally determine what the model learns and how it behaves.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "n-gram",
+        "log-likelihood"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "n-gram",
+      "title": "N-gram",
+      "summary": "A contiguous sequence of \\( n \\) tokens from a text, used as the fundamental unit in classical statistical language models and many NLP features.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "count-based-language-model",
+        "corpus"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "count-based-language-model",
+      "title": "Count-based language model",
+      "summary": "A language model that estimates the probability of a word sequence by counting n-gram occurrences in a corpus and applying smoothing to handle unseen sequences. Count-based models dominated NLP from the 1980s through the early 2010s.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "language-model",
+        "n-gram"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "language-model",
+      "title": "Language model",
+      "summary": "A probabilistic model that assigns a probability to any sequence of tokens, capturing the statistical structure of natural language. Language models are the foundation of modern NLP — the same framework underlies n-gram models, LSTMs, an…",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "autoregressive-language-model",
+        "count-based-language-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "autoregressive-language-model",
+      "title": "Autoregressive language model",
+      "summary": "A language model that generates text left-to-right by predicting each token conditioned on all preceding tokens, with no access to future context. All GPT-family models, LLaMA, and Claude are autoregressive.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "masked-language-model",
+        "language-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "masked-language-model",
+      "title": "Masked language model",
+      "summary": "A language model trained to predict randomly masked tokens in a sequence using bidirectional context — both the left and right surrounding tokens. Introduced by BERT (2019), MLMs produce rich contextual representations that excel at unde…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "landmark",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "causal-language-model",
+        "autoregressive-language-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "causal-language-model",
+      "title": "Causal language model",
+      "summary": "A language model that predicts each token using only the tokens that precede it, enforcing a strict left-to-right causal ordering — synonymous with \"autoregressive language model.\" The term \"causal\" refers to the causal mask applied in s…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "chat-language-model",
+        "masked-language-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "chat-language-model",
+      "title": "Chat language model",
+      "summary": "A language model fine-tuned to follow instructions and engage in multi-turn dialogue, typically produced by applying supervised fine-tuning (SFT) and preference-based alignment (RLHF/DPO) to a pretrained base model. ChatGPT (2022) popula…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "perplexity",
+        "causal-language-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "perplexity",
+      "title": "Perplexity",
+      "summary": "The standard intrinsic evaluation metric for language models, measuring how \"surprised\" the model is by a held-out test sequence — lower perplexity indicates a better model.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "log-likelihood",
+        "chat-language-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "log-likelihood",
+      "title": "Log-likelihood",
+      "summary": "The natural logarithm of the likelihood function, converting the product of probabilities into a sum for numerical stability and algebraic convenience in optimization. Maximizing the log-likelihood is the most common training objective i…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "corpus",
+        "perplexity"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

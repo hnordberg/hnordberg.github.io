@@ -6944,5 +6944,495 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "corpus",
+    "title": "Corpus",
+    "summary": "A large, structured collection of text used for training or evaluating language models and NLP systems. The quality, size, and composition of the training corpus fundamentally determine what the model learns and how it behaves.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "n-gram",
+      "log-likelihood"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1961 · W. Nelson Francis, Henry Kučera (Brown Corpus)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A large, structured collection of text used for training or evaluating language models and NLP systems. The quality, size, and composition of the training corpus fundamentally determine what the model learns and how it behaves.</p><p>The corpus (plural: <i>corpora</i>) is the raw material from which statistical and neural language models learn. Before a model sees any text, the corpus must be assembled, cleaned, and tokenized — each step introducing design choices that propagate into model behavior.</p>\n\n  <h4>Key dimensions of corpus design</h4>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Dimension</th>\n      <th style=\"padding:6px; text-align:left;\">Description</th>\n      <th style=\"padding:6px; text-align:left;\">Example</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Scale</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Token count; modern LLMs train on trillions</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">LLaMA 2: ~2T tokens</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Diversity</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Mix of domains (web, books, code, papers)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">The Pile: 22 sub-corpora</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Curation</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Deduplication, toxicity filtering, quality scoring</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">C4: heuristic quality filters on Common Crawl</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Data mixture</td>\n      <td style=\"padding:6px;\">Relative proportion of each source — a critical hyperparameter</td>\n      <td style=\"padding:6px;\">Chinchilla-optimal ratios</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Scaling laws and corpus size.</b> Hoffmann et al. (2022) showed that for compute-optimal training, model size and training tokens should scale roughly equally — doubling parameters requires doubling data. This means corpus size is not just \"more is better\" but must be balanced against model capacity. Training a 70B model on only 300B tokens wastes compute; the Chinchilla-optimal recipe calls for ~1.4T tokens at that scale.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Curation pipeline.</b> A typical preprocessing pipeline for web-scraped corpora includes: (1) language identification, (2) deduplication via MinHash or exact n-gram matching — Penedo et al. found ~30% of Common Crawl is near-duplicate, (3) heuristic quality filters (line length, symbol ratios, perplexity scoring against a clean reference model), and (4) domain-specific filtering for toxic or personally identifiable content.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Notable corpora in the history of NLP",
+        "body": "<ul>\n    <li><b>Brown Corpus</b> (1961): first digital English corpus, 1M words, 500 texts across 15 genres</li>\n    <li><b>Penn Treebank</b> (1993): ~1M words of Wall Street Journal text with syntactic parse annotations — the standard benchmark for n-gram and early neural LMs</li>\n    <li><b>Wikipedia dumps</b>: ~4B words of encyclopedic text, used in nearly every LLM pretraining mix</li>\n    <li><b>Common Crawl</b>: petabytes of raw web text; the basis for C4, OSCAR, and most large-scale corpora</li>\n    <li><b>The Pile</b> (2020): 800GB diverse text explicitly designed for LLM training, including Arxiv, GitHub, PubMed, and StackExchange</li>\n    <li><b>RedPajama</b> (2023): open reproduction of LLaMA's training data, ~1.2T tokens</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Relationship to tokenization.</b> The corpus and tokenizer are co-dependent: BPE and SentencePiece vocabularies are learned from the training corpus itself, so the token distribution reflects corpus composition. A corpus heavy on code will produce a tokenizer with many code-specific merges; switching corpora without retraining the tokenizer degrades efficiency.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "n-gram",
+    "title": "N-gram",
+    "summary": "A contiguous sequence of \\( n \\) tokens from a text, used as the fundamental unit in classical statistical language models and many NLP features.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "count-based-language-model",
+      "corpus"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1948 · Claude Shannon · A Mathematical Theory of Communication"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A contiguous sequence of \\( n \\) tokens from a text, used as the fundamental unit in classical statistical language models and many NLP features.</p><p>For a sequence of tokens \\( w_1, w_2, \\ldots, w_T \\), the n-grams are all subsequences of length \\( n \\). Common sizes have specific names:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">\\( n \\)</th>\n      <th style=\"padding:6px; text-align:left;\">Name</th>\n      <th style=\"padding:6px; text-align:left;\">Example (\"the cat sat\")</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">1</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Unigram</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">the, cat, sat</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">2</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Bigram</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">(the, cat), (cat, sat)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">3</td>\n      <td style=\"padding:6px;\">Trigram</td>\n      <td style=\"padding:6px;\">(the, cat, sat)</td>\n    </tr>\n  </tbody></table>\n\n  <p>In an n-gram language model, the probability of the next word is conditioned on the preceding \\( n-1 \\) words via the Markov assumption:</p>\n\n  <p>\\[ P(w_t \\mid w_1, \\ldots, w_{t-1}) \\approx P(w_t \\mid w_{t-n+1}, \\ldots, w_{t-1}) \\]</p>\n\n  <p>Probabilities are estimated by counting: \\( P(w_t \\mid w_{t-2}, w_{t-1}) = \\frac{C(w_{t-2}, w_{t-1}, w_t)}{C(w_{t-2}, w_{t-1})} \\). The fundamental limitation is data sparsity — most n-grams for \\( n \\geq 3 \\) are never observed in any finite corpus, requiring smoothing techniques (Laplace, Kneser-Ney). Neural language models eliminated this bottleneck by operating in continuous embedding space rather than discrete count space.</p><details>\n    <summary>Python</summary>\n    <pre><code>from collections import Counter\n\ndef extract_ngrams(tokens, n):\n    return [tuple(tokens[i:i+n]) for i in range(len(tokens) - n + 1)]\n\ndef ngram_probs(tokens, n):\n    ngrams = Counter(extract_ngrams(tokens, n))\n    context = Counter(extract_ngrams(tokens, n - 1))\n    probs = {}\n    for ng, count in ngrams.items():\n        probs[ng] = count / context[ng[:-1]]\n    return probs</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "count-based-language-model",
+    "title": "Count-based language model",
+    "summary": "A language model that estimates the probability of a word sequence by counting n-gram occurrences in a corpus and applying smoothing to handle unseen sequences. Count-based models dominated NLP from the 1980s through the early 2010s.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "language-model",
+      "n-gram"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1995 · Reinhard Kneser, Hermann Ney · Improved backing-off for M-gram language modeling"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A language model that estimates the probability of a word sequence by counting n-gram occurrences in a corpus and applying smoothing to handle unseen sequences. Count-based models dominated NLP from the 1980s through the early 2010s.</p><p>The maximum likelihood estimate (MLE) for an n-gram probability is:</p>\n\n  <p>\\[ P_{\\text{MLE}}(w_t \\mid w_{t-n+1}, \\ldots, w_{t-1}) = \\frac{C(w_{t-n+1}, \\ldots, w_t)}{C(w_{t-n+1}, \\ldots, w_{t-1})} \\]</p>\n\n  <p>where \\( C(\\cdot) \\) denotes the raw count in the training corpus. This assigns zero probability to any n-gram not observed during training — a fatal flaw because a single unseen bigram makes the entire sequence probability zero, and perplexity becomes infinite.</p>\n\n  <h4>Smoothing techniques</h4>\n\n  <p>Smoothing redistributes probability mass from observed events to unseen events:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Method</th>\n      <th style=\"padding:6px; text-align:left;\">Mechanism</th>\n      <th style=\"padding:6px; text-align:left;\">Formula (bigram case)</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Add-one (Laplace)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Add 1 to every count</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\frac{C(w_{t-1}, w_t) + 1}{C(w_{t-1}) + V} \\)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Add-\\( k \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Add \\( k < 1 \\) to every count</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\frac{C(w_{t-1}, w_t) + k}{C(w_{t-1}) + kV} \\)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Good-Turing</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Re-estimate counts using frequency of frequencies \\( N_c \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( c^* = (c+1) \\frac{N_{c+1}}{N_c} \\)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Kneser-Ney</td>\n      <td style=\"padding:6px;\">Absolute discounting + novel back-off distribution</td>\n      <td style=\"padding:6px;\">\\( \\frac{\\max(C(w_{t-1}, w_t) - d, 0)}{C(w_{t-1})} + \\lambda \\, P_{\\text{KN}}(w_t) \\)</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Kneser-Ney smoothing</b> (1995) is widely regarded as the best n-gram smoothing method. Its key insight is that the back-off (lower-order) distribution should not use the raw unigram frequency but rather the <i>continuation probability</i> — how many distinct contexts a word appears in:</p>\n\n  <p>\\[ P_{\\text{KN}}(w) = \\frac{|\\{w' : C(w', w) > 0\\}|}{|\\{(w', w'') : C(w', w'') > 0\\}|} \\]</p>\n\n  <p>This captures the intuition that a word like \"Francisco\" has a high raw count but appears in very few contexts (mostly after \"San\"), so it should have low back-off probability. The discount \\( d \\) is typically estimated via the formula \\( d = \\frac{n_1}{n_1 + 2n_2} \\) where \\( n_1, n_2 \\) are the counts of n-grams occurring exactly once or twice.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Interpolation vs. back-off.</b> Interpolation (Jelinek-Mercer) always mixes higher- and lower-order estimates: \\( P_{\\text{interp}} = \\lambda_n P_n + (1 - \\lambda_n) P_{n-1} \\). Back-off (Katz) uses the lower-order model only when the higher-order count is zero. Modified Kneser-Ney uses interpolation and is the standard in practice.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Limitations and the transition to neural models.</b> Even with sophisticated smoothing, count-based models cannot generalize to semantically similar but lexically distinct contexts — \"cat sat on the mat\" tells a trigram model nothing about \"dog sat on the rug.\" Neural language models (Bengio et al., 2003) addressed this by mapping words to continuous embeddings where similar words share similar representations, eliminating the sparsity bottleneck entirely.</p><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why MLE assigns zero to unseen n-grams:</b> If \\( C(w_{t-n+1}, \\ldots, w_t) = 0 \\), then \\( P_{\\text{MLE}}(w_t \\mid w_{t-n+1:t-1}) = \\frac{0}{C(w_{t-n+1:t-1})} = 0 \\). For the full sequence probability \\( P(w_{1:T}) = \\prod_t P(w_t \\mid \\text{context}) \\), a single zero factor makes the entire product zero and the log-likelihood \\( -\\infty \\), so perplexity is undefined.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Laplace smoothing derivation:</b> Adding a pseudocount of 1 to each of the \\( V \\) possible continuations gives \\( P_{\\text{Lap}}(w_t \\mid w_{t-1}) = \\frac{C(w_{t-1}, w_t) + 1}{\\sum_{w} (C(w_{t-1}, w) + 1)} = \\frac{C(w_{t-1}, w_t) + 1}{C(w_{t-1}) + V} \\). This over-smooths dramatically for large \\( V \\) — with \\( V = 50{,}000 \\), even frequent bigrams lose most of their probability mass to unseen events.</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "language-model",
+    "title": "Language model",
+    "summary": "A probabilistic model that assigns a probability to any sequence of tokens, capturing the statistical structure of natural language. Language models are the foundation of modern NLP — the same framework underlies n-gram models, LSTMs, an…",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "landmark",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "autoregressive-language-model",
+      "count-based-language-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1948 · Claude Shannon · A Mathematical Theory of Communication"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A probabilistic model that assigns a probability to any sequence of tokens, capturing the statistical structure of natural language. Language models are the foundation of modern NLP — the same framework underlies n-gram models, LSTMs, and large Transformer-based LLMs.</p><p>Formally, a language model defines a probability distribution over sequences \\( w_1, w_2, \\ldots, w_T \\). By the chain rule of probability, this joint distribution factorizes exactly as:</p>\n\n  <p>\\[ P(w_1, \\ldots, w_T) = \\prod_{t=1}^{T} P(w_t \\mid w_1, \\ldots, w_{t-1}) \\]</p>\n\n  <p>Different model families approximate the conditional distributions differently:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Type</th>\n      <th style=\"padding:6px; text-align:left;\">Conditioning</th>\n      <th style=\"padding:6px; text-align:left;\">Era</th>\n      <th style=\"padding:6px; text-align:left;\">Example</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">N-gram</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( P(w_t \\mid w_{t-n+1:t-1}) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">1980s–2000s</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Kneser-Ney trigram</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Neural (feedforward)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( P(w_t \\mid w_{t-n+1:t-1}; \\theta) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">2003</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Bengio NNLM</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Recurrent</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( P(w_t \\mid h_t; \\theta) \\), \\( h_t = f(h_{t-1}, w_{t-1}) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">2010–2017</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">LSTM-LM</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Autoregressive Transformer</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( P(w_t \\mid w_{1:t-1}; \\theta) \\) via causal attention</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">2018–present</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">GPT, LLaMA, Claude</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Masked</td>\n      <td style=\"padding:6px;\">\\( P(w_t \\mid w_{\\backslash t}; \\theta) \\)</td>\n      <td style=\"padding:6px;\">2019–present</td>\n      <td style=\"padding:6px;\">BERT, RoBERTa</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Training objective.</b> Nearly all language models are trained by maximum likelihood estimation — equivalently, minimizing the negative log-likelihood (NLL) or cross-entropy loss:</p>\n\n  <p>\\[ \\mathcal{L} = -\\frac{1}{T} \\sum_{t=1}^{T} \\log P(w_t \\mid \\text{context}; \\theta) \\]</p>\n\n  <p>The standard intrinsic evaluation metric is perplexity: \\( \\text{PPL} = \\exp(\\mathcal{L}) \\), which measures how many tokens the model is effectively choosing between at each step.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The scaling hypothesis.</b> The surprising finding of the scaling era (Kaplan et al., 2020) is that the simple objective of next-token prediction, applied at sufficient scale in parameters, data, and compute, produces models with emergent capabilities: in-context learning, chain-of-thought reasoning, and broad world knowledge. This was not predicted by the classical NLP community and has made \"language model\" nearly synonymous with \"foundation model\" in modern usage.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Historical context.</b> Shannon (1948) first formalized language as a stochastic process and estimated English entropy via n-gram statistics. Jelinek and colleagues at IBM (1970s–80s) built the first practical LMs for speech recognition. Bengio et al. (2003) introduced neural language models with learned embeddings. The Transformer (Vaswani et al., 2017) eliminated the sequential bottleneck of RNNs, enabling the massive parallelism that made scaling to billions of parameters feasible.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "autoregressive-language-model",
+    "title": "Autoregressive language model",
+    "summary": "A language model that generates text left-to-right by predicting each token conditioned on all preceding tokens, with no access to future context. All GPT-family models, LLaMA, and Claude are autoregressive.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "masked-language-model",
+      "language-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2018 · Alec Radford et al. (GPT-1) · Improving Language Understanding by Generative Pre-Training"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A language model that generates text left-to-right by predicting each token conditioned on all preceding tokens, with no access to future context. All GPT-family models, LLaMA, and Claude are autoregressive.</p><p>An autoregressive model factorizes the joint probability using the chain rule in the forward (left-to-right) direction:</p>\n\n  <p>\\[ P(w_1, \\ldots, w_T) = \\prod_{t=1}^{T} P(w_t \\mid w_1, \\ldots, w_{t-1}; \\theta) \\]</p>\n\n  <p>This is enforced architecturally via <b>causal masking</b> in the self-attention mechanism. The attention mask \\( M \\) is a lower-triangular matrix:</p>\n\n  <p>\\[ M_{ij} = \\begin{cases} 0 & \\text{if } j \\leq i \\\\ -\\infty & \\text{if } j > i \\end{cases} \\]</p>\n\n  <p>so that after softmax, position \\( i \\) attends only to positions \\( \\leq i \\). This ensures that the model's output at position \\( t \\) is a function only of \\( w_{1:t} \\), preserving the autoregressive property.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Training.</b> The training objective is next-token prediction (cross-entropy loss over the vocabulary at each position). Because every token in the sequence provides a training signal, autoregressive models are highly data-efficient compared to masked LMs which only predict ~15% of tokens. The loss is:</p>\n\n  <p>\\[ \\mathcal{L} = -\\frac{1}{T} \\sum_{t=1}^{T} \\log P(w_t \\mid w_{1:t-1}; \\theta) \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Inference.</b> Generation proceeds token by token: the model computes \\( P(\\cdot \\mid w_{1:t-1}) \\), samples or greedily selects \\( w_t \\), appends it to the sequence, and repeats. This sequential process means generating \\( T \\) tokens requires \\( T \\) forward passes. The KV-cache optimization avoids recomputing attention for previous positions, reducing each step from \\( O(T) \\) to \\( O(1) \\) in new computation, but memory grows linearly with sequence length.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Decoding strategies</b> control how tokens are selected from the predicted distribution:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Strategy</th>\n      <th style=\"padding:6px; text-align:left;\">Mechanism</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Greedy</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( w_t = \\arg\\max P(\\cdot \\mid w_{1:t-1}) \\)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Temperature sampling</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( P'(w) \\propto P(w)^{1/\\tau} \\); \\( \\tau < 1 \\) sharpens, \\( \\tau > 1 \\) flattens</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Top-\\( k \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Sample from the \\( k \\) highest-probability tokens only</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Nucleus (top-\\( p \\))</td>\n      <td style=\"padding:6px;\">Sample from smallest set whose cumulative probability \\( \\geq p \\)</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Advantages over masked LMs:</b> Autoregressive models naturally support open-ended generation, can be evaluated via perplexity on any text, and scale more predictably. The key limitation is that generation is inherently sequential, and the model cannot \"look ahead\" — it must commit to each token before seeing what comes next, which can lead to locally optimal but globally suboptimal sequences.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "masked-language-model",
+    "title": "Masked language model",
+    "summary": "A language model trained to predict randomly masked tokens in a sequence using bidirectional context — both the left and right surrounding tokens. Introduced by BERT (2019), MLMs produce rich contextual representations that excel at unde…",
+    "domain": "history",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "intermediate",
+      "landmark",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "causal-language-model",
+      "autoregressive-language-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Jacob Devlin, Ming-Wei Chang, Kenton Lee, Kristina Toutanova · BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+        "url": "https://arxiv.org/abs/1810.04805"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A language model trained to predict randomly masked tokens in a sequence using bidirectional context — both the left and right surrounding tokens. Introduced by BERT (2019), MLMs produce rich contextual representations that excel at understanding tasks.</p><p>The masked language model (MLM) objective randomly replaces a fraction (typically 15%) of input tokens with a special <code>[MASK]</code> token and trains the model to reconstruct them:</p>\n\n  <p>\\[ \\mathcal{L}_{\\text{MLM}} = -\\sum_{t \\in \\mathcal{M}} \\log P(w_t \\mid w_{\\backslash \\mathcal{M}}; \\theta) \\]</p>\n\n  <p>where \\( \\mathcal{M} \\) is the set of masked positions and \\( w_{\\backslash \\mathcal{M}} \\) denotes all unmasked tokens. Because the model attends to context in both directions (no causal mask), each representation at position \\( t \\) encodes information from the entire sequence — a strictly richer signal than the left-only context of autoregressive models.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>BERT's masking strategy.</b> Of the 15% selected tokens: 80% are replaced with <code>[MASK]</code>, 10% with a random token, and 10% kept unchanged. This design mitigates the train/test mismatch since <code>[MASK]</code> never appears at inference time. The 10% random replacement forces the model to maintain a distributional representation at every position, not just masked ones.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Architecture.</b> BERT uses a standard Transformer encoder (no decoder) with bidirectional self-attention. BERT-base has 12 layers, 768 hidden dimensions, and 12 attention heads (110M parameters); BERT-large has 24 layers, 1024 hidden dimensions, and 16 heads (340M parameters). It also uses a second pretraining objective, next sentence prediction (NSP), which was later shown to be unnecessary — RoBERTa (2019) dropped NSP, trained longer on more data, and consistently outperformed BERT.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Comparison with autoregressive models",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Property</th>\n      <th style=\"padding:6px; text-align:left;\">MLM (BERT)</th>\n      <th style=\"padding:6px; text-align:left;\">Autoregressive (GPT)</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Context</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Bidirectional</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Left-to-right only</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Training signal</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">~15% of tokens</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">100% of tokens</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Generation</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Requires iterative re-masking</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Natural (token-by-token)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Best for</td>\n      <td style=\"padding:6px;\">Classification, NER, extractive QA</td>\n      <td style=\"padding:6px;\">Open-ended generation, dialogue</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Downstream use.</b> MLMs are typically fine-tuned by adding a task-specific head (linear layer) on top of the <code>[CLS]</code> token representation or the per-token representations. The pretrained bidirectional representations transfer remarkably well — BERT achieved state-of-the-art on 11 NLP benchmarks upon release, demonstrating that unsupervised pretraining followed by supervised fine-tuning (the \"pretrain-finetune\" paradigm) was superior to task-specific architectures.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "causal-language-model",
+    "title": "Causal language model",
+    "summary": "A language model that predicts each token using only the tokens that precede it, enforcing a strict left-to-right causal ordering — synonymous with \"autoregressive language model.\" The term \"causal\" refers to the causal mask applied in s…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "chat-language-model",
+      "masked-language-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2018 · Alec Radford et al. · Improving Language Understanding by Generative Pre-Training"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A language model that predicts each token using only the tokens that precede it, enforcing a strict left-to-right causal ordering — synonymous with \"autoregressive language model.\" The term \"causal\" refers to the causal mask applied in self-attention.</p><p>The term \"causal\" comes from the causal (lower-triangular) mask applied to the self-attention scores before softmax. For a sequence of length \\( T \\), the mask matrix is:</p>\n\n  <p>\\[ M_{ij} = \\begin{cases} 0 & \\text{if } j \\leq i \\\\ -\\infty & \\text{if } j > i \\end{cases} \\]</p>\n\n  <p>Adding \\( M \\) to the raw attention logits before softmax ensures that \\( \\text{Attention}(Q, K, V) = \\text{softmax}\\!\\left(\\frac{QK^\\top}{\\sqrt{d_k}} + M\\right) V \\), so position \\( i \\) attends only to positions \\( \\leq i \\). This enforces the autoregressive property: the model's output at position \\( t \\) depends only on \\( w_{1:t} \\), matching the chain rule factorization \\( P(w_{1:T}) = \\prod_{t=1}^{T} P(w_t \\mid w_{1:t-1}) \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Causal vs. masked language models — an architectural distinction",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Property</th>\n      <th style=\"padding:6px; text-align:left;\">Causal LM (GPT)</th>\n      <th style=\"padding:6px; text-align:left;\">Masked LM (BERT)</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Attention pattern</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Unidirectional (lower-triangular mask)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Bidirectional (no mask)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Training signal</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Every token is predicted (100%)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Only ~15% masked tokens</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Generation</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Natural token-by-token sampling</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Requires iterative re-masking</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Density estimation</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Exact log-likelihood via chain rule</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">No tractable likelihood</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Dominant use</td>\n      <td style=\"padding:6px;\">Open-ended generation, LLMs</td>\n      <td style=\"padding:6px;\">Classification, NER, extractive QA</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why \"causal\" matters beyond naming.</b> The causal mask is what makes these models valid density estimators — they define a proper probability distribution over sequences because the chain rule factorization is exact. This enables principled evaluation via perplexity and log-likelihood, which masked LMs cannot compute tractably. It also means causal LMs can be used for importance sampling, sequence scoring, and other probabilistic inference tasks.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Prefix LM variant.</b> Some models (e.g., T5 encoder, UL2) use a prefix language model that allows bidirectional attention over a prefix portion of the input and causal attention over the rest. This hybrid approach gives richer representations for conditioning context while retaining autoregressive generation for the output.</p>\n\n  <p>Causal LMs have become the dominant paradigm for general-purpose AI, as the same architecture and objective support both understanding (via prompting) and generation — a unification that masked LMs cannot achieve.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "chat-language-model",
+    "title": "Chat language model",
+    "summary": "A language model fine-tuned to follow instructions and engage in multi-turn dialogue, typically produced by applying supervised fine-tuning (SFT) and preference-based alignment (RLHF/DPO) to a pretrained base model. ChatGPT (2022) popula…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "perplexity",
+      "causal-language-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · OpenAI (ChatGPT / InstructGPT) · Training language models to follow instructions with human feedback",
+        "url": "https://arxiv.org/abs/2203.02155"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A language model fine-tuned to follow instructions and engage in multi-turn dialogue, typically produced by applying supervised fine-tuning (SFT) and preference-based alignment (RLHF/DPO) to a pretrained base model. ChatGPT (2022) popularized this paradigm.</p><p>A chat model extends a base causal LM through a multi-stage <b>post-training pipeline</b>:</p>\n\n  <ol>\n    <li><b>Supervised fine-tuning (SFT):</b> Train on curated (instruction, response) pairs to teach the model to follow prompts rather than merely complete text. Datasets typically contain 10K–100K high-quality examples written by human annotators.</li>\n    <li><b>Reward model training:</b> Train a separate model to predict human preferences given pairs of responses to the same prompt. The reward model \\( R(x, y) \\) scores response \\( y \\) to prompt \\( x \\).</li>\n    <li><b>Preference alignment:</b> Optimize the policy (chat model) against the reward model using one of:\n      <ul>\n        <li><b>RLHF</b> (PPO): maximize \\( \\mathbb{E}[R(x, y)] - \\beta \\, D_{\\text{KL}}(\\pi_\\theta \\| \\pi_{\\text{ref}}) \\), where the KL penalty prevents the model from drifting too far from the SFT policy</li>\n        <li><b>DPO</b> (Direct Preference Optimization): reparameterizes RLHF to eliminate the reward model, directly optimizing: \\( \\mathcal{L}_{\\text{DPO}} = -\\log \\sigma\\!\\left(\\beta \\log \\frac{\\pi_\\theta(y_w \\mid x)}{\\pi_{\\text{ref}}(y_w \\mid x)} - \\beta \\log \\frac{\\pi_\\theta(y_l \\mid x)}{\\pi_{\\text{ref}}(y_l \\mid x)}\\right) \\) where \\( y_w, y_l \\) are the preferred and dispreferred responses</li>\n      </ul>\n    </li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Chat template / prompt format.</b> Chat models use a structured prompting format that distinguishes roles within the token stream — typically system, user, and assistant turns, delimited by special tokens. Examples:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Format</th>\n      <th style=\"padding:6px; text-align:left;\">Delimiters</th>\n      <th style=\"padding:6px; text-align:left;\">Used by</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">ChatML</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\"><code>&lt;|im_start|&gt;role</code> ... <code>&lt;|im_end|&gt;</code></td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">OpenAI models</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Llama format</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\"><code>[INST]</code> ... <code>[/INST]</code></td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">LLaMA 2 Chat</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Alpaca</td>\n      <td style=\"padding:6px;\"><code>### Instruction:</code> / <code>### Response:</code></td>\n      <td style=\"padding:6px;\">Stanford Alpaca</td>\n    </tr>\n  </table>\n\n  <p>This format is baked into the fine-tuning data so the model learns to condition its behavior on role boundaries. Misformatting the template at inference time (e.g., omitting special tokens) can severely degrade performance.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Base vs. chat model.</b> The base model and chat model share identical architectures and parameter counts — the difference is entirely in the training data distribution of the post-training stages. This means chat models sacrifice some raw completion ability (they may refuse to simply continue a passage) in exchange for instruction-following, safety behaviors, and conversational coherence. The \"alignment tax\" — the performance cost of alignment — is generally small on benchmarks but noticeable in unconventional prompting scenarios.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "perplexity",
+    "title": "Perplexity",
+    "summary": "The standard intrinsic evaluation metric for language models, measuring how \"surprised\" the model is by a held-out test sequence — lower perplexity indicates a better model.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "log-likelihood",
+      "chat-language-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1977 · Frederick Jelinek et al. (IBM speech recognition group)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The standard intrinsic evaluation metric for language models, measuring how \"surprised\" the model is by a held-out test sequence — lower perplexity indicates a better model.</p><p>Perplexity is defined as the exponentiated average negative log-likelihood per token:</p>\n\n  <p>\\[ \\text{PPL} = \\exp\\left(-\\frac{1}{T} \\sum_{t=1}^{T} \\log P(w_t \\mid w_{1:t-1})\\right) \\]</p>\n\n  <p>Equivalently, \\( \\text{PPL} = 2^{H(P, \\hat{P})} \\) when using base-2 logarithms, where \\( H(P, \\hat{P}) \\) is the cross-entropy between the true data distribution \\( P \\) and the model's distribution \\( \\hat{P} \\). The connection to information theory is direct: cross-entropy measures the average number of bits needed to encode data from \\( P \\) using the code designed for \\( \\hat{P} \\), and perplexity is the effective vocabulary size that coding cost implies.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Intuition.</b> A perplexity of \\( k \\) means the model is as uncertain as if it were choosing uniformly among \\( k \\) tokens at each step. A perfect model on deterministic text achieves PPL = 1 (no uncertainty). A uniform distribution over a vocabulary of size \\( V \\) gives PPL = \\( V \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Historical benchmarks on Penn Treebank",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Model</th>\n      <th style=\"padding:6px; text-align:left;\">PPL</th>\n      <th style=\"padding:6px; text-align:left;\">Year</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Kneser-Ney 5-gram</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">~141</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">1990s</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">LSTM (Zaremba et al.)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">~58</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">2014</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">AWD-LSTM (Merity et al.)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">~52</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">2018</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Transformer-XL</td>\n      <td style=\"padding:6px;\">~18</td>\n      <td style=\"padding:6px;\">2019</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Important caveats and limitations",
+        "body": "<ul>\n    <li><b>Tokenization dependence:</b> PPL is only comparable across models using the same vocabulary and tokenizer. Different tokenizers produce different token counts \\( T \\), making raw PPL values incomparable. A model using BPE with 50K merges will report different PPL than one using 32K merges on the same text, even if they assign identical probabilities to the raw character sequence.</li>\n    <li><b>Bits-per-character (BPC):</b> To enable cross-tokenizer comparison, BPC normalizes by character count: \\( \\text{BPC} = -\\frac{1}{C} \\sum_{t=1}^{T} \\log_2 P(w_t \\mid w_{1:t-1}) \\) where \\( C \\) is the total character count. This is tokenizer-invariant.</li>\n    <li><b>PPL vs. downstream performance:</b> Lower perplexity generally correlates with better downstream task performance, but the correlation is imperfect — a model can achieve low PPL by excelling at predicting function words while struggling with factual content.</li>\n    <li><b>Masked LMs:</b> Perplexity is not directly defined for masked language models like BERT, which do not define a proper autoregressive distribution over sequences. Pseudo-perplexity approximations exist but are not standard.</li>\n  </ul><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "title": "From cross-entropy to perplexity",
+        "body": "<p>The cross-entropy of a model \\( \\hat{P} \\) with respect to the true distribution \\( P \\) over sequences is:</p>\n    <p>\\[ H(P, \\hat{P}) = -\\sum_{x} P(x) \\log \\hat{P}(x) \\]</p>\n    <p>In practice, we approximate this with the empirical cross-entropy over a test corpus of \\( T \\) tokens:</p>\n    <p>\\[ \\hat{H} = -\\frac{1}{T} \\sum_{t=1}^{T} \\log_2 P(w_t \\mid w_{1:t-1}) \\]</p>\n    <p>Perplexity is then \\( \\text{PPL} = 2^{\\hat{H}} \\). Using natural logs: \\( \\text{PPL} = \\exp\\left(-\\frac{1}{T} \\sum_{t=1}^{T} \\ln P(w_t \\mid w_{1:t-1})\\right) \\). The two are equivalent since \\( 2^{x / \\ln 2} = e^x \\).</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "log-likelihood",
+    "title": "Log-likelihood",
+    "summary": "The natural logarithm of the likelihood function, converting the product of probabilities into a sum for numerical stability and algebraic convenience in optimization. Maximizing the log-likelihood is the most common training objective i…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "corpus",
+      "perplexity"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1922 · R.A. Fisher · On the Mathematical Foundations of Theoretical Statistics"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The natural logarithm of the likelihood function, converting the product of probabilities into a sum for numerical stability and algebraic convenience in optimization. Maximizing the log-likelihood is the most common training objective in machine learning.</p><p>Given a dataset \\( \\mathcal{D} = \\{x_1, \\ldots, x_N\\} \\) assumed i.i.d. from some distribution, and a model with parameters \\( \\theta \\), the likelihood is:</p>\n\n  <p>\\[ L(\\theta) = \\prod_{i=1}^{N} P(x_i \\mid \\theta) \\]</p>\n\n  <p>The log-likelihood is:</p>\n\n  <p>\\[ \\ell(\\theta) = \\log L(\\theta) = \\sum_{i=1}^{N} \\log P(x_i \\mid \\theta) \\]</p>\n\n  <p>The logarithm is strictly monotonically increasing, so \\( \\arg\\max_\\theta \\ell(\\theta) = \\arg\\max_\\theta L(\\theta) \\). The maximum likelihood estimate (MLE) is \\( \\hat{\\theta}_{\\text{MLE}} = \\arg\\max_\\theta \\ell(\\theta) \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Why the log transform is essential",
+        "body": "<ul>\n    <li><b>Numerical stability:</b> Multiplying many small probabilities causes floating-point underflow. For \\( N = 1000 \\) data points each with probability 0.01, the likelihood is \\( 10^{-2000} \\) — far below the smallest representable float64 (\\( \\approx 10^{-308} \\)). The log-likelihood is simply \\( -2000 \\log 10 \\approx -4605 \\), perfectly representable.</li>\n    <li><b>Gradient tractability:</b> Sums have simpler derivatives than products. The gradient of the log-likelihood is \\( \\nabla_\\theta \\ell = \\sum_{i=1}^N \\nabla_\\theta \\log P(x_i \\mid \\theta) \\), which decomposes into per-example contributions — essential for stochastic gradient descent.</li>\n    <li><b>Connection to information theory:</b> The average negative log-likelihood equals the cross-entropy: \\( -\\frac{1}{N} \\ell(\\theta) \\to H(P_{\\text{data}}, P_\\theta) \\) as \\( N \\to \\infty \\). Minimizing NLL is equivalent to minimizing the KL divergence \\( D_{\\text{KL}}(P_{\\text{data}} \\| P_\\theta) \\) plus a constant.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>In language modeling:</b> For a sequence \\( w_1, \\ldots, w_T \\), the log-likelihood under an autoregressive model is:</p>\n\n  <p>\\[ \\ell(\\theta) = \\sum_{t=1}^{T} \\log P(w_t \\mid w_{1:t-1}; \\theta) \\]</p>\n\n  <p>Training minimizes the <i>negative</i> log-likelihood (NLL), and the per-token NLL exponentiated gives perplexity: \\( \\text{PPL} = \\exp(-\\ell / T) \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Regularized variants.</b> In Bayesian and penalized maximum likelihood, a log-prior or penalty is added: \\( \\ell_{\\text{reg}}(\\theta) = \\ell(\\theta) + \\log P(\\theta) \\). For a Gaussian prior \\( P(\\theta) \\propto \\exp(-\\frac{\\lambda}{2}\\|\\theta\\|^2) \\), this recovers L2 regularization (weight decay). MAP estimation maximizes this regularized objective.</p><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>MLE for a Gaussian:</b> Given \\( x_i \\sim \\mathcal{N}(\\mu, \\sigma^2) \\):</p>\n    <p>\\[ \\ell(\\mu, \\sigma^2) = -\\frac{N}{2}\\log(2\\pi\\sigma^2) - \\frac{1}{2\\sigma^2}\\sum_{i=1}^{N}(x_i - \\mu)^2 \\]</p>\n    <p>Setting \\( \\frac{\\partial \\ell}{\\partial \\mu} = 0 \\): \\( \\hat{\\mu} = \\frac{1}{N}\\sum x_i \\) (the sample mean).</p>\n    <p>Setting \\( \\frac{\\partial \\ell}{\\partial \\sigma^2} = 0 \\): \\( \\hat{\\sigma}^2 = \\frac{1}{N}\\sum (x_i - \\hat{\\mu})^2 \\) (the biased sample variance).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>NLL equals cross-entropy:</b> As \\( N \\to \\infty \\), \\( -\\frac{1}{N}\\ell(\\theta) = -\\frac{1}{N}\\sum_i \\log P_\\theta(x_i) \\to \\mathbb{E}_{P_{\\text{data}}}[-\\log P_\\theta(x)] = H(P_{\\text{data}}, P_\\theta) \\). Since \\( H(P_{\\text{data}}, P_\\theta) = H(P_{\\text{data}}) + D_{\\text{KL}}(P_{\\text{data}} \\| P_\\theta) \\) and the entropy \\( H(P_{\\text{data}}) \\) is constant w.r.t. \\( \\theta \\), minimizing NLL minimizes the KL divergence.</p>\n  </details>"
+      }
+    ],
+    "cards": []
   }
 ]
