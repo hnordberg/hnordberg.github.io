@@ -1514,6 +1514,14 @@ body.dark-mode .wiki-section-body details {
     transform: rotate(90deg);
 }
 
+.wiki-section-body details[open] {
+    padding-left: 0.75rem;
+}
+
+.wiki-section-body details[open] > summary {
+    margin-left: -0.75rem;
+}
+
 .wiki-code-panel {
     position: relative;
     margin: 0;
