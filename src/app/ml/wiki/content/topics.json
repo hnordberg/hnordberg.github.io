@@ -1437,5 +1437,450 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "adamw-optimizer",
+    "title": "AdamW Optimizer",
+    "summary": "A modification to the Adam optimizer that decouples weight decay from the gradient-based update. By applying weight decay directly to the parameters rather than through the loss function, AdamW avoids the interaction between adaptive lea…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "swiglu-activation-function",
+      "message-passing-in-graph-neural-networks-gnns"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Ilya Loshchilov, Frank Hutter · Decoupled Weight Decay Regularization",
+        "url": "https://arxiv.org/abs/1711.05101"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A modification to the Adam optimizer that decouples weight decay from the gradient-based update. By applying weight decay directly to the parameters rather than through the loss function, AdamW avoids the interaction between adaptive learning rates and regularization that degrades generalization in standard Adam.</p><p>In standard SGD, L2 regularization (adding \\( \\frac{\\lambda}{2}\\|\\theta\\|^2 \\) to the loss) and weight decay (subtracting \\( \\lambda\\theta \\) from the parameters each step) are mathematically equivalent. However, in adaptive optimizers like Adam, this equivalence breaks down. When L2 regularization is applied through the loss, the gradient of the regularization term \\( \\lambda\\theta \\) is scaled by Adam's per-parameter adaptive learning rate \\( 1/(\\sqrt{\\hat{v}_t} + \\epsilon) \\). This means parameters with large historical gradients receive <em>less</em> regularization than those with small gradients — the opposite of what is typically intended.</p>\n\n  <p>AdamW fixes this by applying weight decay directly to the parameter update, <em>after</em> the adaptive gradient step:</p>\n\n  \\[ \\theta_t = \\theta_{t-1} - \\eta \\left( \\frac{\\hat{m}_t}{\\sqrt{\\hat{v}_t} + \\epsilon} \\right) - \\eta \\lambda \\, \\theta_{t-1} \\]\n\n  <p>where \\( \\hat{m}_t \\) and \\( \\hat{v}_t \\) are the bias-corrected first and second moment estimates, \\( \\eta \\) is the learning rate, \\( \\lambda \\) is the weight decay coefficient, and \\( \\epsilon \\) is a small constant for numerical stability. The key insight is that the decay term \\( \\eta \\lambda \\, \\theta_{t-1} \\) is <em>not</em> scaled by the adaptive factor, ensuring uniform regularization across all parameters.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 600 220\" width=\"100%\" max-width=\"600px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; fill: #cbd5e0; font-size: 14px; }\n            .h { font-family: sans-serif; fill: #fff; font-size: 16px; font-weight: bold; }\n            .box { fill: #2d3748; stroke: #4a5568; stroke-width: 2; rx: 6; }\n            .arr { stroke: #cbd5e0; stroke-width: 2; marker-end: url(#arrow_1771711354011); }\n        </style>\n        <defs>\n            <marker id=\"arrow_1771711354011\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n                <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/>\n            </marker>\n        </defs>\n        \n        <text x=\"150\" y=\"30\" class=\"h\" text-anchor=\"middle\">L2 via Loss (Standard Adam)</text>\n        <rect x=\"50\" y=\"50\" width=\"200\" height=\"40\" class=\"box\" />\n        <text x=\"150\" y=\"75\" class=\"t\" text-anchor=\"middle\">Compute Grad w/ L2</text>\n        <path d=\"M 150 90 L 150 120\" class=\"arr\" />\n        <rect x=\"50\" y=\"120\" width=\"200\" height=\"40\" class=\"box\" />\n        <text x=\"150\" y=\"145\" class=\"t\" text-anchor=\"middle\">Scale by 1/√v</text>\n        <path d=\"M 150 160 L 150 190\" class=\"arr\" />\n        <text x=\"150\" y=\"205\" class=\"t\" text-anchor=\"middle\">Update θ</text>\n        \n        <text x=\"450\" y=\"30\" class=\"h\" text-anchor=\"middle\">AdamW (Decoupled)</text>\n        <rect x=\"350\" y=\"50\" width=\"200\" height=\"40\" class=\"box\" />\n        <text x=\"450\" y=\"75\" class=\"t\" text-anchor=\"middle\">Compute Grad (No L2)</text>\n        <path d=\"M 450 90 L 450 120\" class=\"arr\" />\n        <rect x=\"350\" y=\"120\" width=\"200\" height=\"40\" class=\"box\" />\n        <text x=\"450\" y=\"145\" class=\"t\" text-anchor=\"middle\">Scale by 1/√v</text>\n        <path d=\"M 450 160 L 450 190\" class=\"arr\" />\n        <text x=\"450\" y=\"205\" class=\"t\" text-anchor=\"middle\">Update θ AND Apply Decay</text>\n        \n        <line x1=\"300\" y1=\"20\" x2=\"300\" y2=\"210\" stroke=\"#4a5568\" stroke-dasharray=\"4\" />\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Standard Adam couples weight decay with the adaptive gradient scale, while AdamW decouples it, applying decay directly to the weights.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>AdamW is the default optimizer for training Transformers and most large language models. It pairs particularly well with learning rate warm-up and cosine annealing schedules. Typical values are \\( \\lambda \\in [0.01, 0.1] \\) and \\( \\eta \\) tuned via warm-up.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "swiglu-activation-function",
+    "title": "SwiGLU Activation Function",
+    "summary": "A variant of the Gated Linear Unit (GLU) that uses the Swish activation as its gating function. SwiGLU replaces the standard ReLU-based feed-forward network in modern Transformer architectures (LLaMA, PaLM) due to consistently superior e…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "pre-norm-vs-post-norm-architecture",
+      "adamw-optimizer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Noam Shazeer · GLU Variants Improve Transformer",
+        "url": "https://arxiv.org/abs/2002.05202"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A variant of the Gated Linear Unit (GLU) that uses the Swish activation as its gating function. SwiGLU replaces the standard ReLU-based feed-forward network in modern Transformer architectures (LLaMA, PaLM) due to consistently superior empirical performance across language modeling benchmarks.</p><p>The general GLU family applies an element-wise gating mechanism in the feed-forward sub-layer. A standard GLU uses a sigmoid gate: \\( \\text{GLU}(x, W, V, b, c) = \\sigma(xW + b) \\otimes (xV + c) \\). SwiGLU replaces the sigmoid with the Swish function, defined as:</p>\n\n  \\[ \\text{Swish}_\\beta(x) = x \\cdot \\sigma(\\beta x) \\]\n\n  <p>where \\( \\sigma \\) is the sigmoid function and \\( \\beta \\) is a learnable or fixed parameter (often \\( \\beta = 1 \\)). The SwiGLU activation is then:</p>\n\n  \\[ \\text{SwiGLU}(x, W, V, b, c) = \\text{Swish}_\\beta(xW + b) \\otimes (xV + c) \\]\n\n  <p>where \\( W, V \\) are learned weight matrices and \\( b, c \\) are bias terms. The output is then projected back down by a third matrix \\( W_2 \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 250\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .axis { stroke: #4a5568; stroke-width: 1.5; }\n            .relu { stroke: #e53e3e; stroke-width: 3; fill: none; }\n            .swish { stroke: #4299e1; stroke-width: 3; fill: none; }\n            .t { font-family: sans-serif; fill: #cbd5e0; font-size: 13px; }\n            .grid { stroke: #2d3748; stroke-width: 1; stroke-dasharray: 4; }\n        </style>\n        \n        <!-- Grid -->\n        <line x1=\"50\" y1=\"50\" x2=\"450\" y2=\"50\" class=\"grid\" />\n        <line x1=\"50\" y1=\"100\" x2=\"450\" y2=\"100\" class=\"grid\" />\n        <line x1=\"50\" y1=\"150\" x2=\"450\" y2=\"150\" class=\"grid\" />\n        <line x1=\"50\" y1=\"200\" x2=\"450\" y2=\"200\" class=\"grid\" />\n        \n        <!-- Axes -->\n        <line x1=\"50\" y1=\"150\" x2=\"450\" y2=\"150\" class=\"axis\" /> <!-- X-axis at y=0 -->\n        <line x1=\"250\" y1=\"20\" x2=\"250\" y2=\"220\" class=\"axis\" /> <!-- Y-axis at x=0 -->\n        \n        <!-- ReLU Line -->\n        <path d=\"M 50 150 L 250 150 L 400 0\" class=\"relu\" />\n        \n        <!-- Swish Line -->\n        <path d=\"M 50 148 C 150 148, 200 170, 250 150 C 300 110, 350 50, 400 0\" class=\"swish\" />\n        \n        <!-- Labels -->\n        <text x=\"260\" y=\"30\" class=\"t\">y</text>\n        <text x=\"435\" y=\"145\" class=\"t\">x</text>\n        \n        <!-- Legend -->\n        <rect x=\"70\" y=\"30\" width=\"15\" height=\"3\" fill=\"#e53e3e\" />\n        <text x=\"95\" y=\"35\" class=\"t\">ReLU</text>\n        <rect x=\"70\" y=\"50\" width=\"15\" height=\"3\" fill=\"#4299e1\" />\n        <text x=\"95\" y=\"55\" class=\"t\">Swish (β=1)</text>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Swish allows a small negative gradient, improving flow compared to ReLU's hard zero cutoff.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Two properties make SwiGLU effective. First, the Swish function is non-monotonic — it permits small negative outputs, which empirically improves gradient flow compared to ReLU. Second, the multiplicative gating mechanism allows the network to learn which components of the hidden representation to pass through, providing richer representation capacity than a simple pointwise nonlinearity.</p>\n\n  <p>Because SwiGLU uses three weight matrices instead of two (compared to a standard FFN), the hidden dimension is typically reduced by a factor of \\( \\frac{2}{3} \\) to keep the parameter count comparable. In LLaMA, the FFN hidden dimension is \\( \\frac{8}{3} d_{\\text{model}} \\) rounded to the nearest multiple of 256.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "pre-norm-vs-post-norm-architecture",
+    "title": "Pre-Norm vs. Post-Norm Architecture",
+    "summary": "An architectural design choice governing where Layer Normalization is placed within a Transformer block. Pre-Norm applies normalization before each sub-layer, while Post-Norm (the original Transformer design) applies it after . Modern LL…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "byte-pair-encoding-bpe",
+      "swiglu-activation-function"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Ruibin Xiong et al. · On Layer Normalization in the Transformer Architecture",
+        "url": "https://arxiv.org/abs/2002.04745"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An architectural design choice governing where Layer Normalization is placed within a Transformer block. Pre-Norm applies normalization <em>before</em> each sub-layer, while Post-Norm (the original Transformer design) applies it <em>after</em>. Modern LLMs almost universally use Pre-Norm because it yields far more stable gradients in deep networks.</p><p><strong>Post-Norm</strong> (original Transformer, BERT):</p>\n\n  \\[ x_{l+1} = \\text{LayerNorm}\\!\\left(x_l + \\text{Sublayer}(x_l)\\right) \\]\n\n  <p>Here the normalization wraps the residual connection. In deep networks, the variance of activations on the residual stream can grow uncontrollably across layers, because each sub-layer's output is added before normalization constrains it. This often necessitates careful learning rate warm-up and can cause training instability beyond ~12 layers without additional techniques.</p>\n\n  <p><strong>Pre-Norm</strong> (GPT-2, GPT-3, LLaMA):</p>\n\n  \\[ x_{l+1} = x_l + \\text{Sublayer}\\!\\left(\\text{LayerNorm}(x_l)\\right) \\]\n\n  <p>The residual stream bypasses the normalization entirely. The gradient of the identity path \\( \\partial x_{l+1}/\\partial x_l = I + \\ldots \\) always contains the identity matrix, ensuring that gradients flow unattenuated through arbitrarily deep networks — analogous to the benefit of skip connections in ResNets. This eliminates the need for learning rate warm-up in most cases.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 280\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .box { fill: #2b6cb0; rx: 4; stroke: #63b3ed; stroke-width: 1.5; }\n            .normbox { fill: #c53030; rx: 4; stroke: #fc8181; stroke-width: 1.5; }\n            .t { fill: #fff; font-family: sans-serif; font-size: 13px; font-weight: bold; text-anchor: middle; alignment-baseline: middle; }\n            .th { fill: #cbd5e0; font-family: sans-serif; font-size: 15px; font-weight: bold; text-anchor: middle; }\n            .arr { stroke: #cbd5e0; stroke-width: 2; fill: none; marker-end: url(#arrow_1771711354135); }\n            .circ { fill: #2d3748; stroke: #cbd5e0; stroke-width: 1.5; }\n            .plus { stroke: #cbd5e0; stroke-width: 1.5; }\n        </style>\n        <defs>\n            <marker id=\"arrow_1771711354135\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\">\n                <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/>\n            </marker>\n        </defs>\n        \n        <!-- Post-Norm -->\n        <text x=\"125\" y=\"30\" class=\"th\">Post-Norm</text>\n        <text x=\"125\" y=\"55\" class=\"t\" fill=\"#a0aec0\">x<tspan baseline-shift=\"sub\" font-size=\"75%\">l</tspan></text>\n        \n        <path d=\"M 125 60 L 125 90\" class=\"arr\" />\n        <!-- Sublayer branch -->\n        <path d=\"M 125 75 L 180 75 L 180 90\" class=\"arr\" />\n        <rect x=\"140\" y=\"90\" width=\"80\" height=\"30\" class=\"box\" />\n        <text x=\"180\" y=\"105\" class=\"t\">Sublayer</text>\n        \n        <path d=\"M 180 120 L 180 145 L 140 145\" class=\"arr\" />\n        <path d=\"M 125 90 L 125 135\" class=\"arr\" />\n        \n        <circle cx=\"125\" cy=\"145\" r=\"10\" class=\"circ\" />\n        <line x1=\"120\" y1=\"145\" x2=\"130\" y2=\"145\" class=\"plus\" /><line x1=\"125\" y1=\"140\" x2=\"125\" y2=\"150\" class=\"plus\" />\n        \n        <path d=\"M 125 155 L 125 170\" class=\"arr\" />\n        <rect x=\"85\" y=\"170\" width=\"80\" height=\"30\" class=\"normbox\" />\n        <text x=\"125\" y=\"185\" class=\"t\">LayerNorm</text>\n        \n        <path d=\"M 125 200 L 125 230\" class=\"arr\" />\n        <text x=\"125\" y=\"245\" class=\"t\" fill=\"#a0aec0\">x<tspan baseline-shift=\"sub\" font-size=\"75%\">l+1</tspan></text>\n\n        <!-- Pre-Norm -->\n        <text x=\"375\" y=\"30\" class=\"th\">Pre-Norm</text>\n        <text x=\"375\" y=\"55\" class=\"t\" fill=\"#a0aec0\">x<tspan baseline-shift=\"sub\" font-size=\"75%\">l</tspan></text>\n        \n        <path d=\"M 375 60 L 375 160\" class=\"arr\" /> <!-- Main identity branch goes straight through -->\n        \n        <!-- Sublayer branch starting with Norm -->\n        <path d=\"M 375 75 L 430 75 L 430 90\" class=\"arr\" />\n        <rect x=\"390\" y=\"90\" width=\"80\" height=\"30\" class=\"normbox\" />\n        <text x=\"430\" y=\"105\" class=\"t\">LayerNorm</text>\n        \n        <path d=\"M 430 120 L 430 135\" class=\"arr\" />\n        <rect x=\"390\" y=\"135\" width=\"80\" height=\"30\" class=\"box\" />\n        <text x=\"430\" y=\"150\" class=\"t\">Sublayer</text>\n        \n        <path d=\"M 430 165 L 430 180 L 390 180\" class=\"arr\" />\n        \n        <circle cx=\"375\" cy=\"180\" r=\"10\" class=\"circ\" />\n        <line x1=\"370\" y1=\"180\" x2=\"380\" y2=\"180\" class=\"plus\" /><line x1=\"375\" y1=\"175\" x2=\"375\" y2=\"185\" class=\"plus\" />\n        \n        <path d=\"M 375 190 L 375 230\" class=\"arr\" />\n        <text x=\"375\" y=\"245\" class=\"t\" fill=\"#a0aec0\">x<tspan baseline-shift=\"sub\" font-size=\"75%\">l+1</tspan></text>\n        \n        <line x1=\"250\" y1=\"20\" x2=\"250\" y2=\"260\" stroke=\"#4a5568\" stroke-dasharray=\"4\" />\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">In Pre-Norm, the residual addition is outside the layer norm, creating an uninterrupted path for gradients across network depth.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><strong>Trade-off:</strong> Some evidence suggests Post-Norm achieves slightly better final performance when training is stabilized (e.g., via careful initialization or warm-up), because the normalization after the residual addition provides a tighter regularization effect. However, the training stability advantage of Pre-Norm dominates in practice, especially at scale.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "byte-pair-encoding-bpe",
+    "title": "Byte Pair Encoding (BPE)",
+    "summary": "A data compression algorithm adapted for subword tokenization in NLP. BPE iteratively merges the most frequent adjacent symbol pairs in a corpus, producing a vocabulary that balances between character-level generality and word-level effi…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "softmax-temperature",
+      "pre-norm-vs-post-norm-architecture"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2016 · Rico Sennrich, Barry Haddow, Alexandra Birch · Neural Machine Translation of Rare Words with Subword Units",
+        "url": "https://arxiv.org/abs/1508.07909"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A data compression algorithm adapted for subword tokenization in NLP. BPE iteratively merges the most frequent adjacent symbol pairs in a corpus, producing a vocabulary that balances between character-level generality and word-level efficiency. It is the tokenization method behind GPT-2, GPT-3/4, and many other large language models.</p><p>BPE was originally a byte-level compression algorithm (Gage, 1994) and was adapted for neural machine translation by Sennrich et al. (2016). The algorithm proceeds as follows:</p>\n\n  <ol>\n    <li>Initialize the vocabulary with all individual characters (or bytes) in the training corpus, plus a special end-of-word symbol.</li>\n    <li>Count all adjacent symbol pairs across the corpus.</li>\n    <li>Merge the most frequent pair into a new single token and add it to the vocabulary.</li>\n    <li>Repeat steps 2–3 for a predefined number of merges (e.g., 50,000 for GPT-2).</li>\n  </ol>\n\n  <p>For example, given frequent co-occurrences: <code>e + s → es</code>, then <code>es + t → est</code>. Common words like \"the\" become single tokens, while rare words like \"mRNA\" are decomposed into known subwords (<code>m</code>, <code>RNA</code> or <code>m</code>, <code>R</code>, <code>NA</code>).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: monospace; fill: #cbd5e0; font-size: 14px; }\n            .highlight { fill: #ed8936; font-weight: bold; }\n            .box { fill: #2d3748; stroke: #4a5568; stroke-width: 1.5; rx: 4; }\n            .arr { stroke: #a0aec0; stroke-width: 2; marker-end: url(#arrow_1771711354193); }\n        </style>\n        <defs>\n            <marker id=\"arrow_1771711354193\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\">\n                <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#a0aec0\"/>\n            </marker>\n        </defs>\n        \n        <rect x=\"20\" y=\"20\" width=\"460\" height=\"40\" class=\"box\" />\n        <text x=\"30\" y=\"45\" class=\"t\">Iter 0: l o w &lt;/w&gt; (5)  l o w e r &lt;/w&gt; (2)  n e w &lt;/w&gt; (6)</text>\n        \n        <path d=\"M 250 60 L 250 85\" class=\"arr\" />\n        <text x=\"260\" y=\"75\" class=\"t\" fill=\"#63b3ed\">Merge: e + w → ew</text>\n        \n        <rect x=\"20\" y=\"85\" width=\"460\" height=\"40\" class=\"box\" />\n        <text x=\"30\" y=\"110\" class=\"t\">Iter 1: l o w &lt;/w&gt; (5)  l o w e r &lt;/w&gt; (2)  n <tspan class=\"highlight\">ew</tspan> &lt;/w&gt; (6)</text>\n        \n        <path d=\"M 250 125 L 250 150\" class=\"arr\" />\n        <text x=\"260\" y=\"140\" class=\"t\" fill=\"#63b3ed\">Merge: l + o → lo</text>\n        \n        <rect x=\"20\" y=\"150\" width=\"460\" height=\"40\" class=\"box\" />\n        <text x=\"30\" y=\"175\" class=\"t\">Iter 2: <tspan class=\"highlight\">lo</tspan> w &lt;/w&gt; (5)  <tspan class=\"highlight\">lo</tspan> w e r &lt;/w&gt; (2)  n ew &lt;/w&gt; (6)</text>\n        \n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Simplified illustrative tokenization. BPE greedily merges pair frequencies.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><strong>Key properties:</strong></p>\n  <ul>\n    <li><strong>Open vocabulary:</strong> Any string can be encoded — unknown words are simply broken into smaller known pieces, eliminating the out-of-vocabulary problem.</li>\n    <li><strong>Frequency-adaptive:</strong> Common morphemes and words get dedicated tokens, reducing sequence length and improving computational efficiency.</li>\n    <li><strong>Deterministic:</strong> Given a fixed merge table, tokenization is reproducible.</li>\n  </ul>\n\n  <p>GPT-2 introduced <em>byte-level BPE</em>, which starts from raw UTF-8 bytes (vocabulary of 256) rather than Unicode characters, ensuring that any input can be tokenized without preprocessing or unknown tokens.</p><details>\n    <summary>Python</summary>\n    <pre><code># Simplified BPE merge learning\nfrom collections import Counter\n\ndef learn_bpe(corpus_tokens, num_merges):\n    \\\"\\\"\\\"Learn BPE merge rules from a tokenized corpus.\\\"\\\"\\\"\n    # Start with character-level splits\n    vocab = [list(word) + ['&lt;/w&gt;'] for word in corpus_tokens]\n    merges = []\n    for _ in range(num_merges):\n        pairs = Counter()\n        for word in vocab:\n            for i in range(len(word) - 1):\n                pairs[(word[i], word[i+1])] += 1\n        if not pairs:\n            break\n        best = max(pairs, key=pairs.get)\n        merges.append(best)\n        # Apply merge\n        new_vocab = []\n        for word in vocab:\n            new_word, i = [], 0\n            while i &lt; len(word):\n                if i &lt; len(word)-1 and (word[i], word[i+1]) == best:\n                    new_word.append(word[i] + word[i+1])\n                    i += 2\n                else:\n                    new_word.append(word[i])\n                    i += 1\n            new_vocab.append(new_word)\n        vocab = new_vocab\n    return merges</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "softmax-temperature",
+    "title": "Softmax Temperature",
+    "summary": "A scalar hyperparameter \\( T \\) applied to logits before the softmax function to control the entropy of the output probability distribution. Low temperatures sharpen the distribution toward greedy decoding; high temperatures flatten it t…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "key-value-kv-caching",
+      "byte-pair-encoding-bpe"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2015 · Geoffrey Hinton, Oriol Vinyals, Jeff Dean · Distilling the Knowledge in a Neural Network",
+        "url": "https://arxiv.org/abs/1503.02531"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A scalar hyperparameter \\( T \\) applied to logits before the softmax function to control the entropy of the output probability distribution. Low temperatures sharpen the distribution toward greedy decoding; high temperatures flatten it toward uniform sampling.</p><p>The temperature-scaled softmax is defined as:</p>\n\n  \\[ p_i = \\frac{\\exp(z_i / T)}{\\sum_j \\exp(z_j / T)} \\]\n\n  <p>where \\( z_i \\) are the unnormalized logits (the model's raw output scores) and \\( T > 0 \\) is the temperature.</p>\n\n  <p><strong>Behavior at different temperatures:</strong></p>\n\n  <table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Temperature</th>\n      <th style=\"padding:6px; text-align:left;\">Effect</th>\n      <th style=\"padding:6px; text-align:left;\">Use case</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">\\( T \\to 0 \\)</td>\n      <td style=\"padding:6px;\">Converges to argmax (greedy decoding)</td>\n      <td style=\"padding:6px;\">Deterministic, factual output</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">\\( T = 1 \\)</td>\n      <td style=\"padding:6px;\">Standard softmax (unchanged)</td>\n      <td style=\"padding:6px;\">Default / training distribution</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">\\( T > 1 \\)</td>\n      <td style=\"padding:6px;\">Flattened distribution, higher entropy</td>\n      <td style=\"padding:6px;\">Creative / diverse generation</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 600 200\" width=\"100%\" max-width=\"600px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .axis { stroke: #4a5568; stroke-width: 1.5; }\n            .bar-t1 { fill: #48bb78; }\n            .bar-t01 { fill: #e53e3e; }\n            .bar-t5 { fill: #4299e1; }\n            .t { fill: #cbd5e0; font-family: sans-serif; font-size: 13px; text-anchor: middle; }\n            .th { fill: #fff; font-family: sans-serif; font-size: 15px; font-weight: bold; text-anchor: middle; }\n        </style>\n        \n        <!-- Graph 1: T=0.2 -->\n        <text x=\"100\" y=\"25\" class=\"th\">T = 0.2 (Sharp)</text>\n        <line x1=\"30\" y1=\"160\" x2=\"170\" y2=\"160\" class=\"axis\" />\n        <rect x=\"45\" y=\"155\" width=\"20\" height=\"5\" class=\"bar-t01\" /> <!-- low -->\n        <rect x=\"90\" y=\"40\" width=\"20\" height=\"120\" class=\"bar-t01\" /> <!-- high -->\n        <rect x=\"135\" y=\"158\" width=\"20\" height=\"2\" class=\"bar-t01\" /> <!-- very low -->\n        <text x=\"55\" y=\"180\" class=\"t\">A</text>\n        <text x=\"100\" y=\"180\" class=\"t\">B</text>\n        <text x=\"145\" y=\"180\" class=\"t\">C</text>\n\n        <!-- Graph 2: T=1.0 -->\n        <text x=\"300\" y=\"25\" class=\"th\">T = 1.0 (Standard)</text>\n        <line x1=\"230\" y1=\"160\" x2=\"370\" y2=\"160\" class=\"axis\" />\n        <rect x=\"245\" y=\"120\" width=\"20\" height=\"40\" class=\"bar-t1\" />\n        <rect x=\"290\" y=\"60\" width=\"20\" height=\"100\" class=\"bar-t1\" />\n        <rect x=\"335\" y=\"140\" width=\"20\" height=\"20\" class=\"bar-t1\" />\n        <text x=\"255\" y=\"180\" class=\"t\">A</text>\n        <text x=\"300\" y=\"180\" class=\"t\">B</text>\n        <text x=\"345\" y=\"180\" class=\"t\">C</text>\n        \n        <!-- Graph 3: T=5.0 -->\n        <text x=\"500\" y=\"25\" class=\"th\">T = 5.0 (Flat)</text>\n        <line x1=\"430\" y1=\"160\" x2=\"570\" y2=\"160\" class=\"axis\" />\n        <rect x=\"445\" y=\"100\" width=\"20\" height=\"60\" class=\"bar-t5\" />\n        <rect x=\"490\" y=\"90\" width=\"20\" height=\"70\" class=\"bar-t5\" />\n        <rect x=\"535\" y=\"105\" width=\"20\" height=\"55\" class=\"bar-t5\" />\n        <text x=\"455\" y=\"180\" class=\"t\">A</text>\n        <text x=\"500\" y=\"180\" class=\"t\">B</text>\n        <text x=\"545\" y=\"180\" class=\"t\">C</text>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Illustrating the effect of temperature on probabilities from fixed logits [1.0, 2.0, 0.5].</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Mathematically, dividing logits by a small \\( T \\) amplifies the differences between them (since \\( z_i/T \\) grows when \\( T < 1 \\)), causing the softmax to concentrate mass on the largest logit. Conversely, a large \\( T \\) compresses the differences, making probabilities more uniform.</p>\n\n  <p>Temperature also appears in knowledge distillation (Hinton et al., 2015), where a \"teacher\" model's softmax is evaluated at high temperature to produce soft targets that expose inter-class similarity structure, which would be lost in hard one-hot labels.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "key-value-kv-caching",
+    "title": "Key-Value (KV) Caching",
+    "summary": "An inference-time optimization for autoregressive Transformer generation that stores previously computed Key and Value projections so they are not redundantly recomputed at each decoding step. KV caching reduces per-step complexity from…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "rotary-positional-embedding-rope",
+      "softmax-temperature"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Ashish Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An inference-time optimization for autoregressive Transformer generation that stores previously computed Key and Value projections so they are not redundantly recomputed at each decoding step. KV caching reduces per-step complexity from \\( O(N^2) \\) to \\( O(N) \\) at the cost of GPU memory proportional to the sequence length.</p><p>During autoregressive generation, a Transformer predicts token \\( x_t \\) conditioned on the sequence \\( x_1, \\ldots, x_{t-1} \\). Without caching, the model must recompute the Query, Key, and Value projections for <em>all</em> \\( t \\) tokens at every step, because the self-attention mechanism requires the full \\( K \\) and \\( V \\) matrices:</p>\n\n  \\[ \\text{Attention}(Q, K, V) = \\text{softmax}\\!\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right) V \\]\n\n  <p>With KV caching, the \\( K \\) and \\( V \\) vectors for positions \\( 1 \\) through \\( t-1 \\) are stored in GPU memory after their first computation. At step \\( t \\), only the new token's projections \\( q_t, k_t, v_t \\) are computed. The new \\( k_t \\) and \\( v_t \\) are appended to the cache, and attention is computed between the single query \\( q_t \\) and the full cached \\( K_{1:t} \\) and \\( V_{1:t} \\) matrices.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 600 240\" width=\"100%\" max-width=\"600px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; fill: #cbd5e0; font-size: 14px; text-anchor: middle; alignment-baseline: middle; }\n            .th { font-family: sans-serif; fill: #fff; font-size: 16px; font-weight: bold; text-anchor: middle; }\n            .box { fill: #2d3748; stroke: #4a5568; stroke-width: 2; rx: 4; }\n            .query-box { fill: #c53030; stroke: #fc8181; rx: 4; }\n            .kv-cache { fill: #4a5568; stroke: #a0aec0; rx: 4; stroke-dasharray: 4; }\n            .kv-new { fill: #2b6cb0; stroke: #63b3ed; rx: 4; }\n            .arr { stroke: #cbd5e0; stroke-width: 2; marker-end: url(#arrow_1771711354254); fill: none; }\n        </style>\n        <defs>\n            <marker id=\"arrow_1771711354254\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n                <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n            </marker>\n        </defs>\n        \n        <text x=\"300\" y=\"25\" class=\"th\">Generation Step 't'</text>\n        \n        <!-- Input Token -->\n        <rect x=\"250\" y=\"50\" width=\"100\" height=\"30\" class=\"box\"></rect>\n        <text x=\"300\" y=\"65\" class=\"t\">Token x<tspan baseline-shift=\"sub\" font-size=\"75%\">t</tspan></text>\n        \n        <path d=\"M 300 80 L 300 110\" class=\"arr\"></path>\n        \n        <!-- Projections -->\n        <rect x=\"150\" y=\"110\" width=\"80\" height=\"30\" class=\"query-box\"></rect>\n        <text x=\"190\" y=\"125\" class=\"t\" fill=\"#fff\">q<tspan baseline-shift=\"sub\" font-size=\"75%\">t</tspan></text>\n        \n        <rect x=\"260\" y=\"110\" width=\"80\" height=\"30\" class=\"kv-new\"></rect>\n        <text x=\"300\" y=\"125\" class=\"t\" fill=\"#fff\">k<tspan baseline-shift=\"sub\" font-size=\"75%\">t</tspan></text>\n        \n        <rect x=\"370\" y=\"110\" width=\"80\" height=\"30\" class=\"kv-new\"></rect>\n        <text x=\"410\" y=\"125\" class=\"t\" fill=\"#fff\">v<tspan baseline-shift=\"sub\" font-size=\"75%\">t</tspan></text>\n        \n        <!-- Cache -->\n        <text x=\"300\" y=\"165\" class=\"t\">Append to KV Cache</text>\n        <rect x=\"200\" y=\"175\" width=\"200\" height=\"40\" class=\"kv-cache\"></rect>\n        <rect x=\"210\" y=\"182\" width=\"60\" height=\"26\" fill=\"#2d3748\" rx=\"2\"></rect>\n        <text x=\"240\" y=\"195\" class=\"t\">K<tspan baseline-shift=\"sub\" font-size=\"75%\">1:t-1</tspan></text>\n        <rect x=\"275\" y=\"182\" width=\"50\" height=\"26\" class=\"kv-new\"></rect>\n        <text x=\"300\" y=\"195\" class=\"t\" fill=\"#fff\">k<tspan baseline-shift=\"sub\" font-size=\"75%\">t</tspan></text>\n        <rect x=\"330\" y=\"182\" width=\"60\" height=\"26\" fill=\"#2d3748\" rx=\"2\"></rect>\n        <text x=\"360\" y=\"195\" class=\"t\">V<tspan baseline-shift=\"sub\" font-size=\"75%\">1:t-1</tspan></text>\n\n        <!-- Attention Flow -->\n        <path d=\"M 190 140 C 190 180, 200 195, 200 195\" class=\"arr\"></path> <!-- q_t attends to Cache -->\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Only the newest query \\( q_t \\) is used to attend over the full, newly augmented KV Cache matrix.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><strong>Memory cost:</strong> For each layer in a model with \\( L \\) layers, \\( H \\) attention heads, and head dimension \\( d_h \\), the KV cache stores \\( 2 \\times L \\times H \\times d_h \\) floats per token. For a 70B-parameter model (80 layers, 64 heads, \\( d_h = 128 \\)) in fp16, this amounts to roughly 2.5 MB per token — so a 4096-token context window requires ~10 GB of KV cache alone.</p>\n\n  <p><strong>Optimizations:</strong> Multi-Query Attention (MQA) and Grouped-Query Attention (GQA) reduce KV cache size by sharing Key/Value heads across multiple Query heads. PagedAttention (vLLM) manages cache memory in non-contiguous pages to reduce fragmentation during batched serving.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "rotary-positional-embedding-rope",
+    "title": "Rotary Positional Embedding (RoPE)",
+    "summary": "A positional encoding method that injects relative position information by rotating Query and Key vectors in a high-dimensional complex plane before computing attention. The dot product of two rotated vectors depends only on their relati…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "sinusoidal-positional-encoding",
+      "key-value-kv-caching"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2021 · Jianlin Su et al. · RoFormer: Enhanced Transformer with Rotary Position Embedding",
+        "url": "https://arxiv.org/abs/2104.09864"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A positional encoding method that injects relative position information by rotating Query and Key vectors in a high-dimensional complex plane before computing attention. The dot product of two rotated vectors depends only on their relative distance, giving RoPE a natural inductive bias for relative positioning without adding parameters. Used in LLaMA, PaLM, and most modern LLMs.</p><p>Unlike sinusoidal encodings that are <em>added</em> to embeddings, RoPE applies a position-dependent rotation <em>multiplicatively</em> to the Query and Key vectors. For a token at position \\( m \\), the query \\( q \\) is transformed as \\( q' = R_{\\Theta,m}\\, q \\), where \\( R_{\\Theta,m} \\) is a block-diagonal rotation matrix. Each 2D block rotates a pair of dimensions \\( (q_{2i}, q_{2i+1}) \\) by angle \\( m\\theta_i \\):</p>\n\n  \\[ R_{\\Theta,m} = \\begin{pmatrix} \\cos m\\theta_1 & -\\sin m\\theta_1 & & \\\\ \\sin m\\theta_1 & \\cos m\\theta_1 & & \\\\ & & \\ddots & \\\\ & & \\cos m\\theta_{d/2} & -\\sin m\\theta_{d/2} \\\\ & & \\sin m\\theta_{d/2} & \\cos m\\theta_{d/2} \\end{pmatrix} \\]\n\n  <p>where the frequency for dimension pair \\( i \\) is \\( \\theta_i = 10000^{-2i/d} \\), mirroring the sinusoidal encoding's frequency schedule.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .axis { stroke: #4a5568; stroke-width: 1.5; }\n            .t { font-family: sans-serif; fill: #cbd5e0; font-size: 14px; text-anchor: middle; }\n            .vec-q { stroke: #f6ad55; stroke-width: 2.5; marker-end: url(#arrow-q_1771711354285); }\n            .vec-k { stroke: #63b3ed; stroke-width: 2.5; marker-end: url(#arrow-k_1771711354285); }\n            .arc { stroke: #a0aec0; stroke-width: 1.5; fill: none; stroke-dasharray: 4;}\n        </style>\n        <defs>\n            <marker id=\"arrow-q_1771711354285\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#f6ad55\"/></marker>\n            <marker id=\"arrow-k_1771711354285\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#63b3ed\"/></marker>\n        </defs>\n        \n        <!-- Axes -->\n        <line x1=\"150\" y1=\"200\" x2=\"450\" y2=\"200\" class=\"axis\" />\n        <line x1=\"200\" y1=\"220\" x2=\"200\" y2=\"20\" class=\"axis\" />\n        \n        <!-- Vectors -->\n        <!-- Center (200, 200) -->\n        <line x1=\"200\" y1=\"200\" x2=\"286\" y2=\"150\" class=\"vec-k\" /> <!-- k rotated by n\\theta -->\n        <line x1=\"200\" y1=\"200\" x2=\"250\" y2=\"66\" class=\"vec-q\" /> <!-- q rotated by m\\theta -->\n        \n        <!-- Arcs -->\n        <!-- Arc for k (n\\theta) -->\n        <path d=\"M 280 200 A 80 80 0 0 0 268 160\" class=\"arc\" />\n        <text x=\"295\" y=\"185\" class=\"t\" fill=\"#63b3ed\">nθ</text>\n        \n        <!-- Arc for q (m\\theta) -->\n        <path d=\"M 320 200 A 120 120 0 0 0 234 84\" class=\"arc\" />\n        <text x=\"335\" y=\"160\" class=\"t\" fill=\"#f6ad55\">mθ</text>\n        \n        <!-- Arc between k and q -->\n        <path d=\"M 252 170 A 60 60 0 0 0 221 143\" class=\"arc\" stroke=\"#fff\" />\n        <text x=\"260\" y=\"145\" class=\"t\" fill=\"#fff\">(m - n)θ</text>\n        \n        <text x=\"430\" y=\"215\" class=\"t\">Re</text>\n        <text x=\"180\" y=\"30\" class=\"t\">Im</text>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">The dot product (\\( \\cos((m-n)\\theta) \\)) inherently captures relative distance.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><strong>Relative position property:</strong> Because rotation matrices are orthogonal, the dot product of rotated queries and keys simplifies to:</p>\n\n  \\[ (R_m q)^T (R_n k) = q^T R_m^T R_n\\, k = q^T R_{n-m}\\, k \\]\n\n  <p>The attention score depends only on the relative position \\( (n - m) \\), not the absolute positions. This is achieved without any additional parameters or learned embeddings.</p>\n\n  <p><strong>Advantages over alternatives:</strong> RoPE preserves the vector magnitude (rotations are norm-preserving), naturally decays attention scores with increasing relative distance (because high-frequency components oscillate more rapidly), and generalizes better to sequence lengths not seen during training than absolute positional encodings. Length extrapolation can be further improved with techniques like YaRN or NTK-aware scaling of the \\( \\theta_i \\) frequencies.</p><details>\n    <summary>Derivations</summary>\n    <p>Consider a 2D subspace with query \\( q = (q_1, q_2) \\) and key \\( k = (k_1, k_2) \\). Rotating \\( q \\) by angle \\( m\\theta \\) and \\( k \\) by angle \\( n\\theta \\):</p>\n    \\[ q' = \\begin{pmatrix} \\cos m\\theta & -\\sin m\\theta \\\\ \\sin m\\theta & \\cos m\\theta \\end{pmatrix} \\begin{pmatrix} q_1 \\\\ q_2 \\end{pmatrix} \\]\n    <p>The dot product \\( q'^T k' \\) expands to:</p>\n    \\[ (q_1 \\cos m\\theta - q_2 \\sin m\\theta)(k_1 \\cos n\\theta - k_2 \\sin n\\theta) + (q_1 \\sin m\\theta + q_2 \\cos m\\theta)(k_1 \\sin n\\theta + k_2 \\cos n\\theta) \\]\n    <p>Using the product-to-sum identities, all terms simplify to expressions involving \\( \\cos((m-n)\\theta) \\) and \\( \\sin((m-n)\\theta) \\), confirming dependence only on the relative position \\( m - n \\).</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "sinusoidal-positional-encoding",
+    "title": "Sinusoidal Positional Encoding",
+    "summary": "The original fixed positional encoding from \"Attention Is All You Need\" that injects token order into the Transformer by adding deterministic sine and cosine signals of varying frequencies to the input embeddings. Each position receives…",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "landmark",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "causal-masked-self-attention",
+      "rotary-positional-embedding-rope"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Ashish Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The original fixed positional encoding from \"Attention Is All You Need\" that injects token order into the Transformer by adding deterministic sine and cosine signals of varying frequencies to the input embeddings. Each position receives a unique encoding vector, and the linear relationship between encodings at different positions allows the model to learn relative attention patterns.</p><p>A Transformer processes all tokens in parallel and has no inherent notion of sequence order. Sinusoidal positional encoding provides this by constructing a vector \\( PE_{pos} \\in \\mathbb{R}^{d_{\\text{model}}} \\) for each position \\( pos \\), which is added element-wise to the token embedding. The encoding is defined as:</p>\n\n  \\[ PE_{(pos, 2i)} = \\sin\\!\\left(\\frac{pos}{10000^{2i/d_{\\text{model}}}}\\right) \\]\n  \\[ PE_{(pos, 2i+1)} = \\cos\\!\\left(\\frac{pos}{10000^{2i/d_{\\text{model}}}}\\right) \\]\n\n  <p>where \\( i \\in \\{0, 1, \\ldots, d_{\\text{model}}/2 - 1\\} \\) indexes dimension pairs. Each dimension pair oscillates at a different frequency, with wavelengths forming a geometric progression from \\( 2\\pi \\) (dimension 0) to \\( 10000 \\cdot 2\\pi \\) (last dimension).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 200\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .axis { stroke: #4a5568; stroke-width: 1.5; }\n            .t { font-family: sans-serif; fill: #cbd5e0; font-size: 13px; text-anchor: middle; }\n            .pos-box { fill: none; stroke: #2d3748; stroke-width: 1; }\n        </style>\n        \n        <text x=\"250\" y=\"25\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"15px\" font-weight=\"bold\" text-anchor=\"middle\">Encoding Dimensions (Low to High Freq)</text>\n        \n        <g transform=\"translate(50, 40)\">\n            <text x=\"-25\" y=\"15\" class=\"t\">p=0</text>\n            <text x=\"-25\" y=\"45\" class=\"t\">p=1</text>\n            <text x=\"-25\" y=\"75\" class=\"t\">p=2</text>\n            <text x=\"-25\" y=\"105\" class=\"t\">p=3</text>\n            <text x=\"-25\" y=\"135\" class=\"t\">p=4</text>\n            \n            <!-- Generate a rough \"heatmap\" representation of sin/cos frequencies -->\n            <!-- Columns representing dimensions; left is high freq (i=0), right is low freq -->\n            <!-- High freq (oscillates fast) -->\n            <rect x=\"0\" y=\"0\" width=\"20\" height=\"20\" fill=\"#2b6cb0\" />\n            <rect x=\"0\" y=\"30\" width=\"20\" height=\"20\" fill=\"#c53030\" />\n            <rect x=\"0\" y=\"60\" width=\"20\" height=\"20\" fill=\"#2b6cb0\" />\n            <rect x=\"0\" y=\"90\" width=\"20\" height=\"20\" fill=\"#c53030\" />\n            <rect x=\"0\" y=\"120\" width=\"20\" height=\"20\" fill=\"#2b6cb0\" />\n            \n            <!-- Med freq -->\n            <rect x=\"80\" y=\"0\" width=\"20\" height=\"20\" fill=\"#2b6cb0\" />\n            <rect x=\"80\" y=\"30\" width=\"20\" height=\"20\" fill=\"#63b3ed\" />\n            <rect x=\"80\" y=\"60\" width=\"20\" height=\"20\" fill=\"#fc8181\" />\n            <rect x=\"80\" y=\"90\" width=\"20\" height=\"20\" fill=\"#c53030\" />\n            <rect x=\"80\" y=\"120\" width=\"20\" height=\"20\" fill=\"#fc8181\" />\n            \n            <!-- Low freq (almost constant across small positions) -->\n            <rect x=\"360\" y=\"0\" width=\"20\" height=\"20\" fill=\"#2b6cb0\" />\n            <rect x=\"360\" y=\"30\" width=\"20\" height=\"20\" fill=\"#3182ce\" />\n            <rect x=\"360\" y=\"60\" width=\"20\" height=\"20\" fill=\"#4299e1\" />\n            <rect x=\"360\" y=\"90\" width=\"20\" height=\"20\" fill=\"#63b3ed\" />\n            <rect x=\"360\" y=\"120\" width=\"20\" height=\"20\" fill=\"#90cdf4\" />\n            \n            <line x1=\"120\" y1=\"70\" x2=\"340\" y2=\"70\" stroke=\"#cbd5e0\" stroke-width=\"2\" stroke-dasharray=\"4\" marker-end=\"url(#arrow)\" />\n        </g>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Illustration: High frequencies (left) oscillate rapidly across tokens, while low frequencies (right) remain nearly constant.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><strong>Relative position property:</strong> For any fixed offset \\( k \\), the encoding \\( PE_{pos+k} \\) can be expressed as a linear transformation of \\( PE_{pos} \\). Specifically, there exists a matrix \\( M_k \\) (independent of \\( pos \\)) such that \\( PE_{pos+k} = M_k \\cdot PE_{pos} \\). This allows the attention mechanism to learn to attend by relative position.</p>\n\n  <p><strong>Comparison with learned encodings:</strong> Vaswani et al. found that sinusoidal and learned positional embeddings performed nearly identically. However, sinusoidal encodings have the theoretical advantage of extrapolating to sequence lengths longer than those seen during training (though in practice, modern models prefer RoPE for this purpose). Sinusoidal encodings have been largely replaced in contemporary architectures by relative position methods like RoPE or ALiBi.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "causal-masked-self-attention",
+    "title": "Causal (Masked) Self-Attention",
+    "summary": "A modification of self-attention that enforces autoregressive ordering by preventing each token from attending to future positions. An upper-triangular mask of negative infinity is added to the attention logits before the softmax, zeroin…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "message-passing-in-graph-neural-networks-gnns",
+      "sinusoidal-positional-encoding"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Ashish Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A modification of self-attention that enforces autoregressive ordering by preventing each token from attending to future positions. An upper-triangular mask of negative infinity is added to the attention logits before the softmax, zeroing out all future-token attention weights. This is the core mechanism enabling left-to-right language generation in decoder-only Transformers (GPT, LLaMA).</p><p>In standard (bidirectional) self-attention, every token attends to every other token. For autoregressive generation, where token \\( x_t \\) must be predicted using only \\( x_1, \\ldots, x_{t-1} \\), this would constitute information leakage. Causal masking prevents this by modifying the attention computation:</p>\n\n  \\[ \\text{Attention}(Q, K, V) = \\text{softmax}\\!\\left(\\frac{QK^T}{\\sqrt{d_k}} + M\\right) V \\]\n\n  <p>where the mask \\( M \\in \\mathbb{R}^{n \\times n} \\) is defined as:</p>\n\n  \\[ M_{i,j} = \\begin{cases} 0 & \\text{if } j \\leq i \\\\ -\\infty & \\text{if } j > i \\end{cases} \\]\n\n  <p>Since \\( \\exp(-\\infty) = 0 \\), the softmax assigns exactly zero probability to all future positions, ensuring that the attention output for position \\( i \\) is a weighted combination of values from positions \\( 1 \\) through \\( i \\) only.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 350 250\" width=\"100%\" max-width=\"350px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: monospace; font-size: 14px; text-anchor: middle; alignment-baseline: middle; }\n            .box-0 { fill: #48bb78; stroke: #2d3748; stroke-width: 1; opacity: 0.8; }\n            .box-inf { fill: #2d3748; stroke: #1a202c; stroke-width: 1; }\n        </style>\n        \n        <text x=\"175\" y=\"25\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">Attention Mask Matrix (M)</text>\n        \n        <g transform=\"translate(60, 50)\">\n            <!-- Top labels: Keys -->\n            <text x=\"20\" y=\"-10\" class=\"t\" fill=\"#cbd5e0\">K<tspan baseline-shift=\"sub\" font-size=\"75%\">1</tspan></text>\n            <text x=\"60\" y=\"-10\" class=\"t\" fill=\"#cbd5e0\">K<tspan baseline-shift=\"sub\" font-size=\"75%\">2</tspan></text>\n            <text x=\"100\" y=\"-10\" class=\"t\" fill=\"#cbd5e0\">K<tspan baseline-shift=\"sub\" font-size=\"75%\">3</tspan></text>\n            <text x=\"140\" y=\"-10\" class=\"t\" fill=\"#cbd5e0\">K<tspan baseline-shift=\"sub\" font-size=\"75%\">4</tspan></text>\n            \n            <!-- Left labels: Queries -->\n            <text x=\"-20\" y=\"20\" class=\"t\" fill=\"#cbd5e0\">Q<tspan baseline-shift=\"sub\" font-size=\"75%\">1</tspan></text>\n            <text x=\"-20\" y=\"60\" class=\"t\" fill=\"#cbd5e0\">Q<tspan baseline-shift=\"sub\" font-size=\"75%\">2</tspan></text>\n            <text x=\"-20\" y=\"100\" class=\"t\" fill=\"#cbd5e0\">Q<tspan baseline-shift=\"sub\" font-size=\"75%\">3</tspan></text>\n            <text x=\"-20\" y=\"140\" class=\"t\" fill=\"#cbd5e0\">Q<tspan baseline-shift=\"sub\" font-size=\"75%\">4</tspan></text>\n            \n            <!-- Row 1 -->\n            <rect x=\"0\" y=\"0\" width=\"40\" height=\"40\" class=\"box-0\" />\n            <text x=\"20\" y=\"20\" class=\"t\" fill=\"#fff\">0</text>\n            <rect x=\"40\" y=\"0\" width=\"40\" height=\"40\" class=\"box-inf\" />\n            <text x=\"60\" y=\"20\" class=\"t\" fill=\"#a0aec0\">-∞</text>\n            <rect x=\"80\" y=\"0\" width=\"40\" height=\"40\" class=\"box-inf\" />\n            <text x=\"100\" y=\"20\" class=\"t\" fill=\"#a0aec0\">-∞</text>\n            <rect x=\"120\" y=\"0\" width=\"40\" height=\"40\" class=\"box-inf\" />\n            <text x=\"140\" y=\"20\" class=\"t\" fill=\"#a0aec0\">-∞</text>\n            \n            <!-- Row 2 -->\n            <rect x=\"0\" y=\"40\" width=\"40\" height=\"40\" class=\"box-0\" />\n            <text x=\"20\" y=\"60\" class=\"t\" fill=\"#fff\">0</text>\n            <rect x=\"40\" y=\"40\" width=\"40\" height=\"40\" class=\"box-0\" />\n            <text x=\"60\" y=\"60\" class=\"t\" fill=\"#fff\">0</text>\n            <rect x=\"80\" y=\"40\" width=\"40\" height=\"40\" class=\"box-inf\" />\n            <text x=\"100\" y=\"60\" class=\"t\" fill=\"#a0aec0\">-∞</text>\n            <rect x=\"120\" y=\"40\" width=\"40\" height=\"40\" class=\"box-inf\" />\n            <text x=\"140\" y=\"60\" class=\"t\" fill=\"#a0aec0\">-∞</text>\n            \n            <!-- Row 3 -->\n            <rect x=\"0\" y=\"80\" width=\"40\" height=\"40\" class=\"box-0\" />\n            <text x=\"20\" y=\"100\" class=\"t\" fill=\"#fff\">0</text>\n            <rect x=\"40\" y=\"80\" width=\"40\" height=\"40\" class=\"box-0\" />\n            <text x=\"60\" y=\"100\" class=\"t\" fill=\"#fff\">0</text>\n            <rect x=\"80\" y=\"80\" width=\"40\" height=\"40\" class=\"box-0\" />\n            <text x=\"100\" y=\"100\" class=\"t\" fill=\"#fff\">0</text>\n            <rect x=\"120\" y=\"80\" width=\"40\" height=\"40\" class=\"box-inf\" />\n            <text x=\"140\" y=\"100\" class=\"t\" fill=\"#a0aec0\">-∞</text>\n            \n            <!-- Row 4 -->\n            <rect x=\"0\" y=\"120\" width=\"40\" height=\"40\" class=\"box-0\" />\n            <text x=\"20\" y=\"140\" class=\"t\" fill=\"#fff\">0</text>\n            <rect x=\"40\" y=\"120\" width=\"40\" height=\"40\" class=\"box-0\" />\n            <text x=\"60\" y=\"140\" class=\"t\" fill=\"#fff\">0</text>\n            <rect x=\"80\" y=\"120\" width=\"40\" height=\"40\" class=\"box-0\" />\n            <text x=\"100\" y=\"140\" class=\"t\" fill=\"#fff\">0</text>\n            <rect x=\"120\" y=\"120\" width=\"40\" height=\"40\" class=\"box-0\" />\n            <text x=\"140\" y=\"140\" class=\"t\" fill=\"#fff\">0</text>\n        </g>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">The upper triangle is ignored by softmax, preventing information flow from right to left.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><strong>Implementation detail:</strong> In practice, the mask is a boolean or float tensor created once and broadcast across the batch and head dimensions. Many frameworks use <code>torch.triu(torch.ones(n, n), diagonal=1).bool()</code> to generate the mask, then apply it via <code>scores.masked_fill_(mask, float('-inf'))</code>.</p>\n\n  <p><strong>Relationship to other architectures:</strong> Encoder-only models (BERT) use no causal mask, allowing bidirectional attention. Encoder-decoder models (the original Transformer) use causal masking only in the decoder's self-attention and additionally use cross-attention masks to attend over encoder outputs. Prefix-LM variants (e.g., T5 in some configurations) allow bidirectional attention over a prefix and causal attention over the generation portion.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "message-passing-in-graph-neural-networks-gnns",
+    "title": "Message Passing in Graph Neural Networks (GNNs)",
+    "summary": "The fundamental computational primitive of spatial Graph Neural Networks, in which each node updates its representation by aggregating \"messages\" — transformed feature vectors — from its immediate neighbors. After \\( K \\) rounds of messa…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "adamw-optimizer",
+      "causal-masked-self-attention"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Justin Gilmer et al. · Neural Message Passing for Quantum Chemistry",
+        "url": "https://arxiv.org/abs/1704.01212"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The fundamental computational primitive of spatial Graph Neural Networks, in which each node updates its representation by aggregating \"messages\" — transformed feature vectors — from its immediate neighbors. After \\( K \\) rounds of message passing, each node's representation encodes information from its \\( K \\)-hop neighborhood.</p><p>Message passing formalizes how information propagates through a graph. At layer \\( k \\), the representation of node \\( v \\), denoted \\( h_v^{(k)} \\), is updated in two stages:</p>\n\n  <p><strong>1. Aggregate:</strong> Collect features from the neighbors \\( \\mathcal{N}(v) \\) using a permutation-invariant function (sum, mean, or max):</p>\n\n  \\[ m_v^{(k)} = \\text{AGGREGATE}^{(k)}\\!\\left(\\left\\{ h_u^{(k-1)} : u \\in \\mathcal{N}(v) \\right\\}\\right) \\]\n\n  <p><strong>2. Update:</strong> Combine the aggregated message with the node's own previous representation, typically through a learned transformation followed by a nonlinearity:</p>\n\n  \\[ h_v^{(k)} = \\text{UPDATE}^{(k)}\\!\\left(h_v^{(k-1)},\\; m_v^{(k)}\\right) \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; fill: #fff; font-size: 14px; font-weight: bold; text-anchor: middle; alignment-baseline: middle; }\n            .t-sub { font-family: sans-serif; fill: #cbd5e0; font-size: 13px; text-anchor: middle; }\n            .node { fill: #c53030; stroke: #fc8181; stroke-width: 2; }\n            .neighbor { fill: #2b6cb0; stroke: #63b3ed; stroke-width: 2; }\n            .edge { stroke: #4a5568; stroke-width: 2; marker-end: url(#arrow-g_1771711354384); }\n            .box { fill: #2d3748; stroke: #a0aec0; stroke-width: 1.5; rx: 4; }\n        </style>\n        <defs>\n            <marker id=\"arrow-g_1771711354384\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n                <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#4a5568\"></path>\n            </marker>\n        </defs>\n        \n        <!-- Neighbors -->\n        <circle cx=\"80\" cy=\"50\" r=\"20\" class=\"neighbor\"></circle> <text x=\"80\" y=\"55\" class=\"t\">u₁</text>\n        <circle cx=\"80\" cy=\"120\" r=\"20\" class=\"neighbor\"></circle> <text x=\"80\" y=\"125\" class=\"t\">u₂</text>\n        <circle cx=\"80\" cy=\"190\" r=\"20\" class=\"neighbor\"></circle> <text x=\"80\" y=\"195\" class=\"t\">u₃</text>\n        \n        <!-- Edges (Messages) -->\n        <path d=\"M 100 60 L 170 110\" class=\"edge\"></path> <text x=\"140\" y=\"80\" class=\"t-sub\">msg</text>\n        <path d=\"M 100 120 L 170 120\" class=\"edge\"></path> <text x=\"140\" y=\"115\" class=\"t-sub\">msg</text>\n        <path d=\"M 100 180 L 170 130\" class=\"edge\"></path> <text x=\"140\" y=\"165\" class=\"t-sub\">msg</text>\n        \n        <!-- Node V -->\n        <circle cx=\"200\" cy=\"120\" r=\"24\" class=\"node\"></circle> <text x=\"200\" y=\"125\" class=\"t\">v</text>\n        \n        <!-- Aggregate & Update Block -->\n        <path d=\"M 230 120 L 280 120\" class=\"edge\" stroke=\"#a0aec0\"></path>\n        \n        <rect x=\"290\" y=\"70\" width=\"160\" height=\"100\" class=\"box\"></rect>\n        <text x=\"370\" y=\"95\" class=\"t\">AGGREGATE</text>\n        <path d=\"M 370 105 L 370 125\" stroke=\"#a0aec0\" stroke-width=\"2\" marker-end=\"url(#arrow-g_1771711354384)\"></path>\n        <text x=\"370\" y=\"145\" class=\"t\">UPDATE</text>\n        \n        <path d=\"M 450 120 L 490 120\" class=\"edge\" stroke=\"#a0aec0\"></path>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Node \\(v\\) aggregates representations from its neighborhood to formulate a new state.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Different GNN variants instantiate these two functions differently:</p>\n\n  <table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Model</th>\n      <th style=\"padding:6px; text-align:left;\">AGGREGATE</th>\n      <th style=\"padding:6px; text-align:left;\">UPDATE</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">GCN</td>\n      <td style=\"padding:6px;\">Normalized sum: \\( \\sum_{u} \\frac{h_u}{\\sqrt{|\\mathcal{N}(u)||\\mathcal{N}(v)|}} \\)</td>\n      <td style=\"padding:6px;\">\\( \\sigma(W \\cdot m_v^{(k)}) \\)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">GraphSAGE</td>\n      <td style=\"padding:6px;\">Mean, LSTM, or max-pool over neighbors</td>\n      <td style=\"padding:6px;\">\\( \\sigma(W \\cdot [h_v^{(k-1)} \\| m_v^{(k)}]) \\)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">GAT</td>\n      <td style=\"padding:6px;\">Attention-weighted sum</td>\n      <td style=\"padding:6px;\">\\( \\sigma(\\sum_{u} \\alpha_{vu} W h_u) \\)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">GIN</td>\n      <td style=\"padding:6px;\">Sum (provably most expressive)</td>\n      <td style=\"padding:6px;\">\\( \\text{MLP}((1+\\epsilon) h_v + m_v) \\)</td>\n    </tr>\n  </tbody></table>\n\n  <p><strong>Over-smoothing:</strong> A key limitation of deep message passing networks is that after many layers, all node representations converge to similar values, losing discriminative power. This is analogous to a diffusion process and limits most GNNs to 2–5 layers. Techniques such as residual connections, jumping knowledge, and graph transformers have been proposed to mitigate this.</p>\n\n  <p><strong>Connection to the Weisfeiler-Leman test:</strong> The message passing framework is closely related to the 1-WL graph isomorphism test. Xu et al. (2019) showed that standard GNNs are at most as powerful as 1-WL in distinguishing non-isomorphic graphs, and that GIN achieves this upper bound.</p>"
+      }
+    ],
+    "cards": []
   }
 ]

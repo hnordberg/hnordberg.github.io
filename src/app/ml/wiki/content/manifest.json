@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-14",
+  "updatedAt": "2026-04-15",
   "sourceDeck": "Machine Learning by Henrik Nordberg",
   "topics": [
     {
@@ -737,6 +737,231 @@
         "proximal-policy-optimization-ppo"
       ],
       "updatedAt": "2026-04-14",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "adamw-optimizer",
+      "title": "AdamW Optimizer",
+      "summary": "A modification to the Adam optimizer that decouples weight decay from the gradient-based update. By applying weight decay directly to the parameters rather than through the loss function, AdamW avoids the interaction between adaptive lea…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "swiglu-activation-function",
+        "message-passing-in-graph-neural-networks-gnns"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "swiglu-activation-function",
+      "title": "SwiGLU Activation Function",
+      "summary": "A variant of the Gated Linear Unit (GLU) that uses the Swish activation as its gating function. SwiGLU replaces the standard ReLU-based feed-forward network in modern Transformer architectures (LLaMA, PaLM) due to consistently superior e…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "pre-norm-vs-post-norm-architecture",
+        "adamw-optimizer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pre-norm-vs-post-norm-architecture",
+      "title": "Pre-Norm vs. Post-Norm Architecture",
+      "summary": "An architectural design choice governing where Layer Normalization is placed within a Transformer block. Pre-Norm applies normalization before each sub-layer, while Post-Norm (the original Transformer design) applies it after . Modern LL…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "byte-pair-encoding-bpe",
+        "swiglu-activation-function"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "byte-pair-encoding-bpe",
+      "title": "Byte Pair Encoding (BPE)",
+      "summary": "A data compression algorithm adapted for subword tokenization in NLP. BPE iteratively merges the most frequent adjacent symbol pairs in a corpus, producing a vocabulary that balances between character-level generality and word-level effi…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "softmax-temperature",
+        "pre-norm-vs-post-norm-architecture"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "softmax-temperature",
+      "title": "Softmax Temperature",
+      "summary": "A scalar hyperparameter \\( T \\) applied to logits before the softmax function to control the entropy of the output probability distribution. Low temperatures sharpen the distribution toward greedy decoding; high temperatures flatten it t…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "key-value-kv-caching",
+        "byte-pair-encoding-bpe"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "key-value-kv-caching",
+      "title": "Key-Value (KV) Caching",
+      "summary": "An inference-time optimization for autoregressive Transformer generation that stores previously computed Key and Value projections so they are not redundantly recomputed at each decoding step. KV caching reduces per-step complexity from…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "rotary-positional-embedding-rope",
+        "softmax-temperature"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "rotary-positional-embedding-rope",
+      "title": "Rotary Positional Embedding (RoPE)",
+      "summary": "A positional encoding method that injects relative position information by rotating Query and Key vectors in a high-dimensional complex plane before computing attention. The dot product of two rotated vectors depends only on their relati…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "sinusoidal-positional-encoding",
+        "key-value-kv-caching"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sinusoidal-positional-encoding",
+      "title": "Sinusoidal Positional Encoding",
+      "summary": "The original fixed positional encoding from \"Attention Is All You Need\" that injects token order into the Transformer by adding deterministic sine and cosine signals of varying frequencies to the input embeddings. Each position receives…",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "causal-masked-self-attention",
+        "rotary-positional-embedding-rope"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "causal-masked-self-attention",
+      "title": "Causal (Masked) Self-Attention",
+      "summary": "A modification of self-attention that enforces autoregressive ordering by preventing each token from attending to future positions. An upper-triangular mask of negative infinity is added to the attention logits before the softmax, zeroin…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "message-passing-in-graph-neural-networks-gnns",
+        "sinusoidal-positional-encoding"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "message-passing-in-graph-neural-networks-gnns",
+      "title": "Message Passing in Graph Neural Networks (GNNs)",
+      "summary": "The fundamental computational primitive of spatial Graph Neural Networks, in which each node updates its representation by aggregating \"messages\" — transformed feature vectors — from its immediate neighbors. After \\( K \\) rounds of messa…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "adamw-optimizer",
+        "causal-masked-self-attention"
+      ],
+      "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
