@@ -6630,5 +6630,428 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "document-term-matrix",
+    "title": "Document-term matrix",
+    "summary": "A matrix where each row represents a document, each column represents a term from the vocabulary, and each entry records the frequency or weight of that term in that document — the foundational data structure of the vector space model in…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "tf-idf",
+      "vocabulary"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1975 · Gerard Salton et al. · A Vector Space Model for Automatic Indexing"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A matrix where each row represents a document, each column represents a term from the vocabulary, and each entry records the frequency or weight of that term in that document — the foundational data structure of the vector space model in information retrieval.</p><p>For a corpus of \\( N \\) documents and a vocabulary of \\( |V| \\) terms, the document-term matrix \\( A \\in \\mathbb{R}^{N \\times |V|} \\) has entries \\( A_{ij} \\) representing the importance of term \\( j \\) in document \\( i \\). Raw entries may be term counts, binary indicators, or TF-IDF weights. A concrete example with three documents and four terms:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Document</th>\n      <th style=\"padding:6px; text-align:center;\">cat</th>\n      <th style=\"padding:6px; text-align:center;\">dog</th>\n      <th style=\"padding:6px; text-align:center;\">fish</th>\n      <th style=\"padding:6px; text-align:center;\">pet</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">d₁: \"the cat is a pet\"</td>\n      <td style=\"padding:6px; text-align:center; border-bottom:1px solid #ddd;\">1</td>\n      <td style=\"padding:6px; text-align:center; border-bottom:1px solid #ddd;\">0</td>\n      <td style=\"padding:6px; text-align:center; border-bottom:1px solid #ddd;\">0</td>\n      <td style=\"padding:6px; text-align:center; border-bottom:1px solid #ddd;\">1</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">d₂: \"the dog is a pet\"</td>\n      <td style=\"padding:6px; text-align:center; border-bottom:1px solid #ddd;\">0</td>\n      <td style=\"padding:6px; text-align:center; border-bottom:1px solid #ddd;\">1</td>\n      <td style=\"padding:6px; text-align:center; border-bottom:1px solid #ddd;\">0</td>\n      <td style=\"padding:6px; text-align:center; border-bottom:1px solid #ddd;\">1</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">d₃: \"the fish\"</td>\n      <td style=\"padding:6px; text-align:center;\">0</td>\n      <td style=\"padding:6px; text-align:center;\">0</td>\n      <td style=\"padding:6px; text-align:center;\">1</td>\n      <td style=\"padding:6px; text-align:center;\">0</td>\n    </tr>\n  </table>\n\n  <p>Stop words (\"the\", \"is\", \"a\") are often removed before constructing the matrix. In practice, the matrix is extremely sparse — a typical English document of 500 words touches only a tiny fraction of a 100,000-word vocabulary, so \\( > 99\\% \\) of entries are zero. Sparse storage formats like CSR (Compressed Sparse Row) exploit this to keep memory manageable.</p>\n\n  <p>Key operations on the document-term matrix connect to major ML techniques:</p>\n  <ul>\n    <li><b>Latent Semantic Analysis (LSA):</b> applies truncated SVD to discover latent topic dimensions: \\( A \\approx U_k \\Sigma_k V_k^T \\), where \\( k \\) is the number of retained dimensions (typically 100–300). The rows of \\( U_k \\Sigma_k \\) become dense document representations.</li>\n    <li><b>Cosine similarity:</b> measures document similarity as \\( \\cos(\\theta) = \\frac{a_i \\cdot a_j}{\\|a_i\\| \\|a_j\\|} \\), where \\( a_i, a_j \\) are row vectors from \\( A \\). Unlike Euclidean distance, cosine similarity is invariant to document length.</li>\n    <li><b>Topic models (LDA):</b> treat \\( A \\) as generated from document-topic and topic-word distributions, providing a probabilistic alternative to SVD-based decomposition.</li>\n    <li><b>Inverted index:</b> the transpose \\( A^T \\) — the term-document matrix — is the conceptual basis of the inverted index used in search engines, mapping each term to its list of containing documents.</li>\n  </ul>\n\n  <p>The document-term matrix is the central data structure of classical information retrieval. Modern dense retrieval methods (using BERT or other Transformer encoders to produce document embeddings) can be viewed as replacing the sparse rows of \\( A \\) with learned dense vectors, trading interpretability for semantic generalization.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "tf-idf",
+    "title": "TF-IDF",
+    "summary": "A term-weighting scheme that scores a word's importance in a document relative to a corpus by multiplying its local frequency (TF) by its global rarity (IDF).",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "sparsity",
+      "document-term-matrix"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1972 · Karen Spärck Jones · A Statistical Interpretation of Term Specificity and Its Application in Retrieval"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A term-weighting scheme that scores a word's importance in a document relative to a corpus by multiplying its local frequency (TF) by its global rarity (IDF).</p><p>For term \\( t \\) in document \\( d \\) from corpus \\( D \\):</p>\n\n  <p>\\[ \\text{TF-IDF}(t, d, D) = \\text{TF}(t, d) \\times \\text{IDF}(t, D) \\]</p>\n\n  <p>Common formulations:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Component</th>\n      <th style=\"padding:6px; text-align:left;\">Formula</th>\n      <th style=\"padding:6px; text-align:left;\">Intuition</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Term Frequency</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\text{TF}(t, d) = \\frac{f_{t,d}}{\\sum_{t' \\in d} f_{t',d}} \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">How often \\( t \\) appears in \\( d \\), normalized</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Inverse Document Frequency</td>\n      <td style=\"padding:6px;\">\\( \\text{IDF}(t, D) = \\log \\frac{|D|}{|\\{d \\in D : t \\in d\\}|} \\)</td>\n      <td style=\"padding:6px;\">Down-weights terms appearing in many documents</td>\n    </tr>\n  </tbody></table>\n\n  <p>Words like \"the\" and \"is\" have high TF but near-zero IDF, correctly receiving low scores. Domain-specific terms have moderate TF but high IDF, receiving appropriately high scores. TF-IDF remains the backbone of BM25 (the standard sparse retrieval algorithm) and is still a competitive baseline for document classification, keyword extraction, and search ranking.</p><details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\nfrom collections import Counter\n\ndef tfidf(docs):\n    \"\"\"Compute TF-IDF for a list of tokenized documents.\"\"\"\n    N = len(docs)\n    vocab = sorted(set(w for d in docs for w in d))\n    word2idx = {w: i for i, w in enumerate(vocab)}\n    matrix = np.zeros((N, len(vocab)))\n    df = Counter(w for d in docs for w in set(d))\n    for i, doc in enumerate(docs):\n        tf = Counter(doc)\n        for w, count in tf.items():\n            idf = np.log(N / df[w])\n            matrix[i, word2idx[w]] = (count / len(doc)) * idf\n    return matrix, vocab</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "sparsity",
+    "title": "Sparsity",
+    "summary": "A property of vectors, matrices, or models where the majority of elements are exactly zero, enabling both computational efficiency and interpretable representations.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "dense-vector",
+      "tf-idf"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1996 · Tibshirani (Lasso) · Regression Shrinkage and Selection via the Lasso",
+        "url": "https://doi.org/10.1111/j.2517-6161.1996.tb02080.x"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A property of vectors, matrices, or models where the majority of elements are exactly zero, enabling both computational efficiency and interpretable representations.</p><p>A vector \\( x \\in \\mathbb{R}^n \\) is \\( k \\)-sparse if it has at most \\( k \\) non-zero entries, with \\( k \\ll n \\). The \\( \\ell_0 \\) \"norm\" counts non-zero entries: \\( \\|x\\|_0 = |\\{i : x_i \\neq 0\\}| \\). Since \\( \\ell_0 \\) minimization is NP-hard, the \\( \\ell_1 \\) norm \\( \\|x\\|_1 = \\sum_i |x_i| \\) serves as its convex relaxation — the tightest convex surrogate that still promotes sparsity.</p>\n\n  <p>Sparsity appears at multiple levels in ML:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Context</th>\n      <th style=\"padding:6px; text-align:left;\">Example</th>\n      <th style=\"padding:6px; text-align:left;\">Mechanism &amp; Benefit</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Data representation</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">One-hot vectors, BoW, TF-IDF</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Naturally sparse; memory-efficient via CSR/COO storage</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Regularization (Lasso)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\mathcal{L} + \\lambda \\|w\\|_1 \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Drives weights to exactly zero → automatic feature selection</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Model architecture</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Mixture of Experts (top-\\( k \\) routing)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Activates \\( k \\) of \\( N \\) experts per token → scales parameters without proportional FLOPs</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Activations</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">ReLU: \\( \\max(0, x) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Zeroes negative pre-activations → sparse hidden representations</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Pruning</td>\n      <td style=\"padding:6px;\">Magnitude pruning, lottery tickets</td>\n      <td style=\"padding:6px;\">Zeroes small weights post-training → smaller, faster models</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why \\( \\ell_1 \\) induces sparsity but \\( \\ell_2 \\) does not:</b> geometrically, the \\( \\ell_1 \\) ball has corners aligned with the coordinate axes. When the loss contour meets the constraint boundary, it is most likely to touch at a corner where one or more coordinates are exactly zero. The \\( \\ell_2 \\) ball is smooth, so contact points generically have all-nonzero coordinates.</p>\n\n  <p>The contrast between sparse and dense representations is a recurring theme in ML: sparse vectors (e.g., TF-IDF) are high-dimensional and interpretable but cannot capture synonymy; dense vectors (e.g., word embeddings) are low-dimensional and capture semantics but are opaque. Modern retrieval systems often combine both in hybrid search. In the interpretability literature, sparse autoencoders are trained to decompose dense Transformer activations into sparse, monosemantic features.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "dense-vector",
+    "title": "Dense vector",
+    "summary": "A vector in which most or all elements are non-zero, typically low-dimensional and learned, as opposed to a sparse high-dimensional representation. Dense vectors are the standard output of neural embedding models and the native represent…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "sparse-vector",
+      "sparsity"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2003 · Bengio et al. · A Neural Probabilistic Language Model",
+        "url": "https://www.jmlr.org/papers/v3/bengio03a.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A vector in which most or all elements are non-zero, typically low-dimensional and learned, as opposed to a sparse high-dimensional representation. Dense vectors are the standard output of neural embedding models and the native representation inside Transformers.</p><p>A word embedding \\( e \\in \\mathbb{R}^{d} \\) (e.g., \\( d = 300 \\) for Word2Vec, \\( d = 768 \\) for BERT-base) will typically have every component carrying a non-zero floating-point value. This contrasts sharply with sparse representations like one-hot vectors or TF-IDF, where \\( > 99\\% \\) of entries are zero.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "How dense vectors are produced",
+        "body": "<ul>\n    <li><b>Static embeddings</b> (Word2Vec, GloVe): trained via shallow objectives — skip-gram maximizes \\( \\sum_{(w,c)} \\log \\sigma(e_w \\cdot e_c) \\), where \\( w \\) is the target word and \\( c \\) is a context word. Each word gets a single fixed vector.</li>\n    <li><b>Contextual embeddings</b> (BERT, GPT): produced by Transformer encoder/decoder layers. The same word receives different vectors depending on context, since the representation is a function of the entire input sequence via self-attention.</li>\n    <li><b>Sentence/document embeddings:</b> obtained by pooling token-level vectors (mean pooling, [CLS] token) or via contrastive training (e.g., Sentence-BERT).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key properties and operations",
+        "body": "<ul>\n    <li><b>Semantic generalization:</b> similar concepts are nearby — \\( \\cos(e_{\\text{king}}, e_{\\text{queen}}) \\) is high — enabling generalization to unseen inputs.</li>\n    <li><b>Similarity metrics:</b> cosine similarity \\( \\frac{u \\cdot v}{\\|u\\|\\|v\\|} \\) is standard. For normalized vectors, cosine similarity equals the dot product, so approximate nearest-neighbor libraries (FAISS, ScaNN) can use inner product search.</li>\n    <li><b>Fixed dimensionality:</b> representation size is independent of vocabulary — a 300-dim embedding works whether \\( |V| = 10{,}000 \\) or \\( 100{,}000 \\).</li>\n    <li><b>Arithmetic structure:</b> well-trained embeddings exhibit linear analogies: \\( e_{\\text{king}} - e_{\\text{man}} + e_{\\text{woman}} \\approx e_{\\text{queen}} \\).</li>\n  </ul>\n\n  <p>The fundamental trade-off against sparse vectors is interpretability: individual dimensions of a dense vector rarely correspond to identifiable features. Recent work on sparse autoencoders aims to decompose dense Transformer representations into interpretable sparse features, bridging the two paradigms.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "sparse-vector",
+    "title": "Sparse vector",
+    "summary": "A vector in which the vast majority of elements are exactly zero, typically high-dimensional with each dimension corresponding to a discrete feature or vocabulary term. Sparse vectors are the native representation of classical informatio…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "one-hot-encoding",
+      "dense-vector"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1975 · Salton et al. · A Vector Space Model for Automatic Indexing"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A vector in which the vast majority of elements are exactly zero, typically high-dimensional with each dimension corresponding to a discrete feature or vocabulary term. Sparse vectors are the native representation of classical information retrieval and count-based NLP.</p><p>Sparse vectors arise naturally when representing categorical or count-based data. A one-hot encoding of a word from a vocabulary of size \\( |V| = 50{,}000 \\) produces a vector with exactly 1 non-zero entry and 49,999 zeros. A TF-IDF document vector may have a few hundred non-zero entries out of tens of thousands of dimensions.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Storage formats</b> exploit sparsity by recording only non-zero entries:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Format</th>\n      <th style=\"padding:6px; text-align:left;\">Storage</th>\n      <th style=\"padding:6px; text-align:left;\">Best for</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">CSR (Compressed Sparse Row)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Row pointers + column indices + values</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Row slicing, matrix-vector products (document-term matrices)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">CSC (Compressed Sparse Column)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Column pointers + row indices + values</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Column slicing (term lookups across documents)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">COO (Coordinate)</td>\n      <td style=\"padding:6px;\">(row, col, value) triples</td>\n      <td style=\"padding:6px;\">Incremental construction, format conversion</td>\n    </tr>\n  </table>\n\n  <p>A CSR matrix with \\( \\text{nnz} \\) non-zero entries uses \\( O(\\text{nnz}) \\) memory versus \\( O(N \\times |V|) \\) for a dense matrix — often a reduction of 100x or more.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Sparse retrieval.</b> In search engines, the document-term matrix's transpose yields an <i>inverted index</i>: for each term, a posting list records which documents contain it and with what weight. At query time, only documents containing at least one query term are scored, making search sublinear in corpus size. BM25 — the standard sparse retrieval algorithm — computes:</p>\n\n  <p>\\[ \\text{BM25}(q, d) = \\sum_{t \\in q} \\text{IDF}(t) \\cdot \\frac{f_{t,d} \\cdot (k_1 + 1)}{f_{t,d} + k_1 \\cdot (1 - b + b \\cdot \\frac{|d|}{\\text{avgdl}})} \\]</p>\n\n  <p>where \\( f_{t,d} \\) is term frequency, \\( k_1 \\) and \\( b \\) are tuning parameters, and avgdl is average document length.</p>\n\n  <p>Sparse vectors cannot capture synonymy (\"car\" and \"automobile\" are orthogonal), which motivated the development of dense embeddings. Modern hybrid search systems combine both: sparse matching for exact keyword recall and dense matching for semantic generalization.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "one-hot-encoding",
+    "title": "One-hot encoding",
+    "summary": "A representation of a categorical variable as a binary vector with exactly one element set to 1 (indicating the active category) and all others set to 0. It is the starting point for most neural approaches to categorical data.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "tokenization",
+      "sparse-vector"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1960s · Various (information theory and digital encoding literature)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A representation of a categorical variable as a binary vector with exactly one element set to 1 (indicating the active category) and all others set to 0. It is the starting point for most neural approaches to categorical data.</p><p>For a variable with \\( K \\) categories, the one-hot encoding of category \\( k \\) is the standard basis vector \\( e_k \\in \\mathbb{R}^K \\), where \\( (e_k)_i = \\mathbb{1}[i = k] \\). For a vocabulary of words \\( V = \\{\\text{cat}, \\text{dog}, \\text{fish}\\} \\):</p>\n\n  <p>\\[ \\text{cat} = [1, 0, 0], \\quad \\text{dog} = [0, 1, 0], \\quad \\text{fish} = [0, 0, 1] \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key mathematical properties",
+        "body": "<ul>\n    <li><b>Equidistant:</b> all pairs are equidistant — \\( \\|e_i - e_j\\|_2^2 = 2 \\) for \\( i \\neq j \\) — so no notion of similarity is encoded.</li>\n    <li><b>Orthogonal:</b> \\( e_i^T e_j = 0 \\) for \\( i \\neq j \\), meaning dot-product similarity between any two distinct categories is zero.</li>\n    <li><b>Dimensionality = cardinality:</b> the vector dimension equals the number of categories, which becomes prohibitive for large vocabularies (\\( |V| &gt; 100{,}000 \\) in NLP).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to embedding layers.</b> Multiplying a one-hot vector by an embedding matrix \\( E \\in \\mathbb{R}^{K \\times d} \\) selects the corresponding row:</p>\n\n  <p>\\[ e_k^T E = E[k, :] \\in \\mathbb{R}^d \\]</p>\n\n  <p>This is why embedding layers in PyTorch (<code>nn.Embedding</code>) and TensorFlow (<code>tf.keras.layers.Embedding</code>) are implemented as lookup tables rather than matrix multiplications — the one-hot product is equivalent to indexing row \\( k \\). The embedding layer thus replaces the sparse, semantics-free one-hot space with a dense, learned representation where similar items can cluster together.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Limitations and alternatives.</b> For high-cardinality categorical features (e.g., user IDs, ZIP codes), one-hot encoding creates extremely wide feature vectors. Alternatives include hashing tricks (map categories to a fixed-size vector via hash functions, accepting collisions) and learned embeddings that compress the space to \\( d \\ll K \\) dimensions.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "tokenization",
+    "title": "Tokenization",
+    "summary": "The process of segmenting raw text into discrete units (tokens) that serve as the atomic inputs to a language model. Tokenization determines the vocabulary, sequence length, and the model's ability to handle unseen words.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "token",
+      "one-hot-encoding"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2016 · Sennrich, Haddow, Birch (BPE for NMT) · Neural Machine Translation of Rare Words with Subword Units",
+        "url": "https://arxiv.org/abs/1508.07909"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The process of segmenting raw text into discrete units (tokens) that serve as the atomic inputs to a language model. Tokenization determines the vocabulary, sequence length, and the model's ability to handle unseen words.</p><p>Tokenization is the first step in any NLP pipeline. The choice of granularity involves a fundamental trade-off between vocabulary size and sequence length:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Granularity</th>\n      <th style=\"padding:6px; text-align:left;\">Example (\"unhappiness\")</th>\n      <th style=\"padding:6px; text-align:left;\">Trade-off</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Character</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">u, n, h, a, p, p, i, n, e, s, s</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Tiny vocab (~256), very long sequences → burdens \\( O(n^2) \\) attention</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Subword (BPE)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">un, happi, ness</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Balanced vocab (32K–100K) / length, handles OOV gracefully</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Word</td>\n      <td style=\"padding:6px;\">unhappiness</td>\n      <td style=\"padding:6px;\">Enormous vocab, OOV problem for rare/morphological variants</td>\n    </tr>\n  </table>\n\n  <p>Modern LLMs universally use <b>subword tokenization</b> — BPE, WordPiece, or Unigram (SentencePiece) — as a compromise. The tokenizer is trained on the corpus <i>before</i> model training and remains fixed thereafter. Training a BPE tokenizer proceeds by:</p>\n  <ol>\n    <li>Initializing the vocabulary with all individual characters (or bytes).</li>\n    <li>Counting all adjacent symbol pairs in the training corpus.</li>\n    <li>Merging the most frequent pair into a new symbol and adding it to the vocabulary.</li>\n    <li>Repeating until the desired vocabulary size is reached (e.g., 32,000 merges).</li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Practical impact on model performance",
+        "body": "<ul>\n    <li><b>Fertility</b> — the average number of tokens per word — varies across languages and domains. English typically averages ~1.3 tokens/word, while morphologically rich languages or non-Latin scripts may average 3–5x higher fertility, consuming more of the context window and degrading performance.</li>\n    <li><b>Code and math:</b> tokenizers trained mainly on natural language often fragment code tokens (e.g., splitting <code>!=</code> into two tokens), wasting model capacity.</li>\n    <li><b>Whitespace handling:</b> GPT-style tokenizers prepend spaces to tokens (\"Ġthe\"), while SentencePiece uses a special character (▁) to mark word boundaries.</li>\n  </ul>\n\n  <p>Tokenization is not a neutral preprocessing step — it shapes what the model can learn. Two models with identical architectures but different tokenizers can exhibit substantially different performance on the same task.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "token",
+    "title": "Token",
+    "summary": "The atomic unit of text processed by a language model — a discrete symbol from a fixed vocabulary, which may represent a word, subword, character, or byte. Tokens are the fundamental unit of cost, context, and generation in modern LLMs.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "subword",
+      "tokenization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1990s · Various (tokenization literature)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The atomic unit of text processed by a language model — a discrete symbol from a fixed vocabulary, which may represent a word, subword, character, or byte. Tokens are the fundamental unit of cost, context, and generation in modern LLMs.</p><p>After tokenization, raw text is converted into a sequence of integer token IDs. Each ID indexes into the model's vocabulary and maps to an embedding vector via the embedding layer:</p>\n\n  <p>\\[ \\text{token ID } k \\;\\xrightarrow{\\; E \\in \\mathbb{R}^{|V| \\times d} \\;}\\; e_k = E[k, :] \\in \\mathbb{R}^d \\]</p>\n\n  <p>For GPT-style models with BPE tokenization, a token typically corresponds to ~4 characters or ~0.75 words of English text. A rough but useful heuristic: 1 token ≈ 0.75 English words, or equivalently, 100 tokens ≈ 75 words.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Tokens as the unit of computation",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Dimension</th>\n      <th style=\"padding:6px; text-align:left;\">Role of the Token</th>\n      <th style=\"padding:6px; text-align:left;\">Example</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Context window</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Maximum sequence length measured in tokens</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">GPT-4: 128K tokens; Claude: 200K tokens</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Pricing</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">API costs charged per input + output token</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">$X per million input tokens</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Generation</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Autoregressive models produce one token per forward pass</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Each pass computes \\( P(w_t | w_{<t}) <=\"\" anki-mathjax=\"\"> over <anki-mathjax> |V| \\) tokens</t})></anki-mathjax></td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Attention cost</td>\n      <td style=\"padding:6px;\">Self-attention scales as \\( O(n^2) \\) in sequence length</td>\n      <td style=\"padding:6px;\">Doubling tokens quadruples attention FLOPs</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Special tokens</b> serve structural roles beyond content:</p>\n  <ul>\n    <li><code>&lt;BOS&gt;</code> / <code>&lt;EOS&gt;</code> — beginning/end of sequence, used to signal generation boundaries</li>\n    <li><code>&lt;PAD&gt;</code> — padding token for batching sequences of unequal length; masked out in attention</li>\n    <li><code>[SEP]</code> — separates segments in BERT-style models (e.g., question from passage)</li>\n    <li><code>[CLS]</code> — classification token in BERT; its final hidden state is used as the sequence representation</li>\n    <li><code>&lt;UNK&gt;</code> — unknown/out-of-vocabulary; rare in subword systems since any string can be decomposed to bytes</li>\n  </ul>\n\n  <p>The token is not merely a preprocessing artifact — it is the grain at which the model reasons, attends, and generates. Architectural innovations like KV-caching, speculative decoding, and sparse attention all operate at the token level.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "subword",
+    "title": "Subword",
+    "summary": "A linguistic unit smaller than a word but larger than a character, used as the tokenization granularity in modern language models to balance vocabulary size against sequence length. Subword tokenization is universally adopted in Transfor…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "vocabulary",
+      "token"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2016 · Sennrich, Haddow, Birch · Neural Machine Translation of Rare Words with Subword Units",
+        "url": "https://arxiv.org/abs/1508.07909"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A linguistic unit smaller than a word but larger than a character, used as the tokenization granularity in modern language models to balance vocabulary size against sequence length. Subword tokenization is universally adopted in Transformers.</p><p>Subword tokenization decomposes words into frequently occurring fragments. For example, \"tokenization\" might split into [\"token\", \"ization\"], while common words like \"the\" remain whole tokens. This approach resolves the core tension in tokenizer design:</p>\n\n  <ul>\n    <li><b>Word-level</b> tokenizers cannot handle unseen words (OOV problem) and require enormous vocabularies for morphologically rich languages.</li>\n    <li><b>Character-level</b> tokenizers produce extremely long sequences, burdening attention's \\( O(n^2) \\) cost and making it harder to learn long-range dependencies.</li>\n    <li><b>Subword</b> tokenizers adaptively split rare words into known components while keeping common words intact — a data-driven compression of the input.</li>\n  </ul>\n\n  <p>The three dominant subword algorithms:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Algorithm</th>\n      <th style=\"padding:6px; text-align:left;\">Strategy</th>\n      <th style=\"padding:6px; text-align:left;\">Used by</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">BPE (Byte-Pair Encoding)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Bottom-up: iteratively merge most frequent adjacent pairs</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">GPT-2/3/4, LLaMA, Claude</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">WordPiece</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Bottom-up: merge pairs that maximize language model likelihood</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">BERT, DistilBERT</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Unigram LM</td>\n      <td style=\"padding:6px;\">Top-down: start with large vocab, iteratively prune tokens with least impact on corpus likelihood</td>\n      <td style=\"padding:6px;\">T5, mBART (via SentencePiece)</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "BPE training algorithm in detail",
+        "body": "<ol>\n    <li>Initialize vocabulary with all individual bytes (or characters).</li>\n    <li>Count frequencies of all adjacent symbol pairs across the corpus.</li>\n    <li>Merge the most frequent pair into a new symbol; add to vocabulary.</li>\n    <li>Repeat steps 2–3 for \\( M \\) merges (e.g., \\( M = 32{,}000 \\)), yielding a vocabulary of size \\( 256 + M \\) for byte-level BPE.</li>\n  </ol>\n\n  <p>At inference time, BPE applies the learned merges greedily in priority order. WordPiece instead uses a longest-match-first strategy, prefixing continuation tokens with <code>##</code> (e.g., \"playing\" → [\"play\", \"##ing\"]). Unigram selects the tokenization that maximizes the product of unigram probabilities: \\( \\arg\\max_{(x_1, \\ldots, x_m)} \\sum_i \\log p(x_i) \\), solved efficiently with the Viterbi algorithm.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>SentencePiece</b> (Kudo &amp; Richardson, 2018) is a language-agnostic library that implements both BPE and Unigram. It treats the input as a raw byte stream rather than pre-tokenized words, making it suitable for languages without whitespace boundaries (Chinese, Japanese).</p><details>\n    <summary>Python</summary>\n    <pre><code>from collections import Counter\n\ndef train_bpe(corpus_tokens, num_merges):\n    \"\"\"Train a simple BPE tokenizer.\"\"\"\n    # Represent each word as a tuple of characters + end-of-word marker\n    vocab = Counter()\n    for word, freq in corpus_tokens.items():\n        vocab[tuple(word) + ('',)] = freq\n    \n    merges = []\n    for _ in range(num_merges):\n        pairs = Counter()\n        for word, freq in vocab.items():\n            for i in range(len(word) - 1):\n                pairs[(word[i], word[i+1])] += freq\n        if not pairs:\n            break\n        best = max(pairs, key=pairs.get)\n        merges.append(best)\n        new_vocab = {}\n        for word, freq in vocab.items():\n            new_word = []\n            i = 0\n            while i &lt; len(word):\n                if i &lt; len(word)-1 and (word[i], word[i+1]) == best:\n                    new_word.append(word[i] + word[i+1])\n                    i += 2\n                else:\n                    new_word.append(word[i])\n                    i += 1\n            new_vocab[tuple(new_word)] = freq\n        vocab = new_vocab\n    return merges, vocab</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "vocabulary",
+    "title": "Vocabulary",
+    "summary": "The fixed, finite set of all tokens that a language model can recognize and generate, defined during tokenizer training and remaining immutable during model training and inference.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "document-term-matrix",
+      "subword"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1990s · Various (statistical NLP literature)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The fixed, finite set of all tokens that a language model can recognize and generate, defined during tokenizer training and remaining immutable during model training and inference.</p><p>The vocabulary \\( V \\) determines the discrete output space of the model. At each generation step, the model produces a probability distribution over \\( |V| \\) tokens via a softmax over logits:</p>\n\n  <p>\\[ P(w_t | w_{&lt;t}) = \\text{softmax}(W_{\\text{head}} \\, h_t) \\in \\mathbb{R}^{|V|} \\]</p>\n\n  <p>where \\( W_{\\text{head}} \\in \\mathbb{R}^{|V| \\times d} \\) is the language model head (often tied with the embedding matrix \\( E \\)) and \\( h_t \\in \\mathbb{R}^d \\) is the hidden state at position \\( t \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Vocabulary sizes across major models",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Model</th>\n      <th style=\"padding:6px; text-align:left;\">\\( |V| \\)</th>\n      <th style=\"padding:6px; text-align:left;\">Tokenizer</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">GPT-2</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">50,257</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Byte-level BPE</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">BERT</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">30,522</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">WordPiece</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">LLaMA 2</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">32,000</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">SentencePiece BPE</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">GPT-4</td>\n      <td style=\"padding:6px;\">~100,000</td>\n      <td style=\"padding:6px;\">cl100k_base BPE</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Design trade-offs of vocabulary size",
+        "body": "<ul>\n    <li><b>Larger \\( |V| \\) → shorter sequences:</b> fewer tokens per text, reducing attention cost (\\( O(n^2) \\)) and improving throughput. But the embedding matrix \\( E \\in \\mathbb{R}^{|V| \\times d} \\) and the softmax computation both grow linearly with \\( |V| \\).</li>\n    <li><b>Smaller \\( |V| \\) → longer sequences:</b> more tokens per text, increasing compute but allowing a smaller embedding table and faster softmax.</li>\n    <li><b>Embedding weight tying:</b> many models tie \\( W_{\\text{head}} = E^T \\), so the embedding matrix does double duty. This reduces total parameters by \\( |V| \\times d \\) but couples input and output representations.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Multilinguality.</b> The vocabulary determines how efficiently different languages are encoded. A tokenizer trained predominantly on English may fragment Chinese or Arabic text into individual bytes, producing sequences 3–6x longer than English for the same semantic content. This \"tokenization tax\" means the model consumes more context window and more compute for non-English text. Multilingual models (mT5, BLOOM) address this by training tokenizers on balanced multilingual corpora.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Vocabulary extension.</b> After model training, adding new tokens (e.g., for a domain-specific fine-tune) requires expanding the embedding matrix and the LM head, initializing new rows randomly or by averaging related token embeddings. This is how models are adapted for specialized vocabularies (code, chemistry, legal) without full retraining.</p>"
+      }
+    ],
+    "cards": []
   }
 ]

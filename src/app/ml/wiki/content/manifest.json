@@ -2948,6 +2948,229 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "document-term-matrix",
+      "title": "Document-term matrix",
+      "summary": "A matrix where each row represents a document, each column represents a term from the vocabulary, and each entry records the frequency or weight of that term in that document — the foundational data structure of the vector space model in…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "tf-idf",
+        "vocabulary"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "tf-idf",
+      "title": "TF-IDF",
+      "summary": "A term-weighting scheme that scores a word's importance in a document relative to a corpus by multiplying its local frequency (TF) by its global rarity (IDF).",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "sparsity",
+        "document-term-matrix"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sparsity",
+      "title": "Sparsity",
+      "summary": "A property of vectors, matrices, or models where the majority of elements are exactly zero, enabling both computational efficiency and interpretable representations.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "dense-vector",
+        "tf-idf"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "dense-vector",
+      "title": "Dense vector",
+      "summary": "A vector in which most or all elements are non-zero, typically low-dimensional and learned, as opposed to a sparse high-dimensional representation. Dense vectors are the standard output of neural embedding models and the native represent…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "sparse-vector",
+        "sparsity"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sparse-vector",
+      "title": "Sparse vector",
+      "summary": "A vector in which the vast majority of elements are exactly zero, typically high-dimensional with each dimension corresponding to a discrete feature or vocabulary term. Sparse vectors are the native representation of classical informatio…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "one-hot-encoding",
+        "dense-vector"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "one-hot-encoding",
+      "title": "One-hot encoding",
+      "summary": "A representation of a categorical variable as a binary vector with exactly one element set to 1 (indicating the active category) and all others set to 0. It is the starting point for most neural approaches to categorical data.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "tokenization",
+        "sparse-vector"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "tokenization",
+      "title": "Tokenization",
+      "summary": "The process of segmenting raw text into discrete units (tokens) that serve as the atomic inputs to a language model. Tokenization determines the vocabulary, sequence length, and the model's ability to handle unseen words.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "token",
+        "one-hot-encoding"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "token",
+      "title": "Token",
+      "summary": "The atomic unit of text processed by a language model — a discrete symbol from a fixed vocabulary, which may represent a word, subword, character, or byte. Tokens are the fundamental unit of cost, context, and generation in modern LLMs.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "subword",
+        "tokenization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "subword",
+      "title": "Subword",
+      "summary": "A linguistic unit smaller than a word but larger than a character, used as the tokenization granularity in modern language models to balance vocabulary size against sequence length. Subword tokenization is universally adopted in Transfor…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "vocabulary",
+        "token"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "vocabulary",
+      "title": "Vocabulary",
+      "summary": "The fixed, finite set of all tokens that a language model can recognize and generate, defined during tokenizer training and remaining immutable during model training and inference.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "document-term-matrix",
+        "subword"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
