@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getManifest, getPaths } from "../../lib/loadContent";
-
+import { resolvePathTopics } from "../../lib/paths";
 type PageProps = { params: Promise<{ pathSlug: string }> };
 
 export function generateStaticParams() {
@@ -27,7 +27,7 @@ export default async function MlWikiPathDetailPage({ params }: PageProps) {
   if (!path) notFound();
 
   const manifest = getManifest();
-  const titleBySlug = new Map(manifest.topics.map((t) => [t.slug, t.title]));
+  const matchedTopics = resolvePathTopics(manifest, path);
 
   return (
     <main className="wiki-main">
@@ -46,34 +46,21 @@ export default async function MlWikiPathDetailPage({ params }: PageProps) {
         ) : null}
       </header>
 
-      <ol className="wiki-path-steps">
-        {path.topicSlugs.map((slug, i) => {
-          const prev = i > 0 ? path.topicSlugs[i - 1] : null;
-          const next =
-            i < path.topicSlugs.length - 1 ? path.topicSlugs[i + 1] : null;
-          const title = titleBySlug.get(slug) ?? slug;
+      <ol className="wiki-path-steps" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderLeft: '2px solid var(--color-base-300)', paddingLeft: '1.5rem', marginLeft: '1rem' }}>
+        {matchedTopics.map((topic, i) => {
+          const slug = topic.slug;
           return (
-            <li key={slug} className="wiki-path-step card">
-              <div className="wiki-path-step-num">Step {i + 1}</div>
-              <div className="card-title">
-                <Link href={`/ml/wiki/${slug}`}>{title}</Link>
+            <li key={slug} className="wiki-path-step card" style={{ position: 'relative' }}>
+              <div style={{ position: 'absolute', left: '-2.2rem', top: '1.5rem', width: '1rem', height: '1rem', borderRadius: '50%', backgroundColor: 'var(--color-primary-500)', border: '2px solid var(--color-bg)' }} />
+              <div className="wiki-path-step-num" style={{ fontSize: '0.85rem', color: 'var(--color-base-500)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Step {i + 1}
               </div>
-              <nav className="wiki-path-step-nav" aria-label={`Navigation for ${title}`}>
-                {prev ? (
-                  <Link href={`/ml/wiki/${prev}`} className="wiki-path-nav-link">
-                    ← Previous
-                  </Link>
-                ) : (
-                  <span className="wiki-path-nav-disabled">← Previous</span>
-                )}
-                {next ? (
-                  <Link href={`/ml/wiki/${next}`} className="wiki-path-nav-link">
-                    Next →
-                  </Link>
-                ) : (
-                  <span className="wiki-path-nav-disabled">Next →</span>
-                )}
-              </nav>
+              <div className="card-title">
+                <Link href={`/ml/wiki/${slug}?path=${path.slug}`}>{topic.title}</Link>
+              </div>
+              <div className="card-text">
+                {topic.summary}
+              </div>
             </li>
           );
         })}

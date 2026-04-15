@@ -5,6 +5,7 @@ import {
   getManifest,
   getTopicBySlug,
 } from "../lib/loadContent";
+import { Suspense } from "react";
 import { WikiTopicClient } from "../components/WikiTopicClient";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -31,7 +32,9 @@ export default async function MlWikiTopicPage({ params }: PageProps) {
 
   return (
     <main className="wiki-main wiki-main--wide">
-      <WikiTopicClient topic={topic} manifest={manifest} />
+      <Suspense fallback={<div style={{ padding: '2rem', textAlign: 'center' }}>Loading topic...</div>}>
+        <WikiTopicClient topic={topic} manifest={manifest} />
+      </Suspense>
     </main>
   );
 }

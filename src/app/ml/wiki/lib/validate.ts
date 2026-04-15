@@ -143,14 +143,7 @@ export function validateWikiPaths(
       });
     }
     pathSlugs.add(p.slug);
-    for (const ts of p.topicSlugs) {
-      if (!slugs.has(ts)) {
-        issues.push({
-          code: "PATH_UNKNOWN_TOPIC",
-          message: `Path "${p.slug}" references unknown topic: ${ts}`,
-        });
-      }
-    }
+    // Note: Since topics are dynamically resolved, we don't validate explicit topicSlugs anymore.
   }
   return issues;
 }

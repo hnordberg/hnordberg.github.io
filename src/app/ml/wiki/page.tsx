@@ -27,7 +27,7 @@ export default function MlWikiIndexPage() {
         </p>
         <h1 className="wiki-page-title">ML Wiki</h1>
         <p className="wiki-lead">
-          Mini-wiki derived from the deck <strong>{manifest.sourceDeck}</strong>.
+          Mini-wiki derived from the Anki deck <b><Link href="https://ankiweb.net/shared/info/2014176013?cb=1773248155654">{manifest.sourceDeck}</Link></b>.
           Browse by topic, filter below, or explore{" "}
           <Link href="/ml/wiki/paths">learning paths</Link> and{" "}
           <Link href="/ml/wiki/tags">all tags</Link>.
@@ -40,7 +40,12 @@ export default function MlWikiIndexPage() {
 
       <section className="wiki-hub-links card-grid">
         <div className="card">
-          <div className="card-title">Learning paths</div>
+          <Link
+            href="/ml/wiki/paths"
+            className="card-title wiki-hub-card-heading-link"
+          >
+            Learning paths
+          </Link>
           <div className="card-text">
             <ul className="list">
               {paths.paths.map((p) => (

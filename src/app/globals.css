@@ -83,7 +83,7 @@ ol li {
     margin-bottom: 0.5rem;
 }
 
-header {
+.site-header {
     padding: 1rem;
     display: flex;
     justify-content: space-between;
@@ -93,19 +93,19 @@ header {
 
 /* Desktop view - sticky header */
 @media (min-width: 769px) {
-    header {
+    .site-header {
         position: sticky;
         top: 0;
         z-index: 100;
     }
 }
 
-body.dark-mode header {
+body.dark-mode .site-header {
     background-color: var(--header-background-dark);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-body.light-mode header {
+body.light-mode .site-header {
     background-color: var(--header-background-light);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -195,7 +195,7 @@ body.light-mode .hamburger-menu span {
 
 /* Mobile menu styles */
 @media (max-width: 768px) {
-    header {
+    .site-header {
         padding: 1rem;
         position: sticky;
         top: 0;
@@ -667,7 +667,7 @@ body.dark-mode .card .block-quote {
 
 /* Print layout: single column, hide navigation */
 @media print {
-    header,
+    .site-header,
     footer,
     #main-nav,
     .nav-mobile-header,
@@ -835,6 +835,19 @@ body.dark-mode .wiki-lead {
 
 .wiki-hub-links {
     margin-bottom: 2.5rem;
+}
+
+/* Card hub title links: match plain headings until hover */
+.wiki-hub-card-heading-link {
+    color: inherit;
+}
+
+.wiki-hub-card-heading-link:hover {
+    color: #2196F3;
+}
+
+body.dark-mode .wiki-hub-card-heading-link:hover {
+    color: #64B5F6;
 }
 
 .wiki-index-section {

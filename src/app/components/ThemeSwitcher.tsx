@@ -1,27 +1,47 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useLayoutEffect, useRef } from 'react'
 import styles from './ThemeSwitcher.module.css'
 
+type ThemeClass = 'dark-mode' | 'light-mode'
+
+function readStoredTheme(): ThemeClass {
+    try {
+        const s = localStorage.getItem('theme')
+        if (s === 'light-mode' || s === 'dark-mode') return s
+    } catch {
+        /* ignore */
+    }
+    return 'dark-mode'
+}
+
 const ThemeSwitcher = () => {
-    const [theme, setTheme] = useState('dark-mode');
+    const [theme, setTheme] = useState<ThemeClass>('dark-mode')
+    const synced = useRef(false)
 
-    useEffect(() => {
-        const storedTheme = localStorage.getItem('theme');
-        if (storedTheme) {
-            setTheme(storedTheme);
-        } else {
-            setTheme('dark-mode');
+    useLayoutEffect(() => {
+        if (!synced.current) {
+            synced.current = true
+            const initial = readStoredTheme()
+            document.body.className = initial
+            setTheme(initial)
+            try {
+                localStorage.setItem('theme', initial)
+            } catch {
+                /* ignore */
+            }
+            return
         }
-    }, []);
-
-    useEffect(() => {
-        document.body.className = theme;
-        localStorage.setItem('theme', theme);
-    }, [theme]);
+        document.body.className = theme
+        try {
+            localStorage.setItem('theme', theme)
+        } catch {
+            /* ignore */
+        }
+    }, [theme])
 
     const toggleTheme = () => {
-        setTheme(theme === 'dark-mode' ? 'light-mode' : 'dark-mode');
+        setTheme((t) => (t === 'dark-mode' ? 'light-mode' : 'dark-mode'))
     };
 
     return (

@@ -34,7 +34,8 @@
       "tags": [
         "linear-models",
         "least-squares",
-        "optimization"
+        "optimization",
+        "path-core-foundations"
       ],
       "prerequisites": [],
       "related": [
@@ -55,7 +56,8 @@
         "architecture",
         "attention",
         "ml",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -77,7 +79,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -99,7 +102,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -121,7 +125,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -166,7 +171,8 @@
         "ml",
         "product",
         "safety",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -189,7 +195,8 @@
         "ml",
         "neural-odes",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -212,7 +219,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-scaling-advanced",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -235,7 +244,8 @@
         "ml",
         "peft",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -280,7 +290,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -305,7 +316,9 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -330,7 +343,9 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -355,7 +370,9 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -379,7 +396,8 @@
         "ml",
         "nlp",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -402,7 +420,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -426,7 +446,8 @@
         "ml",
         "nlp",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -450,7 +471,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -497,7 +519,8 @@
         "landmark",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -520,7 +543,8 @@
         "optimization",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -543,7 +567,8 @@
         "landmark",
         "ml",
         "product",
-        "wiki-import"
+        "wiki-import",
+        "path-vision"
       ],
       "prerequisites": [],
       "related": [
@@ -589,7 +614,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -613,7 +639,8 @@
         "optimization",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -637,7 +664,9 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -660,7 +689,9 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -683,7 +714,8 @@
         "nlp",
         "reinforcement",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-reinforcement"
       ],
       "prerequisites": [],
       "related": [
@@ -706,7 +738,8 @@
         "ml",
         "reinforcement",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-reinforcement"
       ],
       "prerequisites": [],
       "related": [
@@ -729,7 +762,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -751,7 +785,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -773,7 +808,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -795,7 +831,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -818,7 +855,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -841,7 +879,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -864,7 +903,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -887,7 +927,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -910,7 +951,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -933,7 +975,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -1262,7 +1305,8 @@
         "landmark",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -1308,7 +1352,8 @@
         "ml",
         "reinforcement",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-reinforcement"
       ],
       "prerequisites": [],
       "related": [
@@ -1331,7 +1376,8 @@
         "ml",
         "reinforcement",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-reinforcement"
       ],
       "prerequisites": [],
       "related": [
@@ -1353,7 +1399,8 @@
         "ml",
         "reinforcement",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-reinforcement"
       ],
       "prerequisites": [],
       "related": [
@@ -1375,7 +1422,8 @@
         "intermediate",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -1397,7 +1445,8 @@
         "intermediate",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -1485,7 +1534,8 @@
         "ml",
         "regularization",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -1592,7 +1642,8 @@
         "ml",
         "reinforcement",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-reinforcement"
       ],
       "prerequisites": [],
       "related": [
@@ -1614,7 +1665,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -1637,7 +1689,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -1989,7 +2043,8 @@
         "foundational",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2099,7 +2154,8 @@
         "foundational",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2207,7 +2263,8 @@
         "foundational",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2229,7 +2286,8 @@
         "foundational",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2251,7 +2309,8 @@
         "foundational",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2273,7 +2332,8 @@
         "foundational",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2295,7 +2355,9 @@
         "foundational",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -2317,7 +2379,9 @@
         "foundational",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -2338,7 +2402,8 @@
         "architecture",
         "foundational",
         "ml",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2359,7 +2424,8 @@
         "architecture",
         "foundational",
         "ml",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2380,7 +2446,8 @@
         "architecture",
         "foundational",
         "ml",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2401,7 +2468,8 @@
         "architecture",
         "foundational",
         "ml",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2423,7 +2491,9 @@
         "foundational",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -2445,7 +2515,8 @@
         "foundational",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2509,7 +2580,8 @@
         "foundational",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2531,7 +2603,9 @@
         "cv",
         "foundational",
         "ml",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-vision"
       ],
       "prerequisites": [],
       "related": [
@@ -2554,7 +2628,8 @@
         "ml",
         "nlp",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2576,7 +2651,8 @@
         "foundational",
         "ml",
         "nlp",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2599,7 +2675,8 @@
         "ml",
         "nlp",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2666,7 +2743,8 @@
         "ml",
         "nlp",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2688,7 +2766,8 @@
         "architecture",
         "ml",
         "nlp",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2710,7 +2789,8 @@
         "architecture",
         "ml",
         "nlp",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2733,7 +2813,8 @@
         "ml",
         "nlp",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -2757,7 +2838,9 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -2780,7 +2863,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -2804,7 +2888,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -2894,7 +2979,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -2917,7 +3003,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3093,7 +3180,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3116,7 +3204,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3139,7 +3228,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3162,7 +3252,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3274,7 +3365,9 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3298,7 +3391,9 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3321,7 +3416,9 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3344,7 +3441,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3410,7 +3508,8 @@
         "optimization",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3476,7 +3575,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3516,7 +3616,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3583,7 +3684,8 @@
         "optimization",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3690,7 +3792,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -3927,7 +4030,8 @@
         "landmark",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -4077,7 +4181,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4100,7 +4206,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4124,7 +4232,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4147,7 +4257,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4170,7 +4281,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4193,7 +4305,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4216,7 +4329,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4239,7 +4353,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4262,7 +4377,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4277,7 +4393,7 @@
       "title": "Causal Mask",
       "summary": "A lower-triangular binary mask applied inside scaled dot-product attention to prevent each position from attending to future positions, enforcing the autoregressive property: position \\( t \\) can only attend to positions \\( 1, \\ldots, t \\).",
       "domain": "llm",
-      "level": "intro",
+      "level": "intermediate",
       "type": "mixed",
       "tags": [
         "attention",
@@ -4285,7 +4401,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4309,7 +4426,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4332,7 +4450,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4355,7 +4474,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4378,7 +4498,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4400,7 +4521,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4423,7 +4545,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4447,7 +4571,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4469,7 +4595,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4492,7 +4619,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4515,7 +4644,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4538,7 +4668,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4561,7 +4692,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4584,7 +4716,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4608,7 +4741,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4632,7 +4766,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4655,7 +4790,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4679,7 +4815,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4702,7 +4839,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4725,7 +4863,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4748,7 +4887,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4771,7 +4911,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4794,7 +4935,9 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4817,7 +4960,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4840,7 +4984,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4863,7 +5008,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4886,7 +5032,8 @@
         "ml",
         "optimization",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4909,7 +5056,8 @@
         "ml",
         "optimization",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4932,7 +5080,8 @@
         "ml",
         "optimization",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4955,7 +5104,8 @@
         "ml",
         "optimization",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -4978,7 +5128,8 @@
         "ml",
         "optimization",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5001,7 +5152,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5046,7 +5198,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5069,7 +5222,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5180,7 +5334,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5202,7 +5357,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5224,7 +5380,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5246,7 +5403,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5269,7 +5427,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5292,7 +5451,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5314,7 +5474,9 @@
         "architecture",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5336,7 +5498,9 @@
         "architecture",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5358,7 +5522,9 @@
         "architecture",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5380,7 +5546,9 @@
         "architecture",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5402,7 +5570,9 @@
         "architecture",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5425,7 +5595,9 @@
         "attention",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5646,7 +5818,9 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5668,7 +5842,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5690,7 +5865,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5712,7 +5888,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5734,7 +5911,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5757,7 +5935,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5780,7 +5959,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5803,7 +5983,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5826,7 +6007,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -5872,7 +6054,8 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6043,7 +6226,10 @@
         "cv",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-vision",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6066,7 +6252,9 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6089,7 +6277,10 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-vision",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6113,7 +6304,10 @@
         "landmark",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-vision",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6158,7 +6352,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6246,7 +6441,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6269,7 +6465,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6313,7 +6510,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6335,7 +6533,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6357,7 +6556,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6379,7 +6579,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6401,7 +6602,8 @@
         "ml",
         "product",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6423,7 +6625,9 @@
         "foundational",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6445,7 +6649,9 @@
         "foundational",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6467,7 +6673,9 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6489,7 +6697,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6511,7 +6720,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6534,7 +6744,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6557,7 +6768,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6580,7 +6792,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6603,7 +6816,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6626,7 +6840,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6650,7 +6865,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6673,7 +6890,9 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -6697,7 +6916,9 @@
         "nlp",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -7025,7 +7246,8 @@
         "intermediate",
         "ml",
         "regularization",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -7048,7 +7270,9 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -7071,7 +7295,8 @@
         "ml",
         "optimization",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -7117,7 +7342,8 @@
         "ml",
         "optimization",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -7205,7 +7431,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -7227,7 +7454,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -7249,7 +7477,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -7271,7 +7500,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -7293,7 +7523,8 @@
         "intermediate",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-vision"
       ],
       "prerequisites": [],
       "related": [
@@ -7315,7 +7546,8 @@
         "intermediate",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -7359,7 +7591,8 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -7768,7 +8001,8 @@
         "ml",
         "reinforcement",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-reinforcement"
       ],
       "prerequisites": [],
       "related": [
@@ -7790,7 +8024,8 @@
         "ml",
         "reinforcement",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-reinforcement"
       ],
       "prerequisites": [],
       "related": [
@@ -7812,7 +8047,8 @@
         "ml",
         "reinforcement",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-reinforcement"
       ],
       "prerequisites": [],
       "related": [
@@ -8004,7 +8240,8 @@
         "architecture",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -8068,7 +8305,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -8090,7 +8328,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -8112,7 +8351,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -8218,7 +8458,8 @@
         "implementation",
         "intermediate",
         "ml",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [
@@ -8241,7 +8482,9 @@
         "implementation",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -8264,7 +8507,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -8286,7 +8530,8 @@
         "ml",
         "nlp",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -8308,7 +8553,9 @@
         "foundational",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -8330,7 +8577,9 @@
         "foundational",
         "ml",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -8675,7 +8924,8 @@
         "ml",
         "reinforcement",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-reinforcement"
       ],
       "prerequisites": [],
       "related": [
@@ -8739,7 +8989,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -8761,7 +9012,8 @@
         "ml",
         "theory",
         "transformer",
-        "wiki-import"
+        "wiki-import",
+        "path-transformer-llm"
       ],
       "prerequisites": [],
       "related": [
@@ -8826,7 +9078,8 @@
         "architecture",
         "ml",
         "theory",
-        "wiki-import"
+        "wiki-import",
+        "path-architectures"
       ],
       "prerequisites": [],
       "related": [

@@ -2,6 +2,11 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import pathsJson from "../content/paths.json";
+import { resolvePathTopics, sortTopics } from "../lib/paths";
+import { useWikiProgress } from "./useWikiProgress";
+import type { WikiPathsFile } from "../types";
 import { useMathJax } from "../../../components/MathJax";
 import type { WikiManifest, WikiTopic, WikiTopicIndexEntry } from "../types";
 import { buildTitleBySlug } from "./TopicRelations";
@@ -21,17 +26,35 @@ export function WikiTopicClient({ topic, manifest }: WikiTopicClientProps) {
   const titleBySlug = buildTitleBySlug(manifest);
   const [infoOpen, setInfoOpen] = useState(false);
 
-  const { prev, next } = useMemo(() => {
-    const topics = manifest.topics;
-    const i = topics.findIndex((t) => t.slug === topic.slug);
+  const searchParams = useSearchParams();
+  const currentPathSlug = searchParams?.get("path");
+  const { markCompleted } = useWikiProgress();
+
+  const { prev, next, pathContext, topicsList, currentIndex } = useMemo(() => {
+    let topicsList = sortTopics(manifest.topics);
+    let pathContext = null;
+    
+    if (currentPathSlug) {
+      const pathsFile = pathsJson as unknown as WikiPathsFile;
+      const foundPath = pathsFile.paths.find((p) => p.slug === currentPathSlug);
+      if (foundPath) {
+        pathContext = foundPath;
+        topicsList = resolvePathTopics(manifest, foundPath);
+      }
+    }
+
+    const i = topicsList.findIndex((t) => t.slug === topic.slug);
     if (i < 0) {
-      return { prev: null as WikiTopicIndexEntry | null, next: null as WikiTopicIndexEntry | null };
+      return { prev: null as WikiTopicIndexEntry | null, next: null as WikiTopicIndexEntry | null, pathContext, topicsList, currentIndex: -1 };
     }
     return {
-      prev: i > 0 ? topics[i - 1]! : null,
-      next: i < topics.length - 1 ? topics[i + 1]! : null,
+      prev: i > 0 ? topicsList[i - 1]! : null,
+      next: i < topicsList.length - 1 ? topicsList[i + 1]! : null,
+      pathContext,
+      topicsList,
+      currentIndex: i
     };
-  }, [manifest.topics, topic.slug]);
+  }, [manifest, topic.slug, currentPathSlug]);
 
   const closeInfo = useCallback(() => setInfoOpen(false), []);
 
@@ -61,12 +84,24 @@ export function WikiTopicClient({ topic, manifest }: WikiTopicClientProps) {
           className={`wiki-topic-layout${infoOpen ? " wiki-topic-layout--info-open" : ""}`}
         >
           <div className="wiki-topic-main">
+            {pathContext && currentIndex >= 0 ? (
+              <div style={{ marginBottom: '1.5rem', borderBottom: '1px solid var(--color-base-200)', paddingBottom: '1rem' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--color-base-500)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+                  <Link href={`/ml/wiki/paths/${pathContext.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>Path: {pathContext.title}</Link>
+                  <span style={{ margin: '0 0.5rem' }}>•</span>
+                  Step {currentIndex + 1} of {topicsList.length}
+                </div>
+                <div style={{ height: '4px', width: '100%', backgroundColor: 'var(--color-base-200)', borderRadius: '2px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: `${((currentIndex + 1) / topicsList.length) * 100}%`, backgroundColor: 'var(--color-primary-500)', transition: 'width 0.3s ease' }} />
+                </div>
+              </div>
+            ) : null}
             <div className="wiki-topic-title-row">
               <h1 className="wiki-article-title">{topic.title}</h1>
               <div className="wiki-topic-title-actions">
                 {prev ? (
                   <Link
-                    href={`/ml/wiki/${prev.slug}`}
+                    href={`/ml/wiki/${prev.slug}${currentPathSlug ? `?path=${currentPathSlug}` : ""}`}
                     className="wiki-topic-nav-btn"
                     aria-label={`Previous article: ${prev.title}`}
                   >
@@ -75,7 +110,7 @@ export function WikiTopicClient({ topic, manifest }: WikiTopicClientProps) {
                 ) : null}
                 {next ? (
                   <Link
-                    href={`/ml/wiki/${next.slug}`}
+                    href={`/ml/wiki/${next.slug}${currentPathSlug ? `?path=${currentPathSlug}` : ""}`}
                     className="wiki-topic-nav-btn"
                     aria-label={`Next article: ${next.title}`}
                   >
@@ -106,6 +141,21 @@ export function WikiTopicClient({ topic, manifest }: WikiTopicClientProps) {
             {topic.cards.length > 0 ? (
               <CardEvidence cards={topic.cards} />
             ) : null}
+            <div style={{ marginTop: '3rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-base-200)', display: 'flex', justifyContent: 'center' }}>
+              <button 
+                type="button" 
+                className="wiki-topic-nav-btn" 
+                style={{ padding: '0.75rem 2rem', fontSize: '1rem', backgroundColor: 'var(--color-primary-600)', color: 'black', borderRadius: '4px', cursor: 'pointer', border: '1px solid transparent' }}
+                onClick={() => {
+                  markCompleted(topic.slug);
+                  if (next) {
+                    window.location.href = `/ml/wiki/${next.slug}${currentPathSlug ? `?path=${currentPathSlug}` : ""}`;
+                  }
+                }}
+              >
+                Mark as Complete & Next →
+              </button>
+            </div>
           </div>
 
           <div

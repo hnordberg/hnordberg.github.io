@@ -123,12 +123,17 @@ export type WikiManifest = {
   topics: WikiTopicIndexEntry[];
 };
 
+export interface PathCriteria {
+  includeTags: string[]; // Let's interpret this as OR (matching 'or' user preference)
+  excludeTags?: string[];
+  levels?: ("intro" | "basic" | "intermediate" | "advanced")[];
+}
+
 export type WikiLearningPath = {
   slug: string;
   title: string;
   description: string;
-  /** Ordered topic slugs */
-  topicSlugs: string[];
+  criteria: PathCriteria;
   estimatedMinutes?: number;
 };
 

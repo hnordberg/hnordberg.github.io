@@ -16,6 +16,17 @@ export const metadata: Metadata = {
   },
 }
 
+const themeBootstrap = `
+(function(){
+  try {
+    var t = localStorage.getItem('theme');
+    if (t !== 'light-mode' && t !== 'dark-mode') t = 'dark-mode';
+    document.body.className = t;
+  } catch (e) {
+    document.body.className = 'dark-mode';
+  }
+})();`
+
 export default function RootLayout({
   children,
 }: {
@@ -24,7 +35,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <header>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+        <header className="site-header">
           <Navigation />
           <ThemeSwitcher />
         </header>

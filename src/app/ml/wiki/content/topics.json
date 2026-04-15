@@ -9,7 +9,8 @@
     "tags": [
       "linear-models",
       "least-squares",
-      "optimization"
+      "optimization",
+      "path-core-foundations"
     ],
     "prerequisites": [
       "linear-function",
@@ -159,7 +160,8 @@
       "architecture",
       "attention",
       "ml",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "vision-language-model-vlm",
@@ -214,7 +216,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "structured-pruning",
@@ -258,7 +261,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "large-language-model-llm",
@@ -312,7 +316,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "gpt-2-and-zero-shot-task-transfer",
@@ -405,7 +410,8 @@
       "ml",
       "product",
       "safety",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "constitutional-ai"
@@ -458,7 +464,8 @@
       "ml",
       "neural-odes",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "recurrent-neural-network-rnn",
@@ -507,7 +514,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-scaling-advanced",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "steering-vectors",
@@ -557,7 +566,8 @@
       "ml",
       "peft",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "low-rank-adaptation-lora",
@@ -652,7 +662,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "data-parallelism",
@@ -694,7 +705,9 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "encoder-decoder-architecture",
@@ -740,7 +753,9 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "gpt-1-generative-pre-training"
@@ -781,7 +796,9 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "decoder-only-transformer",
@@ -831,7 +848,8 @@
       "ml",
       "nlp",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "word-embedding",
@@ -880,7 +898,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "multilayer-perceptron-mlp",
@@ -926,7 +946,8 @@
       "ml",
       "nlp",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "attention-mechanism"
@@ -974,7 +995,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "attention-mechanism",
@@ -1064,7 +1086,8 @@
       "landmark",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "recurrent-neural-network-rnn",
@@ -1116,7 +1139,8 @@
       "optimization",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "weight-initialization"
@@ -1156,7 +1180,8 @@
       "landmark",
       "ml",
       "product",
-      "wiki-import"
+      "wiki-import",
+      "path-vision"
     ],
     "prerequisites": [],
     "related": [
@@ -1243,7 +1268,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "embedding-layer",
@@ -1292,7 +1318,8 @@
       "optimization",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "backpropagation",
@@ -1334,7 +1361,9 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "key-value-kv-caching"
@@ -1386,7 +1415,9 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "autoregressive-language-model",
@@ -1440,7 +1471,8 @@
       "nlp",
       "reinforcement",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-reinforcement"
     ],
     "prerequisites": [
       "reinforcement-learning-from-human-feedback-rlhf",
@@ -1489,7 +1521,8 @@
       "ml",
       "reinforcement",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-reinforcement"
     ],
     "prerequisites": [
       "policy-reinforcement-learning",
@@ -1539,7 +1572,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "causal-language-model",
@@ -1591,7 +1625,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "adam-optimizer"
@@ -1638,7 +1673,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "activation-function"
@@ -1685,7 +1721,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "layer-normalization",
@@ -1734,7 +1771,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "subword-tokenization"
@@ -1783,7 +1821,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "softmax"
@@ -1832,7 +1871,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention",
@@ -1882,7 +1922,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "positional-encoding",
@@ -1931,7 +1972,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "positional-encoding"
@@ -1979,7 +2021,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention",
@@ -2816,7 +2859,8 @@
       "landmark",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "neural-network",
@@ -2941,7 +2985,8 @@
       "ml",
       "reinforcement",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-reinforcement"
     ],
     "prerequisites": [
       "the-bellman-equation",
@@ -2997,7 +3042,8 @@
       "ml",
       "reinforcement",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-reinforcement"
     ],
     "prerequisites": [
       "the-markov-property",
@@ -3048,7 +3094,8 @@
       "ml",
       "reinforcement",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-reinforcement"
     ],
     "prerequisites": [
       "probability-distribution"
@@ -3099,7 +3146,8 @@
       "intermediate",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "supervised-learning",
@@ -3159,7 +3207,8 @@
       "intermediate",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "decision-tree",
@@ -3393,7 +3442,8 @@
       "ml",
       "regularization",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "regularization",
@@ -3715,7 +3765,8 @@
       "ml",
       "reinforcement",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-reinforcement"
     ],
     "prerequisites": [],
     "related": [
@@ -3780,7 +3831,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [],
     "related": [
@@ -3845,7 +3897,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "linear-function"
@@ -4783,7 +4837,8 @@
       "foundational",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "neural-network"
@@ -5084,7 +5139,8 @@
       "foundational",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [],
     "related": [
@@ -5368,7 +5424,8 @@
       "foundational",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [],
     "related": [
@@ -5420,7 +5477,8 @@
       "foundational",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "neuron"
@@ -5475,7 +5533,8 @@
       "foundational",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "activation-function"
@@ -5530,7 +5589,8 @@
       "foundational",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "activation-function"
@@ -5584,7 +5644,9 @@
       "foundational",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "activation-function"
@@ -5644,7 +5706,9 @@
       "foundational",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "activation-function",
@@ -5703,7 +5767,8 @@
       "architecture",
       "foundational",
       "ml",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "affine-transformation",
@@ -5757,7 +5822,8 @@
       "architecture",
       "foundational",
       "ml",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "neural-network"
@@ -5804,7 +5870,8 @@
       "architecture",
       "foundational",
       "ml",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "neural-network"
@@ -5853,7 +5920,8 @@
       "architecture",
       "foundational",
       "ml",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "neural-network"
@@ -5902,7 +5970,9 @@
       "foundational",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "fully-connected-layer",
@@ -5951,7 +6021,8 @@
       "foundational",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "multilayer-perceptron-mlp"
@@ -6091,7 +6162,8 @@
       "foundational",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "neural-network"
@@ -6153,7 +6225,9 @@
       "cv",
       "foundational",
       "ml",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-vision"
     ],
     "prerequisites": [
       "feedforward-neural-network"
@@ -6217,7 +6291,8 @@
       "ml",
       "nlp",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "neural-network"
@@ -6281,7 +6356,8 @@
       "foundational",
       "ml",
       "nlp",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "recurrent-neural-network-rnn"
@@ -6335,7 +6411,8 @@
       "ml",
       "nlp",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "neural-network"
@@ -6489,7 +6566,8 @@
       "ml",
       "nlp",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "recurrent-neural-network-rnn",
@@ -6544,7 +6622,8 @@
       "architecture",
       "ml",
       "nlp",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "long-short-term-memory-lstm"
@@ -6592,7 +6671,8 @@
       "architecture",
       "ml",
       "nlp",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "long-short-term-memory-lstm"
@@ -6642,7 +6722,8 @@
       "ml",
       "nlp",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "recurrent-neural-network-rnn"
@@ -6682,7 +6763,9 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "one-hot-encoding",
@@ -6735,7 +6818,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "dense-vector"
@@ -6784,7 +6868,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "embedding-vector"
@@ -6960,7 +7045,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "embedding-vector"
@@ -7012,7 +7098,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "dense-vector"
@@ -7365,7 +7452,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [],
     "related": [
@@ -7409,7 +7497,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "tokenization"
@@ -7457,7 +7546,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "token"
@@ -7506,7 +7596,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "tokenization"
@@ -7763,7 +7854,9 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "language-model",
@@ -7821,7 +7914,9 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "language-model",
@@ -7878,7 +7973,9 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "autoregressive-language-model"
@@ -7930,7 +8027,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "causal-language-model"
@@ -8091,7 +8189,8 @@
       "optimization",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "log-likelihood",
@@ -8250,7 +8349,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "probability-distribution"
@@ -8353,7 +8453,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "probability-distribution"
@@ -8526,7 +8627,8 @@
       "optimization",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "log-likelihood",
@@ -8806,7 +8908,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "classification"
@@ -9342,7 +9445,8 @@
       "landmark",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "binary-classification"
@@ -9689,7 +9793,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention",
@@ -9739,7 +9845,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention",
@@ -9786,7 +9894,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "decoder-block",
@@ -9834,7 +9944,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "attention-mechanism",
@@ -9887,7 +9998,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "query-key-value-qkv"
@@ -9939,7 +10051,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "attention-score"
@@ -9991,7 +10104,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "attention-score",
@@ -10036,7 +10150,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "attention-score",
@@ -10089,7 +10204,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention"
@@ -10146,7 +10262,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention"
@@ -10200,7 +10317,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention",
@@ -10245,7 +10363,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention"
@@ -10289,7 +10408,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "multi-head-attention",
@@ -10329,7 +10449,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "projection-matrix"
@@ -10368,7 +10489,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "linear-function",
@@ -10424,7 +10546,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "fully-connected-layer"
@@ -10473,7 +10597,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "neural-network"
@@ -10517,7 +10643,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "layer-normalization"
@@ -10568,7 +10695,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "transformer"
@@ -10611,7 +10740,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [],
     "related": [
@@ -10661,7 +10791,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "chat-language-model"
@@ -10718,7 +10849,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "prompt"
@@ -10770,7 +10902,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "prompt",
@@ -10827,7 +10960,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "prompt"
@@ -10881,7 +11015,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "few-shot-prompting",
@@ -10935,7 +11070,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "prompt"
@@ -10990,7 +11126,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "prompt-engineering",
@@ -11049,7 +11186,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "chain-of-thought"
@@ -11105,7 +11243,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "chain-of-thought",
@@ -11167,7 +11306,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "chain-of-thought",
@@ -11217,7 +11357,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "prompt",
@@ -11276,7 +11417,9 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "language-model",
@@ -11326,7 +11469,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "language-model",
@@ -11389,7 +11533,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "finetuning",
@@ -11446,7 +11591,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "pretraining",
@@ -11506,7 +11652,8 @@
       "ml",
       "optimization",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "finetuning"
@@ -11564,7 +11711,8 @@
       "ml",
       "optimization",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "finetuning"
@@ -11621,7 +11769,8 @@
       "ml",
       "optimization",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "parameter-efficient-fine-tuning-peft",
@@ -11680,7 +11829,8 @@
       "ml",
       "optimization",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "low-rank-adaptation-lora"
@@ -11737,7 +11887,8 @@
       "ml",
       "optimization",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "low-rank-adaptation-lora",
@@ -11791,7 +11942,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "pretraining"
@@ -11901,7 +12053,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "autoregressive-language-model",
@@ -11960,7 +12113,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "sampling-in-language-models"
@@ -12228,7 +12382,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "large-language-model-llm"
@@ -12291,7 +12446,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "alignment-ai"
@@ -12348,7 +12504,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [],
     "related": [
@@ -12408,7 +12565,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [],
     "related": [
@@ -12483,7 +12641,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "large-language-model-llm",
@@ -12547,7 +12706,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "information-retrieval",
@@ -12600,7 +12760,9 @@
       "architecture",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "sparsely-gated-mixture-of-experts-moe"
@@ -12652,7 +12814,9 @@
       "architecture",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "sparse-mixture-of-experts-moe-layer"
@@ -12695,7 +12859,9 @@
       "architecture",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "sparse-mixture-of-experts-moe-layer"
@@ -12741,7 +12907,9 @@
       "architecture",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "router-network"
@@ -12779,7 +12947,9 @@
       "architecture",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "sparse-mixture-of-experts-moe-layer"
@@ -12827,7 +12997,9 @@
       "attention",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "sparse-mixture-of-experts-moe-layer",
@@ -13327,7 +13499,9 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "pruning"
@@ -13394,7 +13568,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "pruning"
@@ -13456,7 +13631,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "model-compression"
@@ -13529,7 +13705,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "quantization"
@@ -13588,7 +13765,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "quantization"
@@ -13639,7 +13817,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "finetuning",
@@ -13715,7 +13894,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "preference-based-alignment",
@@ -13782,7 +13962,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "preference-dataset",
@@ -13848,7 +14029,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "chat-language-model"
@@ -13988,7 +14170,8 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "preference-based-alignment",
@@ -14469,7 +14652,10 @@
       "cv",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-vision",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "vision-encoder",
@@ -14530,7 +14716,9 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention",
@@ -14592,7 +14780,10 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-vision",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "convolutional-neural-network-cnn"
@@ -14653,7 +14844,10 @@
       "landmark",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-vision",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "vision-encoder",
@@ -14767,7 +14961,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention",
@@ -15015,7 +15210,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "model-parallelism"
@@ -15079,7 +15275,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "tensor-parallelism",
@@ -15197,7 +15394,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "distributed-computing-ml-training"
@@ -15249,7 +15447,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [],
     "related": [
@@ -15312,7 +15511,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "backpropagation"
@@ -15372,7 +15572,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "pretraining",
@@ -15428,7 +15629,8 @@
       "ml",
       "product",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "context-window"
@@ -15489,7 +15691,9 @@
       "foundational",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "self-attention"
@@ -15549,7 +15753,9 @@
       "foundational",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "positional-encoding"
@@ -15598,7 +15804,9 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "positional-encoding"
@@ -15657,7 +15865,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "token",
@@ -15713,7 +15922,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "vocabulary"
@@ -15777,7 +15987,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "tokenization",
@@ -15841,7 +16052,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "tokenization"
@@ -15891,7 +16103,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "special-tokens"
@@ -15934,7 +16147,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "special-tokens"
@@ -15989,7 +16203,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "special-tokens"
@@ -16042,7 +16257,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [],
     "related": [
@@ -16090,7 +16307,9 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "transformer",
@@ -16144,7 +16363,9 @@
       "nlp",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "recurrent-neural-network-rnn"
@@ -16819,7 +17040,8 @@
       "intermediate",
       "ml",
       "regularization",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "neural-network"
@@ -16864,7 +17086,9 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "neural-network"
@@ -16909,7 +17133,8 @@
       "ml",
       "optimization",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "gradient-descent",
@@ -17013,7 +17238,8 @@
       "ml",
       "optimization",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "gradient-descent",
@@ -17197,7 +17423,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "learning-rate"
@@ -17244,7 +17471,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "learning-rate-schedule"
@@ -17291,7 +17519,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "learning-rate-schedule"
@@ -17334,7 +17563,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "neural-network"
@@ -17376,7 +17606,8 @@
       "intermediate",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-vision"
     ],
     "prerequisites": [
       "weight-initialization"
@@ -17424,7 +17655,8 @@
       "intermediate",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "cross-entropy",
@@ -17511,7 +17743,8 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [],
     "related": [
@@ -18366,7 +18599,8 @@
       "ml",
       "reinforcement",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-reinforcement"
     ],
     "prerequisites": [
       "reinforcement-learning-rl"
@@ -18410,7 +18644,8 @@
       "ml",
       "reinforcement",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-reinforcement"
     ],
     "prerequisites": [
       "reinforcement-learning-rl"
@@ -18454,7 +18689,8 @@
       "ml",
       "reinforcement",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-reinforcement"
     ],
     "prerequisites": [
       "policy-reinforcement-learning",
@@ -18859,7 +19095,8 @@
       "architecture",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "mechanistic-interpretability",
@@ -18992,7 +19229,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "pretraining"
@@ -19054,7 +19292,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "scaling-laws",
@@ -19113,7 +19352,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [],
     "related": [
@@ -19374,7 +19614,8 @@
       "implementation",
       "intermediate",
       "ml",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "output-layer",
@@ -19428,7 +19669,9 @@
       "implementation",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "softmax",
@@ -19478,7 +19721,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "sampling-in-language-models"
@@ -19530,7 +19774,8 @@
       "ml",
       "nlp",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "sampling-in-language-models",
@@ -19580,7 +19825,9 @@
       "foundational",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "transformer"
@@ -19633,7 +19880,9 @@
       "foundational",
       "ml",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "transformer"
@@ -20470,7 +20719,8 @@
       "ml",
       "reinforcement",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-reinforcement"
     ],
     "prerequisites": [
       "proximal-policy-optimization-ppo",
@@ -20622,7 +20872,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "mechanistic-interpretability"
@@ -20680,7 +20931,8 @@
       "ml",
       "theory",
       "transformer",
-      "wiki-import"
+      "wiki-import",
+      "path-transformer-llm"
     ],
     "prerequisites": [
       "mechanistic-interpretability"
@@ -20819,7 +21071,8 @@
       "architecture",
       "ml",
       "theory",
-      "wiki-import"
+      "wiki-import",
+      "path-architectures"
     ],
     "prerequisites": [
       "multilayer-perceptron-mlp"

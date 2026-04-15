@@ -3,24 +3,57 @@
   "paths": [
     {
       "slug": "core-foundations",
-      "title": "Core foundations",
-      "description": "Start with linear models, then connect to generalization and the bias–variance picture.",
-      "topicSlugs": ["linear-regression-basics", "bias-variance-tradeoff"],
-      "estimatedMinutes": 45
+      "title": "Foundations of Machine Learning",
+      "description": "Build a solid mathematical and conceptual grounding. Covers linear models, error decomposition, and essential optimization.",
+      "estimatedMinutes": 60,
+      "criteria": {
+        "includeTags": ["path-core-foundations"]
+      }
     },
     {
-      "slug": "math-first",
-      "title": "Math-first path",
-      "description": "Same topics ordered for readers who prefer error decomposition before supervised setup details.",
-      "topicSlugs": ["bias-variance-tradeoff", "linear-regression-basics"],
-      "estimatedMinutes": 40
+      "slug": "architectures",
+      "title": "Deep Learning Architectures",
+      "description": "Trace the evolution up to modern landmarks. Covers CNNs, initialization, and Memory Networks.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "includeTags": ["path-architectures"]
+      }
     },
     {
-      "slug": "llm-practical-theory",
-      "title": "LLM practical theory (placeholder)",
-      "description": "Reserved for future topics on scaling laws, attention, and training objectives. Add topics to the wiki and extend this list.",
-      "topicSlugs": ["linear-regression-basics"],
-      "estimatedMinutes": 20
+      "slug": "transformer-llm",
+      "title": "The Path to Modern LLMs",
+      "description": "Map the trajectory from word embeddings to modern generative pre-trained transformers.",
+      "estimatedMinutes": 120,
+      "criteria": {
+        "includeTags": ["path-transformer-llm"]
+      }
+    },
+    {
+      "slug": "reinforcement",
+      "title": "Reinforcement Learning from Zero to RLHF",
+      "description": "Construct a journey from basic decision processes to aligning complex models.",
+      "estimatedMinutes": 60,
+      "criteria": {
+        "includeTags": ["path-reinforcement"]
+      }
+    },
+    {
+      "slug": "vision",
+      "title": "Computer Vision Essentials",
+      "description": "Teach how ML systems \"see\" and map vision features to text.",
+      "estimatedMinutes": 45,
+      "criteria": {
+        "includeTags": ["path-vision"]
+      }
+    },
+    {
+      "slug": "scaling-advanced",
+      "title": "Scaling & Interpretability",
+      "description": "Explore the bleeding edge of deployment, pruning, and safety mechanisms for advanced users.",
+      "estimatedMinutes": 60,
+      "criteria": {
+        "includeTags": ["path-scaling-advanced"]
+      }
     }
   ]
 }

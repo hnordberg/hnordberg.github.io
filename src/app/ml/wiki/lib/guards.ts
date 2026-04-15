@@ -136,7 +136,10 @@ export function isWikiLearningPath(v: unknown): v is WikiLearningPath {
   const o = v as Record<string, unknown>;
   if (!isString(o.slug) || !isString(o.title) || !isString(o.description))
     return false;
-  if (!isStringArray(o.topicSlugs)) return false;
+  if (!o.criteria || typeof o.criteria !== "object") return false;
+  const c = o.criteria as Record<string, unknown>;
+  if (c.includeTags !== undefined && !isStringArray(c.includeTags)) return false;
+  if (c.excludeTags !== undefined && !isStringArray(c.excludeTags)) return false;
   if (o.estimatedMinutes !== undefined && typeof o.estimatedMinutes !== "number")
     return false;
   return true;
