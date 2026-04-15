@@ -92,13 +92,13 @@
     "referencesHtml": "<p>Standard texts present the tradeoff as a guide to model complexity: richer hypothesis classes reduce bias but increase variance when data are finite. See also VC-style complexity measures for classification.</p>",
     "papers": [
       {
-        "citation": "Geman, S., Bienenstock, E. & Doursat, R. Neural networks and the bias/variance dilemma. Neural Computation 4(1), 1–58 (1992).",
+        "citation": "1992 · Geman et al. · Neural Networks and the Bias/Variance Dilemma",
         "doi": "10.1162/neco.1992.4.1.1",
         "note": "Influential discussion in the neural network literature."
       },
       {
-        "citation": "Hastie, Tibshirani & Friedman, The Elements of Statistical Learning, §7.3 (bias–variance tradeoff).",
-        "note": "Textbook treatment with figures."
+        "citation": "2009 · Hastie, Tibshirani, and Friedman · The Elements of Statistical Learning",
+        "note": "Textbook treatment of the bias-variance tradeoff (see Section 7.3)."
       }
     ],
     "sections": [
@@ -1418,7 +1418,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "The autoregressive language modeling objective has a long history, from Shannon's original work on information theory (1948) through n-gram models to neural language models (Bengio et al., 2003).",
+        "citation": "1948 · Shannon · A Mathematical Theory of Communication",
+        "note": "Foundational information-theoretic treatment that motivated statistical language modeling."
+      },
+      {
+        "citation": "2003 · Bengio et al. · A Neural Probabilistic Language Model",
         "url": "https://www.jmlr.org/papers/v3/bengio03a.html"
       }
     ],
@@ -8859,7 +8863,20 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Umbrella concept · PCA (Pearson, 1901; Hotelling, 1933), t-SNE (van der Maaten & Hinton, 2008), UMAP (McInnes et al., 2018)"
+        "citation": "1901 · Pearson · On Lines and Planes of Closest Fit to Systems of Points in Space",
+        "note": "Foundational paper for principal component analysis."
+      },
+      {
+        "citation": "1933 · Hotelling · Analysis of a Complex of Statistical Variables into Principal Components",
+        "note": "Formal development of PCA in modern multivariate statistics."
+      },
+      {
+        "citation": "2008 · van der Maaten and Hinton · Visualizing Data using t-SNE",
+        "url": "https://jmlr.org/papers/v9/vandermaaten08a.html"
+      },
+      {
+        "citation": "2018 · McInnes et al. · UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction",
+        "url": "https://arxiv.org/abs/1802.03426"
       }
     ],
     "sections": [
@@ -9582,8 +9599,12 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2017 · Vaswani et al. · Attention Is All You Need · SwiGLU: Shazeer (2020)",
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
         "url": "https://arxiv.org/abs/1706.03762"
+      },
+      {
+        "citation": "2020 · Shazeer · GLU Variants Improve Transformer",
+        "url": "https://arxiv.org/abs/2002.05202"
       }
     ],
     "sections": [
@@ -10050,7 +10071,7 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Emerged as a discipline with GPT-3 (2020) · Systematised across 2021–2024 · Zhou et al. (2023), APE",
+        "citation": "2023 · Zhou et al. · Large Language Models Are Human-Level Prompt Engineers",
         "url": "https://arxiv.org/abs/2302.11382"
       }
     ],
@@ -10313,7 +10334,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2023 · Introduced in GPT-3.5/4 function calling API (OpenAI, June 2023); adopted by Anthropic (Claude), Google (Gemini), and open-weight models. Related: Toolformer (Schick et al., 2023)",
+        "citation": "2023 · OpenAI · Function Calling and Other API Updates",
+        "url": "https://openai.com/index/function-calling-and-other-api-updates/"
+      },
+      {
+        "citation": "2023 · Schick et al. · Toolformer: Language Models Can Teach Themselves to Use Tools",
         "url": "https://arxiv.org/abs/2302.04761"
       }
     ],
@@ -10515,8 +10540,12 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Concept from transfer learning; popularised in NLP by Howard & Ruder (2018, ULMFiT ) and Devlin et al. (2019, BERT ).",
+        "citation": "2018 · Howard and Ruder · Universal Language Model Fine-tuning for Text Classification",
         "url": "https://arxiv.org/abs/1801.06146"
+      },
+      {
+        "citation": "2019 · Devlin et al. · BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+        "url": "https://arxiv.org/abs/1810.04805"
       }
     ],
     "sections": [
@@ -10730,8 +10759,8 @@
         "url": "https://arxiv.org/abs/2106.09685"
       },
       {
-        "citation": "S-LoRA (Sheng et al., 2023)",
-        "url": "https://arxiv.org/abs/2106.09685"
+        "citation": "2023 · Sheng et al. · S-LoRA: Serving Thousands of Concurrent LoRA Adapters",
+        "url": "https://arxiv.org/abs/2311.03285"
       }
     ],
     "sections": [
@@ -10830,8 +10859,9 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Concept crystallised with the rise of instruction tuning; formalised by InstructGPT · 2022 · Ouyang et al. · Training language models to follow instructions with human feedback",
-        "url": "https://arxiv.org/abs/2203.02155"
+        "citation": "2022 · Ouyang et al. · Training Language Models to Follow Instructions with Human Feedback",
+        "url": "https://arxiv.org/abs/2203.02155",
+        "note": "Seminal reference for instruction-tuned base-to-assistant model transitions."
       }
     ],
     "sections": [
@@ -10878,8 +10908,9 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "LLaMA release (Meta, Feb 2023) catalysed the open-weight movement · LLaMA: Open and Efficient Foundation Language Models",
-        "url": "https://arxiv.org/abs/2302.13971"
+        "citation": "2023 · Touvron et al. · LLaMA: Open and Efficient Foundation Language Models",
+        "url": "https://arxiv.org/abs/2302.13971",
+        "note": "Catalyzed the modern open-weight LLM ecosystem."
       }
     ],
     "sections": [
@@ -10985,8 +11016,9 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Fundamental decoding strategy; degeneration formally analysed · 2020 · Holtzman et al. · The Curious Case of Neural Text Degeneration",
-        "url": "https://arxiv.org/abs/1904.09751"
+        "citation": "2020 · Holtzman et al. · The Curious Case of Neural Text Degeneration",
+        "url": "https://arxiv.org/abs/1904.09751",
+        "note": "Analyzes degeneration behavior of deterministic decoding strategies such as greedy search."
       }
     ],
     "sections": [
@@ -11136,7 +11168,7 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Popularised by the OpenAI API (2020s) · Related: Keskar et al. (2019) · CTRL: A Conditional Transformer Language Model for Controllable Generation",
+        "citation": "2019 · Keskar et al. · CTRL: A Conditional Transformer Language Model for Controllable Generation",
         "url": "https://arxiv.org/abs/1909.05858"
       }
     ],
@@ -11235,7 +11267,7 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Term adopted from NLP summarisation literature · Became a central concern post-GPT-3 (2020+) · Survey: Ji et al. (2023) · Survey of Hallucination in Natural Language Generation",
+        "citation": "2023 · Ji et al. · Survey of Hallucination in Natural Language Generation",
         "url": "https://arxiv.org/abs/2202.03629"
       }
     ],
@@ -11849,11 +11881,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2022 · Wortsman et al. (Model Soups)",
-        "url": "https://arxiv.org/abs/2212.04089"
+        "citation": "2022 · Wortsman et al. · Model soups: averaging weights of multiple fine-tuned models improves accuracy without increasing inference time",
+        "url": "https://arxiv.org/abs/2203.05482"
       },
       {
-        "citation": "Ilharco et al. (Task Arithmetic) · Editing Models with Task Arithmetic",
+        "citation": "2023 · Ilharco et al. · Editing Models with Task Arithmetic",
         "url": "https://arxiv.org/abs/2212.04089"
       }
     ],
@@ -11941,7 +11973,9 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1985 · Ken Shoemake · Animating Rotation with Quaternion Curves (SIGGRAPH); applied to model merging in 2023."
+        "citation": "1985 · Shoemake · Animating Rotation with Quaternion Curves",
+        "url": "https://doi.org/10.1145/325334.325242",
+        "note": "Original SLERP reference from SIGGRAPH 1985."
       }
     ],
     "sections": [
@@ -12187,7 +12221,16 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1990 · Yann LeCun, John Denker, Sara Solla · Optimal Brain Damage; modern: SparseGPT (Frantar & Alistarh, 2023), Wanda (Sun et al., 2024)"
+        "citation": "1990 · LeCun, Denker, and Solla · Optimal Brain Damage",
+        "url": "http://yann.lecun.com/exdb/publis/pdf/lecun-90b.pdf"
+      },
+      {
+        "citation": "2023 · Frantar and Alistarh · SparseGPT: Massive Language Models Can be Accurately Pruned in One-Shot",
+        "url": "https://arxiv.org/abs/2301.00774"
+      },
+      {
+        "citation": "2024 · Sun et al. · A Simple and Effective Pruning Approach for Large Language Models (Wanda)",
+        "url": "https://arxiv.org/abs/2306.11695"
       }
     ],
     "sections": [
@@ -12308,12 +12351,12 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1990 · LeCun, Denker & Solla · Optimal Brain Damage",
+        "citation": "1990 · LeCun, Denker, and Solla · Optimal Brain Damage",
         "url": "http://yann.lecun.com/exdb/publis/pdf/lecun-90b.pdf"
       },
       {
-        "citation": "Frantar & Alistarh (2023) · SparseGPT",
-        "url": "http://yann.lecun.com/exdb/publis/pdf/lecun-90b.pdf"
+        "citation": "2023 · Frantar and Alistarh · SparseGPT: Massive Language Models Can be Accurately Pruned in One-Shot",
+        "url": "https://arxiv.org/abs/2301.00774"
       }
     ],
     "sections": [
@@ -12959,11 +13002,10 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Fundamental methodology in psychometrics (Thurstone, 1927)",
-        "url": "https://arxiv.org/abs/2203.02155"
+        "citation": "1927 · L. L. Thurstone · A Law of Comparative Judgment"
       },
       {
-        "citation": "applied to LLM alignment by Ouyang et al. (2022) in Training language models to follow instructions with human feedback",
+        "citation": "2022 · Ouyang et al. · Training Language Models to Follow Instructions with Human Feedback",
         "url": "https://arxiv.org/abs/2203.02155"
       }
     ],
@@ -13015,10 +13057,12 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Foundational in information retrieval"
+        "citation": "2009 · Tie-Yan Liu · Learning to Rank for Information Retrieval",
+        "url": "https://www.nowpublishers.com/article/Details/INR-016"
       },
       {
-        "citation": "learning-to-rank formalised by Liu (2009), \"Learning to Rank for Information Retrieval.\" RankNet by Burges et al. (2005)"
+        "citation": "2005 · Burges et al. · Learning to Rank using Gradient Descent",
+        "url": "https://www.microsoft.com/en-us/research/publication/learning-to-rank-using-gradient-descent/"
       }
     ],
     "sections": [
@@ -13081,11 +13125,10 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1960 · Arpad Elo · The Rating of Chess Players, Past and Present",
-        "url": "https://arxiv.org/abs/2306.05685"
+        "citation": "1960 · Arpad Elo · The Rating of Chess Players, Past and Present"
       },
       {
-        "citation": "applied to LLMs by Zheng et al., LMSYS Chatbot Arena (2023), Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena",
+        "citation": "2023 · Zheng et al. · Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena",
         "url": "https://arxiv.org/abs/2306.05685"
       }
     ],
@@ -13132,11 +13175,10 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Fundamental concept in social choice theory (Condorcet, 1785) and information retrieval",
-        "url": "https://icml.cc/Conferences/2005/proceedings/papers/012_Learning_BurgesEtAl.pdf"
+        "citation": "1785 · Marquis de Condorcet · Essai sur l'application de l'analyse a la probabilite des decisions rendues a la pluralite des voix"
       },
       {
-        "citation": "pairwise learning-to-rank formalised by Burges et al. (2005), Learning to Rank using Gradient Descent",
+        "citation": "2005 · Burges et al. · Learning to Rank using Gradient Descent",
         "url": "https://icml.cc/Conferences/2005/proceedings/papers/012_Learning_BurgesEtAl.pdf"
       }
     ],
@@ -13318,15 +13360,15 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2022 · Alayrac et al. (Flamingo)",
-        "url": "https://arxiv.org/abs/2304.08485"
+        "citation": "2022 · Alayrac et al. · Flamingo: a Visual Language Model for Few-Shot Learning",
+        "url": "https://arxiv.org/abs/2204.14198"
       },
       {
-        "citation": "Li et al. (BLIP-2, 2023)",
-        "url": "https://arxiv.org/abs/2304.08485"
+        "citation": "2023 · Li et al. · BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models",
+        "url": "https://arxiv.org/abs/2301.12597"
       },
       {
-        "citation": "Liu et al. (LLaVA, 2023) · Visual Instruction Tuning",
+        "citation": "2023 · Liu et al. · Visual Instruction Tuning",
         "url": "https://arxiv.org/abs/2304.08485"
       }
     ],
@@ -13379,8 +13421,8 @@
         "url": "https://arxiv.org/abs/1409.0473"
       },
       {
-        "citation": "formalised in the Transformer by Vaswani et al. (2017), Attention Is All You Need",
-        "url": "https://arxiv.org/abs/1409.0473"
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
       }
     ],
     "sections": [
@@ -13432,12 +13474,12 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2020 · Dosovitskiy et al. (ViT)",
+        "citation": "2020 · Dosovitskiy et al. · An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale",
         "url": "https://arxiv.org/abs/2010.11929"
       },
       {
-        "citation": "Radford et al. (CLIP, 2021) · An Image is Worth 16×16 Words",
-        "url": "https://arxiv.org/abs/2010.11929"
+        "citation": "2021 · Radford et al. · Learning Transferable Visual Models From Natural Language Supervision",
+        "url": "https://arxiv.org/abs/2103.00020"
       }
     ],
     "sections": [
@@ -13658,10 +13700,6 @@
       {
         "citation": "2012 · Dean et al. · Large Scale Distributed Deep Networks",
         "url": "https://arxiv.org/abs/1206.5533"
-      },
-      {
-        "citation": "formalized for deep learning by Dean et al. (2012), Large Scale Distributed Deep Networks",
-        "url": "https://arxiv.org/abs/1206.5533"
       }
     ],
     "sections": [
@@ -13720,8 +13758,12 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Formalized for modern deep learning by Shoeybi et al. (2020, Megatron-LM ) and Narayanan et al. (2021, pipeline parallelism).",
+        "citation": "2020 · Shoeybi et al. · Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism",
         "url": "https://arxiv.org/abs/1909.08053"
+      },
+      {
+        "citation": "2021 · Narayanan et al. · Efficient Large-Scale Language Model Training on GPU Clusters Using Megatron-LM",
+        "url": "https://arxiv.org/abs/2104.04473"
       }
     ],
     "sections": [
@@ -13768,12 +13810,12 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2019 · Huang et al. ( GPipe )",
+        "citation": "2019 · Huang et al. · GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism",
         "url": "https://arxiv.org/abs/1811.06965"
       },
       {
-        "citation": "Narayanan et al. ( Megatron-LM pipeline, 2021 )",
-        "url": "https://arxiv.org/abs/1811.06965"
+        "citation": "2021 · Narayanan et al. · Efficient Large-Scale Language Model Training on GPU Clusters Using Megatron-LM",
+        "url": "https://arxiv.org/abs/2104.04473"
       }
     ],
     "sections": [
@@ -14048,10 +14090,6 @@
       {
         "citation": "2020 · Kaplan et al. · Scaling Laws for Neural Language Models",
         "url": "https://arxiv.org/abs/2001.08361"
-      },
-      {
-        "citation": "2020 · Kaplan et al. · Scaling Laws for Neural Language Models",
-        "url": "https://arxiv.org/abs/2001.08361"
       }
     ],
     "sections": [
@@ -14167,7 +14205,7 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2023–2024 · Dubey et al. (LLaMA 3, 2024)",
+        "citation": "2024 · Dubey et al. · The Llama 3 Herd of Models",
         "url": "https://arxiv.org/abs/2309.00071"
       },
       {
@@ -14384,12 +14422,12 @@
         "url": "https://arxiv.org/abs/1803.02155"
       },
       {
-        "citation": "Su et al. (RoPE, 2021) · RoFormer",
-        "url": "https://arxiv.org/abs/1803.02155"
+        "citation": "2021 · Su et al. · RoFormer: Enhanced Transformer with Rotary Position Embedding",
+        "url": "https://arxiv.org/abs/2104.09864"
       },
       {
-        "citation": "Press et al. (ALiBi, 2022) · Train Short, Test Long",
-        "url": "https://arxiv.org/abs/1803.02155"
+        "citation": "2022 · Press et al. · Train Short, Test Long: Attention with Linear Biases Enables Input Length Extrapolation",
+        "url": "https://arxiv.org/abs/2108.12409"
       }
     ],
     "sections": [
@@ -14435,10 +14473,6 @@
     "updatedAt": "2026-04-15",
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
-      {
-        "citation": "2016 · Sennrich et al. · Neural Machine Translation of Rare Words with Subword Units",
-        "url": "https://arxiv.org/abs/1508.07909"
-      },
       {
         "citation": "2016 · Sennrich et al. · Neural Machine Translation of Rare Words with Subword Units",
         "url": "https://arxiv.org/abs/1508.07909"
@@ -14492,10 +14526,14 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Practical design choice in all neural language models"
+        "citation": "2019 · Radford et al. · Language Models are Unsupervised Multitask Learners",
+        "url": "https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf",
+        "note": "Describes GPT-2's byte-level BPE setup and a 50,257-token vocabulary."
       },
       {
-        "citation": "vocabulary design discussed in Radford et al. (GPT-2, 2019) and Touvron et al. (LLaMA, 2023)"
+        "citation": "2023 · Touvron et al. · LLaMA: Open and Efficient Foundation Language Models",
+        "url": "https://arxiv.org/abs/2302.13971",
+        "note": "Documents LLaMA tokenizer and vocabulary design choices."
       }
     ],
     "sections": [
@@ -14548,7 +14586,16 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1994 · Philip Gage (BPE for data compression); Sennrich et al. (2016, BPE for NMT); Kudo (2018, SentencePiece)"
+        "citation": "1994 · Gage · A New Algorithm for Data Compression",
+        "url": "https://jacobfilipp.com/DrDobbs/articles/CUJ/1994/9402/gage/gage.htm"
+      },
+      {
+        "citation": "2016 · Sennrich et al. · Neural Machine Translation of Rare Words with Subword Units",
+        "url": "https://arxiv.org/abs/1508.07909"
+      },
+      {
+        "citation": "2018 · Kudo and Richardson · SentencePiece: A Simple and Language Independent Subword Tokenizer and Detokenizer for Neural Text Processing",
+        "url": "https://arxiv.org/abs/1808.06226"
       }
     ],
     "sections": [
@@ -14598,7 +14645,14 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Introduced with sequence-to-sequence models and BERT (Devlin et al., 2019); chat-specific tokens evolved with instruction-tuned models (2022–2023)."
+        "citation": "2019 · Devlin et al. · BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+        "url": "https://arxiv.org/abs/1810.04805",
+        "note": "Established common special-token conventions like [CLS] and [SEP]."
+      },
+      {
+        "citation": "2022 · Ouyang et al. · Training Language Models to Follow Instructions with Human Feedback",
+        "url": "https://arxiv.org/abs/2203.02155",
+        "note": "Helped standardize modern assistant-format special tokens in instruction tuning."
       }
     ],
     "sections": [
@@ -14643,7 +14697,7 @@
     "sections": [
       {
         "kind": "prose",
-        "body": "<p>A special token used to fill shorter sequences in a batch to match the length of the longest sequence, enabling efficient batched computation on GPUs (which require uniform tensor dimensions). Padding tokens are masked out during attention and loss computation so they don't affect the model's behaviour.</p><p>Given a batch with sequences of varying length:</p>\n<pre style=\"background:#f5f5f5; color:#111; padding:8px; border-radius:4px; font-size:0.9em;\">\nSequence 1: [The, cat, sat]           → [The, cat, sat, PAD, PAD]\nSequence 2: [Hello, world, how, are, you] → [Hello, world, how, are, you]\n</pre>\n\n<p>The padding token is excluded from computation via two masks:</p>\n<ul>\n<li><b>Attention mask:</b> Set to negative infinity (or a very large negative number) for padding positions before the softmax step in the attention equation:\n\\[ \text{Attention}(Q, K, V) = \text{softmax}\\left(rac{QK^T}{\\sqrt{d_k}} + Might)V \\]\nwhere \\( M_{ij} = -\\infty \\) if position \\( j \\) is a PAD token. This prevents other tokens from attending to padding since \\( \\exp(-\\infty) = 0 \\).</li>\n<li><b>Loss mask:</b> Exclude padding positions from the cross-entropy loss so the model isn't penalised for failing to \"predict\" padding tokens during training.</li>\n</ul>"
+        "body": "<p>A special token used to fill shorter sequences in a batch to match the length of the longest sequence, enabling efficient batched computation on GPUs (which require uniform tensor dimensions). Padding tokens are masked out during attention and loss computation so they don't affect the model's behaviour.</p><p>Given a batch with sequences of varying length:</p>\n<pre style=\"background:#f5f5f5; color:#111; padding:8px; border-radius:4px; font-size:0.9em;\">\nSequence 1: [The, cat, sat]           → [The, cat, sat, PAD, PAD]\nSequence 2: [Hello, world, how, are, you] → [Hello, world, how, are, you]\n</pre>\n\n<p>The padding token is excluded from computation via two masks:</p>\n<ul>\n<li><b>Attention mask:</b> Set to negative infinity (or a very large negative number) for padding positions before the softmax step in the attention equation:\n\\[ \\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}} + M\\right)V \\]\nwhere \\( M_{ij} = -\\infty \\) if position \\( j \\) is a PAD token. This prevents other tokens from attending to padding since \\( \\exp(-\\infty) = 0 \\).</li>\n<li><b>Loss mask:</b> Exclude padding positions from the cross-entropy loss so the model isn't penalised for failing to \"predict\" padding tokens during training.</li>\n</ul>"
       },
       {
         "kind": "prose",
@@ -15062,7 +15116,13 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "ANN research spans decades; FAISS (Johnson et al., 2017); HNSW (Malkov & Yashunin, 2018)."
+        "citation": "2017 · Johnson et al. · Billion-scale similarity search with GPUs",
+        "url": "https://arxiv.org/abs/1702.08734",
+        "note": "Introduces FAISS for efficient ANN search."
+      },
+      {
+        "citation": "2018 · Malkov and Yashunin · Efficient and Robust Approximate Nearest Neighbor Search Using Hierarchical Navigable Small World Graphs",
+        "url": "https://arxiv.org/abs/1603.09320"
       }
     ],
     "sections": [
@@ -15245,7 +15305,14 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Concept extrapolated from cognitive science (Harnad, 1990, \"symbol grounding problem\"); adapted urgently into LLMs for RAG validation (2022–present)."
+        "citation": "1990 · Harnad · The Symbol Grounding Problem",
+        "url": "https://doi.org/10.1016/0167-2789(90)90087-6",
+        "note": "Classic cognitive-science statement of grounding."
+      },
+      {
+        "citation": "2020 · Lewis et al. · Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "url": "https://arxiv.org/abs/2005.11401",
+        "note": "Widely used grounding mechanism in modern LLM systems."
       }
     ],
     "sections": [
@@ -15594,7 +15661,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1991 · Anders Krogh, John Hertz (weight decay as regularisation); Loshchilov & Hutter (2019, AdamW) · Decoupled Weight Decay Regularization",
+        "citation": "1991 · Krogh and Hertz · A Simple Weight Decay Can Improve Generalization",
+        "note": "Classic early reference connecting L2-style shrinkage to improved generalization."
+      },
+      {
+        "citation": "2019 · Loshchilov and Hutter · Decoupled Weight Decay Regularization",
         "url": "https://arxiv.org/abs/1711.05101"
       }
     ],

@@ -55,6 +55,9 @@ const INLINE_URL_RE = /https?:\/\/\S+/i;
 
 function appearsBundledMultiWorkCitation(citation) {
   if (PACKED_MULTI_CITATION_RE.test(citation)) return true;
+  if (/\bet al\.\s*\(\d{4}[^)]*\)\s+and\s+[^.]*\bet al\.\s*\(\d{4}[^)]*\)/i.test(citation)) {
+    return true;
+  }
 
   const yearParenCount = (citation.match(/\(\d{4}\)/g) || []).length;
   const etAlCount = (citation.match(/et al\./gi) || []).length;
@@ -110,6 +113,13 @@ function isLikelyUnnormalizedAuthorYearCitation(citation) {
     /\bet al\.\s*\(\d{4}\)/i.test(citation) &&
     !/^\d{4}\b/.test(parts[0])
   );
+}
+
+function hasAuthorYearButNotCanonicalStart(citation) {
+  // Catches forms like:
+  // "applied to ... by Ouyang et al. (2022) in ..."
+  // where author+year exists but citation does not start with "YYYY ·".
+  return /\bet al\.\s*\(\d{4}\)/i.test(citation) && !/^\d{4}\s*·/.test(citation);
 }
 
 function readJson(rel) {
@@ -350,6 +360,11 @@ function issues() {
             if (isLikelyUnnormalizedAuthorYearCitation(p.citation)) {
               out.push(
                 `Topic ${t.slug}: arXiv-linked paper citation should use canonical format "year · authors · title"`
+              );
+            }
+            if (hasAuthorYearButNotCanonicalStart(p.citation)) {
+              out.push(
+                `Topic ${t.slug}: arXiv-linked paper citation has author/year but is not in canonical "year · authors · title" order`
               );
             }
           }
