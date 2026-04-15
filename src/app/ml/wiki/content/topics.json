@@ -4134,5 +4134,569 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "l1-regularization-lasso",
+    "title": "L1 regularization (Lasso)",
+    "summary": "L1 regularization adds the sum of absolute parameter values to the loss function, penalizing model complexity and driving many weights exactly to zero. This induces sparsity, making L1 an implicit feature-selection mechanism.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "regularization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "l2-regularization-ridge-weight-decay",
+      "automatic-differentiation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1996 · Robert Tibshirani · Regression Shrinkage and Selection via the Lasso",
+        "url": "https://statweb.stanford.edu/~tibs/lasso/lasso.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>L1 regularization adds the sum of absolute parameter values to the loss function, penalizing model complexity and driving many weights exactly to zero. This induces sparsity, making L1 an implicit feature-selection mechanism.</p><p>The regularized objective augments the base loss with a penalty scaled by \\( \\lambda &gt; 0 \\):</p>\n  <p>\\[ J_{\\text{reg}}(\\theta) = J(\\theta) + \\lambda \\sum_{i=1}^{n} |\\theta_i| \\]</p>\n  <p>where \\( \\theta_i \\) are the model parameters and \\( \\lambda \\) controls the penalty strength. Because the L1 norm is not differentiable at zero, optimization typically uses subgradient methods or proximal gradient descent. The subgradient of \\( |\\theta_i| \\) is:</p>\n  <p>\\[ \\frac{\\partial}{\\partial \\theta_i} |\\theta_i| = \\begin{cases} +1 &amp; \\theta_i &gt; 0 \\\\ -1 &amp; \\theta_i &lt; 0 \\\\ [-1, +1] &amp; \\theta_i = 0 \\end{cases} \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 400 300\" width=\"100%\" max-width=\"400px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <g stroke=\"#4a5568\" stroke-width=\"1.5\">\n        <line x1=\"50\" y1=\"150\" x2=\"350\" y2=\"150\"></line>\n        <line x1=\"200\" y1=\"20\" x2=\"200\" y2=\"280\"></line>\n      </g>\n      <!-- L1 Diamond -->\n      <polygon points=\"200,70 280,150 200,230 120,150\" fill=\"rgba(226, 232, 240, 0.2)\" stroke=\"#cbd5e0\" stroke-width=\"2\"></polygon>\n      <text x=\"210\" y=\"65\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\">|w<tspan baseline-shift=\"sub\">1</tspan>| + |w<tspan baseline-shift=\"sub\">2</tspan>| ≤ t</text>\n      <!-- Loss contours -->\n      <g fill=\"none\" stroke=\"#ed8936\" stroke-width=\"1.5\">\n        <ellipse cx=\"300\" cy=\"50\" rx=\"30\" ry=\"20\" transform=\"rotate(-30 300 50)\"></ellipse>\n        <ellipse cx=\"300\" cy=\"50\" rx=\"60\" ry=\"40\" transform=\"rotate(-30 300 50)\"></ellipse>\n        <ellipse cx=\"300\" cy=\"50\" rx=\"100\" ry=\"70\" transform=\"rotate(-30 300 50)\"></ellipse>\n      </g>\n      <circle cx=\"300\" cy=\"50\" r=\"3\" fill=\"#ed8936\"></circle>\n      <text x=\"310\" y=\"55\" fill=\"#ed8936\" font-family=\"sans-serif\" font-size=\"14\">Unregularized Optima</text>\n      <!-- Intersection point (Sparsity) -->\n      <circle cx=\"200\" cy=\"70\" r=\"4\" fill=\"#fc8181\"></circle>\n      <path d=\"M 120 40 Q 150 40 190 60\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"1.5\" marker-end=\"url(#arrow_1772479439423)\"></path>\n      <defs>\n        <marker id=\"arrow_1772479439423\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fc8181\"></path>\n        </marker>\n      </defs>\n      <text x=\"80\" y=\"30\" fill=\"#fc8181\" font-family=\"sans-serif\" font-size=\"14\">Optimum at vertex</text>\n      <text x=\"80\" y=\"45\" fill=\"#fc8181\" font-family=\"sans-serif\" font-size=\"14\">(w<tspan baseline-shift=\"sub\">1</tspan>=0)</text>\n      <!-- Axes labels -->\n      <text x=\"340\" y=\"170\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"14\">w<tspan baseline-shift=\"sub\">1</tspan></text>\n      <text x=\"210\" y=\"30\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"14\">w<tspan baseline-shift=\"sub\">2</tspan></text>\n    </svg>\n    <p style=\"font-size:0.85em; color:#718096; margin-top:8px;\">Loss contours hit the L1 constraint diamond at a corner, forcing w₁ = 0.</p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Geometric intuition.</b> The L1 constraint region \\( \\sum |\\theta_i| \\leq t \\) forms a diamond (cross-polytope) in parameter space. The sharp vertices of this diamond lie on the coordinate axes, so the elliptical contours of the loss function are far more likely to make first contact at a vertex, setting one or more parameters exactly to zero. Compare this with L2 regularization, whose circular constraint region produces no such vertex effect and merely shrinks weights toward zero without eliminating them.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Sparsity and feature selection.</b> The zero-driving property is what makes Lasso valuable beyond mere regularization: in a linear model with 1000 features, Lasso may select only 20 nonzero coefficients, yielding an interpretable model. This is critical in genomics, NLP feature engineering, and any domain where \\( p \\gg n \\) (more features than samples).</p>\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Property</th>\n      <th style=\"padding:6px; text-align:left;\">L1 (Lasso)</th>\n      <th style=\"padding:6px; text-align:left;\">L2 (Ridge)</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Penalty term</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\lambda \\sum |\\theta_i| \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\lambda \\sum \\theta_i^2 \\)</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Constraint shape</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Diamond (cross-polytope)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Sphere (hypersphere)</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Produces exact zeros?</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Yes</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">No</td></tr>\n    <tr><td style=\"padding:6px;\">Feature selection?</td><td style=\"padding:6px;\">Implicit</td><td style=\"padding:6px;\">No</td></tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Elastic Net.</b> In practice, pure L1 can be unstable when features are correlated (it arbitrarily selects one from a correlated group). Elastic Net (Zou &amp; Hastie, 2005) combines L1 and L2 penalties: \\( \\lambda_1 \\sum |\\theta_i| + \\lambda_2 \\sum \\theta_i^2 \\), retaining sparsity while grouping correlated features together.</p><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why L1 induces sparsity (coordinate descent view).</b> Consider minimizing \\( f(\\theta_i) = \\frac{1}{2}(\\theta_i - \\hat{\\theta}_i)^2 + \\lambda |\\theta_i| \\) for a single coordinate, where \\( \\hat{\\theta}_i \\) is the OLS estimate. The solution is the soft-thresholding operator:</p>\n    <p>\\[ \\theta_i^* = \\text{sign}(\\hat{\\theta}_i) \\max(|\\hat{\\theta}_i| - \\lambda, 0) \\]</p>\n    <p>When \\( |\\hat{\\theta}_i| &lt; \\lambda \\), the parameter is driven exactly to zero. This closed-form solution underlies the coordinate descent algorithm for Lasso and directly shows the sparsity mechanism.</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "l2-regularization-ridge-weight-decay",
+    "title": "L2 regularization (Ridge/Weight Decay)",
+    "summary": "L2 regularization adds the sum of squared parameter values to the loss function, uniformly shrinking all weights toward zero without eliminating any. In vanilla SGD, L2 regularization is mathematically equivalent to weight decay.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "regularization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "early-stopping",
+      "l1-regularization-lasso"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1943 · Andrey Tikhonov · On the Stability of Inverse Problems"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>L2 regularization adds the sum of squared parameter values to the loss function, uniformly shrinking all weights toward zero without eliminating any. In vanilla SGD, L2 regularization is mathematically equivalent to weight decay.</p><p>The regularized objective is:</p>\n  <p>\\[ J_{\\text{reg}}(\\theta) = J(\\theta) + \\frac{\\lambda}{2} \\sum_{i=1}^{n} \\theta_i^2 \\]</p>\n  <p>where \\( \\lambda &gt; 0 \\) controls penalty strength and the factor of \\( \\frac{1}{2} \\) is conventional for clean gradient expressions. The gradient of the penalty term is simply \\( \\lambda \\theta_i \\), yielding the update rule:</p>\n  <p>\\[ \\theta_i \\leftarrow \\theta_i - \\eta \\left( \\frac{\\partial J}{\\partial \\theta_i} + \\lambda \\theta_i \\right) = (1 - \\eta \\lambda)\\,\\theta_i - \\eta \\frac{\\partial J}{\\partial \\theta_i} \\]</p>\n  <p>The multiplicative factor \\( (1 - \\eta \\lambda) \\) shrinks every weight by a constant fraction each step, which is why the technique is called <b>weight decay</b>.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 400 300\" width=\"100%\" max-width=\"400px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <g stroke=\"#4a5568\" stroke-width=\"1.5\">\n        <line x1=\"50\" y1=\"150\" x2=\"350\" y2=\"150\"></line>\n        <line x1=\"200\" y1=\"20\" x2=\"200\" y2=\"280\"></line>\n      </g>\n      <!-- L2 Circle -->\n      <circle cx=\"200\" cy=\"150\" r=\"80\" fill=\"rgba(226, 232, 240, 0.2)\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      <text x=\"205\" y=\"165\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\">w<tspan baseline-shift=\"super\">2</tspan><tspan baseline-shift=\"sub\">1</tspan> + w<tspan baseline-shift=\"super\">2</tspan><tspan baseline-shift=\"sub\">2</tspan> ≤ t</text>\n      <!-- Loss contours -->\n      <g fill=\"none\" stroke=\"#ed8936\" stroke-width=\"1.5\">\n        <ellipse cx=\"300\" cy=\"50\" rx=\"30\" ry=\"20\" transform=\"rotate(-30 300 50)\"></ellipse>\n        <ellipse cx=\"300\" cy=\"50\" rx=\"50\" ry=\"33\" transform=\"rotate(-30 300 50)\"></ellipse>\n        <ellipse cx=\"300\" cy=\"50\" rx=\"80\" ry=\"53\" transform=\"rotate(-30 300 50)\"></ellipse>\n      </g>\n      <circle cx=\"300\" cy=\"50\" r=\"3\" fill=\"#ed8936\"></circle>\n      <text x=\"310\" y=\"55\" fill=\"#ed8936\" font-family=\"sans-serif\" font-size=\"14\">Unregularized Optima</text>\n      <!-- Intersection point (Shrinkage) -->\n      <circle cx=\"235\" cy=\"78\" r=\"4\" fill=\"#63b3ed\"></circle>\n      <path d=\"M 235 25 Q 235 50 235 70\" fill=\"none\" stroke=\"#63b3ed\" stroke-width=\"1.5\" marker-end=\"url(#arrow_blue_1772479441487)\"></path>\n      <defs>\n        <marker id=\"arrow_blue_1772479441487\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#63b3ed\"></path>\n        </marker>\n      </defs>\n      <text x=\"120\" y=\"30\" fill=\"#63b3ed\" font-family=\"sans-serif\" font-size=\"14\">Optimum point</text>\n      <text x=\"120\" y=\"45\" fill=\"#63b3ed\" font-family=\"sans-serif\" font-size=\"14\">(w<tspan baseline-shift=\"sub\">1</tspan> ≠ 0, w<tspan baseline-shift=\"sub\">2</tspan> ≠ 0)</text>\n      <!-- Axes labels -->\n      <text x=\"340\" y=\"170\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"14\">w<tspan baseline-shift=\"sub\">1</tspan></text>\n      <text x=\"210\" y=\"30\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"14\">w<tspan baseline-shift=\"sub\">2</tspan></text>\n    </svg>\n    <p style=\"font-size:0.85em; color:#718096; margin-top:8px;\">Loss contours hit the L2 constraint sphere smoothly, shrinking both weights without enforcing exact zeros.</p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Geometric intuition.</b> The L2 constraint region \\( \\sum \\theta_i^2 \\leq t \\) is a hypersphere. Because it has no corners, the loss contours almost never intersect the constraint boundary at a coordinate axis, so weights shrink but do not reach exactly zero. This contrasts with L1's diamond geometry, which promotes sparsity.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bayesian interpretation.</b> L2 regularization corresponds to placing a Gaussian prior \\( \\theta_i \\sim \\mathcal{N}(0, \\sigma^2) \\) on the parameters, where \\( \\lambda = 1/\\sigma^2 \\). MAP estimation under this prior yields the Ridge objective. L1 analogously corresponds to a Laplace prior.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Weight decay vs. L2 in adaptive optimizers.</b> For vanilla SGD, L2 regularization and weight decay are identical. However, for adaptive methods like Adam, they diverge: L2 regularization scales the penalty by the adaptive learning rate, while <em>decoupled weight decay</em> (AdamW, Loshchilov &amp; Hutter 2019) applies the decay directly to the weight, independent of the gradient moment estimates. AdamW consistently outperforms Adam + L2 in practice.</p>\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Aspect</th>\n      <th style=\"padding:6px; text-align:left;\">L2 Regularization</th>\n      <th style=\"padding:6px; text-align:left;\">Decoupled Weight Decay</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Gradient term</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\nabla J + \\lambda \\theta \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\nabla J \\) (decay applied separately)</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Interacts with adaptive LR?</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Yes</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">No</td></tr>\n    <tr><td style=\"padding:6px;\">Used in</td><td style=\"padding:6px;\">SGD + L2, Adam + L2</td><td style=\"padding:6px;\">AdamW</td></tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Effect on eigenspectrum.</b> In linear regression, Ridge adds \\( \\lambda I \\) to the Gram matrix \\( X^T X \\), ensuring invertibility and shrinking the contribution of small-eigenvalue directions. This is the original Tikhonov regularization used to solve ill-posed inverse problems.</p><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Ridge regression closed form.</b> For the linear model \\( y = X\\theta + \\epsilon \\), the Ridge estimator is:</p>\n    <p>\\[ \\hat{\\theta}_{\\text{ridge}} = (X^T X + \\lambda I)^{-1} X^T y \\]</p>\n    <p>Derived by setting the gradient of \\( \\|y - X\\theta\\|^2 + \\lambda \\|\\theta\\|^2 \\) to zero:</p>\n    <p>\\[ \\nabla_\\theta = -2X^T(y - X\\theta) + 2\\lambda\\theta = 0 \\]</p>\n    <p>\\[ (X^T X + \\lambda I)\\theta = X^T y \\]</p>\n    <p>The addition of \\( \\lambda I \\) ensures the matrix is always invertible, even when \\( X^T X \\) is singular (more features than samples).</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "early-stopping",
+    "title": "Early stopping",
+    "summary": "Early stopping halts training when validation performance stops improving, using the model weights from the best-performing epoch. It is one of the simplest and most effective regularization techniques in deep learning.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "regularization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "hyperparameter",
+      "l2-regularization-ridge-weight-decay"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1995 · Sjöberg, Ljung; Bishop · Nonlinear Black-Box Modeling in System Identification"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Early stopping halts training when validation performance stops improving, using the model weights from the best-performing epoch. It is one of the simplest and most effective regularization techniques in deep learning.</p><p><b>Mechanism.</b> During training, the model is periodically evaluated on a held-out validation set. A <em>patience</em> counter tracks how many consecutive evaluations have passed without improvement. When patience is exhausted, training stops and the checkpoint with the lowest validation loss is restored:</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 400 250\" width=\"100%\" max-width=\"400px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <g stroke=\"#4a5568\" stroke-width=\"1.5\">\n        <line x1=\"50\" y1=\"200\" x2=\"350\" y2=\"200\"></line>\n        <line x1=\"50\" y1=\"30\" x2=\"50\" y2=\"200\"></line>\n      </g>\n      <!-- Axis Labels -->\n      <text x=\"355\" y=\"205\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"12\">Epochs</text>\n      <text x=\"10\" y=\"20\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"12\">Loss</text>\n      <!-- Training Curve -->\n      <path d=\"M 50 180 Q 150 50 350 40\" fill=\"none\" stroke=\"#63b3ed\" stroke-width=\"2.5\"></path>\n      <text x=\"300\" y=\"35\" fill=\"#63b3ed\" font-family=\"sans-serif\" font-size=\"14\">Training</text>\n      <!-- Validation Curve -->\n      <path d=\"M 50 190 Q 100 120 180 100 T 350 150\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"2.5\"></path>\n      <text x=\"300\" y=\"140\" fill=\"#fc8181\" font-family=\"sans-serif\" font-size=\"14\">Validation</text>\n      <!-- Minimum point and early stopping line -->\n      <circle cx=\"180\" cy=\"100\" r=\"4\" fill=\"#f6e05e\"></circle>\n      <line x1=\"180\" y1=\"100\" x2=\"180\" y2=\"200\" stroke=\"#f6e05e\" stroke-width=\"2\" stroke-dasharray=\"4 4\"></line>\n      <text x=\"185\" y=\"90\" fill=\"#f6e05e\" font-family=\"sans-serif\" font-size=\"12\">Optimum</text>\n      <path d=\"M 180 215 L 250 215\" stroke=\"#fbd38d\" stroke-width=\"2\" marker-end=\"url(#arrow_stop_1772480315210)\"></path>\n      <text x=\"185\" y=\"235\" fill=\"#fbd38d\" font-family=\"sans-serif\" font-size=\"12\">Patience Window</text>\n      <line x1=\"250\" y1=\"100\" x2=\"250\" y2=\"200\" stroke=\"#fbd38d\" stroke-width=\"2\" stroke-dasharray=\"2 2\"></line>\n      <text x=\"255\" y=\"90\" fill=\"#fbd38d\" font-family=\"sans-serif\" font-size=\"12\">Stop Training</text>\n      <defs>\n        <marker id=\"arrow_stop_1772480315210\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fbd38d\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"font-size:0.85em; color:#718096; margin-top:8px;\">Training is stopped after the validation loss worsens sequentially for a defined \"patience\" window.</p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<ol>\n    <li>After each epoch (or evaluation interval), compute validation loss \\( \\mathcal{L}_{\\text{val}}^{(t)} \\).</li>\n    <li>If \\( \\mathcal{L}_{\\text{val}}^{(t)} &lt; \\mathcal{L}_{\\text{val}}^{(\\text{best})} - \\delta \\), save the checkpoint and reset the patience counter. The tolerance \\( \\delta \\geq 0 \\) prevents stopping on trivial improvements.</li>\n    <li>Otherwise, increment the patience counter. If it exceeds the threshold \\( P \\), stop training.</li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to L2 regularization.</b> Bishop (1995) and Sjöberg &amp; Ljung (1995) showed that for quadratic loss surfaces, early stopping implicitly constrains the effective number of parameters. Starting from small random weights, gradient descent explores an expanding volume of parameter space over time. Stopping early limits this volume, functioning analogously to an L2 penalty. Specifically, for a linear model with learning rate \\( \\eta \\) and \\( t \\) steps, the effective regularization parameter is approximately \\( \\lambda_{\\text{eff}} \\approx \\frac{1}{\\eta \\cdot t} \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Practical considerations.",
+        "body": "<ul>\n    <li><b>Patience:</b> Typical values range from 5 to 20 epochs. Too low risks stopping during temporary validation plateaus; too high wastes compute.</li>\n    <li><b>Metric choice:</b> Usually validation loss, but can be any metric (accuracy, F1, BLEU). For metrics where higher is better, the comparison is inverted.</li>\n    <li><b>Interaction with learning rate schedules:</b> Cosine annealing or warm restarts can cause temporary validation loss spikes, so patience must account for the schedule period.</li>\n    <li><b>No hyperparameter on model capacity:</b> Unlike L1/L2 regularization, early stopping does not modify the loss function. It regularizes purely through optimization dynamics, making it compatible with any other regularization method.</li>\n  </ul>\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Hyperparameter</th>\n      <th style=\"padding:6px; text-align:left;\">Typical range</th>\n      <th style=\"padding:6px; text-align:left;\">Effect</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Patience \\( P \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">5–20 epochs</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Higher = more robust to noise, longer training</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Tolerance \\( \\delta \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">0–1e-4</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Ignores negligible improvements</td></tr>\n    <tr><td style=\"padding:6px;\">Eval frequency</td><td style=\"padding:6px;\">Every epoch or every N steps</td><td style=\"padding:6px;\">Trade-off between granularity and overhead</td></tr>\n  </tbody></table><details>\n    <summary>Python</summary>\n    <pre><code class=\"language-python\">class EarlyStopping:\n    def __init__(self, patience=10, min_delta=0.0):\n        self.patience = patience\n        self.min_delta = min_delta\n        self.best_loss = float('inf')\n        self.counter = 0\n        self.best_weights = None\n\n    def step(self, val_loss, model):\n        if val_loss &lt; self.best_loss - self.min_delta:\n            self.best_loss = val_loss\n            self.counter = 0\n            self.best_weights = model.state_dict().copy()\n        else:\n            self.counter += 1\n        return self.counter &gt;= self.patience\n\n    def restore(self, model):\n        model.load_state_dict(self.best_weights)</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "hyperparameter",
+    "title": "Hyperparameter",
+    "summary": "A hyperparameter is a configuration value set before training begins that governs the learning process or model architecture, as opposed to model parameters (weights, biases) which are learned from data via optimization.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "optimization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "data-leakage",
+      "early-stopping"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2012 · Bergstra, Bengio · Random Search for Hyper-Parameter Optimization",
+        "url": "https://jmlr.org/papers/v13/bergstra12a.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A hyperparameter is a configuration value set before training begins that governs the learning process or model architecture, as opposed to model parameters (weights, biases) which are learned from data via optimization.</p><p><b>Hyperparameters vs. parameters.</b> Model parameters live inside the hypothesis space and are optimized by the training algorithm (e.g., gradient descent updates weights \\( \\theta \\)). Hyperparameters sit <em>outside</em> this loop: they define the search space, the optimizer's behavior, or the model's structural capacity. Changing a hyperparameter typically requires restarting training from scratch.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 200\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <g stroke=\"#4a5568\" stroke-width=\"1.5\">\n        <!-- Hyperparameter space (Outer container) -->\n        <rect x=\"20\" y=\"20\" width=\"460\" height=\"160\" fill=\"transparent\" stroke=\"#cbd5e0\" stroke-width=\"2\" rx=\"4\"></rect>\n        <text x=\"30\" y=\"40\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\">Hyperparameters (Learning Rate, Architecture, Regularization)</text>\n\n        <!-- Parameter space (Inner container) -->\n        <rect x=\"50\" y=\"60\" width=\"400\" height=\"100\" fill=\"rgba(99, 179, 237, 0.1)\" stroke=\"#63b3ed\" stroke-width=\"2\" stroke-dasharray=\"4 4\" rx=\"4\"></rect>\n        <text x=\"60\" y=\"80\" fill=\"#63b3ed\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\">Model Parameters (Weights, Biases)</text>\n        \n        <!-- SGD optimization loop -->\n        <path d=\"M 100 130 C 150 90, 350 90, 400 130\" fill=\"none\" stroke=\"#ed8936\" stroke-width=\"2\" marker-end=\"url(#arrow_sgd_1772480317269)\"></path>\n        <text x=\"250\" y=\"110\" fill=\"#ed8936\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Optimized by Gradient Descent during Training</text>\n        <text x=\"250\" y=\"180\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Set explicitly before training loop</text>\n      </g>\n      <defs>\n        <marker id=\"arrow_sgd_1772480317269\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ed8936\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"font-size:0.85em; color:#718096; margin-top:8px;\">Hyperparameters set the bounds and rules; parameters are the internal values searched during training.</p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Category</th>\n      <th style=\"padding:6px; text-align:left;\">Examples</th>\n      <th style=\"padding:6px; text-align:left;\">What it controls</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Optimizer</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Learning rate \\( \\eta \\), momentum \\( \\beta \\), weight decay \\( \\lambda \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Step size, gradient smoothing, regularization</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Training</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Batch size, number of epochs, warmup steps</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Data throughput, convergence dynamics</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Architecture</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Hidden layers, units per layer, attention heads</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Model capacity and inductive bias</td></tr>\n    <tr><td style=\"padding:6px;\">Regularization</td><td style=\"padding:6px;\">Dropout rate, early stopping patience</td><td style=\"padding:6px;\">Overfitting control</td></tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Hyperparameter optimization (HPO).</b> Because the validation loss is a non-differentiable, noisy, and expensive function of hyperparameters, specialized search methods are used:</p>\n  <ul>\n    <li><b>Grid search:</b> Exhaustive evaluation over a predefined grid. Cost is \\( O(k^d) \\) for \\( k \\) values per dimension and \\( d \\) hyperparameters — intractable beyond 2–3 dimensions.</li>\n    <li><b>Random search</b> (Bergstra &amp; Bengio, 2012): Samples hyperparameters uniformly at random. Provably more efficient than grid search when only a few hyperparameters matter, because it does not waste budget on unimportant dimensions.</li>\n    <li><b>Bayesian optimization:</b> Builds a probabilistic surrogate model (typically a Gaussian process) of the objective \\( f(\\mathbf{h}) \\) and selects the next point to evaluate by maximizing an acquisition function (e.g., Expected Improvement). Much more sample-efficient than random search for expensive evaluations.</li>\n    <li><b>Hyperband / ASHA:</b> Early-stopping-based methods that allocate more resources to promising configurations and kill underperformers. Hyperband frames HPO as a multi-armed bandit problem over resource allocation.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Sensitivity and interactions.</b> Learning rate is almost universally the most critical hyperparameter. Batch size and learning rate interact strongly: the linear scaling rule (Goyal et al., 2017) suggests scaling \\( \\eta \\propto B \\) when increasing batch size \\( B \\). Modern large-scale training often fixes most hyperparameters and tunes only learning rate, warmup, and weight decay.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "data-leakage",
+    "title": "Data leakage",
+    "summary": "Data leakage occurs when information from outside the training set — typically from the test set or from the future — inadvertently influences model building, producing inflated performance estimates that collapse in production.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "backpropagation",
+      "hyperparameter"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2011 · Kaufman et al. · Leakage in Data Mining: Formulation, Detection, and Avoidance",
+        "url": "https://arxiv.org/abs/1106.0826"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Data leakage occurs when information from outside the training set — typically from the test set or from the future — inadvertently influences model building, producing inflated performance estimates that collapse in production.</p><p><b>Why it matters.</b> Leakage is one of the most common and damaging errors in applied ML. A model trained with leaked information appears to generalize well on validation metrics but fails on genuinely unseen data, because it has effectively memorized signals that will not be available at inference time.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 200\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <!-- Temporal Leakage Scenario -->\n      <g stroke=\"#4a5568\" stroke-width=\"1.5\">\n        <line x1=\"50\" y1=\"100\" x2=\"450\" y2=\"100\"></line>\n        <path d=\"M 440 90 L 450 100 L 440 110\" fill=\"none\"></path>\n        <text x=\"455\" y=\"105\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"12\">Time</text>\n      </g>\n      <!-- Time slices -->\n      <rect x=\"80\" y=\"80\" width=\"40\" height=\"40\" fill=\"#4299e1\"></rect>\n      <rect x=\"130\" y=\"80\" width=\"40\" height=\"40\" fill=\"#4299e1\"></rect>\n      <rect x=\"180\" y=\"80\" width=\"40\" height=\"40\" fill=\"#4299e1\"></rect>\n      <rect x=\"230\" y=\"80\" width=\"40\" height=\"40\" fill=\"#f56565\"></rect> <!-- Leaked test data -->\n      <rect x=\"280\" y=\"80\" width=\"40\" height=\"40\" fill=\"#4299e1\"></rect>\n      \n      <!-- Test Set -->\n      <rect x=\"360\" y=\"80\" width=\"40\" height=\"40\" fill=\"#f56565\"></rect>\n      \n      <text x=\"180\" y=\"50\" fill=\"#4299e1\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Train Split</text>\n      <text x=\"380\" y=\"50\" fill=\"#f56565\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Test Split</text>\n      \n      <!-- Leakage marker -->\n      <path d=\"M 360 70 Q 295 20 250 70\" fill=\"none\" stroke=\"#ed8936\" stroke-width=\"2\" stroke-dasharray=\"4 4\" marker-end=\"url(#arrow_leak_1772480319333)\"></path>\n      <text x=\"305\" y=\"45\" fill=\"#ed8936\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Temporal Leakage!</text>\n      \n      <defs>\n        <marker id=\"arrow_leak_1772480319333\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ed8936\"></path>\n        </marker>\n      </defs>\n      <text x=\"250\" y=\"180\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Random shuffling across time allows future events to inform past predictions.</text>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Common forms of leakage",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Type</th>\n      <th style=\"padding:6px; text-align:left;\">Mechanism</th>\n      <th style=\"padding:6px; text-align:left;\">Example</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\"><b>Preprocessing leakage</b></td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Fitting transformations on the full dataset before splitting</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Computing mean/std for standardization using train + test data</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\"><b>Target leakage</b></td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Including features that are proxies for or derived from the label</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Using \"treatment outcome\" as a feature when predicting \"will patient be treated\"</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\"><b>Temporal leakage</b></td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Using future data to predict past events</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Training a stock predictor on data shuffled across time, so tomorrow's features leak into today's prediction</td></tr>\n    <tr><td style=\"padding:6px;\"><b>Group leakage</b></td><td style=\"padding:6px;\">Correlated samples span train and test</td><td style=\"padding:6px;\">Multiple CT slices from the same patient appear in both splits</td></tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Detection strategies",
+        "body": "<ul>\n    <li><b>Suspiciously high metrics:</b> If a model achieves near-perfect accuracy on a hard task, leakage is a likely culprit.</li>\n    <li><b>Feature importance analysis:</b> If an unexpected feature dominates, inspect whether it encodes the target.</li>\n    <li><b>Adversarial validation:</b> Train a classifier to distinguish train from test sets. If it succeeds (AUC &gt; 0.5), the distributions differ — possibly due to leakage in the split.</li>\n    <li><b>Temporal consistency checks:</b> Verify that all features for a sample were available before the prediction timestamp.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Prevention.</b> The core principle is strict temporal and informational separation. Use <code>sklearn.pipeline.Pipeline</code> to ensure all preprocessing is fitted only on training folds. For time-series, always split chronologically. For grouped data (e.g., medical imaging), use <code>GroupKFold</code> to keep all samples from the same group in a single fold.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "backpropagation",
+    "title": "Backpropagation",
+    "summary": "Backpropagation is the algorithm that computes the gradient of a scalar loss function with respect to every weight in a neural network by applying the chain rule layer-by-layer from output to input. It is the computational engine behind…",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "landmark",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "forward-pass",
+      "data-leakage"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · Rumelhart, Hinton, Williams · Learning Representations by Back-Propagating Errors",
+        "url": "https://www.nature.com/articles/323533a0"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Backpropagation is the algorithm that computes the gradient of a scalar loss function with respect to every weight in a neural network by applying the chain rule layer-by-layer from output to input. It is the computational engine behind gradient-based learning in deep networks.</p><p><b>Setup.</b> Consider a network with \\( L \\) layers. Layer \\( l \\) computes pre-activation \\( z^{(l)} = W^{(l)} a^{(l-1)} + b^{(l)} \\) and activation \\( a^{(l)} = \\sigma(z^{(l)}) \\), where \\( a^{(0)} = x \\) (the input) and \\( \\hat{y} = a^{(L)} \\) (the output). The scalar loss is \\( \\mathcal{L}(\\hat{y}, y) \\).</p>\n  <p><b>The backward recursion.</b> Define the error signal at layer \\( l \\) as \\( \\delta^{(l)} = \\frac{\\partial \\mathcal{L}}{\\partial z^{(l)}} \\). Backpropagation computes this recursively:</p>\n  <p>\\[ \\delta^{(L)} = \\nabla_{a^{(L)}} \\mathcal{L} \\odot \\sigma'(z^{(L)}) \\]</p>\n  <p>\\[ \\delta^{(l)} = \\left( (W^{(l+1)})^T \\delta^{(l+1)} \\right) \\odot \\sigma'(z^{(l)}) \\]</p>\n  <p>where \\( \\odot \\) denotes the Hadamard (element-wise) product. The parameter gradients then follow directly:</p>\n  <p>\\[ \\frac{\\partial \\mathcal{L}}{\\partial W^{(l)}} = \\delta^{(l)} (a^{(l-1)})^T, \\qquad \\frac{\\partial \\mathcal{L}}{\\partial b^{(l)}} = \\delta^{(l)} \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 200\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <!-- Forward connections (faded) -->\n      <path d=\"M 80 100 L 220 100\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"2\" marker-end=\"url(#arrow_fw_1772480321397)\" opacity=\"0.5\"></path>\n      <path d=\"M 280 100 L 420 100\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"2\" marker-end=\"url(#arrow_fw_1772480321397)\" opacity=\"0.5\"></path>\n      <!-- Backward error flow -->\n      <path d=\"M 420 120 L 280 120\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\" marker-end=\"url(#arrow_bw_1772480321397)\"></path>\n      <path d=\"M 220 120 L 80 120\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\" marker-end=\"url(#arrow_bw_1772480321397)\"></path>\n      \n      <!-- Nodes -->\n      <circle cx=\"50\" cy=\"100\" r=\"30\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      <text x=\"50\" y=\"105\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"16\" text-anchor=\"middle\">z<tspan baseline-shift=\"super\">(l-1)</tspan></text>\n      \n      <circle cx=\"250\" cy=\"100\" r=\"30\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      <text x=\"250\" y=\"105\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"16\" text-anchor=\"middle\">z<tspan baseline-shift=\"super\">(l)</tspan></text>\n      \n      <circle cx=\"450\" cy=\"100\" r=\"30\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      <text x=\"450\" y=\"105\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"16\" text-anchor=\"middle\">z<tspan baseline-shift=\"super\">(l+1)</tspan></text>\n      \n      <!-- Error Signals -->\n      <text x=\"350\" y=\"145\" fill=\"#f6ad55\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">δ<tspan baseline-shift=\"super\">(l+1)</tspan></text>\n      <text x=\"150\" y=\"145\" fill=\"#f6ad55\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">δ<tspan baseline-shift=\"super\">(l)</tspan></text>\n      \n      <!-- Multiplications -->\n      <text x=\"350\" y=\"180\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">× (W<tspan baseline-shift=\"super\">(l+1)</tspan>)<tspan baseline-shift=\"super\">T</tspan> · σ'(z<tspan baseline-shift=\"super\">(l)</tspan>)</text>\n      <text x=\"150\" y=\"180\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">× (W<tspan baseline-shift=\"super\">(l)</tspan>)<tspan baseline-shift=\"super\">T</tspan> · σ'(z<tspan baseline-shift=\"super\">(l-1)</tspan>)</text>\n\n      <defs>\n        <marker id=\"arrow_fw_1772480321397\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#4a5568\"></path>\n        </marker>\n        <marker id=\"arrow_bw_1772480321397\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#f6ad55\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"font-size:0.85em; color:#718096; margin-top:8px;\">The error signal \\( \\delta^{(l)} \\) propagates backward from layer to layer via matrix multiplication and element-wise derivative scaling.</p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Computational cost.</b> The backward pass requires roughly 2x the FLOPs of the forward pass: the forward pass computes activations, and the backward pass computes both the error signals and the weight gradients. Total cost is \\( O(|W|) \\) per sample, linear in the number of parameters, making it tractable even for networks with billions of weights.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Vanishing and exploding gradients.</b> The recursive multiplication \\( (W^{(l+1)})^T \\delta^{(l+1)} \\) means gradients pass through \\( L \\) matrix multiplications. If the spectral norms \\( \\|W^{(l)}\\| \\) are consistently less than 1, gradients shrink exponentially with depth (vanishing); if greater than 1, they grow exponentially (exploding). This fundamental instability motivated key architectural innovations:</p>\n  <ul>\n    <li><b>ReLU activations</b> — \\( \\sigma'(z) \\in \\{0, 1\\} \\), avoiding the saturation regions of sigmoid/tanh where \\( \\sigma'(z) \\approx 0 \\).</li>\n    <li><b>Residual connections</b> (He et al., 2015) — provide gradient highways that bypass layers.</li>\n    <li><b>Layer/batch normalization</b> — stabilize the distribution of activations and gradients.</li>\n    <li><b>Gradient clipping</b> — caps gradient norms to prevent explosions, especially in RNNs.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Historical context.</b> Though the chain rule is centuries old, its systematic application to neural networks was popularized by Rumelhart, Hinton, and Williams (1986), who demonstrated that backprop could learn useful internal representations in multi-layer networks — settling a decade-long debate about whether hidden layers could be trained effectively. Earlier independent formulations by Werbos (1974) and Linnainmaa (1970) had gone largely unnoticed.</p><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Output layer error (cross-entropy + softmax).</b> For cross-entropy loss \\( \\mathcal{L} = -\\sum_k y_k \\log \\hat{y}_k \\) with softmax output \\( \\hat{y}_k = \\frac{e^{z_k}}{\\sum_j e^{z_j}} \\), the error simplifies elegantly:</p>\n    <p>\\[ \\delta^{(L)}_k = \\hat{y}_k - y_k \\]</p>\n    <p>This clean form arises because the Jacobian of softmax composed with cross-entropy reduces to a simple subtraction, avoiding explicit computation of the full softmax Jacobian.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bias gradient.</b> Since \\( z^{(l)} = W^{(l)} a^{(l-1)} + b^{(l)} \\), we have \\( \\frac{\\partial z^{(l)}}{\\partial b^{(l)}} = I \\), so \\( \\frac{\\partial \\mathcal{L}}{\\partial b^{(l)}} = \\delta^{(l)} \\).</p>\n  </details>\n  <details>\n    <summary>Python</summary>\n    <pre><code class=\"language-python\">def backprop(X, y, weights, biases, activations, z_values):\n    \\\"\\\"\\\"Backprop for an L-layer network with ReLU hidden + softmax output.\\\"\\\"\\\"\n    L = len(weights)\n    m = X.shape[0]\n    grads_w, grads_b = [None]*L, [None]*L\n\n    # Output layer error (softmax + cross-entropy)\n    delta = activations[L] - y  # (batch, classes)\n\n    for l in reversed(range(L)):\n        grads_w[l] = activations[l].T @ delta / m\n        grads_b[l] = delta.mean(axis=0)\n        if l &gt; 0:\n            delta = (delta @ weights[l].T) * (z_values[l-1] &gt; 0)  # ReLU derivative\n\n    return grads_w, grads_b</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "forward-pass",
+    "title": "Forward pass",
+    "summary": "The forward pass propagates input data through the network layer by layer, applying affine transformations and nonlinear activations to produce an output prediction. It is the inference-time computation and also the first phase of traini…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "backward-pass",
+      "backpropagation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1960s+ · Various ·"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The forward pass propagates input data through the network layer by layer, applying affine transformations and nonlinear activations to produce an output prediction. It is the inference-time computation and also the first phase of training (before the backward pass).</p><p><b>Layer-by-layer computation.</b> For a fully connected network with \\( L \\) layers, the forward pass computes:</p>\n  <p>\\[ z^{(l)} = W^{(l)} a^{(l-1)} + b^{(l)}, \\qquad a^{(l)} = \\sigma(z^{(l)}) \\]</p>\n  <p>where \\( a^{(0)} = x \\) is the input, \\( W^{(l)} \\in \\mathbb{R}^{n_l \\times n_{l-1}} \\) is the weight matrix, \\( b^{(l)} \\in \\mathbb{R}^{n_l} \\) is the bias vector, and \\( \\sigma \\) is a nonlinear activation function. The final output is \\( \\hat{y} = a^{(L)} \\), possibly passed through a task-specific function (softmax for classification, identity for regression).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 150\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <!-- Forward computation flow -->\n      <path d=\"M 60 75 L 120 75\" fill=\"none\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow_fpass_1772480323451)\"></path>\n      <path d=\"M 180 75 L 240 75\" fill=\"none\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow_fpass_1772480323451)\"></path>\n      <path d=\"M 300 75 L 360 75\" fill=\"none\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow_fpass_1772480323451)\"></path>\n      <path d=\"M 420 75 L 460 75\" fill=\"none\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow_fpass_1772480323451)\"></path>\n      \n      <!-- Nodes -->\n      <text x=\"30\" y=\"80\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"18\" font-weight=\"bold\">x</text>\n      \n      <rect x=\"120\" y=\"55\" width=\"60\" height=\"40\" fill=\"#2b6cb0\" rx=\"4\"></rect>\n      <text x=\"150\" y=\"80\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">W<tspan baseline-shift=\"super\">(1)</tspan></text>\n      <text x=\"150\" y=\"115\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">z<tspan baseline-shift=\"super\">(1)</tspan></text>\n      \n      <circle cx=\"270\" cy=\"75\" r=\"30\" fill=\"#c53030\"></circle>\n      <text x=\"270\" y=\"80\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"16\" text-anchor=\"middle\">σ</text>\n      <text x=\"270\" y=\"125\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">a<tspan baseline-shift=\"super\">(1)</tspan></text>\n      \n      <rect x=\"360\" y=\"55\" width=\"60\" height=\"40\" fill=\"#2b6cb0\" rx=\"4\"></rect>\n      <text x=\"390\" y=\"80\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">W<tspan baseline-shift=\"super\">(2)</tspan></text>\n      <text x=\"390\" y=\"115\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">z<tspan baseline-shift=\"super\">(2)</tspan></text>\n      \n      <text x=\"475\" y=\"80\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"18\" font-weight=\"bold\">ŷ</text>\n      \n      <defs>\n        <marker id=\"arrow_fpass_1772480323451\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#68d391\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"font-size:0.85em; color:#718096; margin-top:8px;\">Alternating affine transformations (weights) and nonlinearities (activations).</p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Computational graph.</b> Modern deep learning frameworks (PyTorch, JAX) record every operation during the forward pass into a directed acyclic graph (DAG). Each node stores the operation performed and pointers to its inputs. This graph is then traversed in reverse during the backward pass to compute gradients via automatic differentiation. In PyTorch's eager mode, this graph is built dynamically on each forward call, enabling data-dependent control flow (if/else, variable-length loops). TensorFlow 1.x used static graphs defined before execution.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Cost.</b> For a fully connected layer mapping \\( n_{\\text{in}} \\) inputs to \\( n_{\\text{out}} \\) outputs with batch size \\( B \\), the forward pass requires \\( O(B \\cdot n_{\\text{in}} \\cdot n_{\\text{out}}) \\) multiply-add operations — dominated by the matrix multiplication \\( W a \\). For convolutional layers, the cost depends on kernel size, spatial dimensions, and channel counts. The total forward pass cost is linear in the number of parameters, \\( O(|W|) \\), per sample.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Forward pass in different architectures",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Architecture</th>\n      <th style=\"padding:6px; text-align:left;\">Forward pass structure</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">MLP</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Sequential: \\( x \\to h_1 \\to h_2 \\to \\cdots \\to \\hat{y} \\)</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">CNN</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Conv → activation → pool, repeated; then FC head</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">ResNet</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Residual blocks: \\( a^{(l)} = \\sigma(f(a^{(l-1)}) + a^{(l-1)}) \\)</td></tr>\n    <tr><td style=\"padding:6px;\">Transformer</td><td style=\"padding:6px;\">Self-attention → add &amp; norm → FFN → add &amp; norm, repeated</td></tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Training vs. inference.</b> During training, intermediate activations \\( a^{(l)} \\) must be cached for the backward pass, which dominates memory usage (memory is \\( O(L \\cdot B \\cdot n) \\)). At inference time, these intermediates can be discarded layer by layer, reducing memory to \\( O(\\max_l n_l) \\). Gradient checkpointing (Chen et al., 2016) trades compute for memory by recomputing activations during the backward pass instead of storing them.</p><details>\n    <summary>Python</summary>\n    <pre><code class=\"language-python\">import numpy as np\n\ndef forward_pass(X, weights, biases, activation=np.maximum):\n    \\\"\\\"\\\"Forward pass for an L-layer network with ReLU activations.\n\n    Returns activations and pre-activations for use in backprop.\n    \\\"\\\"\\\"\n    a = X\n    activations = [a]\n    z_values = []\n\n    for l in range(len(weights) - 1):\n        z = a @ weights[l] + biases[l]\n        a = activation(0, z)  # ReLU\n        z_values.append(z)\n        activations.append(a)\n\n    # Output layer (no activation — handled by loss function)\n    z = a @ weights[-1] + biases[-1]\n    z_values.append(z)\n    activations.append(z)\n\n    return activations, z_values</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "backward-pass",
+    "title": "Backward pass",
+    "summary": "The backward pass traverses the computational graph in reverse topological order, applying the chain rule at each node to compute the gradient of the loss with respect to every parameter. It is the second phase of a training step, follow…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "chain-rule",
+      "forward-pass"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1970 · Seppo Linnainmaa · The Representation of the Cumulative Rounding Error of an Algorithm as a Taylor Expansion of the Local Rounding Errors"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The backward pass traverses the computational graph in reverse topological order, applying the chain rule at each node to compute the gradient of the loss with respect to every parameter. It is the second phase of a training step, following the forward pass.</p><p><b>Relationship to the forward pass.</b> The forward pass builds a computational graph and caches intermediate values (activations, pre-activations). The backward pass consumes this graph: starting from the scalar loss \\( \\mathcal{L} \\), it propagates gradient information backward through each operation. Every node in the graph has a local Jacobian, and the backward pass multiplies these Jacobians together via the chain rule to produce the end-to-end gradient.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 400 200\" width=\"100%\" max-width=\"400px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <!-- Main node C -->\n      <circle cx=\"200\" cy=\"100\" r=\"40\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      <text x=\"200\" y=\"105\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"18\" text-anchor=\"middle\" font-weight=\"bold\">f(a, b)</text>\n      <text x=\"200\" y=\"155\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">c = f(a,b)</text>\n\n      <!-- Upstream gradient arriving -->\n      <path d=\"M 330 100 L 250 100\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"2\" marker-end=\"url(#arrow_back_1772480325494)\"></path>\n      <text x=\"290\" y=\"90\" fill=\"#fc8181\" font-family=\"sans-serif\" font-size=\"16\" text-anchor=\"middle\">∂L/∂c</text>\n      \n      <!-- Split downstream gradients -->\n      <path d=\"M 160 85 L 80 50\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\" marker-end=\"url(#arrow_out_1772480325494)\"></path>\n      <text x=\"120\" y=\"55\" fill=\"#f6ad55\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">∂L/∂a</text>\n      \n      <path d=\"M 160 115 L 80 150\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\" marker-end=\"url(#arrow_out_1772480325494)\"></path>\n      <text x=\"120\" y=\"155\" fill=\"#f6ad55\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">∂L/∂b</text>\n\n      <defs>\n        <marker id=\"arrow_back_1772480325494\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fc8181\"></path>\n        </marker>\n        <marker id=\"arrow_out_1772480325494\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#f6ad55\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"font-size:0.85em; color:#718096; margin-top:8px;\">A single graph node receives the upstream gradient, multiplies it by the local gradients \\( \\frac{\\partial c}{\\partial a} \\) and \\( \\frac{\\partial c}{\\partial b} \\), and passes them backward.</p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Mechanics at a single node.</b> Consider a node computing \\( c = f(a, b) \\). Given the upstream gradient \\( \\frac{\\partial \\mathcal{L}}{\\partial c} \\) (already computed), the backward pass computes:</p>\n  <p>\\[ \\frac{\\partial \\mathcal{L}}{\\partial a} = \\frac{\\partial \\mathcal{L}}{\\partial c} \\cdot \\frac{\\partial c}{\\partial a}, \\qquad \\frac{\\partial \\mathcal{L}}{\\partial b} = \\frac{\\partial \\mathcal{L}}{\\partial c} \\cdot \\frac{\\partial c}{\\partial b} \\]</p>\n  <p>The local derivatives \\( \\frac{\\partial c}{\\partial a} \\) and \\( \\frac{\\partial c}{\\partial b} \\) are specific to the operation \\( f \\) and are computed analytically. This is repeated for every node in reverse topological order.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Common local gradients",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Operation</th>\n      <th style=\"padding:6px; text-align:left;\">Forward</th>\n      <th style=\"padding:6px; text-align:left;\">Local gradient</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Addition: \\( c = a + b \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( c = a + b \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\frac{\\partial c}{\\partial a} = 1, \\; \\frac{\\partial c}{\\partial b} = 1 \\)</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Multiplication: \\( c = a \\cdot b \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( c = ab \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\frac{\\partial c}{\\partial a} = b, \\; \\frac{\\partial c}{\\partial b} = a \\)</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">MatMul: \\( C = AB \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( C = AB \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\frac{\\partial \\mathcal{L}}{\\partial A} = \\frac{\\partial \\mathcal{L}}{\\partial C} B^T \\)</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">ReLU: \\( c = \\max(0, a) \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( c = \\max(0,a) \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\frac{\\partial c}{\\partial a} = \\mathbf{1}[a &gt; 0] \\)</td></tr>\n    <tr><td style=\"padding:6px;\">Sigmoid: \\( c = \\sigma(a) \\)</td><td style=\"padding:6px;\">\\( c = \\frac{1}{1+e^{-a}} \\)</td><td style=\"padding:6px;\">\\( \\frac{\\partial c}{\\partial a} = c(1-c) \\)</td></tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Computational cost.</b> The backward pass costs approximately 2x the forward pass FLOPs. The forward pass performs one matrix multiply per layer; the backward pass performs two (one for the error signal, one for the weight gradient). Combined, a full training step (forward + backward) costs roughly 3x a single forward pass.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Memory requirements.</b> The backward pass requires access to the activations cached during the forward pass. For a model with \\( L \\) layers, batch size \\( B \\), and hidden dimension \\( n \\), this costs \\( O(L \\cdot B \\cdot n) \\) memory. Gradient checkpointing reduces this to \\( O(\\sqrt{L} \\cdot B \\cdot n) \\) by recomputing activations from checkpoints during the backward pass, at the cost of one additional forward pass.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "chain-rule",
+    "title": "Chain rule",
+    "summary": "The chain rule is the calculus theorem that gives the derivative of a composition of functions. It is the mathematical foundation of backpropagation: every gradient computation in a neural network is an application of the chain rule.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "automatic-differentiation",
+      "backward-pass"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1676 · Gottfried Wilhelm Leibniz ·"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The chain rule is the calculus theorem that gives the derivative of a composition of functions. It is the mathematical foundation of backpropagation: every gradient computation in a neural network is an application of the chain rule.</p><p><b>Single-variable form.</b> If \\( y = f(g(x)) \\), then:</p>\n  <p>\\[ \\frac{dy}{dx} = \\frac{df}{dg} \\cdot \\frac{dg}{dx} = f'(g(x)) \\cdot g'(x) \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 120\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <text x=\"40\" y=\"65\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"18\" font-weight=\"bold\">x</text>\n      <path d=\"M 60 60 L 140 60\" stroke=\"#4a5568\" stroke-width=\"2\" marker-end=\"url(#chain_arrow_1772480327553)\"></path>\n      \n      <rect x=\"150\" y=\"40\" width=\"60\" height=\"40\" fill=\"#2b6cb0\" rx=\"4\"></rect>\n      <text x=\"180\" y=\"65\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"16\" text-anchor=\"middle\">g</text>\n      \n      <text x=\"240\" y=\"85\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">u = g(x)</text>\n      <path d=\"M 220 60 L 300 60\" stroke=\"#4a5568\" stroke-width=\"2\" marker-end=\"url(#chain_arrow_1772480327553)\"></path>\n      <text x=\"260\" y=\"50\" fill=\"#f6ad55\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">du/dx</text>\n      \n      <rect x=\"310\" y=\"40\" width=\"60\" height=\"40\" fill=\"#2b6cb0\" rx=\"4\"></rect>\n      <text x=\"340\" y=\"65\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"16\" text-anchor=\"middle\">f</text>\n      \n      <path d=\"M 380 60 L 460 60\" stroke=\"#4a5568\" stroke-width=\"2\" marker-end=\"url(#chain_arrow_1772480327553)\"></path>\n      <text x=\"420\" y=\"50\" fill=\"#f6ad55\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">dy/du</text>\n      <text x=\"480\" y=\"65\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"18\" font-weight=\"bold\">y</text>\n\n      <defs>\n        <marker id=\"chain_arrow_1772480327553\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#4a5568\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <p style=\"font-size:0.85em; color:#718096; margin-top:8px;\">The derivative of a composite function is the product of the derivatives of its parts: \\( \\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx} \\)</p>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Multivariable form.</b> If \\( \\mathcal{L} \\) depends on \\( z \\) through multiple intermediate variables \\( a_1, \\ldots, a_k \\), the total derivative sums over all paths:</p>\n  <p>\\[ \\frac{\\partial \\mathcal{L}}{\\partial z} = \\sum_{i=1}^{k} \\frac{\\partial \\mathcal{L}}{\\partial a_i} \\cdot \\frac{\\partial a_i}{\\partial z} \\]</p>\n  <p>This summation-over-paths form is critical in neural networks, where a single parameter can influence the loss through multiple downstream nodes (e.g., a shared weight in a recurrent network or a parameter used in multiple branches of a residual block).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Application to deep networks.</b> A feedforward network of \\( L \\) layers computes \\( \\hat{y} = f_L(f_{L-1}(\\cdots f_1(x))) \\). The gradient of the loss with respect to the input to layer \\( l \\) involves a product of \\( L - l \\) Jacobians:</p>\n  <p>\\[ \\frac{\\partial \\mathcal{L}}{\\partial z^{(l)}} = \\frac{\\partial \\mathcal{L}}{\\partial z^{(L)}} \\prod_{k=l+1}^{L} \\frac{\\partial z^{(k)}}{\\partial z^{(k-1)}} \\]</p>\n  <p>Each factor \\( \\frac{\\partial z^{(k)}}{\\partial z^{(k-1)}} \\) is the Jacobian of layer \\( k \\). This product structure directly causes the <b>vanishing/exploding gradient problem</b>: if all Jacobian spectral norms are below 1, the product shrinks exponentially; if above 1, it grows exponentially. The depth \\( L \\) acts as an exponent on this instability.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Forward vs. reverse mode.</b> The chain rule can be evaluated in two directions:</p>\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Mode</th>\n      <th style=\"padding:6px; text-align:left;\">Direction</th>\n      <th style=\"padding:6px; text-align:left;\">Cost</th>\n      <th style=\"padding:6px; text-align:left;\">Best for</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Forward (tangent)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Input → output</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( O(n_{\\text{in}}) \\) passes</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Few inputs, many outputs (e.g., Jacobian-vector products)</td></tr>\n    <tr><td style=\"padding:6px;\">Reverse (adjoint)</td><td style=\"padding:6px;\">Output → input</td><td style=\"padding:6px;\">\\( O(n_{\\text{out}}) \\) passes</td><td style=\"padding:6px;\">One scalar output, many inputs (neural network training)</td></tr>\n  </tbody></table>\n  <p>Neural network training has one scalar output (the loss) and millions of inputs (the parameters), so reverse mode (backpropagation) computes all gradients in a single backward pass. Forward mode would require one pass per parameter — completely intractable.</p><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Concrete example: 2-layer network.</b> Let \\( \\hat{y} = \\sigma_2(W_2 \\cdot \\sigma_1(W_1 x + b_1) + b_2) \\) with loss \\( \\mathcal{L} = \\frac{1}{2}(\\hat{y} - y)^2 \\). The gradient with respect to \\( W_1 \\) requires chaining through three functions:</p>\n    <p>\\[ \\frac{\\partial \\mathcal{L}}{\\partial W_1} = \\underbrace{(\\hat{y} - y)}_{\\frac{\\partial \\mathcal{L}}{\\partial \\hat{y}}} \\cdot \\underbrace{\\sigma_2'(z_2)}_{\\frac{\\partial \\hat{y}}{\\partial z_2}} \\cdot \\underbrace{W_2^T}_{\\frac{\\partial z_2}{\\partial a_1}} \\cdot \\underbrace{\\sigma_1'(z_1)}_{\\frac{\\partial a_1}{\\partial z_1}} \\cdot \\underbrace{x^T}_{\\frac{\\partial z_1}{\\partial W_1}} \\]</p>\n    <p>Each factor is a local derivative at one node, and the full gradient is their product — precisely the chain rule applied recursively.</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "automatic-differentiation",
+    "title": "Automatic differentiation",
+    "summary": "Automatic differentiation (autodiff) computes exact, numerically stable derivatives of functions expressed as computer programs by systematically applying the chain rule to elementary operations. It is the computational backbone of every…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "l1-regularization-lasso",
+      "chain-rule"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1970 · Seppo Linnainmaa · The Representation of the Cumulative Rounding Error of an Algorithm as a Taylor Expansion of the Local Rounding Errors"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Automatic differentiation (autodiff) computes exact, numerically stable derivatives of functions expressed as computer programs by systematically applying the chain rule to elementary operations. It is the computational backbone of every modern deep learning framework.</p><p><b>Three approaches to computing derivatives:</b></p>\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Method</th>\n      <th style=\"padding:6px; text-align:left;\">Accuracy</th>\n      <th style=\"padding:6px; text-align:left;\">Cost</th>\n      <th style=\"padding:6px; text-align:left;\">Drawback</th>\n    </tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\"><b>Numerical</b> (finite differences)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( O(\\epsilon) \\) or \\( O(\\epsilon^2) \\)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( O(n) \\) evaluations for \\( n \\) params</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Truncation + round-off error; intractable for large \\( n \\)</td></tr>\n    <tr><td style=\"padding:6px; border-bottom:1px solid #ddd;\"><b>Symbolic</b> (CAS)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Exact (analytical)</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Varies</td><td style=\"padding:6px; border-bottom:1px solid #ddd;\">Expression swell — derivatives can be exponentially larger than the original expression</td></tr>\n    <tr><td style=\"padding:6px;\"><b>Automatic</b></td><td style=\"padding:6px;\">Machine precision</td><td style=\"padding:6px;\">\\( O(1) \\) passes (reverse mode)</td><td style=\"padding:6px;\">Requires storing the computational graph (memory)</td></tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 200\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <!-- Forward Mode -->\n      <text x=\"125\" y=\"30\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\">Forward Mode</text>\n      <text x=\"125\" y=\"180\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Propagates ∂x<tspan baseline-shift=\"sub\">i</tspan> forward</text>\n      <path d=\"M 50 100 L 200 100\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow_fw_ad_1772480329621)\"></path>\n      <path d=\"M 50 120 L 200 120\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow_fw_ad_1772480329621)\"></path>\n      <text x=\"125\" y=\"90\" fill=\"#68d391\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Primal computation</text>\n      <text x=\"125\" y=\"140\" fill=\"#68d391\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Tangent propagation</text>\n      <circle cx=\"210\" cy=\"110\" r=\"4\" fill=\"#68d391\"></circle>\n\n      <!-- Divider -->\n      <line x1=\"250\" y1=\"20\" x2=\"250\" y2=\"180\" stroke=\"#4a5568\" stroke-width=\"1\" stroke-dasharray=\"4 4\"></line>\n\n      <!-- Reverse Mode -->\n      <text x=\"375\" y=\"30\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\">Reverse Mode</text>\n      <text x=\"375\" y=\"180\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Propagates ∂y backward (used in ML)</text>\n      <path d=\"M 300 90 L 450 90\" stroke=\"#4299e1\" stroke-width=\"2\" marker-end=\"url(#arrow_fw_blue_1772480329621)\"></path>\n      <text x=\"375\" y=\"80\" fill=\"#4299e1\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">1. Forward (Build Graph)</text>\n      \n      <circle cx=\"450\" cy=\"90\" r=\"4\" fill=\"#fc8181\"></circle>\n      <path d=\"M 450 130 L 300 130\" stroke=\"#fc8181\" stroke-width=\"2\" marker-end=\"url(#arrow_bw_red_1772480329621)\"></path>\n      <text x=\"375\" y=\"150\" fill=\"#fc8181\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">2. Backward (Chain Rule)</text>\n\n      <defs>\n        <marker id=\"arrow_fw_ad_1772480329621\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#68d391\"></path>\n        </marker>\n        <marker id=\"arrow_fw_blue_1772480329621\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#4299e1\"></path>\n        </marker>\n        <marker id=\"arrow_bw_red_1772480329621\" viewBox=\"0 0 10 10\" refX=\"10\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fc8181\"></path>\n        </marker>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>How it works.</b> Any program, no matter how complex, is ultimately a composition of elementary operations (+, ×, exp, log, sin, etc.). Autodiff decomposes the program into a computational graph (a DAG of these primitives) and applies the chain rule mechanically at each node. Because each elementary operation has a known, simple derivative rule, the result is exact to machine precision — no approximation.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Forward mode (tangent mode).</b> Propagates directional derivatives from inputs to outputs. For each input perturbation \\( \\dot{x} \\), computes \\( \\dot{y} = \\frac{\\partial y}{\\partial x} \\dot{x} \\) alongside the primal computation. Cost: one forward pass per input variable. Efficient when \\( n_{\\text{in}} \\ll n_{\\text{out}} \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Reverse mode (adjoint mode).</b> Propagates adjoint (gradient) information from outputs to inputs. One reverse pass computes the gradient of a scalar output with respect to <em>all</em> inputs simultaneously. Cost: one forward pass + one backward pass, regardless of the number of parameters. This is why reverse mode is universally used for neural network training: a single backward pass produces all \\( \\sim 10^6 \\text{--} 10^{11} \\) parameter gradients.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Implementation strategies",
+        "body": "<ul>\n    <li><b>Operator overloading</b> (PyTorch, JAX): Overloads arithmetic operators on tensor objects to record operations into a tape/graph during the forward pass. The <code>backward()</code> call replays the tape in reverse. Supports dynamic, data-dependent control flow naturally.</li>\n    <li><b>Source transformation</b> (Theano, TF 1.x, Tapenade): Transforms the source code or computation graph into a new program that computes both the primal and derivative. More amenable to whole-program optimization but less flexible.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Dual numbers.</b> Forward-mode autodiff can be elegantly implemented using dual numbers \\( a + b\\epsilon \\) where \\( \\epsilon^2 = 0 \\). Evaluating \\( f(x + \\epsilon) \\) produces \\( f(x) + f'(x)\\epsilon \\), extracting the derivative without numerical approximation. JAX's <code>jvp</code> uses this principle.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Higher-order derivatives.</b> Autodiff composes: applying reverse mode to a function that itself uses reverse mode yields second derivatives (Hessian-vector products). This enables second-order optimization methods (e.g., natural gradient, K-FAC) and is used in meta-learning (MAML) where gradients flow through the optimization process itself.</p>"
+      }
+    ],
+    "cards": []
   }
 ]

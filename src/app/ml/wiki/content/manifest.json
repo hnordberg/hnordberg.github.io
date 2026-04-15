@@ -1844,6 +1844,226 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "l1-regularization-lasso",
+      "title": "L1 regularization (Lasso)",
+      "summary": "L1 regularization adds the sum of absolute parameter values to the loss function, penalizing model complexity and driving many weights exactly to zero. This induces sparsity, making L1 an implicit feature-selection mechanism.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "regularization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "l2-regularization-ridge-weight-decay",
+        "automatic-differentiation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "l2-regularization-ridge-weight-decay",
+      "title": "L2 regularization (Ridge/Weight Decay)",
+      "summary": "L2 regularization adds the sum of squared parameter values to the loss function, uniformly shrinking all weights toward zero without eliminating any. In vanilla SGD, L2 regularization is mathematically equivalent to weight decay.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "regularization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "early-stopping",
+        "l1-regularization-lasso"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "early-stopping",
+      "title": "Early stopping",
+      "summary": "Early stopping halts training when validation performance stops improving, using the model weights from the best-performing epoch. It is one of the simplest and most effective regularization techniques in deep learning.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "regularization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "hyperparameter",
+        "l2-regularization-ridge-weight-decay"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "hyperparameter",
+      "title": "Hyperparameter",
+      "summary": "A hyperparameter is a configuration value set before training begins that governs the learning process or model architecture, as opposed to model parameters (weights, biases) which are learned from data via optimization.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "data-leakage",
+        "early-stopping"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "data-leakage",
+      "title": "Data leakage",
+      "summary": "Data leakage occurs when information from outside the training set — typically from the test set or from the future — inadvertently influences model building, producing inflated performance estimates that collapse in production.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "backpropagation",
+        "hyperparameter"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "backpropagation",
+      "title": "Backpropagation",
+      "summary": "Backpropagation is the algorithm that computes the gradient of a scalar loss function with respect to every weight in a neural network by applying the chain rule layer-by-layer from output to input. It is the computational engine behind…",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "forward-pass",
+        "data-leakage"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "forward-pass",
+      "title": "Forward pass",
+      "summary": "The forward pass propagates input data through the network layer by layer, applying affine transformations and nonlinear activations to produce an output prediction. It is the inference-time computation and also the first phase of traini…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "backward-pass",
+        "backpropagation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "backward-pass",
+      "title": "Backward pass",
+      "summary": "The backward pass traverses the computational graph in reverse topological order, applying the chain rule at each node to compute the gradient of the loss with respect to every parameter. It is the second phase of a training step, follow…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "chain-rule",
+        "forward-pass"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "chain-rule",
+      "title": "Chain rule",
+      "summary": "The chain rule is the calculus theorem that gives the derivative of a composition of functions. It is the mathematical foundation of backpropagation: every gradient computation in a neural network is an application of the chain rule.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "automatic-differentiation",
+        "backward-pass"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "automatic-differentiation",
+      "title": "Automatic differentiation",
+      "summary": "Automatic differentiation (autodiff) computes exact, numerically stable derivatives of functions expressed as computer programs by systematically applying the chain rule to elementary operations. It is the computational backbone of every…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "l1-regularization-lasso",
+        "chain-rule"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
