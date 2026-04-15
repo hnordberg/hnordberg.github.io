@@ -51,6 +51,25 @@ const BROKEN_DISPLAY_MATH_RE = /(?<!\\)\[\s*mathcal\{[^<]*\]/i;
 const PACKED_MULTI_CITATION_RE =
   /(see also|scaled to|original .*?·|et al\.\s*\(\d{4}\).*(et al\.\s*\(\d{4}\)|,\s*[A-Z][a-z]+ et al\.\s*\(\d{4}\)))/i;
 
+function appearsBundledMultiWorkCitation(citation) {
+  if (PACKED_MULTI_CITATION_RE.test(citation)) return true;
+
+  const yearParenCount = (citation.match(/\(\d{4}\)/g) || []).length;
+  const etAlCount = (citation.match(/et al\./gi) || []).length;
+  const semicolonParts = citation
+    .split(";")
+    .map((x) => x.trim())
+    .filter(Boolean).length;
+
+  // Common merged formats:
+  // - "Author et al. (2019); Author et al. (2020)"
+  // - "..., Author et al. (2019), Author et al. (2024)"
+  if (semicolonParts >= 2 && (yearParenCount >= 1 || etAlCount >= 2)) return true;
+  if (yearParenCount >= 2 && etAlCount >= 2) return true;
+
+  return false;
+}
+
 function readJson(rel) {
   const p = join(contentDir, rel);
   if (!existsSync(p)) throw new Error(`Missing file: ${p}`);
@@ -269,7 +288,7 @@ function issues() {
           if (p.doi !== undefined && typeof p.doi !== "string") {
             out.push(`Topic ${t.slug}: paper.doi must be string`);
           }
-          if (PACKED_MULTI_CITATION_RE.test(p.citation)) {
+          if (appearsBundledMultiWorkCitation(p.citation)) {
             if (p.url === undefined) {
               out.push(
                 `Topic ${t.slug}: papers entry appears to bundle multiple works without URL(s); split into separate paper objects`
