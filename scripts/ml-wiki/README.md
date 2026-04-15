@@ -32,6 +32,8 @@ Use the **Last processed note ID** from the [Import progress](#import-progress-n
 - `--count` is how many **notes** to take (one wiki topic per note).
 - Alternatively, omit `--pull` and pass **`--input path/to/notes.json`** with the same shape as in [Import from an Anki JSON export](#import-from-an-anki-json-export) (handy for CI or when AnkiConnect is not reachable from the shell).
 
+**Multi-batch automation:** `npm run ml-wiki:import-batch-loop -- --iterations 10 --count 10 --pull --deck "Machine Learning by Henrik Nordberg"` runs import → validate → build → README progress update → git commit for each batch. It reads the [Import progress](#import-progress-note-ids) row in Node so shell scripts do not have to parse Markdown backticks in the table.
+
 **After a successful batch:** (1) `npm run ml-wiki:validate` (2) `npm run build` (3) update the **Last processed note ID** row in this README to the **largest** `noteId` in the batch (see [Import progress](#import-progress-note-ids)) (4) if any new topic’s `papers` entry is missing `url` but the work is on arXiv, add **`https://arxiv.org/abs/…`** (the importer only copies URLs present in the note footer) (5) **commit** the changed files, for example `src/app/ml/wiki/content/topics.json`, `src/app/ml/wiki/content/manifest.json`, this `README.md`, and any new assets under `public/` — message along the lines of `ml-wiki: import batch (max noteId …)`.
 
 #### If validate or build fails
