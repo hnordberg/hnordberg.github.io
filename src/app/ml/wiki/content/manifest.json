@@ -1406,6 +1406,223 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "the-fisher-information-matrix",
+      "title": "The Fisher Information Matrix",
+      "summary": "A matrix from mathematical statistics that quantifies how much information an observable random variable carries about unknown parameters of its distribution. In machine learning, it governs the geometry of parameter space and underpins…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "adaboost-adaptive-boosting",
+        "linear-function"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "adaboost-adaptive-boosting",
+      "title": "AdaBoost (Adaptive Boosting)",
+      "summary": "An ensemble method that sequentially trains weak classifiers (typically decision stumps), reweighting training examples after each round so that misclassified instances receive more attention. The final prediction is a weighted majority…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "landmark",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "information-gain-decision-trees",
+        "the-fisher-information-matrix"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "information-gain-decision-trees",
+      "title": "Information Gain (Decision Trees)",
+      "summary": "The expected reduction in entropy achieved by partitioning a dataset on a given attribute. It is the splitting criterion used by the ID3 and C4.5 decision tree algorithms to greedily select the most informative feature at each node.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "dropout",
+        "adaboost-adaptive-boosting"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "dropout",
+      "title": "Dropout",
+      "summary": "A regularization technique that randomly sets neuron activations to zero during training with probability \\( 1 - p \\), preventing co-adaptation of features and acting as an implicit ensemble over exponentially many thinned sub-networks.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "regularization",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "singular-value-decomposition-svd",
+        "information-gain-decision-trees"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "singular-value-decomposition-svd",
+      "title": "Singular Value Decomposition (SVD)",
+      "summary": "A matrix factorization that decomposes any \\( m \\times n \\) real or complex matrix into the product of three matrices \\( A = U\\Sigma V^T \\), generalizing eigendecomposition to non-square matrices. It is the mathematical foundation for PC…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "maximum-a-posteriori-map-estimation",
+        "dropout"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "maximum-a-posteriori-map-estimation",
+      "title": "Maximum A Posteriori (MAP) Estimation",
+      "summary": "A point estimation method that finds the mode of the posterior distribution \\( P(\\theta|X) \\), combining the likelihood of the data with a prior belief over parameters. MAP generalizes Maximum Likelihood Estimation (MLE) by incorporating…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "supervised-learning",
+        "singular-value-decomposition-svd"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "supervised-learning",
+      "title": "Supervised learning",
+      "summary": "A machine learning paradigm where a model is trained on input-output pairs with explicit labels, learning a mapping from inputs to targets that generalizes to unseen data. It encompasses both classification (discrete targets) and regress…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "unsupervised-learning",
+        "maximum-a-posteriori-map-estimation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "unsupervised-learning",
+      "title": "Unsupervised learning",
+      "summary": "A machine learning paradigm where models learn structure, patterns, or representations from data without explicit labels, including clustering, dimensionality reduction, density estimation, and generative modeling.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "generative",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "reinforcement-learning-rl",
+        "supervised-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "reinforcement-learning-rl",
+      "title": "Reinforcement learning (RL)",
+      "summary": "A machine learning paradigm where an agent learns to make sequential decisions by interacting with an environment, receiving reward signals, and optimizing a policy to maximize cumulative long-term return.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "reinforcement",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "linear-function",
+        "unsupervised-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "linear-function",
+      "title": "Linear function",
+      "summary": "A function satisfying additivity \\( f(x + y) = f(x) + f(y) \\) and homogeneity \\( f(cx) = c\\,f(x) \\), representable as a matrix multiplication \\( f(x) = Wx \\). In deep learning, the term is often used loosely to include affine functions \\…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "the-fisher-information-matrix",
+        "reinforcement-learning-rl"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

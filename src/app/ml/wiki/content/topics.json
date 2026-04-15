@@ -3001,5 +3001,617 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "the-fisher-information-matrix",
+    "title": "The Fisher Information Matrix",
+    "summary": "A matrix from mathematical statistics that quantifies how much information an observable random variable carries about unknown parameters of its distribution. In machine learning, it governs the geometry of parameter space and underpins…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "adaboost-adaptive-boosting",
+      "linear-function"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1925 · Ronald A. Fisher · Theory of Statistical Estimation 1998 · Shun-Ichi Amari · Natural Gradient Works Efficiently in Learning"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A matrix from mathematical statistics that quantifies how much information an observable random variable carries about unknown parameters of its distribution. In machine learning, it governs the geometry of parameter space and underpins Natural Gradient Descent.</p><p>Given a parametric model \\( p(x|\\theta) \\), the <b>score function</b> is the gradient of the log-likelihood with respect to parameters: \\( s(\\theta) = \\nabla_\\theta \\log p(x|\\theta) \\). The score has zero mean under the model, i.e. \\( \\mathbb{E}_{p(x|\\theta)}[s(\\theta)] = 0 \\). The Fisher Information Matrix (FIM) is defined as the covariance of the score:</p>\n\n\\[ \\mathbf{F}(\\theta) = \\mathbb{E}_{p(x|\\theta)}\\!\\left[\\nabla_\\theta \\log p(x|\\theta)\\;\\nabla_\\theta \\log p(x|\\theta)^T\\right] \\]\n\n<p>where \\( \\mathbf{F}(\\theta) \\in \\mathbb{R}^{d \\times d} \\) for \\( d \\) parameters. Under regularity conditions (interchange of differentiation and integration), an equivalent form relates the FIM to the curvature of the log-likelihood:</p>\n\n\\[ \\mathbf{F}(\\theta) = -\\mathbb{E}_{p(x|\\theta)}\\!\\left[\\nabla_\\theta^2 \\log p(x|\\theta)\\right] \\]\n\n<p>This shows the FIM equals the expected negative Hessian of the log-likelihood &mdash; it measures how sharply the log-likelihood curves around \\( \\theta \\), and thus how \"informative\" the data is about the parameters.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; fill: #cbd5e0; }\n            .axis { stroke: #4a5568; stroke-width: 2; }\n            .curve-high { fill: none; stroke: #fc8181; stroke-width: 3; }\n            .curve-low { fill: none; stroke: #63b3ed; stroke-width: 3; }\n            .guide { stroke: #a0aec0; stroke-width: 1.5; stroke-dasharray: 4; }\n        </style>\n        \n        <text x=\"250\" y=\"25\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">Fisher Information as Curvature</text>\n        \n        <!-- Left: High Fisher Information -->\n        <text x=\"130\" y=\"55\" class=\"t\" fill=\"#fc8181\" font-weight=\"bold\">High Fisher Information</text>\n        <text x=\"130\" y=\"75\" class=\"t\" font-size=\"12px\">Sharp Peak, Low Variance</text>\n        <line x1=\"40\" y1=\"200\" x2=\"220\" y2=\"200\" class=\"axis\" />\n        <line x1=\"130\" y1=\"90\" x2=\"130\" y2=\"200\" class=\"axis\" />\n        <path d=\"M 60 200 Q 130 0 200 200\" class=\"curve-high\" />\n        \n        <line x1=\"130\" y1=\"100\" x2=\"145\" y2=\"100\" class=\"guide\" />\n        <line x1=\"130\" y1=\"100\" x2=\"115\" y2=\"100\" class=\"guide\" />\n        \n        <text x=\"130\" y=\"220\" class=\"t\">θ</text>\n        <text x=\"30\" y=\"100\" class=\"t\">log p(x|θ)</text>\n        \n        <!-- Right: Low Fisher Information -->\n        <text x=\"370\" y=\"55\" class=\"t\" fill=\"#63b3ed\" font-weight=\"bold\">Low Fisher Information</text>\n        <text x=\"370\" y=\"75\" class=\"t\" font-size=\"12px\">Flat Peak, High Variance</text>\n        <line x1=\"280\" y1=\"200\" x2=\"460\" y2=\"200\" class=\"axis\" />\n        <line x1=\"370\" y1=\"90\" x2=\"370\" y2=\"200\" class=\"axis\" />\n        <path d=\"M 280 200 Q 370 140 460 200\" class=\"curve-low\" />\n        \n        <text x=\"370\" y=\"220\" class=\"t\">θ</text>\n        \n        <line x1=\"250\" y1=\"40\" x2=\"250\" y2=\"230\" stroke=\"#4a5568\" stroke-dasharray=\"2\" stroke-width=\"2\" />\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">A highly curved log-likelihood (left) corresponds to a large Fisher Information Matrix, indicating \\(\\theta\\) can be estimated with high precision.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key properties and applications in ML",
+        "body": "<ul>\n  <li><b>Cram&eacute;r&ndash;Rao bound:</b> For any unbiased estimator \\( \\hat\\theta \\), the variance is lower-bounded by the inverse FIM: \\( \\text{Var}(\\hat\\theta) \\geq \\mathbf{F}(\\theta)^{-1} \\). This sets the fundamental limit on estimation precision.</li>\n  <li><b>Natural Gradient Descent:</b> Ordinary gradient descent treats parameter space as Euclidean, but the FIM defines a Riemannian metric on the statistical manifold of distributions. Natural gradient descent preconditions the gradient by the inverse FIM: \\( \\theta_{t+1} = \\theta_t - \\eta\\,\\mathbf{F}(\\theta_t)^{-1}\\nabla_\\theta \\mathcal{L} \\). This makes updates invariant to reparameterization and typically converges faster in regions of high curvature. Amari (1998) formalized this connection.</li>\n  <li><b>Relation to KL divergence:</b> The FIM is the Hessian of the KL divergence between nearby distributions: \\( D_{\\text{KL}}(p_\\theta \\| p_{\\theta+\\delta}) \\approx \\tfrac{1}{2}\\delta^T \\mathbf{F}(\\theta)\\,\\delta \\). This makes it the local metric for measuring distance between probability distributions.</li>\n  <li><b>Practical approximations:</b> Computing and inverting the full FIM is \\( O(d^2) \\) in memory and \\( O(d^3) \\) to invert, which is infeasible for modern neural networks with millions of parameters. Approximations include diagonal FIM, block-diagonal (K-FAC by Martens &amp; Grosse, 2015), and the empirical Fisher (using data samples rather than model expectations). These are used in second-order optimizers, Elastic Weight Consolidation (EWC) for continual learning, and Laplace approximation for Bayesian deep learning.</li>\n</ul>\n\n<p>The FIM connects to the Hessian of the loss in supervised learning: when the loss is the negative log-likelihood, the Hessian decomposes into a term involving the FIM (the Gauss&ndash;Newton component) plus residual terms. This is why the FIM is sometimes used as a curvature proxy in optimization.</p><details>\n<summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Equivalence of the two FIM forms.</b> Starting from the score identity \\( \\mathbb{E}[\\nabla_\\theta \\log p(x|\\theta)] = 0 \\), differentiate both sides with respect to \\( \\theta \\):</p>\n\\[ 0 = \\nabla_\\theta \\int p(x|\\theta)\\,\\nabla_\\theta \\log p(x|\\theta)\\,dx = \\int p(x|\\theta)\\left[\\nabla_\\theta^2 \\log p(x|\\theta) + \\nabla_\\theta \\log p(x|\\theta)\\,\\nabla_\\theta \\log p(x|\\theta)^T\\right]dx \\]\n<p>Therefore:</p>\n\\[ \\mathbb{E}\\!\\left[\\nabla_\\theta \\log p\\;\\nabla_\\theta \\log p^T\\right] = -\\mathbb{E}\\!\\left[\\nabla_\\theta^2 \\log p\\right] \\]\n<p>which shows the outer-product form equals the negative expected Hessian form.</p>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "adaboost-adaptive-boosting",
+    "title": "AdaBoost (Adaptive Boosting)",
+    "summary": "An ensemble method that sequentially trains weak classifiers (typically decision stumps), reweighting training examples after each round so that misclassified instances receive more attention. The final prediction is a weighted majority…",
+    "domain": "history",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "landmark",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "information-gain-decision-trees",
+      "the-fisher-information-matrix"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1997 · Yoav Freund, Robert Schapire · A Decision-Theoretic Generalization of On-Line Learning and an Application to Boosting 2000 · Jerome Friedman, Trevor Hastie, Robert Tibshirani · Additive Logistic Regression: a Statistical View of Boosting",
+        "url": "https://www.sciencedirect.com/science/article/pii/S002200009791504X"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An ensemble method that sequentially trains weak classifiers (typically decision stumps), reweighting training examples after each round so that misclassified instances receive more attention. The final prediction is a weighted majority vote of all weak learners.</p><p>AdaBoost was introduced by Freund and Schapire (1997) and was one of the first practical boosting algorithms, proving that combining many \"slightly better than random\" classifiers can yield arbitrarily high accuracy. It won the G&ouml;del Prize in 2003 for its theoretical significance.</p>\n\n<p><b>Algorithm.</b> Given training set \\( \\{(x_i, y_i)\\}_{i=1}^N \\) with \\( y_i \\in \\{-1, +1\\} \\):</p>\n<ol>\n  <li>Initialize sample weights uniformly: \\( w_i^{(1)} = \\frac{1}{N} \\).</li>\n  <li>For each round \\( t = 1, \\ldots, T \\):\n    <ul>\n      <li>Train weak learner \\( h_t(x) \\) on the weighted dataset.</li>\n      <li>Compute weighted classification error: \\( \\varepsilon_t = \\sum_{i=1}^N w_i^{(t)}\\,\\mathbb{1}[h_t(x_i) \\neq y_i] \\).</li>\n      <li>Compute classifier weight: \\( \\alpha_t = \\frac{1}{2}\\ln\\!\\left(\\frac{1 - \\varepsilon_t}{\\varepsilon_t}\\right) \\). Note: \\( \\alpha_t > 0 \\) when \\( \\varepsilon_t < 0.5 \\) (better than random), and \\( \\alpha_t \\to \\infty \\) as \\( \\varepsilon_t \\to 0 \\).</li>\n      <li>Update sample weights: \\( w_i^{(t+1)} = w_i^{(t)} \\exp\\!\\bigl(-\\alpha_t\\, y_i\\, h_t(x_i)\\bigr) \\), then renormalize so weights sum to 1. Misclassified examples (where \\( y_i h_t(x_i) = -1 \\)) have their weights multiplied by \\( e^{\\alpha_t} \\); correct ones by \\( e^{-\\alpha_t} \\).</li>\n    </ul>\n  </li>\n  <li>Final classifier: \\( H(x) = \\text{sign}\\!\\left(\\sum_{t=1}^T \\alpha_t\\, h_t(x)\\right) \\).</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; fill: #fff; }\n            .dot { fill: #48bb78; }\n            .cross { fill: none; stroke: #fc8181; stroke-width: 2; }\n            .bound { stroke: #63b3ed; stroke-width: 2; fill: none; stroke-dasharray: 4;}\n            .arr { stroke: #cbd5e0; stroke-width: 2; marker-end: url(#arrow-ada_1771711355359); }\n        </style>\n        <defs>\n            <marker id=\"arrow-ada_1771711355359\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/></marker>\n        </defs>\n\n        <text x=\"250\" y=\"25\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">AdaBoost Sequential Reweighting</text>\n\n        <!-- Round 1 -->\n        <rect x=\"30\" y=\"50\" width=\"120\" height=\"120\" fill=\"#2b6cb0\" fill-opacity=\"0.2\" rx=\"4\" stroke=\"#4a5568\" />\n        <text x=\"90\" y=\"190\" class=\"t\">Round 1</text>\n        <circle cx=\"60\" cy=\"80\" r=\"4\" class=\"dot\" />\n        <circle cx=\"100\" cy=\"70\" r=\"4\" class=\"dot\" />\n        <circle cx=\"130\" cy=\"110\" r=\"4\" class=\"dot\" />\n        \n        <path d=\"M 55 135 L 65 145 M 55 145 L 65 135\" class=\"cross\" />\n        <path d=\"M 85 155 L 95 165 M 85 165 L 95 155\" class=\"cross\" />\n        <path d=\"M 125 145 L 135 155 M 125 155 L 135 145\" class=\"cross\" />\n        \n        <!-- Decision Bound 1 -->\n        <line x1=\"35\" y1=\"120\" x2=\"145\" y2=\"120\" class=\"bound\" />\n        <text x=\"90\" y=\"40\" class=\"t\" fill=\"#a0aec0\" font-size=\"11px\">Weight uniform</text>\n\n        <!-- Misclassified in 1 becomes larger in 2 -->\n        <circle cx=\"130\" cy=\"110\" r=\"8\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\" /> <!-- Correctly classified dot, but what if it was misclassified? Wait, if boundary is y=120, crosses are below, dots are above. Wait, the cross at x=130 is 145 (below), so it's correct. Assume a dot at x=60 y=140 is misclassified. -->\n        \n        <path d=\"M 160 110 L 180 110\" class=\"arr\" />\n\n        <!-- Round 2 -->\n        <rect x=\"190\" y=\"50\" width=\"120\" height=\"120\" fill=\"#2b6cb0\" fill-opacity=\"0.2\" rx=\"4\" stroke=\"#4a5568\" />\n        <text x=\"250\" y=\"190\" class=\"t\">Round 2</text>\n        \n        <!-- Repositioned data to show misclassifications -->\n        <!-- Dots are true positive, Crosses are true negative. -->\n        <circle cx=\"220\" cy=\"80\" r=\"3\" class=\"dot\" /> <!-- correctly classified R1 -->\n        <circle cx=\"260\" cy=\"70\" r=\"3\" class=\"dot\" /> <!-- correctly classified R1 -->\n        \n        <circle cx=\"290\" cy=\"110\" r=\"8\" class=\"dot\" /> <!-- MISCLASSIFIED by a vertical bound in R1? Let's just draw them bigger -->\n        \n        <path d=\"M 215 135 L 225 145 M 215 145 L 225 135\" class=\"cross\" stroke-width=\"2\" /> <!-- correctly classified -->\n        <path d=\"M 245 155 L 255 165 M 245 165 L 255 155\" class=\"cross\" stroke-width=\"4\" /> <!-- Mislcassified, bigger -->\n        <path d=\"M 285 145 L 295 155 M 285 155 L 295 145\" class=\"cross\" stroke-width=\"2\" />\n        \n        <text x=\"250\" y=\"40\" class=\"t\" fill=\"#f6ad55\" font-size=\"11px\">Misclassified get bigger</text>\n        <line x1=\"280\" y1=\"55\" x2=\"280\" y2=\"165\" class=\"bound\" /> <!-- New decision bound separating the large dot -->\n\n        <path d=\"M 320 110 L 340 110\" class=\"arr\" />\n\n        <!-- Round T -->\n        <rect x=\"350\" y=\"50\" width=\"120\" height=\"120\" fill=\"#2b6cb0\" fill-opacity=\"0.2\" rx=\"4\" stroke=\"#4a5568\" />\n        <text x=\"410\" y=\"190\" class=\"t\">Round T</text>\n        \n        <circle cx=\"380\" cy=\"80\" r=\"6\" class=\"dot\" />\n        <circle cx=\"420\" cy=\"70\" r=\"3\" class=\"dot\" />\n        <circle cx=\"450\" cy=\"110\" r=\"3\" class=\"dot\" />\n        \n        <path d=\"M 375 135 L 385 145 M 375 145 L 385 135\" class=\"cross\" stroke-width=\"2\" />\n        <path d=\"M 405 155 L 415 165 M 405 165 L 415 155\" class=\"cross\" stroke-width=\"2\" />\n        <path d=\"M 445 145 L 455 155 M 445 155 L 455 145\" class=\"cross\" stroke-width=\"4\" />\n        \n        <text x=\"410\" y=\"40\" class=\"t\" fill=\"#68d391\" font-size=\"11px\">Complex bound emerges</text>\n        <path d=\"M 360 90 Q 400 90 410 130 T 450 130\" class=\"bound\" stroke-dasharray=\"0\" stroke=\"#48bb78\" /> <!-- Final non-linear bound -->\n\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">In each round, the algorithm increases the weight of misclassified examples (larger symbols), forcing subsequent weak learners to focus on the hardest cases.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Theoretical properties",
+        "body": "<ul>\n  <li><b>Training error bound:</b> The training error of the ensemble decreases exponentially with rounds: \\( \\text{err}_{\\text{train}} \\leq \\exp\\!\\left(-2\\sum_{t=1}^T \\gamma_t^2\\right) \\) where \\( \\gamma_t = \\frac{1}{2} - \\varepsilon_t \\) is the \"edge\" of each weak learner over random guessing.</li>\n  <li><b>Exponential loss minimization:</b> Breiman (and later Friedman, Hastie, Tibshirani 2000) showed that AdaBoost is equivalent to forward stagewise additive modeling of the exponential loss \\( \\mathcal{L} = \\sum_i \\exp(-y_i F(x_i)) \\) where \\( F(x) = \\sum_t \\alpha_t h_t(x) \\). This connection to loss minimization opened the door to Gradient Boosting.</li>\n  <li><b>Margin theory:</b> Schapire et al. (1998) showed AdaBoost tends to maximize the margin of training examples, which partially explains its resistance to overfitting in practice even as the number of rounds grows &mdash; though it can overfit with noisy data.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connections:</b> AdaBoost is a special case of the more general Gradient Boosting framework (Friedman, 2001) using exponential loss. Unlike Random Forests (which reduce variance via bagging), boosting methods like AdaBoost reduce bias by iteratively correcting errors. XGBoost and LightGBM are modern descendants that use different loss functions and tree-building strategies.</p><details>\n<summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Deriving \\( \\alpha_t \\) from exponential loss.</b> At round \\( t \\), we want to find \\( \\alpha_t \\) that minimizes:</p>\n\\[ \\sum_{i=1}^N w_i^{(t)} \\exp(-\\alpha\\, y_i\\, h_t(x_i)) \\]\n<p>Split the sum into correct (\\( y_i h_t = +1 \\)) and incorrect (\\( y_i h_t = -1 \\)) examples:</p>\n\\[ = e^{-\\alpha}(1 - \\varepsilon_t) + e^{\\alpha}\\,\\varepsilon_t \\]\n<p>Taking the derivative with respect to \\( \\alpha \\) and setting to zero:</p>\n\\[ -e^{-\\alpha}(1-\\varepsilon_t) + e^{\\alpha}\\varepsilon_t = 0 \\implies e^{2\\alpha} = \\frac{1 - \\varepsilon_t}{\\varepsilon_t} \\implies \\alpha_t = \\frac{1}{2}\\ln\\!\\left(\\frac{1 - \\varepsilon_t}{\\varepsilon_t}\\right) \\]\n</details>\n\n<details>\n<summary>Python</summary>\n<pre><code>import numpy as np\n\ndef adaboost(X, y, T, weak_learner_cls):\n    '''AdaBoost for binary classification (y in {-1, +1}).'''\n    N = len(y)\n    w = np.ones(N) / N\n    alphas, learners = [], []\n\n    for t in range(T):\n        h = weak_learner_cls()\n        h.fit(X, y, sample_weight=w)\n        preds = h.predict(X)\n        err = np.dot(w, preds != y)\n        err = np.clip(err, 1e-10, 1 - 1e-10)\n        alpha = 0.5 * np.log((1 - err) / err)\n        w *= np.exp(-alpha * y * preds)\n        w /= w.sum()\n        alphas.append(alpha)\n        learners.append(h)\n\n    def predict(X_new):\n        return np.sign(sum(a * h.predict(X_new)\n                           for a, h in zip(alphas, learners)))\n    return predict\n</code></pre>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "information-gain-decision-trees",
+    "title": "Information Gain (Decision Trees)",
+    "summary": "The expected reduction in entropy achieved by partitioning a dataset on a given attribute. It is the splitting criterion used by the ID3 and C4.5 decision tree algorithms to greedily select the most informative feature at each node.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "dropout",
+      "adaboost-adaptive-boosting"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · J. Ross Quinlan · Induction of Decision Trees (Machine Learning, Vol. 1) 1984 · Leo Breiman et al. · Classification and Regression Trees"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The expected reduction in entropy achieved by partitioning a dataset on a given attribute. It is the splitting criterion used by the ID3 and C4.5 decision tree algorithms to greedily select the most informative feature at each node.</p><p><b>Entropy</b> measures the impurity (uncertainty) of a set \\( S \\) with \\( c \\) classes:</p>\n\\[ H(S) = -\\sum_{i=1}^{c} p_i \\log_2 p_i \\]\n<p>where \\( p_i \\) is the proportion of class \\( i \\) in \\( S \\). Entropy is 0 for a pure node (all one class) and maximal at \\( \\log_2 c \\) for uniform class distribution.</p>\n\n<p><b>Information Gain</b> for attribute \\( A \\) with possible values \\( \\text{Values}(A) \\) is:</p>\n\\[ IG(S, A) = H(S) - \\sum_{v \\in \\text{Values}(A)} \\frac{|S_v|}{|S|}\\,H(S_v) \\]\n<p>where \\( S_v \\subseteq S \\) is the subset of examples where attribute \\( A \\) takes value \\( v \\). The algorithm greedily selects the attribute \\( A^* = \\arg\\max_A IG(S, A) \\) at each node.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; fill: #fff; }\n            .node { fill: #2d3748; stroke: #4a5568; stroke-width: 2; rx: 8; }\n            .dot-pos { fill: #48bb78; }\n            .dot-neg { fill: #fc8181; }\n            .line { stroke: #a0aec0; stroke-width: 2; }\n        </style>\n\n        <text x=\"250\" y=\"25\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">Information Gain = H(Parent) - Weighted H(Children)</text>\n\n        <!-- Parent Node -->\n        <rect x=\"200\" y=\"45\" width=\"100\" height=\"40\" class=\"node\" />\n        <circle cx=\"220\" cy=\"55\" r=\"4\" class=\"dot-pos\" />\n        <circle cx=\"230\" cy=\"55\" r=\"4\" class=\"dot-pos\" />\n        <circle cx=\"240\" cy=\"55\" r=\"4\" class=\"dot-pos\" />\n        <circle cx=\"250\" cy=\"55\" r=\"4\" class=\"dot-pos\" />\n        \n        <circle cx=\"260\" cy=\"55\" r=\"4\" class=\"dot-neg\" />\n        <circle cx=\"270\" cy=\"55\" r=\"4\" class=\"dot-neg\" />\n        <circle cx=\"280\" cy=\"55\" r=\"4\" class=\"dot-neg\" />\n        <circle cx=\"290\" cy=\"55\" r=\"4\" class=\"dot-neg\" />\n        \n        <text x=\"250\" y=\"75\" class=\"t\" font-size=\"12px\">H = 1.0 (High impurity)</text>\n\n        <!-- Split lines -->\n        <line x1=\"250\" y1=\"85\" x2=\"150\" y2=\"135\" class=\"line\" />\n        <line x1=\"250\" y1=\"85\" x2=\"350\" y2=\"135\" class=\"line\" />\n\n        <text x=\"180\" y=\"115\" class=\"t\" fill=\"#63b3ed\">Feature A = 0</text>\n        <text x=\"320\" y=\"115\" class=\"t\" fill=\"#63b3ed\">Feature A = 1</text>\n\n        <!-- Child Node 1 -->\n        <rect x=\"100\" y=\"135\" width=\"100\" height=\"40\" class=\"node\" />\n        <circle cx=\"130\" cy=\"145\" r=\"4\" class=\"dot-pos\" />\n        <circle cx=\"140\" cy=\"145\" r=\"4\" class=\"dot-pos\" />\n        <circle cx=\"150\" cy=\"145\" r=\"4\" class=\"dot-pos\" />\n        <circle cx=\"160\" cy=\"145\" r=\"4\" class=\"dot-pos\" />\n        <circle cx=\"170\" cy=\"145\" r=\"4\" class=\"dot-neg\" />\n        \n        <text x=\"150\" y=\"165\" class=\"t\" font-size=\"12px\">H ≈ 0.72</text>\n\n        <!-- Child Node 2 -->\n        <rect x=\"300\" y=\"135\" width=\"100\" height=\"40\" class=\"node\" />\n        <circle cx=\"340\" cy=\"145\" r=\"4\" class=\"dot-neg\" />\n        <circle cx=\"350\" cy=\"145\" r=\"4\" class=\"dot-neg\" />\n        <circle cx=\"360\" cy=\"145\" r=\"4\" class=\"dot-neg\" />\n        \n        <text x=\"350\" y=\"165\" class=\"t\" font-size=\"12px\">H = 0 (Pure!)</text>\n        \n        <!-- Calculation -->\n        <text x=\"250\" y=\"210\" class=\"t\" fill=\"#f6ad55\">IG = 1.0 - [ (5/8) × 0.72 + (3/8) × 0.0 ] ≈ 0.55</text>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Splitting on Feature A separates the classes well, dropping the average entropy. The difference is the Information Gain.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Concrete example.</b> Consider a binary classification dataset with 14 examples: 9 positive, 5 negative. Root entropy is \\( H = -\\frac{9}{14}\\log_2\\frac{9}{14} - \\frac{5}{14}\\log_2\\frac{5}{14} \\approx 0.940 \\) bits. If splitting on attribute \"Outlook\" (Sunny/Overcast/Rain) produces subsets with entropies 0.971, 0.0, 0.971 and sizes 5, 4, 5 respectively, the information gain is \\( 0.940 - \\frac{5}{14}(0.971) - \\frac{4}{14}(0) - \\frac{5}{14}(0.971) \\approx 0.247 \\) bits.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Limitations and alternatives",
+        "body": "<ul>\n  <li><b>Bias toward high-cardinality features:</b> Information Gain favors attributes with many distinct values (e.g., an ID column achieves maximal IG but is useless for generalization). C4.5 (Quinlan, 1993) addresses this with the <b>Gain Ratio</b>, which normalizes IG by the intrinsic information (split information) of the attribute: \\( GR(S, A) = \\frac{IG(S, A)}{-\\sum_v \\frac{|S_v|}{|S|}\\log_2 \\frac{|S_v|}{|S|}} \\).</li>\n  <li><b>Gini impurity:</b> CART (Breiman et al., 1984) uses Gini impurity \\( G(S) = 1 - \\sum_{i=1}^c p_i^2 \\) instead of entropy. Gini is computationally cheaper (no logarithm) and in practice produces very similar trees. The Gini-based splitting criterion measures the reduction in Gini impurity rather than entropy.</li>\n  <li><b>Connection to mutual information:</b> Information Gain is equivalent to the mutual information \\( I(Y; A) \\) between the class variable \\( Y \\) and attribute \\( A \\). This connects decision tree splitting to information-theoretic feature selection.</li>\n</ul>\n\n<p>Information Gain is foundational to all tree-based ensemble methods (Random Forests, Gradient Boosted Trees) since individual trees in these ensembles use entropy or Gini-based splits internally.</p><details>\n<summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Information Gain as mutual information.</b> By definition of mutual information:</p>\n\\[ I(Y; A) = H(Y) - H(Y|A) = H(Y) - \\sum_{v} P(A=v)\\,H(Y|A=v) \\]\n<p>Since \\( P(A=v) = \\frac{|S_v|}{|S|} \\) and \\( H(Y|A=v) = H(S_v) \\), this is exactly \\( IG(S, A) \\).</p>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "dropout",
+    "title": "Dropout",
+    "summary": "A regularization technique that randomly sets neuron activations to zero during training with probability \\( 1 - p \\), preventing co-adaptation of features and acting as an implicit ensemble over exponentially many thinned sub-networks.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "regularization",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "singular-value-decomposition-svd",
+      "information-gain-decision-trees"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2014 · Srivastava, Hinton, Krizhevsky, Sutskever, Salakhutdinov · Dropout: A Simple Way to Prevent Neural Networks from Overfitting 2016 · Yarin Gal, Zoubin Ghahramani · Dropout as a Bayesian Approximation",
+        "url": "https://jmlr.org/papers/v15/srivastava14a.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A regularization technique that randomly sets neuron activations to zero during training with probability \\( 1 - p \\), preventing co-adaptation of features and acting as an implicit ensemble over exponentially many thinned sub-networks.</p><p>Dropout was introduced by Srivastava et al. (2014), building on earlier ideas by Hinton et al. (2012). The core motivation is that neural networks with many parameters tend to overfit by developing complex co-adaptations where specific neurons become dependent on the presence of other specific neurons. By randomly \"dropping\" neurons, each neuron must learn features that are independently useful.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; fill: #fff; }\n            .node { fill: #2b6cb0; stroke: #63b3ed; stroke-width: 2; }\n            .dropped { fill: none; stroke: #4a5568; stroke-dasharray: 4; stroke-width: 2; }\n            .conn { stroke: #cbd5e0; stroke-width: 1; opacity: 0.6; }\n            .conn-dropped { stroke: #4a5568; stroke-width: 1; stroke-dasharray: 2; opacity: 0.3; }\n        </style>\n\n        <text x=\"250\" y=\"25\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">Standard Network vs. Thinned Network (Dropout)</text>\n\n        <!-- Standard Network -->\n        <text x=\"130\" y=\"55\" class=\"t\" font-weight=\"bold\">Standard Network</text>\n        \n        <!-- Input Layer -->\n        <!-- Layer 1 -->\n        <!-- Layer 2 -->\n        <!-- Just approximate coordinates -->\n        <g transform=\"translate(40, 70)\">\n            <circle cx=\"30\" cy=\"20\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"30\" cy=\"60\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"30\" cy=\"100\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"30\" cy=\"140\" r=\"10\" class=\"node\"></circle>\n            \n            <circle cx=\"90\" cy=\"20\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"90\" cy=\"60\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"90\" cy=\"100\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"90\" cy=\"140\" r=\"10\" class=\"node\"></circle>\n            \n            <circle cx=\"150\" cy=\"60\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"150\" cy=\"100\" r=\"10\" class=\"node\"></circle>\n            \n            <!-- Standard connections -->\n            <!-- We'll just draw lines between them -->\n            <path d=\"M 40 20 L 80 20  M 40 20 L 80 60  M 40 20 L 80 100 M 40 20 L 80 140\" class=\"conn\"></path>\n            <path d=\"M 40 60 L 80 20  M 40 60 L 80 60  M 40 60 L 80 100 M 40 60 L 80 140\" class=\"conn\"></path>\n            <path d=\"M 40 100 L 80 20 M 40 100 L 80 60 M 40 100 L 80 100 M 40 100 L 80 140\" class=\"conn\"></path>\n            <path d=\"M 40 140 L 80 20 M 40 140 L 80 60 M 40 140 L 80 100 M 40 140 L 80 140\" class=\"conn\"></path>\n            \n            <path d=\"M 100 20 L 140 60 M 100 20 L 140 100\" class=\"conn\"></path>\n            <path d=\"M 100 60 L 140 60 M 100 60 L 140 100\" class=\"conn\"></path>\n            <path d=\"M 100 100 L 140 60 M 100 100 L 140 100\" class=\"conn\"></path>\n            <path d=\"M 100 140 L 140 60 M 100 140 L 140 100\" class=\"conn\"></path>\n        </g>\n        \n        <line x1=\"250\" y1=\"40\" x2=\"250\" y2=\"220\" stroke=\"#4a5568\" stroke-dasharray=\"2\" stroke-width=\"2\"></line>\n\n        <!-- Thinned Network -->\n        <text x=\"370\" y=\"55\" class=\"t\" font-weight=\"bold\">After Dropout</text>\n        <text x=\"370\" y=\"70\" class=\"t\" font-size=\"11px\" fill=\"#a0aec0\">(p = 0.5)</text>\n\n        <!-- Use dropped node classes -->\n        <g transform=\"translate(280, 70)\">\n            <circle cx=\"30\" cy=\"20\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"30\" cy=\"60\" r=\"10\" class=\"dropped\"></circle>\n            <circle cx=\"30\" cy=\"100\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"30\" cy=\"140\" r=\"10\" class=\"node\"></circle>\n            \n            <circle cx=\"90\" cy=\"20\" r=\"10\" class=\"dropped\"></circle>\n            <circle cx=\"90\" cy=\"60\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"90\" cy=\"100\" r=\"10\" class=\"dropped\"></circle>\n            <circle cx=\"90\" cy=\"140\" r=\"10\" class=\"node\"></circle>\n            \n            <circle cx=\"150\" cy=\"60\" r=\"10\" class=\"node\"></circle>\n            <circle cx=\"150\" cy=\"100\" r=\"10\" class=\"node\"></circle>\n            \n            <!-- Connections: only solid if both ends present -->\n            <!-- 30,20 to 90,? (only 60 and 140 are present) -->\n            <path d=\"M 40 20 L 80 60 M 40 20 L 80 140\" class=\"conn\"></path>\n            <path d=\"M 40 20 L 80 20 M 40 20 L 80 100\" class=\"conn-dropped\"></path>\n            \n            <!-- 30,60 is dropped -->\n            <path d=\"M 40 60 L 80 20 M 40 60 L 80 60 M 40 60 L 80 100 M 40 60 L 80 140\" class=\"conn-dropped\"></path>\n            \n            <!-- 30,100 to 90,? (60 and 140 present) -->\n            <path d=\"M 40 100 L 80 60 M 40 100 L 80 140\" class=\"conn\"></path>\n            <path d=\"M 40 100 L 80 20 M 40 100 L 80 100\" class=\"conn-dropped\"></path>\n            \n            <!-- 30,140 to 90,? (60 and 140 present) -->\n            <path d=\"M 40 140 L 80 60 M 40 140 L 80 140\" class=\"conn\"></path>\n            <path d=\"M 40 140 L 80 20 M 40 140 L 80 100\" class=\"conn-dropped\"></path>\n            \n            <!-- Hidden to Output -->\n            <!-- 90,60 present -->\n            <path d=\"M 100 60 L 140 60 M 100 60 L 140 100\" class=\"conn\"></path>\n            <!-- 90,140 present -->\n            <path d=\"M 100 140 L 140 60 M 100 140 L 140 100\" class=\"conn\"></path>\n            <!-- Others dropped -->\n            <path d=\"M 100 20 L 140 60 M 100 20 L 140 100\" class=\"conn-dropped\"></path>\n            <path d=\"M 100 100 L 140 60 M 100 100 L 140 100\" class=\"conn-dropped\"></path>\n        </g>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Units (and their connections) are randomly suppressed during training, forcing the network to distribute learned representations.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Mechanism.</b> During training, for each forward pass, each hidden unit \\( h_j \\) is multiplied by a Bernoulli random variable \\( r_j \\sim \\text{Bernoulli}(p) \\):</p>\n\\[ \\tilde{h}_j = r_j \\cdot h_j \\]\n<p>where \\( p \\) is the <b>keep probability</b> (typically 0.5 for hidden layers, 0.8 for input layers). The resulting thinned network is trained via backpropagation as usual. At test time, all units are active but outputs are scaled by \\( p \\) to match the expected training-time activation. Equivalently, <b>inverted dropout</b> (the standard modern implementation) scales activations by \\( 1/p \\) during training and requires no change at test time.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Theoretical interpretations",
+        "body": "<ul>\n  <li><b>Ensemble averaging:</b> A network with \\( n \\) units admits \\( 2^n \\) possible thinned sub-networks. Dropout approximately trains all of them with shared weights and averages their predictions at test time. This is analogous to bagging but with extreme weight sharing.</li>\n  <li><b>Bayesian approximation:</b> Gal and Ghahramani (2016) showed that dropout training is mathematically equivalent to approximate variational inference in a deep Gaussian process. Applying dropout at test time (MC Dropout) yields calibrated uncertainty estimates.</li>\n  <li><b>Adaptive regularization:</b> Wager et al. (2013) showed dropout on logistic regression is equivalent to an adaptive L2 penalty that is stronger for rare features, connecting it to classical regularization.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Practical considerations",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n  <tbody><tr style=\"background:#4a5568; color:#fff;\">\n    <th style=\"padding:6px; text-align:left;\">Layer type</th>\n    <th style=\"padding:6px; text-align:left;\">Typical dropout rate \\( 1-p \\)</th>\n    <th style=\"padding:6px; text-align:left;\">Notes</th>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Input layer</td>\n    <td style=\"padding:6px;\">0.1–0.2</td>\n    <td style=\"padding:6px;\">Light dropout to preserve input signal</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Hidden FC layers</td>\n    <td style=\"padding:6px;\">0.5</td>\n    <td style=\"padding:6px;\">The original default from Hinton et al.</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Conv layers</td>\n    <td style=\"padding:6px;\">0.1–0.3</td>\n    <td style=\"padding:6px;\">Lower rates since convolutions share parameters; Spatial Dropout drops entire feature maps</td>\n  </tr>\n  <tr>\n    <td style=\"padding:6px;\">Recurrent layers</td>\n    <td style=\"padding:6px;\">0.2–0.5</td>\n    <td style=\"padding:6px;\">Applied to non-recurrent connections; Variational Dropout (Gal &amp; Ghahramani, 2016) uses same mask across time steps</td>\n  </tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connections:</b> In Transformers, dropout is typically applied to attention weights and after feed-forward sub-layers. DropConnect (Wan et al., 2013) generalizes dropout to dropping individual weights rather than activations. DropBlock (Ghiasi et al., 2018) drops contiguous regions in feature maps for CNNs. Batch Normalization has a similar regularizing effect and is sometimes used as a partial substitute.</p><details>\n<summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Expected value at test time.</b> During training, the expected activation of unit \\( j \\) is:</p>\n\\[ \\mathbb{E}[\\tilde{h}_j] = \\mathbb{E}[r_j] \\cdot h_j = p \\cdot h_j \\]\n<p>At test time without dropout, the activation is \\( h_j \\). To match the training-time expected value, we scale by \\( p \\): \\( \\hat{h}_j = p \\cdot h_j \\). Inverted dropout instead divides by \\( p \\) during training: \\( \\tilde{h}_j = \\frac{r_j}{p} \\cdot h_j \\), so \\( \\mathbb{E}[\\tilde{h}_j] = h_j \\), requiring no test-time adjustment.</p>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "singular-value-decomposition-svd",
+    "title": "Singular Value Decomposition (SVD)",
+    "summary": "A matrix factorization that decomposes any \\( m \\times n \\) real or complex matrix into the product of three matrices \\( A = U\\Sigma V^T \\), generalizing eigendecomposition to non-square matrices. It is the mathematical foundation for PC…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "maximum-a-posteriori-map-estimation",
+      "dropout"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1873 · Beltrami, Jordan · Sulle funzioni bilineari (Giornale di Matematiche) 1965 · Gene Golub, William Kahan · Calculating the Singular Values and Pseudo-Inverse of a Matrix"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A matrix factorization that decomposes any \\( m \\times n \\) real or complex matrix into the product of three matrices \\( A = U\\Sigma V^T \\), generalizing eigendecomposition to non-square matrices. It is the mathematical foundation for PCA, latent semantic analysis, low-rank approximation, and pseudoinverse computation.</p><p>SVD is one of the most important and universally applicable decompositions in linear algebra. It was developed over the 19th century by Beltrami (1873) and Jordan (1874), with computational algorithms refined by Golub and Kahan (1965) and Golub and Reinsch (1970).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; fill: #fff; }\n            .box { fill: #2b6cb0; fill-opacity: 0.3; stroke: #63b3ed; stroke-width: 2; rx: 4; }\n            .diag { fill: none; stroke: #f6ad55; stroke-width: 2; stroke-dasharray: 4; }\n            .lbl { fill: #a0aec0; font-size: 11px; }\n        </style>\n\n        <text x=\"250\" y=\"25\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">A = U &Sigma; V<tspan baseline-shift=\"super\" font-size=\"75%\">T</tspan></text>\n\n        <!-- A Matrix -->\n        <rect x=\"50\" y=\"60\" width=\"60\" height=\"120\" class=\"box\" />\n        <text x=\"80\" y=\"120\" class=\"t\" font-size=\"24px\">A</text>\n        <text x=\"80\" y=\"195\" class=\"lbl\" text-anchor=\"middle\">m &times; n</text>\n        \n        <text x=\"135\" y=\"120\" class=\"t\">=</text>\n\n        <!-- U Matrix -->\n        <rect x=\"160\" y=\"60\" width=\"80\" height=\"120\" class=\"box\" />\n        <text x=\"200\" y=\"120\" class=\"t\" font-size=\"24px\">U</text>\n        <text x=\"200\" y=\"195\" class=\"lbl\" text-anchor=\"middle\">m &times; m</text>\n        \n        <!-- Sigma Matrix -->\n        <rect x=\"250\" y=\"60\" width=\"60\" height=\"120\" class=\"box\" stroke=\"#f6ad55\" fill=\"#dd6b20\" />\n        <text x=\"280\" y=\"120\" class=\"t\" font-size=\"24px\">&Sigma;</text>\n        <line x1=\"250\" y1=\"60\" x2=\"310\" y2=\"120\" class=\"diag\" stroke=\"#fff\" />\n        <text x=\"280\" y=\"195\" class=\"lbl\" text-anchor=\"middle\">m &times; n</text>\n\n        <!-- V^T Matrix -->\n        <rect x=\"320\" y=\"60\" width=\"120\" height=\"60\" class=\"box\" />\n        <text x=\"380\" y=\"90\" class=\"t\" font-size=\"24px\">V<tspan baseline-shift=\"super\" font-size=\"75%\">T</tspan></text>\n        <text x=\"380\" y=\"135\" class=\"lbl\" text-anchor=\"middle\">n &times; n</text>\n\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">A data matrix \\(A\\) separates into orthonormal columns \\(U\\) (left singular vectors), diagonal \\(\\Sigma\\) (singular values), and orthonormal rows \\(V^T\\) (right singular vectors).</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Decomposition.</b> Any matrix \\( A \\in \\mathbb{R}^{m \\times n} \\) can be factored as:</p>\n\\[ A = U \\Sigma V^T \\]\n<p>where:</p>\n<ul>\n  <li>\\( U \\in \\mathbb{R}^{m \\times m} \\) — orthogonal matrix whose columns are the <b>left singular vectors</b> (eigenvectors of \\( AA^T \\)).</li>\n  <li>\\( \\Sigma \\in \\mathbb{R}^{m \\times n} \\) — diagonal matrix with non-negative entries \\( \\sigma_1 \\geq \\sigma_2 \\geq \\cdots \\geq \\sigma_{\\min(m,n)} \\geq 0 \\), the <b>singular values</b> (square roots of eigenvalues of \\( A^TA \\) or equivalently \\( AA^T \\)).</li>\n  <li>\\( V \\in \\mathbb{R}^{n \\times n} \\) — orthogonal matrix whose columns are the <b>right singular vectors</b> (eigenvectors of \\( A^TA \\)).</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Geometric interpretation.</b> Any linear transformation can be decomposed into three steps: (1) rotate/reflect the input space (\\( V^T \\)), (2) scale along coordinate axes (\\( \\Sigma \\)), (3) rotate/reflect the output space (\\( U \\)). The singular values quantify how much the transformation stretches along each principal direction.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Truncated SVD and the Eckart–Young theorem.</b> The rank-\\( k \\) truncated SVD \\( A_k = U_k \\Sigma_k V_k^T \\) (keeping only the top \\( k \\) singular values) provides the <b>optimal rank-\\( k \\) approximation</b> of \\( A \\) in both Frobenius and spectral norms:</p>\n\\[ A_k = \\arg\\min_{\\text{rank}(B) = k} \\|A - B\\|_F \\quad \\text{with} \\quad \\|A - A_k\\|_F = \\sqrt{\\sigma_{k+1}^2 + \\cdots + \\sigma_r^2} \\]\n<p>where \\( r = \\text{rank}(A) \\). This result is foundational for dimensionality reduction.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Applications in ML",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n  <tbody><tr style=\"background:#4a5568; color:#fff;\">\n    <th style=\"padding:6px; text-align:left;\">Application</th>\n    <th style=\"padding:6px; text-align:left;\">How SVD is used</th>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">PCA</td>\n    <td style=\"padding:6px;\">Right singular vectors of centered data matrix are the principal components; \\( \\sigma_i^2 / (N-1) \\) gives the variance explained</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Latent Semantic Analysis</td>\n    <td style=\"padding:6px;\">Truncated SVD on term-document matrix reveals latent semantic dimensions</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Recommender systems</td>\n    <td style=\"padding:6px;\">Matrix factorization of user-item rating matrices; basis of Simon Funk's Netflix Prize approach</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Pseudoinverse</td>\n    <td style=\"padding:6px;\">Moore–Penrose pseudoinverse computed via \\( A^+ = V\\Sigma^+ U^T \\) where \\( \\Sigma^+ \\) inverts non-zero singular values</td>\n  </tr>\n  <tr>\n    <td style=\"padding:6px;\">Model compression</td>\n    <td style=\"padding:6px;\">Low-rank approximation of weight matrices in neural networks to reduce parameter count and computation</td>\n  </tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Computational cost:</b> Full SVD is \\( O(\\min(m^2 n, mn^2)) \\). Randomized SVD (Halko, Martinsson, Tropp, 2011) computes approximate truncated SVD in \\( O(mn \\log k) \\) for rank-\\( k \\) approximation, making it practical for large-scale applications (used by scikit-learn's <code>TruncatedSVD</code>).</p><details>\n<summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Existence of SVD.</b> Consider \\( A^T A \\), which is symmetric positive semi-definite. Its eigendecomposition gives \\( A^T A = V \\Lambda V^T \\) with eigenvalues \\( \\lambda_i \\geq 0 \\). Define \\( \\sigma_i = \\sqrt{\\lambda_i} \\) and \\( \\Sigma = \\text{diag}(\\sigma_1, \\ldots, \\sigma_r) \\). For each non-zero singular value, define \\( u_i = \\frac{1}{\\sigma_i} A v_i \\). These vectors are orthonormal:</p>\n\\[ u_i^T u_j = \\frac{1}{\\sigma_i \\sigma_j} v_i^T A^T A v_j = \\frac{1}{\\sigma_i \\sigma_j} v_i^T \\lambda_j v_j = \\frac{\\sigma_j}{\\sigma_i}\\delta_{ij} = \\delta_{ij} \\]\n<p>Extending \\( \\{u_i\\} \\) to a full orthonormal basis of \\( \\mathbb{R}^m \\) gives \\( U \\), and we obtain \\( A = U\\Sigma V^T \\).</p>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "maximum-a-posteriori-map-estimation",
+    "title": "Maximum A Posteriori (MAP) Estimation",
+    "summary": "A point estimation method that finds the mode of the posterior distribution \\( P(\\theta|X) \\), combining the likelihood of the data with a prior belief over parameters. MAP generalizes Maximum Likelihood Estimation (MLE) by incorporating…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "supervised-learning",
+      "singular-value-decomposition-svd"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1774 · Pierre-Simon Laplace · Mémoire sur la probabilité des causes par les événemens 2006 · Christopher Bishop · Pattern Recognition and Machine Learning"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A point estimation method that finds the mode of the posterior distribution \\( P(\\theta|X) \\), combining the likelihood of the data with a prior belief over parameters. MAP generalizes Maximum Likelihood Estimation (MLE) by incorporating a prior that acts as a regularizer.</p><p>MAP estimation lies between\n</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; fill: #fff; }\n            .axis { stroke: #4a5568; stroke-width: 2; }\n            .prior { fill: none; stroke: #fc8181; stroke-width: 2; stroke-dasharray: 4; }\n            .likelihood { fill: none; stroke: #63b3ed; stroke-width: 2; stroke-dasharray: 4; }\n            .posterior { fill: none; stroke: #48bb78; stroke-width: 3; }\n            .map-line { stroke: #48bb78; stroke-width: 1.5; stroke-dasharray: 2; }\n            .label-prior { fill: #fc8181; font-weight: bold; font-size: 13px; }\n            .label-like { fill: #63b3ed; font-weight: bold; font-size: 13px; }\n            .label-post { fill: #48bb78; font-weight: bold; font-size: 13px; }\n        </style>\n        <text x=\"250\" y=\"25\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">Maximum A Posteriori (MAP) Estimation</text>\n        <line x1=\"50\" y1=\"200\" x2=\"450\" y2=\"200\" class=\"axis\"></line>\n        <text x=\"460\" y=\"200\" class=\"t\">θ</text>\n        <path d=\"M 50 200 Q 100 200 120 150 T 150 100 T 180 150 T 250 200\" class=\"prior\"></path>\n        <path d=\"M 200 200 Q 280 200 320 120 T 350 60 T 380 120 T 450 200\" class=\"likelihood\"></path>\n        <path d=\"M 150 200 Q 230 200 260 100 T 280 40 T 300 100 T 380 200\" class=\"posterior\"></path>\n        <line x1=\"280\" y1=\"40\" x2=\"280\" y2=\"200\" class=\"map-line\"></line>\n        <text x=\"280\" y=\"215\" class=\"t\" fill=\"#48bb78\" font-size=\"12px\">θ<tspan baseline-shift=\"sub\">MAP</tspan></text>\n        <text x=\"120\" y=\"80\" class=\"label-prior\">Prior P(θ)</text>\n        <text x=\"380\" y=\"50\" class=\"label-like\">Likelihood P(X|θ)</text>\n        <text text-anchor=\"middle\" x=\"280\" y=\"55\" class=\"label-post\">Posterior P(θ|X)</text>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">The posterior is a compromise between the prior distribution and the data likelihood. MAP estimation selects the mode of this posterior.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>\n\n MLE (no prior, purely data-driven) and full Bayesian inference (which computes the entire posterior). It provides a single point estimate that balances data fit with prior knowledge, and is computationally much cheaper than full Bayesian methods while still offering regularization benefits.<p></p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Derivation from Bayes' theorem.</b> By Bayes' rule:</p>\n\\[ P(\\theta|X) = \\frac{P(X|\\theta)\\,P(\\theta)}{P(X)} \\propto P(X|\\theta)\\,P(\\theta) \\]\n<p>Since \\( P(X) \\) does not depend on \\( \\theta \\), the MAP estimate is:</p>\n\\[ \\hat{\\theta}_{\\text{MAP}} = \\arg\\max_\\theta\\, P(X|\\theta)\\,P(\\theta) = \\arg\\max_\\theta\\left[\\log P(X|\\theta) + \\log P(\\theta)\\right] \\]\n<p>The first term is the log-likelihood (same as in MLE). The second term, \\( \\log P(\\theta) \\), penalizes parameter values that are unlikely under the prior, acting as a regularizer.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Prior-regularization equivalences",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n  <tbody><tr style=\"background:#4a5568; color:#fff;\">\n    <th style=\"padding:6px; text-align:left;\">Prior on \\( \\theta \\)</th>\n    <th style=\"padding:6px; text-align:left;\">Equivalent regularization</th>\n    <th style=\"padding:6px; text-align:left;\">Penalty form</th>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">\\( \\theta_j \\sim \\mathcal{N}(0, \\sigma^2) \\)</td>\n    <td style=\"padding:6px;\">L2 / Ridge / Weight decay</td>\n    <td style=\"padding:6px;\">\\( \\frac{1}{2\\sigma^2}\\|\\theta\\|_2^2 \\)</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">\\( \\theta_j \\sim \\text{Laplace}(0, b) \\)</td>\n    <td style=\"padding:6px;\">L1 / Lasso</td>\n    <td style=\"padding:6px;\">\\( \\frac{1}{b}\\|\\theta\\|_1 \\)</td>\n  </tr>\n  <tr>\n    <td style=\"padding:6px;\">Uniform (improper)</td>\n    <td style=\"padding:6px;\">None (recovers MLE)</td>\n    <td style=\"padding:6px;\">Constant — no penalty</td>\n  </tr>\n</tbody></table>\n<p>The Gaussian prior yields the L2 penalty because \\( \\log P(\\theta) = -\\frac{1}{2\\sigma^2}\\sum_j \\theta_j^2 + \\text{const} \\), which is exactly the Ridge penalty scaled by the prior precision \\( 1/\\sigma^2 \\). The Laplace prior yields L1 because its log-density is \\( -\\frac{1}{b}|\\theta_j| + \\text{const} \\), encouraging sparsity.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Limitations compared to full Bayesian inference",
+        "body": "<ul>\n  <li>MAP gives a point estimate and provides no uncertainty quantification. Full Bayesian inference maintains the entire posterior \\( P(\\theta|X) \\), enabling predictive distributions and credible intervals.</li>\n  <li>MAP is not invariant to reparameterization: if \\( \\phi = g(\\theta) \\), the MAP estimate of \\( \\phi \\) is generally not \\( g(\\hat\\theta_{\\text{MAP}}) \\), because the Jacobian of the transformation changes the location of the mode.</li>\n  <li>The posterior mode can be a poor summary of a skewed or multimodal posterior. The posterior mean (under squared loss) or median (under absolute loss) may be more representative.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connections:</b> MAP is widely used in practice: L2-regularized logistic regression, Ridge regression, and weight decay in neural networks can all be viewed as MAP estimation with Gaussian priors. The Expectation-Maximization (EM) algorithm can be adapted to compute MAP estimates (MAP-EM). In the limit of infinite data, MAP converges to MLE since the likelihood dominates the prior.</p><details>\n<summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Gaussian prior yields L2 regularization.</b> Let \\( \\theta_j \\sim \\mathcal{N}(0, \\sigma^2) \\) independently. The log-prior is:</p>\n\\[ \\log P(\\theta) = \\sum_j \\log \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\!\\left(-\\frac{\\theta_j^2}{2\\sigma^2}\\right) = -\\frac{d}{2}\\log(2\\pi\\sigma^2) - \\frac{1}{2\\sigma^2}\\sum_j \\theta_j^2 \\]\n<p>Dropping constants (which don't affect the argmax):</p>\n\\[ \\hat\\theta_{\\text{MAP}} = \\arg\\max_\\theta \\left[\\log P(X|\\theta) - \\frac{1}{2\\sigma^2}\\|\\theta\\|_2^2\\right] = \\arg\\min_\\theta \\left[-\\log P(X|\\theta) + \\frac{\\lambda}{2}\\|\\theta\\|_2^2\\right] \\]\n<p>with \\( \\lambda = 1/\\sigma^2 \\). This is exactly the Ridge regression objective, showing that a tighter prior (smaller \\( \\sigma^2 \\)) corresponds to stronger regularization.</p>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "supervised-learning",
+    "title": "Supervised learning",
+    "summary": "A machine learning paradigm where a model is trained on input-output pairs with explicit labels, learning a mapping from inputs to targets that generalizes to unseen data. It encompasses both classification (discrete targets) and regress…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "unsupervised-learning",
+      "maximum-a-posteriori-map-estimation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1998 · Vladimir Vapnik · Statistical Learning Theory"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A machine learning paradigm where a model is trained on input-output pairs with explicit labels, learning a mapping from inputs to targets that generalizes to unseen data. It encompasses both classification (discrete targets) and regression (continuous targets).</p><p>Supervised learning is\n</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 200\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; fill: #fff; }\n            .box { fill: #2b6cb0; fill-opacity: 0.3; stroke: #63b3ed; stroke-width: 2; rx: 6; }\n            .box-loss { fill: #c53030; fill-opacity: 0.3; stroke: #fc8181; stroke-width: 2; rx: 6; }\n            .arr { stroke: #cbd5e0; stroke-width: 2; marker-end: url(#arrow_1772478271833); fill: none; }\n        </style>\n        <defs>\n            <marker id=\"arrow_1772478271833\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path></marker>\n        </defs>\n        <text x=\"250\" y=\"20\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">Supervised Learning Paradigm</text>\n        <rect x=\"30\" y=\"60\" width=\"80\" height=\"100\" class=\"box\" stroke=\"#a0aec0\" fill=\"#4a5568\"></rect>\n        <text x=\"70\" y=\"90\" class=\"t\" font-weight=\"bold\">Dataset</text>\n        <text x=\"70\" y=\"110\" class=\"t\" font-size=\"12px\">Pairs (x, y)</text>\n        <text x=\"140\" y=\"70\" class=\"t\">x</text>\n        <path d=\"M 110 80 L 190 80\" class=\"arr\"></path>\n        <text x=\"140\" y=\"130\" class=\"t\">y (label)</text>\n        <path d=\"M 110 140 L 330 140\" class=\"arr\"></path>\n        <rect x=\"200\" y=\"50\" width=\"100\" height=\"60\" class=\"box\"></rect>\n        <text x=\"250\" y=\"80\" class=\"t\">Model f<tspan baseline-shift=\"sub\">θ</tspan>(x)</text>\n        <text x=\"320\" y=\"70\" class=\"t\">ŷ</text>\n        <path d=\"M 300 80 L 340 80 Q 370 80 370 100\" class=\"arr\"></path>\n        <rect x=\"340\" y=\"110\" width=\"60\" height=\"60\" class=\"box-loss\"></rect>\n        <text x=\"370\" y=\"140\" class=\"t\" fill=\"#fc8181\">Loss</text>\n        <path d=\"M 400 140 L 425 140\" class=\"arr\"></path>\n        <text x=\"460\" y=\"140\" class=\"t\" font-size=\"12px\">Update θ</text>\n        <path d=\"M 460 120 Q 460 30 250 30 M 250 30 L 250 50\" class=\"arr\" stroke-dasharray=\"4\"></path>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">The model predicts an output from input x. The loss function compares this prediction to the true label y, providing a signal to update model parameters.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>\n\n the most widely used ML paradigm and forms the basis of most practical systems. The training dataset consists of labeled pairs \\( \\mathcal{D} = \\{(x_i, y_i)\\}_{i=1}^N \\), where \\( x_i \\in \\mathbb{R}^d \\) is an input feature vector and \\( y_i \\) is the corresponding target. The goal is to learn a function \\( f_\\theta: \\mathbb{R}^d \\to \\mathcal{Y} \\) that minimizes expected loss on unseen data drawn from the same distribution.<p></p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Formal framework.</b> The learning problem is formulated as empirical risk minimization (ERM):</p>\n\\[ \\hat\\theta = \\arg\\min_\\theta \\frac{1}{N}\\sum_{i=1}^N \\ell(f_\\theta(x_i),\\, y_i) + \\lambda\\,\\Omega(\\theta) \\]\n<p>where \\( \\ell \\) is a loss function and \\( \\Omega(\\theta) \\) is an optional regularizer. The true objective is the expected risk \\( R(\\theta) = \\mathbb{E}_{(x,y) \\sim P}[\\ell(f_\\theta(x), y)] \\), but since \\( P \\) is unknown, we minimize the empirical risk as a proxy.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Common task-loss pairings",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n  <tbody><tr style=\"background:#4a5568; color:#fff;\">\n    <th style=\"padding:6px; text-align:left;\">Task</th>\n    <th style=\"padding:6px; text-align:left;\">Output space \\( \\mathcal{Y} \\)</th>\n    <th style=\"padding:6px; text-align:left;\">Typical loss</th>\n    <th style=\"padding:6px; text-align:left;\">Example models</th>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Binary classification</td>\n    <td style=\"padding:6px;\">\\( \\{0, 1\\} \\)</td>\n    <td style=\"padding:6px;\">Binary cross-entropy / hinge loss</td>\n    <td style=\"padding:6px;\">Logistic regression, SVM</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Multi-class classification</td>\n    <td style=\"padding:6px;\">\\( \\{1, \\ldots, K\\} \\)</td>\n    <td style=\"padding:6px;\">Cross-entropy (softmax + NLL)</td>\n    <td style=\"padding:6px;\">Neural networks, Random Forests</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Regression</td>\n    <td style=\"padding:6px;\">\\( \\mathbb{R} \\)</td>\n    <td style=\"padding:6px;\">MSE / MAE / Huber</td>\n    <td style=\"padding:6px;\">Linear regression, Gradient Boosted Trees</td>\n  </tr>\n  <tr>\n    <td style=\"padding:6px;\">Structured prediction</td>\n    <td style=\"padding:6px;\">Sequences, trees, graphs</td>\n    <td style=\"padding:6px;\">CTC, sequence cross-entropy</td>\n    <td style=\"padding:6px;\">CRFs, Seq2Seq, Transformers</td>\n  </tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key concepts and trade-offs",
+        "body": "<ul>\n  <li><b>Bias-variance trade-off:</b> Simple models (high bias, low variance) underfit; complex models (low bias, high variance) overfit. Regularization, cross-validation, and early stopping help navigate this trade-off.</li>\n  <li><b>Generalization:</b> PAC learning theory and VC dimension provide bounds on how well empirical risk minimization generalizes. Practically, generalization is assessed via held-out validation and test sets.</li>\n  <li><b>Label cost:</b> Supervised learning requires labeled data, which is expensive to obtain. This motivates semi-supervised learning (few labels + much unlabeled data), self-supervised learning (pretext tasks on unlabeled data), and active learning (strategically querying labels).</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connections:</b> Supervised learning contrasts with unsupervised learning (no labels) and reinforcement learning (delayed reward signals). Many modern systems combine paradigms: e.g., self-supervised pretraining (unsupervised) followed by supervised fine-tuning, as in BERT and GPT.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "unsupervised-learning",
+    "title": "Unsupervised learning",
+    "summary": "A machine learning paradigm where models learn structure, patterns, or representations from data without explicit labels, including clustering, dimensionality reduction, density estimation, and generative modeling.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "generative",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "reinforcement-learning-rl",
+      "supervised-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2001 · Hastie, Tibshirani, Friedman · The Elements of Statistical Learning"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A machine learning paradigm where models learn structure, patterns, or representations from data without explicit labels, including clustering, dimensionality reduction, density estimation, and generative modeling.</p><p>In unsupervised learning\n</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 200\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; fill: #fff; }\n            .dot-blue { fill: #63b3ed; }\n            .dot-green { fill: #48bb78; }\n            .dot-red { fill: #fc8181; }\n            .dot-gray { fill: #a0aec0; }\n            .arr { stroke: #cbd5e0; stroke-width: 2; marker-end: url(#arrow2_1772478271836); fill: none; }\n            .circle-bound { fill: none; stroke: #4a5568; stroke-width: 1.5; stroke-dasharray: 4; }\n        </style>\n        <defs>\n            <marker id=\"arrow2_1772478271836\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path></marker>\n        </defs>\n        <text x=\"250\" y=\"20\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">Unsupervised Learning: Discovering Structure</text>\n        <text x=\"100\" y=\"55\" class=\"t\">Raw Data (Unlabeled)</text>\n        <g transform=\"translate(40, 70)\">\n            <circle cx=\"30\" cy=\"30\" r=\"4\" class=\"dot-gray\"></circle>\n            <circle cx=\"40\" cy=\"20\" r=\"4\" class=\"dot-gray\"></circle>\n            <circle cx=\"35\" cy=\"45\" r=\"4\" class=\"dot-gray\"></circle>\n            <circle cx=\"90\" cy=\"70\" r=\"4\" class=\"dot-gray\"></circle>\n            <circle cx=\"100\" cy=\"80\" r=\"4\" class=\"dot-gray\"></circle>\n            <circle cx=\"85\" cy=\"90\" r=\"4\" class=\"dot-gray\"></circle>\n            <circle cx=\"110\" cy=\"75\" r=\"4\" class=\"dot-gray\"></circle>\n            <circle cx=\"40\" cy=\"100\" r=\"4\" class=\"dot-gray\"></circle>\n            <circle cx=\"30\" cy=\"110\" r=\"4\" class=\"dot-gray\"></circle>\n            <circle cx=\"50\" cy=\"105\" r=\"4\" class=\"dot-gray\"></circle>\n        </g>\n        <path d=\"M 180 120 L 240 120\" class=\"arr\"></path>\n        <text x=\"350\" y=\"55\" class=\"t\">Learned Structure (Clusters)</text>\n        <g transform=\"translate(290, 70)\">\n            <circle cx=\"35\" cy=\"31\" r=\"28\" class=\"circle-bound\"></circle>\n            <circle cx=\"30\" cy=\"30\" r=\"4\" class=\"dot-blue\"></circle>\n            <circle cx=\"40\" cy=\"20\" r=\"4\" class=\"dot-blue\"></circle>\n            <circle cx=\"35\" cy=\"45\" r=\"4\" class=\"dot-blue\"></circle>\n            <circle cx=\"96\" cy=\"78\" r=\"28\" class=\"circle-bound\"></circle>\n            <circle cx=\"90\" cy=\"70\" r=\"4\" class=\"dot-green\"></circle>\n            <circle cx=\"100\" cy=\"80\" r=\"4\" class=\"dot-green\"></circle>\n            <circle cx=\"85\" cy=\"90\" r=\"4\" class=\"dot-green\"></circle>\n            <circle cx=\"110\" cy=\"75\" r=\"4\" class=\"dot-green\"></circle>\n            <circle cx=\"40\" cy=\"105\" r=\"28\" class=\"circle-bound\"></circle>\n            <circle cx=\"40\" cy=\"100\" r=\"4\" class=\"dot-red\"></circle>\n            <circle cx=\"30\" cy=\"110\" r=\"4\" class=\"dot-red\"></circle>\n            <circle cx=\"50\" cy=\"105\" r=\"4\" class=\"dot-red\"></circle>\n        </g>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Algorithms automatically identify underlying patterns, such as clustering related points or finding a manifold of lower dimensionality.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>\n\n, the dataset consists only of inputs \\( \\mathcal{D} = \\{x_i\\}_{i=1}^N \\) with no target labels. The objective varies by task but generally involves discovering the underlying data distribution \\( p(x) \\) or learning useful representations. Because there is no ground truth signal, evaluation is inherently more challenging than in supervised learning — metrics are often task-specific or rely on downstream performance.<p></p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Major unsupervised learning paradigms",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n  <tbody><tr style=\"background:#4a5568; color:#fff;\">\n    <th style=\"padding:6px; text-align:left;\">Paradigm</th>\n    <th style=\"padding:6px; text-align:left;\">Objective</th>\n    <th style=\"padding:6px; text-align:left;\">Key methods</th>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Clustering</td>\n    <td style=\"padding:6px;\">Partition data into groups with high intra-group similarity</td>\n    <td style=\"padding:6px;\">K-means (\\( \\min \\sum_{k}\\sum_{x \\in C_k}\\|x - \\mu_k\\|^2 \\)), DBSCAN, Gaussian Mixture Models</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Dimensionality reduction</td>\n    <td style=\"padding:6px;\">Find low-dimensional representations preserving structure</td>\n    <td style=\"padding:6px;\">PCA (projects onto top eigenvectors of covariance matrix), t-SNE, UMAP, autoencoders</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Density estimation</td>\n    <td style=\"padding:6px;\">Estimate \\( p(x) \\) from samples</td>\n    <td style=\"padding:6px;\">Kernel Density Estimation, Gaussian Mixtures (EM algorithm), normalizing flows</td>\n  </tr>\n  <tr>\n    <td style=\"padding:6px;\">Generative modeling</td>\n    <td style=\"padding:6px;\">Learn to sample new data from \\( p(x) \\)</td>\n    <td style=\"padding:6px;\">VAEs (\\( \\mathcal{L} = -\\mathbb{E}_{q}[\\log p(x|z)] + D_{\\text{KL}}(q(z|x)\\|p(z)) \\)), GANs, diffusion models</td>\n  </tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Mathematical formulations.</b> Many unsupervised methods can be cast as optimization problems:</p>\n<ul>\n  <li><b>PCA:</b> Find the \\( k \\)-dimensional subspace maximizing variance: \\( W^* = \\arg\\max_{W^TW=I} \\text{tr}(W^T \\Sigma W) \\), where \\( \\Sigma \\) is the data covariance matrix. The solution is the top \\( k \\) eigenvectors of \\( \\Sigma \\), equivalently obtained via truncated SVD of the centered data matrix.</li>\n  <li><b>K-means:</b> Minimize within-cluster sum of squares \\( \\sum_{k=1}^K \\sum_{x_i \\in C_k} \\|x_i - \\mu_k\\|^2 \\). This is NP-hard in general but Lloyd's algorithm provides a practical alternating minimization heuristic.</li>\n  <li><b>EM algorithm:</b> For latent variable models like GMMs, iteratively computes expected sufficient statistics (E-step) and maximizes expected complete-data log-likelihood (M-step), guaranteeing monotonic increase of the marginal likelihood.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Self-supervised learning</b> blurs the boundary between supervised and unsupervised: it creates surrogate labels from the data itself (e.g., predicting masked tokens in BERT, predicting the next token in GPT, contrastive learning in SimCLR). Technically unsupervised (no human labels), it uses a supervised-style loss and has become the dominant pretraining strategy for modern foundation models.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connections:</b> Unsupervised pretraining followed by supervised fine-tuning is a core recipe in modern deep learning. The representations learned by unsupervised methods (e.g., word embeddings, image features from autoencoders) transfer effectively to downstream supervised tasks. Reinforcement learning is a third distinct paradigm where the signal comes from environmental reward rather than data labels or structure.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "reinforcement-learning-rl",
+    "title": "Reinforcement learning (RL)",
+    "summary": "A machine learning paradigm where an agent learns to make sequential decisions by interacting with an environment, receiving reward signals, and optimizing a policy to maximize cumulative long-term return.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "reinforcement",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "linear-function",
+      "unsupervised-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1989 · Christopher Watkins · Learning from Delayed Rewards (Q-learning) 2018 · Richard Sutton, Andrew Barto · Reinforcement Learning: An Introduction (2nd ed.)",
+        "url": "http://incompleteideas.net/book/the-book-2nd.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A machine learning paradigm where an agent learns to make sequential decisions by interacting with an environment, receiving reward signals, and optimizing a policy to maximize cumulative long-term return.</p><p>Reinforcement learning (RL) differs"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; fill: #fff; }\n            .box { fill: #2b6cb0; stroke: #63b3ed; stroke-width: 2; rx: 8; fill-opacity: 0.2; }\n            .box-env { fill: #48bb78; stroke: #9ae6b4; stroke-width: 2; rx: 8; fill-opacity: 0.2; }\n            .arr { stroke: #cbd5e0; stroke-width: 2; marker-end: url(#arrow3_1772478271838); fill: none; }\n        </style>\n        <defs>\n            <marker id=\"arrow3_1772478271838\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/></marker>\n        </defs>\n        <rect x=\"70\" y=\"80\" width=\"100\" height=\"60\" class=\"box\" />\n        <text x=\"120\" y=\"110\" class=\"t\" font-weight=\"bold\">Agent</text>\n        <text x=\"120\" y=\"130\" class=\"t\" font-size=\"11px\" fill=\"#a0aec0\">Policy &pi;(a|s)</text>\n        <rect x=\"330\" y=\"80\" width=\"110\" height=\"60\" class=\"box-env\" />\n        <text x=\"385\" y=\"110\" class=\"t\" font-weight=\"bold\">Environment</text>\n        <text x=\"385\" y=\"130\" class=\"t\" font-size=\"11px\" fill=\"#a0aec0\">Dynamics P(s'|s,a)</text>\n        <path d=\"M 170 90 L 320 90\" class=\"arr\" />\n        <text x=\"245\" y=\"80\" class=\"t\">Action a<tspan baseline-shift=\"sub\">t</tspan></text>\n        <path d=\"M 330 130 L 180 130\" class=\"arr\" />\n        <text x=\"245\" y=\"120\" class=\"t\" fill=\"#63b3ed\">State s<tspan baseline-shift=\"sub\">t+1</tspan></text>\n        <path d=\"M 385 140 Q 385 180 245 180 T 120 140\" class=\"arr\" />\n        <text x=\"245\" y=\"195\" class=\"t\" fill=\"#f6ad55\">Reward r<tspan baseline-shift=\"sub\">t+1</tspan></text>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">The fundamental RL loop: the agent takes an action in the environment, which transitions to a new state and emits a reward signal.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>\n\n fundamentally from supervised learning: there are no labeled input-output pairs. Instead, the agent must discover which actions yield the most reward through trial and error, balancing <b>exploration</b> (trying new actions) with <b>exploitation</b> (choosing known good actions). The field draws on control theory, operations research, and animal psychology (Thorndike's Law of Effect, 1911).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Markov Decision Process (MDP) formalism.</b> RL problems are typically modeled as an MDP \\( (\\mathcal{S}, \\mathcal{A}, \\mathcal{P}, \\mathcal{R}, \\gamma) \\):</p>\n<ul>\n  <li>\\( \\mathcal{S} \\) &mdash; state space</li>\n  <li>\\( \\mathcal{A} \\) &mdash; action space</li>\n  <li>\\( \\mathcal{P}(s'|s, a) \\) &mdash; transition dynamics (probability of next state given current state and action)</li>\n  <li>\\( \\mathcal{R}(s, a) \\) &mdash; reward function</li>\n  <li>\\( \\gamma \\in [0, 1) \\) &mdash; discount factor controlling the trade-off between immediate and future rewards</li>\n</ul>\n\n<p>The agent follows a policy \\( \\pi(a|s) \\) and seeks to maximize the expected discounted return:</p>\n\\[ G_t = \\sum_{k=0}^{\\infty} \\gamma^k r_{t+k+1} \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Value functions</b> are central to RL. The state-value function \\( V^\\pi(s) = \\mathbb{E}_\\pi[G_t | s_t = s] \\) and action-value function \\( Q^\\pi(s,a) = \\mathbb{E}_\\pi[G_t | s_t = s, a_t = a] \\) satisfy the <b>Bellman equations</b>:</p>\n\\[ V^\\pi(s) = \\sum_a \\pi(a|s) \\sum_{s'} \\mathcal{P}(s'|s,a)\\left[\\mathcal{R}(s,a) + \\gamma\\, V^\\pi(s')\\right] \\]\n\\[ Q^\\pi(s,a) = \\mathcal{R}(s,a) + \\gamma \\sum_{s'} \\mathcal{P}(s'|s,a) \\sum_{a'} \\pi(a'|s')\\, Q^\\pi(s',a') \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Major algorithm families",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n  <tr style=\"background:#4a5568; color:#fff;\">\n    <th style=\"padding:6px; text-align:left;\">Family</th>\n    <th style=\"padding:6px; text-align:left;\">Approach</th>\n    <th style=\"padding:6px; text-align:left;\">Key algorithms</th>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Value-based</td>\n    <td style=\"padding:6px;\">Learn \\( Q^*(s,a) \\), derive policy greedily</td>\n    <td style=\"padding:6px;\">Q-learning, DQN (Mnih et al., 2015), Double DQN</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Policy-based</td>\n    <td style=\"padding:6px;\">Directly optimize \\( \\pi_\\theta(a|s) \\) via gradient ascent on expected return</td>\n    <td style=\"padding:6px;\">REINFORCE, PPO (Schulman et al., 2017)</td>\n  </tr>\n  <tr style=\"border-bottom:1px solid #ccc;\">\n    <td style=\"padding:6px;\">Actor-Critic</td>\n    <td style=\"padding:6px;\">Combine value function (critic) with policy (actor) to reduce variance</td>\n    <td style=\"padding:6px;\">A2C/A3C, SAC, TD3</td>\n  </tr>\n  <tr>\n    <td style=\"padding:6px;\">Model-based</td>\n    <td style=\"padding:6px;\">Learn environment dynamics \\( \\mathcal{P} \\), plan using learned model</td>\n    <td style=\"padding:6px;\">Dyna-Q, MuZero (Schrittwieser et al., 2020), World Models</td>\n  </tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The policy gradient theorem</b> (Sutton et al., 1999) provides the foundation for policy-based methods:</p>\n\\[ \\nabla_\\theta J(\\theta) = \\mathbb{E}_{\\pi_\\theta}\\!\\left[\\nabla_\\theta \\log \\pi_\\theta(a|s)\\, Q^{\\pi_\\theta}(s,a)\\right] \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Key challenges:</b> sample efficiency (model-free methods require millions of interactions), credit assignment over long horizons, partial observability (POMDPs), reward shaping and sparse rewards, and sim-to-real transfer. RLHF (Reinforcement Learning from Human Feedback) applies RL to fine-tune language models using human preference data as the reward signal, and is a key ingredient in ChatGPT, Claude, and other aligned LLMs.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "linear-function",
+    "title": "Linear function",
+    "summary": "A function satisfying additivity \\( f(x + y) = f(x) + f(y) \\) and homogeneity \\( f(cx) = c\\,f(x) \\), representable as a matrix multiplication \\( f(x) = Wx \\). In deep learning, the term is often used loosely to include affine functions \\…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "the-fisher-information-matrix",
+      "reinforcement-learning-rl"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2009 · Gilbert Strang · Introduction to Linear Algebra"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A function satisfying additivity \\( f(x + y) = f(x) + f(y) \\) and homogeneity \\( f(cx) = c\\,f(x) \\), representable as a matrix multiplication \\( f(x) = Wx \\). In deep learning, the term is often used loosely to include affine functions \\( f(x) = Wx + b \\), though strictly these are not linear.</p><p>Linear functions \n</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; fill: #fff; }\n            .grid { fill: none; stroke: #4a5568; stroke-width: 1; opacity: 0.5; }\n            .axis { stroke: #cbd5e0; stroke-width: 2; }\n            .vec { stroke: #63b3ed; stroke-width: 3; marker-end: url(#arrowvec_1772478271840); fill: none; }\n            .vec-out { stroke: #fc8181; stroke-width: 3; marker-end: url(#arrowvec2_1772478271840); fill: none; }\n        </style>\n        <defs>\n            <marker id=\"arrowvec_1772478271840\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#63b3ed\"></path></marker>\n            <marker id=\"arrowvec2_1772478271840\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fc8181\"></path></marker>\n        </defs>\n        <text x=\"250\" y=\"20\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">Linear Transformation (f(x) = Wx)</text>\n        <g transform=\"translate(130, 140)\">\n            <text x=\"0\" y=\"-90\" class=\"t\">R<tspan baseline-shift=\"super\">n</tspan> (Input)</text>\n            <line x1=\"-50\" y1=\"0\" x2=\"50\" y2=\"0\" class=\"axis\"></line>\n            <line x1=\"0\" y1=\"-50\" x2=\"0\" y2=\"50\" class=\"axis\"></line>\n            <path d=\"M 0 0 L 30 -40\" class=\"vec\"></path>\n            <text x=\"40\" y=\"-45\" class=\"t\" fill=\"#63b3ed\">x</text>\n            <circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#fff\"></circle>\n        </g>\n        <path d=\"M 220 120 L 280 120\" stroke=\"#a0aec0\" stroke-width=\"2\" marker-end=\"url(#arrowvec_1772478271840)\" fill=\"none\"></path>\n        <text x=\"250\" y=\"105\" class=\"t\" fill=\"#f6ad55\">W</text>\n        <g transform=\"translate(370, 140)\">\n            <text x=\"0\" y=\"-90\" class=\"t\">R<tspan baseline-shift=\"super\">m</tspan> (Output)</text>\n            <line x1=\"-40\" y1=\"20\" x2=\"40\" y2=\"-20\" class=\"grid\"></line>\n            <line x1=\"-20\" y1=\"40\" x2=\"20\" y2=\"-40\" class=\"grid\"></line>\n            <line x1=\"-60\" y1=\"0\" x2=\"60\" y2=\"0\" class=\"axis\"></line>\n            <line x1=\"0\" y1=\"-60\" x2=\"0\" y2=\"60\" class=\"axis\"></line>\n            <path d=\"M 0 0 L 40 -20\" class=\"vec-out\"></path>\n            <text x=\"50\" y=\"-25\" class=\"t\" fill=\"#fc8181\">Wx</text>\n            <circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"#fff\"></circle>\n        </g>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">A linear transformation maps the input vector space to the output space while preserving straight lines and the origin.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>\n\n(more precisely, linear maps or linear transformations) are the simplest parameterized functions and the foundational building block of neural networks. Every \"layer\" in a neural network applies a linear (or affine) transformation followed by a nonlinear activation.<p></p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Formal definition.</b> A function \\( f: \\mathbb{R}^n \\to \\mathbb{R}^m \\) is linear if and only if it satisfies the superposition principle for all vectors \\( x, y \\in \\mathbb{R}^n \\) and scalars \\( c \\in \\mathbb{R} \\):</p>\n\\[ f(x + y) = f(x) + f(y) \\quad \\text{(additivity)} \\]\n\\[ f(cx) = c\\,f(x) \\quad \\text{(homogeneity)} \\]\n<p>Equivalently, \\( f(\\alpha x + \\beta y) = \\alpha f(x) + \\beta f(y) \\). Every such function can be represented as \\( f(x) = Wx \\) for some matrix \\( W \\in \\mathbb{R}^{m \\times n} \\). A consequence is that \\( f(0) = 0 \\) — linear functions always map the origin to the origin.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Linear vs. affine.</b> An <b>affine function</b> adds a bias: \\( g(x) = Wx + b \\), where \\( b \\in \\mathbb{R}^m \\). This does not satisfy homogeneity (since \\( g(0) = b \\neq 0 \\) in general) and is therefore not linear in the strict sense. However, in deep learning the term \"linear layer\" almost always refers to the affine transformation \\( Wx + b \\). PyTorch's <code>nn.Linear(n, m)</code> implements the affine transform with \\( mn + m \\) parameters.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why nonlinearity is essential.</b> A composition of linear functions is still linear: if \\( f_1(x) = W_1 x \\) and \\( f_2(x) = W_2 x \\), then \\( f_2(f_1(x)) = W_2 W_1 x = W' x \\). This means a deep network of purely linear layers collapses to a single linear transformation, regardless of depth. Activation functions (ReLU, sigmoid, tanh, GELU) break this linearity, enabling neural networks to approximate arbitrary nonlinear functions (Universal Approximation Theorem).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Properties of linear transformations",
+        "body": "<ul>\n  <li><b>Parameter count:</b> A linear map from \\( \\mathbb{R}^n \\to \\mathbb{R}^m \\) has \\( mn \\) parameters (or \\( mn + m \\) with bias). For large layers, this dominates model size — e.g., a fully connected layer from 4096 to 4096 has ~16.8M parameters.</li>\n  <li><b>Gradient:</b> The derivative of \\( f(x) = Wx + b \\) with respect to \\( x \\) is simply \\( W \\), and with respect to \\( W \\) is \\( x^T \\). This makes backpropagation through linear layers straightforward: \\( \\frac{\\partial \\mathcal{L}}{\\partial W} = \\frac{\\partial \\mathcal{L}}{\\partial y}\\, x^T \\) and \\( \\frac{\\partial \\mathcal{L}}{\\partial x} = W^T \\frac{\\partial \\mathcal{L}}{\\partial y} \\).</li>\n  <li><b>Rank and expressiveness:</b> The rank of \\( W \\) determines the dimensionality of the output space. Low-rank factorizations \\( W \\approx UV \\) (where \\( U \\in \\mathbb{R}^{m \\times r}, V \\in \\mathbb{R}^{r \\times n}, r \\ll \\min(m,n) \\)) reduce parameter count from \\( mn \\) to \\( r(m+n) \\) and are the basis of LoRA (Low-Rank Adaptation) for fine-tuning large models.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Role in neural architectures",
+        "body": "<ul>\n  <li><b>MLPs:</b> Alternating linear layers and activations: \\( h_l = \\sigma(W_l h_{l-1} + b_l) \\).</li>\n  <li><b>Transformers:</b> The query/key/value projections (\\( Q = XW_Q \\), \\( K = XW_K \\), \\( V = XW_V \\)) and the feed-forward sub-layers are all linear (affine) transformations. Linear layers constitute the vast majority of parameters in a Transformer.</li>\n  <li><b>CNNs:</b> Convolution is a structured linear operation (a Toeplitz matrix multiplication), and classification heads use fully connected linear layers.</li>\n</ul>"
+      }
+    ],
+    "cards": []
   }
 ]
