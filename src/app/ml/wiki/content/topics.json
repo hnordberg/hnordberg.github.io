@@ -14843,7 +14843,7 @@
       },
       {
         "kind": "prose",
-        "body": "<p><b>Scaled Dot-Product Attention:</b> In modern Transformers, attention is computed via matrix multiplication:</p>\n\n\\[ \text{Attention}(Q, K, V) = \text{softmax}\\left(rac{QK^T}{\\sqrt{d_k}}ight)V \\]\n\n<ul>\n  <li><b>Q (Queries):</b> The vectors asking for information (what the current token is looking for, shape \\(N \times d_k\\)).</li>\n  <li><b>K (Keys):</b> The vectors serving as identity tags for incoming information (what each token holds, shape \\(M \times d_k\\)).</li>\n  <li><b>V (Values):</b> The actual content or features to be aggregated, usually the same underlying vectors as the keys (shape \\(M \times d_v\\)).</li>\n</ul>\n\n<p>The \\( \\sqrt{d_k} \\) scaling factor prevents the dot-products from growing too large and pushing the softmax function into regions with extremely small gradients (the vanishing gradient problem).</p>"
+        "body": "<p><b>Scaled Dot-Product Attention:</b> In modern Transformers, attention is computed via matrix multiplication:</p>\n\n\\[ \\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V \\]\n\n<ul>\n  <li><b>Q (Queries):</b> The vectors asking for information (what the current token is looking for, shape \\(N \times d_k\\)).</li>\n  <li><b>K (Keys):</b> The vectors serving as identity tags for incoming information (what each token holds, shape \\(M \times d_k\\)).</li>\n  <li><b>V (Values):</b> The actual content or features to be aggregated, usually the same underlying vectors as the keys (shape \\(M \times d_v\\)).</li>\n</ul>\n\n<p>The \\( \\sqrt{d_k} \\) scaling factor prevents the dot-products from growing too large and pushing the softmax function into regions with extremely small gradients (the vanishing gradient problem).</p>"
       },
       {
         "kind": "prose",
@@ -14877,13 +14877,16 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2014 · Sutskever, Vinyals, Le (seq2seq)"
+        "citation": "2014 · Sutskever et al. · Sequence to Sequence Learning with Neural Networks",
+        "url": "https://arxiv.org/abs/1409.3215"
       },
       {
-        "citation": "Vaswani et al. (Transformer enc-dec, 2017)"
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
       },
       {
-        "citation": "Raffel et al. (T5, 2020)"
+        "citation": "2020 · Raffel et al. · Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer",
+        "url": "https://arxiv.org/abs/1910.10683"
       }
     ],
     "sections": [
@@ -15005,13 +15008,13 @@
       },
       {
         "kind": "prose",
-        "title": "Raw input \\(\\mathbf{x}\\) \\(ightarrow\\) Learned mapped features \\(f_\theta(\\mathbf{x})\\) \\(ightarrow\\) Task Output \\(g_\\phi(f_\theta(\\mathbf{x}))\\)",
+        "title": "Raw input \\(\\mathbf{x}\\) \\(\\rightarrow\\) Learned mapped features \\(f_\\theta(\\mathbf{x})\\) \\(\\rightarrow\\) Task Output \\(g_\\phi(f_\\theta(\\mathbf{x}))\\)",
         "body": "<p>The explicit objective is for \\( f_\theta \\) to project complicated, linearly intertwined raw data into a continuous latent space \\( \\mathcal{Z} \\) where semantically similar items are mathematically proximate, meaning the simpler downstream classification layer \\( g_\\phi \\) can succeed linearly.</p>"
       },
       {
         "kind": "prose",
         "title": "Categorization of methods",
-        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Signal</th><th style=\"padding:6px; text-align:left;\">Examples</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Supervised</td><td style=\"padding:6px;\">Explicit Task labels</td><td style=\"padding:6px;\">ImageNet pretraining extracting intermediate filter weights</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Self-supervised</td><td style=\"padding:6px;\">Implicit masking tasks in data</td><td style=\"padding:6px;\">Masked language modelling (BERT), autoregressive prediction (GPT)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Contrastive</td><td style=\"padding:6px;\">Semantic distance pairs</td><td style=\"padding:6px;\">CLIP, SimCLR embeddings</td></tr>\n<tr><td style=\"padding:6px;\">Generative</td><td style=\"padding:6px;\">Latent reconstruction</td><td style=\"padding:6px;\">Variational Autoencoders, Diffusion</td></tr>\n</table>\n\n<p>Modern representation techniques often exploit sophisticated mathematical losses directly manipulating the latent space geometry. For instance, contrastive frameworks utilize the <b>InfoNCE Loss</b> to attract positive pairings \\( z_i, z_i^+ \\) while repelling irrelevant pairings:</p>\n\n\\[ \\mathcal{L}_{\text{InfoNCE}} = -\\log rac{\\exp(\text{sim}(z_i, z_i^+)/\tau)}{\\sum_{j} \\exp(\text{sim}(z_i, z_j)/\tau)} \\]\n\n<p>The overarching paradigm of training foundation models on exabytes of data and fine-tuning cleanly verifies the philosophy that pre-training produces a universally applicable representation topology \\( f_\theta \\), which requires only minute task-specific adaptation later.</p>"
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Signal</th><th style=\"padding:6px; text-align:left;\">Examples</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Supervised</td><td style=\"padding:6px;\">Explicit Task labels</td><td style=\"padding:6px;\">ImageNet pretraining extracting intermediate filter weights</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Self-supervised</td><td style=\"padding:6px;\">Implicit masking tasks in data</td><td style=\"padding:6px;\">Masked language modelling (BERT), autoregressive prediction (GPT)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Contrastive</td><td style=\"padding:6px;\">Semantic distance pairs</td><td style=\"padding:6px;\">CLIP, SimCLR embeddings</td></tr>\n<tr><td style=\"padding:6px;\">Generative</td><td style=\"padding:6px;\">Latent reconstruction</td><td style=\"padding:6px;\">Variational Autoencoders, Diffusion</td></tr>\n</table>\n\n<p>Modern representation techniques often exploit sophisticated mathematical losses directly manipulating the latent space geometry. For instance, contrastive frameworks utilize the <b>InfoNCE Loss</b> to attract positive pairings \\( z_i, z_i^+ \\) while repelling irrelevant pairings:</p>\n\n\\[ \\mathcal{L}_{\\text{InfoNCE}} = -\\log \\frac{\\exp(\\text{sim}(z_i, z_i^+)/\\tau)}{\\sum_{j} \\exp(\\text{sim}(z_i, z_j)/\\tau)} \\]\n\n<p>The overarching paradigm of training foundation models on exabytes of data and fine-tuning cleanly verifies the philosophy that pre-training produces a universally applicable representation topology \\( f_\\theta \\), which requires only minute task-specific adaptation later.</p>"
       }
     ],
     "cards": []
@@ -15200,7 +15203,7 @@
     "sections": [
       {
         "kind": "prose",
-        "body": "<p>A statistical probabilistic ranking function used in information retrieval that scores documents heavily by term frequency and inverse document frequency, while strictly implementing saturation bounds and document length normalization. BM25 serves as the indisputable baseline for sparse lexical search and uniquely complements neural dense retrieval methods.</p><p>The total BM25 (Best Matching 25) score for a tokenized query \\( Q = \\{q_1, \\ldots, q_n\\} \\) matching against a target document \\( D \\) evaluates mathematically to:</p>\n\n\\[ \text{BM25}(D, Q) = \\sum_{i=1}^{n} \text{IDF}(q_i) \\cdot rac{f(q_i, D) \\cdot (k_1 + 1)}{f(q_i, D) + k_1 \\cdot \\left(1 - b + b \\cdot rac{|D|}{\text{avgdl}}ight)} \\]\n\n<p>where the explicit components govern critical constraints:</p>\n<ul>\n<li>\\( f(q_i, D) \\) = Term frequency (raw count of term \\( q_i \\) in document \\( D \\)).</li>\n<li>\\( |D| \\) and \\( \text{avgdl} \\) = Document length and average corpus document length.</li>\n<li><b>Term Saturation \\(k_1\\) (\\(pprox\\) 1.2):</b> Ensures the score increases asymptotically sublinearly. The 15th matching occurrence of the word \"apple\" yields vanishingly less marginal value than the 1st, unlike naive TF-IDF.</li>\n<li><b>Length Normalization \\(b\\) (\\(pprox\\) 0.75):</b> Prevents artificially inflating scores simply because a document happens to be immensely longer than the corpus average.</li>\n<li><b>Inverse Document Frequency (IDF):</b> Penalizes commonly flooded stop-words (like \"the\") while radically rewarding rare tokens: \\( \text{IDF}(q_i) = \\log rac{N - n(q_i) + 0.5}{n(q_i) + 0.5} \\)</li>\n</ul>\n\n<p>In modern RAG pipelines, <b>hybrid search</b> implementations fuse BM25 sparse results with Neural Dense Retrieval (calculating reciprocal rank fusion). BM25 flawlessly captures exact keyword and acronym overlaps that ambiguous semantic embeddings occasionally gloss over.</p>"
+        "body": "<p>A statistical probabilistic ranking function used in information retrieval that scores documents heavily by term frequency and inverse document frequency, while strictly implementing saturation bounds and document length normalization. BM25 serves as the indisputable baseline for sparse lexical search and uniquely complements neural dense retrieval methods.</p><p>The total BM25 (Best Matching 25) score for a tokenized query \\( Q = \\{q_1, \\ldots, q_n\\} \\) matching against a target document \\( D \\) evaluates mathematically to:</p>\n\n\\[ \\text{BM25}(D, Q) = \\sum_{i=1}^{n} \\text{IDF}(q_i) \\cdot \\frac{f(q_i, D) \\cdot (k_1 + 1)}{f(q_i, D) + k_1 \\cdot \\left(1 - b + b \\cdot \\frac{|D|}{\\text{avgdl}}\\right)} \\]\n\n<p>where the explicit components govern critical constraints:</p>\n<ul>\n<li>\\( f(q_i, D) \\) = Term frequency (raw count of term \\( q_i \\) in document \\( D \\)).</li>\n<li>\\( |D| \\) and \\( \\text{avgdl} \\) = Document length and average corpus document length.</li>\n<li><b>Term Saturation \\(k_1\\) (\\(\\approx\\) 1.2):</b> Ensures the score increases asymptotically sublinearly. The 15th matching occurrence of the word \"apple\" yields vanishingly less marginal value than the 1st, unlike naive TF-IDF.</li>\n<li><b>Length Normalization \\(b\\) (\\(\\approx\\) 0.75):</b> Prevents artificially inflating scores simply because a document happens to be immensely longer than the corpus average.</li>\n<li><b>Inverse Document Frequency (IDF):</b> Penalizes commonly flooded stop-words (like \"the\") while radically rewarding rare tokens: \\( \\text{IDF}(q_i) = \\log \\frac{N - n(q_i) + 0.5}{n(q_i) + 0.5} \\)</li>\n</ul>\n\n<p>In modern RAG pipelines, <b>hybrid search</b> implementations fuse BM25 sparse results with Neural Dense Retrieval (calculating reciprocal rank fusion). BM25 flawlessly captures exact keyword and acronym overlaps that ambiguous semantic embeddings occasionally gloss over.</p>"
       }
     ],
     "cards": []
@@ -15411,7 +15414,8 @@
         "citation": "Formal knowledge synthesized around summarisation boundaries"
       },
       {
-        "citation": "Maynez et al. (2020), \"On Faithfulness and Factuality in Abstractive Summarization.\""
+        "citation": "2020 · Maynez et al. · On Faithfulness and Factuality in Abstractive Summarization",
+        "url": "https://aclanthology.org/2020.acl-main.173/"
       }
     ],
     "sections": [
@@ -15454,13 +15458,16 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Guo et al. (2017), \"On Calibration of Modern Neural Networks\""
+        "citation": "2017 · Guo et al. · On Calibration of Modern Neural Networks",
+        "url": "https://arxiv.org/abs/1706.04599"
       },
       {
-        "citation": "Platt scaling (1999)"
+        "citation": "1999 · Platt · Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods",
+        "url": "https://transferlab.ai/refs/platt_probabilistic_1999/"
       },
       {
-        "citation": "temperature scaling"
+        "citation": "2005 · Zadrozny and Elkan · Transforming Classifier Scores into Accurate Multiclass Probability Estimates",
+        "url": "https://dl.acm.org/doi/10.1145/1102351.1102430"
       }
     ],
     "sections": [
@@ -15830,13 +15837,16 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1964 · Boris Polyak (heavy ball method)"
+        "citation": "1964 · Polyak · Some Methods of Speeding Up the Convergence of Iteration Methods",
+        "url": "https://www.mathnet.ru/eng/zvmmf7713"
       },
       {
-        "citation": "Nesterov (1983, accelerated gradient)"
+        "citation": "1983 · Nesterov · A Method for Solving the Convex Programming Problem with Convergence Rate O(1/k^2)",
+        "url": "https://doi.org/10.1016/0041-5553(83)90024-4"
       },
       {
-        "citation": "applied to neural networks by Rumelhart et al. (1986)"
+        "citation": "1986 · Rumelhart, Hinton, and Williams · Learning Representations by Back-Propagating Errors",
+        "url": "https://www.nature.com/articles/323533a0"
       }
     ],
     "sections": [
@@ -15878,7 +15888,12 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2017 · Vaswani et al. (Warmup for Transformers) · Loshchilov & Hutter (Cosine)"
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      },
+      {
+        "citation": "2017 · Loshchilov and Hutter · SGDR: Stochastic Gradient Descent with Warm Restarts",
+        "url": "https://arxiv.org/abs/1608.03983"
       }
     ],
     "sections": [
@@ -16001,7 +16016,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2010 · Xavier Glorot, Yoshua Bengio · Understanding the difficulty of training deep feedforward neural networks"
+        "citation": "2010 · Glorot and Bengio · Understanding the Difficulty of Training Deep Feedforward Neural Networks",
+        "url": "https://proceedings.mlr.press/v9/glorot10a.html"
       }
     ],
     "sections": [
@@ -16337,10 +16353,6 @@
         "kind": "prose",
         "title": "Illustration",
         "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n        \n<svg width=\"600\" height=\"150\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"600\" height=\"150\" fill=\"#1a202c\" rx=\"8\"></rect>\n  \n  <rect x=\"30\" y=\"40\" width=\"140\" height=\"60\" fill=\"#2d3748\" stroke=\"#4a5568\" stroke-width=\"2\" rx=\"6\"></rect>\n  <text x=\"100\" y=\"65\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">1. Supervised</text>\n  <text x=\"100\" y=\"85\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Finetuning</text>\n  <text x=\"100\" y=\"120\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Demonstrations</text>\n  \n  <path d=\"M 180 70 L 220 70\" stroke=\"white\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772520567993)\"></path>\n  \n  <rect x=\"230\" y=\"40\" width=\"140\" height=\"60\" fill=\"#2d3748\" stroke=\"#4a5568\" stroke-width=\"2\" rx=\"6\"></rect>\n  <text x=\"300\" y=\"65\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">2. Reward Model</text>\n  <text x=\"300\" y=\"85\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Training</text>\n  <text x=\"300\" y=\"120\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Preferences</text>\n  \n  <path d=\"M 380 70 L 420 70\" stroke=\"white\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772520567993)\"></path>\n  \n  <rect x=\"430\" y=\"40\" width=\"140\" height=\"60\" fill=\"#2d3748\" stroke=\"#4a5568\" stroke-width=\"2\" rx=\"6\"></rect>\n  <text x=\"500\" y=\"65\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">3. PPO / RL</text>\n  <text x=\"500\" y=\"85\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Optimization</text>\n  <text x=\"500\" y=\"120\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Prompts + KL</text>\n  \n  <defs>\n    <marker id=\"arrow_1772520567993\" markerWidth=\"10\" markerHeight=\"10\" refX=\"9\" refY=\"3\" orient=\"auto\" markerUnits=\"strokeWidth\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"white\"></path>\n    </marker>\n  </defs>\n</svg>\n\n        <div style=\"color:#a0aec0; font-size:0.85em; margin-top:4px;\"><i>The standard three-stage RLHF pipeline.</i></div></div>"
-      },
-      {
-        "kind": "prose",
-        "body": "</div>"
       }
     ],
     "cards": []
@@ -16425,10 +16437,6 @@
         "kind": "prose",
         "title": "Illustration",
         "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n        \n<svg width=\"600\" height=\"120\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"600\" height=\"120\" fill=\"#1a202c\" rx=\"8\" />\n  \n  <rect x=\"40\" y=\"30\" width=\"140\" height=\"50\" fill=\"#2d3748\" stroke=\"#e53e3e\" stroke-width=\"2\" rx=\"6\" />\n  <text x=\"110\" y=\"55\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">User Prompt</text>\n  <text x=\"110\" y=\"73\" fill=\"#feb2b2\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">(Harmful Request)</text>\n  \n  <rect x=\"220\" y=\"30\" width=\"140\" height=\"50\" fill=\"#e53e3e\" stroke=\"#c53030\" stroke-width=\"2\" rx=\"6\" />\n  <text x=\"290\" y=\"55\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\" font-weight=\"bold\">Adversarial Suffix</text>\n  <text x=\"290\" y=\"73\" fill=\"#fed7d7\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">(Gradient Optimized)</text>\n  \n  <path d=\"M 370 55 L 420 55\" stroke=\"white\" stroke-width=\"3\" fill=\"none\" marker-end=\"url(#arrow_1772520590974)\" />\n  \n  <rect x=\"430\" y=\"30\" width=\"140\" height=\"50\" fill=\"#2d3748\" stroke=\"#38a169\" stroke-width=\"2\" rx=\"6\" />\n  <text x=\"500\" y=\"55\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Target Output</text>\n  <text x=\"500\" y=\"73\" fill=\"#9ae6b4\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">(\"Sure, here is...\")</text>\n  <defs>\n    <marker id=\"arrow_1772520590974\" markerWidth=\"10\" markerHeight=\"10\" refX=\"9\" refY=\"3\" orient=\"auto\" markerUnits=\"strokeWidth\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"white\" />\n    </marker>\n  </defs>\n</svg>\n\n        <div style=\"color:#a0aec0; font-size:0.85em; margin-top:4px;\"><i>Structure of a gradient-based adversarial jailbreak attack.</i></div></div>"
-      },
-      {
-        "kind": "prose",
-        "body": "</div>"
       }
     ],
     "cards": []
@@ -16680,6 +16688,821 @@
         "kind": "prose",
         "title": "Pitfalls in ML A/B testing",
         "body": "<ul>\n    <li><b>Novelty effects:</b> Users may initially prefer a new model simply because it interacts differently, which drops off over time.</li>\n    <li><b>Multiple comparisons:</b> Testing many metrics simultaneously inflates the false-positive rate; requires corrections like Bonferroni or FDR control.</li>\n    <li><b>Peeking:</b> Checking results before the experiment concludes inflates Type I error; use sequential testing if early stopping is needed.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "continual-learning",
+    "title": "Continual Learning",
+    "summary": "A learning paradigm where a model sequentially acquires knowledge from a stream of tasks or data distributions without forgetting previously learned information.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "what-is-catastrophic-forgetting",
+      "ai-safety"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1995 · Thrun et al. · Lifelong Robot Learning",
+        "url": "https://dl.acm.org/doi/10.1007/978-1-4615-2742-8_2"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A learning paradigm where a model sequentially acquires knowledge from a stream of tasks or data distributions without forgetting previously learned information.</p><p>Also called <b>lifelong learning</b> or <b>incremental learning</b>, continual learning addresses the reality that deployed systems must adapt to new data over time. The central challenge is <b>catastrophic forgetting</b>: gradient updates on new data often destructively overwrite weights critical to prior tasks (the <b>stability-plasticity dilemma</b>).</p>\n  \n  <p><b>Three main strategy families:</b></p>\n  <table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Strategy</th>\n      <th style=\"padding:6px; text-align:left;\">Mechanism</th>\n      <th style=\"padding:6px; text-align:left;\">Example</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Replay</b></td>\n      <td style=\"padding:6px;\">Store or generate examples from prior tasks and mix them with new data</td>\n      <td style=\"padding:6px;\">Experience Replay</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Regularization</b></td>\n      <td style=\"padding:6px;\">Add a penalty that discourages changing weights important to prior tasks</td>\n      <td style=\"padding:6px;\">Elastic Weight Consolidation (EWC)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Architecture</b></td>\n      <td style=\"padding:6px;\">Allocate separate parameters or modules for each task</td>\n      <td style=\"padding:6px;\">Progressive Networks</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"200\" viewBox=\"0 0 400 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Axes -->\n      <line x1=\"50\" y1=\"170\" x2=\"350\" y2=\"170\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n      <line x1=\"50\" y1=\"170\" x2=\"50\" y2=\"30\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n      <text x=\"350\" y=\"190\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Time / Tasks</text>\n      <text x=\"30\" y=\"100\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90 30,100)\">Accuracy</text>\n      \n      <!-- Phase divider -->\n      <line x1=\"200\" y1=\"30\" x2=\"200\" y2=\"170\" stroke=\"#718096\" stroke-width=\"1\" stroke-dasharray=\"4,4\"/>\n      <text x=\"125\" y=\"45\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Task 1 Training</text>\n      <text x=\"275\" y=\"45\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Task 2 Training</text>\n      \n      <!-- Standard network performance on Task 1 -->\n      <path d=\"M 50 160 Q 125 60 200 60 L 210 160 L 350 160\" fill=\"none\" stroke=\"#e53e3e\" stroke-width=\"3\"/>\n      <!-- Continual network performance on Task 1 -->\n      <path d=\"M 50 160 Q 125 60 200 60 L 350 70\" fill=\"none\" stroke=\"#48bb78\" stroke-width=\"3\" stroke-dasharray=\"6,4\"/>\n      \n      <!-- Legend -->\n      <circle cx=\"230\" cy=\"110\" r=\"4\" fill=\"#e53e3e\"/>\n      <text x=\"240\" y=\"114\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"10\">Standard (Forgets)</text>\n      <circle cx=\"230\" cy=\"130\" r=\"4\" fill=\"#48bb78\"/>\n      <text x=\"240\" y=\"134\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"10\">Continual Learning</text>\n    </svg>\n    <br><small style=\"color:#718096;\">Accuracy on Task 1 over time. A continual learning system retains capability on Task 1 while learning Task 2.</small>\n  </div></div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "what-is-catastrophic-forgetting",
+    "title": "What is catastrophic forgetting?",
+    "summary": "The tendency of neural networks to abruptly and severely lose performance on previously learned tasks when trained on new ones.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "curriculum-learning",
+      "continual-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1989 · McCloskey & Cohen · Catastrophic Interference in Connectionist Networks"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The tendency of neural networks to abruptly and severely lose performance on previously learned tasks when trained on new ones.</p><p>Also known as <b>catastrophic interference</b>, this is the primary obstacle to continual learning. It occurs because knowledge in a neural network is encoded in a <b>distributed, overlapping</b> representation. When the network is finetuned on a new task $B$, gradient descent adjusts the weights $\\theta$ to minimize $\\mathcal{L}_B$. Without constraints, it freely overwrites the precise weight configurations that minimized $\\mathcal{L}_A$ for the previous task $A$.</p>\n  \n  <p>Formally, when updating weights with learning rate $\\alpha$ on task $B$:</p>\n  \\[ \\theta_{\\text{new}} \\leftarrow \\theta_{\\text{old}} - \\alpha \\nabla_{\\theta} \\mathcal{L}_B(\\theta) \\]\n  <p>Since $\\nabla_{\\theta} \\mathcal{L}_B$ is blind to the landscape of $\\mathcal{L}_A$, the step moves $\\theta$ out of the optimal basin for task $A$.</p>\n\n  <p><b>Mitigation via Elastic Weight Consolidation (EWC):</b></p>\n  <p>EWC adds a quadratic penalty to the loss function, scaled by the Fisher Information Matrix $F$, which measures how important each parameter is to the previous task:</p>\n  \\[ \\mathcal{L}(\\theta) = \\mathcal{L}_B(\\theta) + \\frac{\\lambda}{2} \\sum_{i} F_i (\\theta_i - \\theta_{A,i}^*)^2 \\]\n  <p>This anchors important weights near their old values $\\theta_{A,i}^*$, while allowing less important weights to change.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"350\" height=\"200\" viewBox=\"0 0 350 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"350\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Task A error surface (ellipse) -->\n      <ellipse cx=\"120\" cy=\"100\" rx=\"50\" ry=\"80\" fill=\"#2b6cb0\" opacity=\"0.3\"/>\n      <ellipse cx=\"120\" cy=\"100\" rx=\"30\" ry=\"50\" fill=\"#2b6cb0\" opacity=\"0.5\"/>\n      <text x=\"120\" y=\"40\" fill=\"#90cdf4\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Task A Optimal Region</text>\n      \n      <!-- Task B error surface (ellipse) -->\n      <ellipse cx=\"250\" cy=\"100\" rx=\"60\" ry=\"40\" fill=\"#c53030\" opacity=\"0.3\"/>\n      <ellipse cx=\"250\" cy=\"100\" rx=\"40\" ry=\"25\" fill=\"#c53030\" opacity=\"0.5\"/>\n      <text x=\"250\" y=\"50\" fill=\"#feb2b2\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Task B Optimal Region</text>\n      \n      <!-- Parameter trajectory (Catastrophic) -->\n      <circle cx=\"120\" cy=\"100\" r=\"4\" fill=\"#fff\"/>\n      <path d=\"M 120 100 Q 180 60 250 100\" fill=\"none\" stroke=\"#e53e3e\" stroke-width=\"2\" marker-end=\"url(#arrow1_1772520700591)\"/>\n      \n      <defs>\n        <marker id=\"arrow1_1772520700591\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#e53e3e\" />\n        </marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">Finetuning moves weights straight to Task B's minimum, exiting Task A's minimum completely.</small>\n  </div></div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "curriculum-learning",
+    "title": "Curriculum Learning",
+    "summary": "A training strategy where examples are presented to a model in a structured order of increasing difficulty, mimicking the human educational curriculum, to accelerate convergence and find better local optima.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "optimization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "pretraining-corpus",
+      "what-is-catastrophic-forgetting"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2009 · Bengio et al. · Curriculum Learning",
+        "url": "https://dl.acm.org/doi/10.1145/1553374.1553380"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A training strategy where examples are presented to a model in a structured order of increasing difficulty, mimicking the human educational curriculum, to accelerate convergence and find better local optima.</p><p>In standard stochastic gradient descent, mini-batches are sampled uniformly at random. Curriculum learning (CL) posits that learning on easy examples first provides a smoother loss landscape and broad foundational representations. Harder examples are progressively introduced to fine-tune the decision boundaries.</p>\n\n  <p><b>Two key design choices:</b></p>\n  <ul>\n    <li><b>Difficulty Assessor:</b> A scoring function $d(x_i)$ that estimates the complexity of an example. In NLP, this could be sequence length or the perplexity from a pre-trained model. In CV, it might be the presence of noise or occlusion.</li>\n    <li><b>Pacing Function:</b> A schedule $c(t)$ determining the proportion of the training data available at epoch $t$. Typical schedules encompass taking the easiest $p\\%$ of data and linearly or exponentially increasing $p$ to $100\\%$.</li>\n  </ul>\n  \n  <p>Formally, at step $t$, the model samples from a training subset $S_t \\subseteq S_{t+1} \\subseteq \\dots \\subseteq D$, where $S_t = \\{x \\in D \\mid d(x) \\le \\text{threshold}(t)\\}$.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"200\" viewBox=\"0 0 400 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      <line x1=\"50\" y1=\"170\" x2=\"350\" y2=\"170\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n      <line x1=\"50\" y1=\"170\" x2=\"50\" y2=\"30\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n      <text x=\"350\" y=\"190\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Training Steps</text>\n      <text x=\"30\" y=\"100\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90 30,100)\">% of Data Used</text>\n      \n      <!-- Linear pacing -->\n      <path d=\"M 50 140 L 250 50 L 350 50\" fill=\"none\" stroke=\"#48bb78\" stroke-width=\"3\"/>\n      <text x=\"180\" y=\"80\" fill=\"#48bb78\" font-family=\"sans-serif\" font-size=\"12\">Linear Pacing</text>\n      \n      <!-- Root/Exponential pacing -->\n      <path d=\"M 50 140 Q 150 50 250 50 L 350 50\" fill=\"none\" stroke=\"#ed8936\" stroke-width=\"3\" stroke-dasharray=\"4,4\"/>\n      <text x=\"120\" y=\"55\" fill=\"#ed8936\" font-family=\"sans-serif\" font-size=\"12\">Root Pacing</text>\n      \n      <line x1=\"45\" y1=\"50\" x2=\"55\" y2=\"50\" stroke=\"#cbd5e0\" stroke-width=\"2\"/>\n      <text x=\"25\" y=\"54\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"10\">100%</text>\n    </svg>\n    <br><small style=\"color:#718096;\">Pacing functions govern how quickly hard examples are mixed into the active training set.</small>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><i>Note:</i> The effectiveness of CL is contested. While robustly helpful for highly structured tasks (like mathematics or parsing), for general image classification, standard random order often performs just as well natively, or \"anti-curricular\" (hardest-first) training sometimes proves superior by providing stronger initial gradient signals.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "pretraining-corpus",
+    "title": "Pretraining Corpus",
+    "summary": "The vast, unstructured text dataset used to train a language model's base weights during self-supervised learning (e.g., next-token prediction), establishing its fundamental linguistic capabilities and world knowledge.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "instruction-dataset",
+      "curriculum-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Gao et al. · The Pile: An 800GB Dataset of Diverse Text for Language Modeling",
+        "url": "https://arxiv.org/abs/2101.00027"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The vast, unstructured text dataset used to train a language model's base weights during self-supervised learning (e.g., next-token prediction), establishing its fundamental linguistic capabilities and world knowledge.</p><p>Base models are essentially a compressed representation of their pretraining corpus. Because modern LLMs require trillions of tokens—following the Chinchilla scaling laws ($N_{\\text{tokens}} \\approx 20 \\times N_{\\text{params}}$)—these corpora are aggregated from large web scrapes, books, code, and academic papers.</p>\n\n  <p><b>Data Processing Pipeline:</b></p>\n  <p>Raw text from sources like <i>Common Crawl</i> is notoriously noisy and toxic. A rigorous pipeline is required to extract high-quality tokens:</p>\n  <ul>\n    <li><b>Quality Filtering:</b> Classifiers trained on Wikipedia/books remove low-quality filler. Heuristics discard text with too many special characters or non-standard word lengths.</li>\n    <li><b>Deduplication:</b> Removing exact or near-duplicate documents (via MinHash) prevents the model from blindly memorizing repeated text and drastically accelerates learning.</li>\n    <li><b>Domain Balancing:</b> Researchers explicitly blend domains by weight (e.g., upweighting code and math datasets to impart structural reasoning).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"150\" viewBox=\"0 0 450 150\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"150\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Blocks -->\n      <rect x=\"20\" y=\"55\" width=\"80\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#4a5568\"/>\n      <text x=\"60\" y=\"75\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Raw Web Data</text>\n      <text x=\"60\" y=\"90\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">~100 TB</text>\n      \n      <rect x=\"150\" y=\"55\" width=\"80\" height=\"40\" rx=\"4\" fill=\"#3182ce\" stroke=\"#2b6cb0\"/>\n      <text x=\"190\" y=\"75\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Filtering &amp;</text>\n      <text x=\"190\" y=\"90\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Deduplication</text>\n\n      <rect x=\"280\" y=\"55\" width=\"30\" height=\"40\" rx=\"4\" fill=\"#38a169\" stroke=\"#2f855a\"/>\n      <rect x=\"315\" y=\"55\" width=\"30\" height=\"40\" rx=\"4\" fill=\"#d69e2e\" stroke=\"#b7791f\"/>\n      <text x=\"312\" y=\"45\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Mix High-Quality Sources</text>\n      \n      <rect x=\"360\" y=\"55\" width=\"70\" height=\"40\" rx=\"4\" fill=\"#805ad5\" stroke=\"#6b46c1\"/>\n      <text x=\"395\" y=\"75\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Final Corpus</text>\n      <text x=\"395\" y=\"90\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">~5-30T Tokens</text>\n\n      <!-- Arrows -->\n      <path d=\"M 100 75 L 145 75\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow2_1772520729182)\"/>\n      <path d=\"M 230 75 L 275 75\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow2_1772520729182)\"/>\n      <path d=\"M 345 75 L 355 75\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow2_1772520729182)\"/>\n      \n      <defs>\n        <marker id=\"arrow2_1772520729182\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#718096\" />\n        </marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">A typical corpus curation pipeline heavily compresses raw data through strict filtering.</small>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Examples include <b>The Pile</b> (825 GB of 22 curated subsets), C4, RefinedWeb, and Fineweb-Edu.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "instruction-dataset",
+    "title": "Instruction Dataset",
+    "summary": "A curated collection of (instruction, response) pairs used during the Supervised Fine-Tuning (SFT) phase to teach a foundation model to act as a helpful assistant rather than a pure text-continuation engine.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "preference-dataset",
+      "pretraining-corpus"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Zhou et al. · LIMA: Less Is More for Alignment",
+        "url": "https://arxiv.org/abs/2305.11206"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A curated collection of (instruction, response) pairs used during the Supervised Fine-Tuning (SFT) phase to teach a foundation model to act as a helpful assistant rather than a pure text-continuation engine.</p><p>Base pretraining only teaches a model to predict the next token (e.g., given \"The capital of France is\", it predicts \"Paris\"). If given an instruction like \"Write a poem about France\", a base model might just generate more instructions. Instruction datasets bridge this gap by demonstrating the desired query-response formatting.</p>\n\n  <p>Unlike pretraining, which requires trillions of tokens, instruction tuning requires significantly less data (typically 1,000 to 100,000 examples) but demands <b>extreme quality and diversity</b>. The <i>LIMA</i> paper famously demonstrated that just 1,000 perfectly crafted, diverse human responses outperform 50K machine-generated ones.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Sources of Instruction Data",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Source Type</th>\n      <th style=\"padding:6px; text-align:left;\">Pros & Cons</th>\n      <th style=\"padding:6px; text-align:left;\">Example Datasets</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Human-Written</b></td>\n      <td style=\"padding:6px;\">Highest quality and reasoning fidelity, but extremely expensive.</td>\n      <td style=\"padding:6px;\">LIMA, OpenAssistant</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>NLP Task Reformatted</b></td>\n      <td style=\"padding:6px;\">Massive scale (QA metrics, Summarization), but feels unnatural / templated.</td>\n      <td style=\"padding:6px;\">FLAN, T0</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>LLM-Generated (Synthetic)</b></td>\n      <td style=\"padding:6px;\">Cheap and scalable, but can inherit teacher biases and logic errors.</td>\n      <td style=\"padding:6px;\">Alpaca, ShareGPT, UltraChat</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Masking the Loss:</b> During backpropagation for an instruction-response pair $(x, y)$, the cross-entropy loss is typically <b>masked</b> over the prompt $x$. The model only updates its weights based on the loss of predicting the response tokens $y_i$, formally:</p>\n  \\[ \\mathcal{L}_{\\text{SFT}} = - \\frac{1}{|y|} \\sum_{i=1}^{|y|} \\log P_{\\theta}(y_i \\mid x, y_{&lt;i}) \\]"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "preference-dataset",
+    "title": "Preference Dataset",
+    "summary": "A dataset mapping human or AI evaluation queries to pairwise or ranked responses &mdash; typically a collection of (prompt, chosen, rejected) pairs &mdash; used to train Reward Models in RLHF or directly optimize language models via DPO.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "reward-signal",
+      "instruction-dataset"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Ouyang et al. · InstructGPT: Training language models to follow instructions",
+        "url": "https://arxiv.org/abs/2203.02155"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A dataset mapping human or AI evaluation queries to pairwise or ranked responses &mdash; typically a collection of (prompt, chosen, rejected) pairs &mdash; used to train Reward Models in RLHF or directly optimize language models via DPO.</p><p>Preference datasets differ fundamentally from Instruction Datasets. While SFT simply mimics ideal behavior, <b>preference datasets provide a negative signal</b>. This enforces <b>alignment</b> by explicitly teaching a model what <i>not</i> to do, capturing nuances of safety and implicit helpfulness that humans struggle to hard-code.</p>\n\n  <p><b>Human Annotation (The Bradley-Terry Model):</b></p>\n  <p>Humans are notoriously bad at rating a single subjective text on a strict numeric scale (e.g., \"rate this story from 1-10\"), exhibiting high variance. Conversely, humans are highly consistent at <b>pairwise ranking</b> (\"A is better than B\"). The standard approach uses the Bradley-Terry model to convert these binary preferences into a continuous, scalar reward model $r_\\theta$. For a prompt $x$, a chosen response $y_w$, and rejected response $y_l$:</p>\n  \\[ P(y_w \\succ y_l \\mid x) = \\sigma( r_\\theta(x, y_w) - r_\\theta(x, y_l) ) \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Prompt -->\n      <rect x=\"50\" y=\"20\" width=\"350\" height=\"30\" rx=\"4\" fill=\"#2d3748\" stroke=\"#4a5568\"/>\n      <text x=\"225\" y=\"40\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Prompt: \"Explain black holes simply.\"</text>\n      \n      <!-- Split arrows -->\n      <path d=\"M 150 50 L 120 80\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\"/>\n      <path d=\"M 300 50 L 330 80\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\"/>\n      \n      <!-- Responses -->\n      <rect x=\"30\" y=\"80\" width=\"180\" height=\"40\" rx=\"4\" fill=\"#3182ce\" stroke=\"#2b6cb0\"/>\n      <text x=\"120\" y=\"100\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Response A</text>\n      <text x=\"120\" y=\"113\" fill=\"#90cdf4\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">(Concise, accurate)</text>\n      \n      <rect x=\"240\" y=\"80\" width=\"180\" height=\"40\" rx=\"4\" fill=\"#e53e3e\" stroke=\"#c53030\"/>\n      <text x=\"330\" y=\"100\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Response B</text>\n      <text x=\"330\" y=\"113\" fill=\"#feb2b2\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">(Rambling, factual errors)</text>\n      \n      <!-- Annotator -->\n      <path d=\"M 120 120 L 180 160\" fill=\"none\" stroke=\"#48bb78\" stroke-width=\"2\" marker-end=\"url(#arrow-pref_1772520750152)\"/>\n      <path d=\"M 330 120 L 270 160\" fill=\"none\" stroke=\"#e53e3e\" stroke-width=\"2\" stroke-dasharray=\"4,4\"/>\n      \n      <rect x=\"175\" y=\"160\" width=\"100\" height=\"30\" rx=\"15\" fill=\"#38a169\"/>\n      <text x=\"225\" y=\"179\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">A &gt; B</text>\n      \n      <defs>\n        <marker id=\"arrow-pref_1772520750152\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#48bb78\" />\n        </marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">Preference data enforces human ranking: A receives a higher scalar score than B in the subsequent reward model.</small>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Famous open-source examples include Anthropic's HH-RLHF (Helpfulness and Harmlessness), UltraFeedback, and the multi-turn Chatbot Arena dataset.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "reward-signal",
+    "title": "Reward Signal",
+    "summary": "A scalar value returned by the environment (or a learned model) that indicates the desirability of an agent's recent action, serving as the sole objective function optimized in Reinforcement Learning.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "reinforcement",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "policy-reinforcement-learning",
+      "preference-dataset"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2018 · Sutton & Barto · Reinforcement Learning: An Introduction (2nd ed.)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A scalar value returned by the environment (or a learned model) that indicates the desirability of an agent's recent action, serving as the sole objective function optimized in Reinforcement Learning.</p><p>In standard Reinforcement Learning, the reward function $R(s,a)$ is typically hand-coded (e.g., $+1$ for winning a point in Pong, $-1$ for dying). The agent discovers complex strategies entirely motivated by maximizing the expectation of this sparse, delayed signal.</p>\n\n  <p><b>Reward Signal in RLHF:</b></p>\n  <p>For LLMs, providing a hand-coded reward function for \"helpfulness\" or \"harmlessness\" is impossible. Instead, a <b>Reward Model (RM)</b> $r_\\theta(x, y)$ is trained on human preference data to output a continuous scalar. The LLM (acting as the RL policy $\\pi_\\phi$) generates a sequence of tokens $y$ given a prompt $x$, and the RM scores it.</p>\n  <p>To prevent the LLM from collapsing into degenerate, sycophantic text that simply \"hacks\" the RM, it is heavily regularized with a Kullback-Leibler (KL) divergence penalty against the original SFT reference model:</p>\n  \\[ R(x, y) = r_\\theta(x, y) - \\beta \\, \\mathbb{D}_{\\text{KL}}( \\pi_\\phi(\\cdot \\mid x) \\,\\|\\, \\pi_{\\text{ref}}(\\cdot \\mid x) ) \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Prompt -->\n      <rect x=\"20\" y=\"80\" width=\"80\" height=\"40\" rx=\"4\" fill=\"#4a5568\"/>\n      <text x=\"60\" y=\"105\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Prompt $x$</text>\n\n      <!-- LLM Policy -->\n      <rect x=\"150\" y=\"80\" width=\"80\" height=\"40\" rx=\"4\" fill=\"#3182ce\" stroke=\"#2b6cb0\"/>\n      <text x=\"190\" y=\"105\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Policy $\\pi_\\phi$</text>\n\n      <!-- Response -->\n      <rect x=\"280\" y=\"80\" width=\"80\" height=\"40\" rx=\"4\" fill=\"#4a5568\"/>\n      <text x=\"320\" y=\"105\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Comp. $y$</text>\n\n      <!-- Reward Model -->\n      <rect x=\"230\" y=\"20\" width=\"180\" height=\"30\" rx=\"4\" fill=\"#38a169\"/>\n      <text x=\"320\" y=\"40\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Reward Model $r_\\theta$</text>\n\n      <!-- Output scalar -->\n      <circle cx=\"200\" cy=\"160\" r=\"20\" fill=\"#e53e3e\"/>\n      <text x=\"200\" y=\"165\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">$+ 4.2$</text>\n\n      <!-- Arrows -->\n      <path d=\"M 100 100 L 145 100\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#RMarrow_1772520770893)\"/>\n      <path d=\"M 230 100 L 275 100\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#RMarrow_1772520770893)\"/>\n      \n      <!-- Scoring flow -->\n      <path d=\"M 60 80 L 60 35 L 225 35\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#RMarrow_1772520770893)\"/>\n      <path d=\"M 320 80 L 320 55\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#RMarrow_1772520770893)\"/>\n      \n      <!-- Feedback -->\n      <path d=\"M 230 35 C 150 35, 230 160, 220 160\" fill=\"none\" stroke=\"#e53e3e\" stroke-width=\"2\" stroke-dasharray=\"4,4\" marker-end=\"url(#RMarrow_1772520770893)\"/>\n      <path d=\"M 180 160 C 150 160, 190 120, 190 125\" fill=\"none\" stroke=\"#e53e3e\" stroke-width=\"2\" stroke-dasharray=\"4,4\" marker-end=\"url(#RMarrow_1772520770893)\"/>\n\n      <defs>\n        <marker id=\"RMarrow_1772520770893\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#718096\" />\n        </marker>\n        <marker id=\"redArrow_1772520770893\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#e53e3e\" />\n        </marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">The PPO update loop: the RM computes a reward which gradients are drawn against to update the policy.</small>\n  </div></div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "policy-reinforcement-learning",
+    "title": "Policy (Reinforcement Learning)",
+    "summary": "A mapping from environment states to actions (or a probability distribution over actions) defining an RL agent's behavior. In modern LLMs, the neural network itself embodies the policy layer $\\pi_\\theta(a \\mid s)$.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "reinforcement",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "value-function",
+      "reward-signal"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1998 · Sutton & Barto · Reinforcement Learning: An Introduction"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A mapping from environment states to actions (or a probability distribution over actions) defining an RL agent's behavior. In modern LLMs, the neural network itself embodies the policy layer $\\pi_\\theta(a \\mid s)$.</p><p>The policy dictates the decision-making intelligence of the system. The fundamental objective of Reinforcement Learning is to discover an optimal policy $\\pi^*$ that maximizes the expected sum of discounted future rewards:</p>\n  \\[ \\pi^* = \\arg\\max_{\\pi} \\mathbb{E}_{\\tau \\sim \\pi} \\left[ \\sum_{t=0}^T \\gamma^t r_t \\right] \\]\n  <p>where $\\gamma \\in [0, 1]$ is the discount factor enforcing a preference for immediate rewards over distant ones, and $\\tau$ denotes the trajectory of states, actions, and rewards.</p>\n\n  <p><b>Types of Policies:</b></p>\n  <ul>\n    <li><b>Deterministic:</b> $a = \\pi(s)$. The agent always takes the identical action in a given state. (Standard for continuous mechanical control, e.g., DDPG).</li>\n    <li><b>Stochastic:</b> $a \\sim \\pi(\\cdot \\mid s)$. The agent outputs a probability distribution. This injects necessary exploration and handles partially observable environments natively.</li>\n  </ul>\n\n  <p>In Large Language Models, the policy $\\pi_{\\theta}$ maps the state (the running sequence of text $x_{&lt;t}$) to an action (sampling the next token $x_t$ from the output vocabulary distribution). Modifying the \"temperature\" during inference visually flattens or sharpens this stochastic policy distribution.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"350\" height=\"200\" viewBox=\"0 0 350 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"350\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Agent/Env Blocks -->\n      <rect x=\"50\" y=\"80\" width=\"80\" height=\"40\" rx=\"4\" fill=\"#3182ce\" stroke=\"#2b6cb0\"/>\n      <text x=\"90\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Agent $\\pi$</text>\n\n      <rect x=\"220\" y=\"80\" width=\"100\" height=\"40\" rx=\"4\" fill=\"#38a169\" stroke=\"#2f855a\"/>\n      <text x=\"270\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Environment</text>\n      \n      <!-- Top Action arrow -->\n      <path d=\"M 90 80 L 90 40 L 270 40 L 270 80\" fill=\"none\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#RL_arrow_1772520781746)\"/>\n      <text x=\"180\" y=\"30\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Action $A_t$</text>\n\n      <!-- Bottom Reward arrow -->\n      <path d=\"M 270 120 L 270 160 L 90 160 L 90 120\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\" marker-end=\"url(#Reward_arrow_1772520781746)\"/>\n      <text x=\"180\" y=\"180\" fill=\"#f6ad55\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">State $S_{t+1}$, Reward $R_{t+1}$</text>\n\n      <defs>\n        <marker id=\"RL_arrow_1772520781746\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\" />\n        </marker>\n        <marker id=\"Reward_arrow_1772520781746\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#f6ad55\" />\n        </marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">The classic RL loop where the Agent encapsulates the optimization of the Policy.</small>\n  </div></div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "value-function",
+    "title": "Value Function",
+    "summary": "A mapping that evaluates how \"good\" it is for an agent to be in a given state (or to take a given action from that state), defined mathematically as the expected cumulative future reward under a specific policy.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "reinforcement",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "ai-safety",
+      "policy-reinforcement-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1989 · Watkins · Learning from Delayed Rewards (Q-Learning)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A mapping that evaluates how \"good\" it is for an agent to be in a given state (or to take a given action from that state), defined mathematically as the expected cumulative future reward under a specific policy.</p><p>The Value Function allows RL algorithms to credit actions taken deep in the past for rewards acquired in the future. Without value estimates, policies would flail randomly in long-horizon tasks.</p>\n\n  <p>The <b>State-Value Function</b> $V^\\pi(s)$ measures the expected reward launching from state $s$ following policy $\\pi$:</p>\n  \\[ V^\\pi(s) = \\mathbb{E}_{\\pi} \\left[ \\sum_{t=0}^\\infty \\gamma^t r_t \\;\\middle|\\; S_0 = s \\right] \\]\n\n  <p>The <b>Action-Value Function</b> $Q^\\pi(s, a)$ measures the expected reward after taking a specific action $a$ in $s$, and subsequently following $\\pi$:</p>\n  \\[ Q^\\pi(s, a) = \\mathbb{E}_{\\pi} \\left[ \\sum_{t=0}^\\infty \\gamma^t r_t \\;\\middle|\\; S_0 = s, A_0 = a \\right] \\]\n\n  <p>The magic engine of modern RL is the <b>Bellman Equation</b>, a recursive formulation establishing that the value of the current state must equal the immediate reward plus the discounted value of the downstream state:</p>\n  \\[ V^\\pi(s) = \\sum_{a \\in A} \\pi(a|s) \\sum_{s', r} p(s', r \\mid s, a) \\left[ r + \\gamma V^\\pi(s') \\right] \\]\n\n  <p>In PPO (the predominant RLHF algorithm), a separate neural network head called the <b>Critic</b> is trained dynamically to estimate the value function $V^\\pi(s)$. This estimate is used to compute the <i>Advantage</i> function $\\hat{A}_t = R_t - V(s_t)$, which dictates how much better or worse an action was than average, drastically reducing optimization variance.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "ai-safety",
+    "title": "AI Safety",
+    "summary": "An interdisciplinary field of machine learning dedicated to understanding, evaluating, and mitigating the risks associated with highly capable artificial intelligence systems to ensure they remain reliably aligned with human intent.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "continual-learning",
+      "value-function"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2014 · Bostrom · Superintelligence: Paths, Dangers, Strategies"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An interdisciplinary field of machine learning dedicated to understanding, evaluating, and mitigating the risks associated with highly capable artificial intelligence systems to ensure they remain reliably aligned with human intent.</p><p>As deep learning scales seamlessly with computation and data, frontier models demonstrate unpredictable, emergent capabilities. AI Safety attempts to formalize technical boundaries around architectures that inherently resist traditional programmatic oversight.</p>\n  \n  <p><b>Two Dimensions of AI Safety:</b></p>\n  <ul>\n    <li><b>Near-Term Safety (Robustness & Fairness):</b> Preventing systems from propagating societal biases, engaging in toxic hallucinations, exposing PII datasets in their pretraining mix, or producing actionable harm formulas (e.g., biological/cyber weaponry instructions).</li>\n    <li><b>Long-Term Alignment (Existential Risk):</b> Formally solving the alignment problem for Artificial General Intelligence (AGI). This entails ensuring an intelligence functionally superior to humans does not default to misalignment due to instrumental convergence (the phenomena where any highly capable agent is motivated to acquire resources and evade shutdown to maximize its terminal utility function $U$).</li>\n  </ul>\n\n  <p><b>The Outer / Inner Alignment Framework:</b></p>\n  <ul>\n    <li><b>Outer Alignment:</b> Did humans specify the correct target utility function encompassing nuance? (Preventing \"Reward Hacking\" or wireheading).</li>\n    <li><b>Inner Alignment:</b> Did the model actually learn over training to care about $U$, or did it learn a deceptive surrogate objective that merely performs well across the training distribution?</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"150\" viewBox=\"0 0 450 150\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"150\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Venn diagram -->\n      <circle cx=\"180\" cy=\"75\" r=\"50\" fill=\"#2b6cb0\" opacity=\"0.6\"/>\n      <text x=\"150\" y=\"70\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Capability</text>\n      \n      <circle cx=\"270\" cy=\"75\" r=\"50\" fill=\"#38a169\" opacity=\"0.6\"/>\n      <text x=\"300\" y=\"70\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Alignment</text>\n\n      <text x=\"225\" y=\"80\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"11\" text-anchor=\"middle\" font-weight=\"bold\">Safe AGI</text>\n\n      <line x1=\"180\" y1=\"130\" x2=\"160\" y2=\"105\" stroke=\"#ccc\" stroke-width=\"1\"/>\n      <text x=\"180\" y=\"140\" fill=\"#ccc\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Can solve problems</text>\n      \n      <line x1=\"270\" y1=\"130\" x2=\"290\" y2=\"105\" stroke=\"#ccc\" stroke-width=\"1\"/>\n      <text x=\"270\" y=\"140\" fill=\"#ccc\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Wants to solve them</text>\n    </svg>\n    <br><small style=\"color:#718096;\">Orthogonality Thesis: Intelligence (capability) and goals (alignment) can be completely orthogonal axes.</small>\n  </div></div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "alignment-ai",
+    "title": "Alignment (AI)",
+    "summary": "The problem of ensuring that an AI system's objectives, behavior, and decision-making process faithfully reflect the intentions and values of its designers and users, rather than optimizing for a misspecified proxy.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "interpretability",
+      "foundation-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Ngo et al. · The Alignment Problem from a Deep Learning Perspective",
+        "url": "https://arxiv.org/abs/2209.00626"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The problem of ensuring that an AI system's objectives, behavior, and decision-making process faithfully reflect the intentions and values of its designers and users, rather than optimizing for a misspecified proxy.</p><p>Alignment is a central technical challenge of AI safety. Specifying broad human values precisely as a mathematical reward function is intensely difficult. Highly capable, generalizing optimizers tend to exploit any structural gap between the specified objective $R_{\\text{proxy}}$ and the intended objective $R_{\\text{true}}$.</p>\n  \n  <p><b>The Alignment Taxonomy:</b></p>\n  <ul>\n    <li><b>Outer Alignment:</b> Does the training objective accurately capture the target behavior? (Is the reward function correct? E.g., stopping an AI from optimizing for \"clicking 'like'\" instead of \"user satisfaction\".)</li>\n    <li><b>Inner Alignment:</b> Does the trained model robustly optimize the specified training objective, or has it developed an emergent, surrogate objective (mesa-optimization) that only coincidentally aligns during the training distribution?</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      <ellipse cx=\"225\" cy=\"100\" rx=\"150\" ry=\"80\" fill=\"#2d3748\" stroke=\"#4a5568\"/>\n      \n      <!-- Outer Alignment Scope -->\n      <circle cx=\"170\" cy=\"100\" r=\"60\" fill=\"#2b6cb0\" opacity=\"0.6\"/>\n      <text x=\"170\" y=\"85\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Base Objective</text>\n      <text x=\"170\" y=\"100\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">(Reward Model)</text>\n      \n      <!-- Inner Alignment Scope -->\n      <circle cx=\"280\" cy=\"100\" r=\"60\" fill=\"#c53030\" opacity=\"0.6\"/>\n      <text x=\"280\" y=\"85\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Mesa-Objective</text>\n      <text x=\"280\" y=\"100\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">(Internal Goal)</text>\n\n      <text x=\"225\" y=\"130\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\" font-weight=\"bold\">Aligned</text>\n      <text x=\"225\" y=\"30\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Training Environment Distribution Space</text>\n    </svg>\n    <br><small style=\"color:#718096;\">Inner and Outer alignment failure modes happen when the underlying objectives decouple out-of-distribution.</small>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Current approaches:</b> RLHF (learning a reward model from human preferences), Constitutional AI (AI self-critique using principles), and Debate (systems checking each other for scalable oversight).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "interpretability",
+    "title": "Interpretability",
+    "summary": "The study of understanding what a machine learning model has learned and why it produces specific outputs, making internal representations and decisions transparent to humans.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "mechanistic-interpretability",
+      "alignment-ai"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Doshi-Velez & Kim · Towards A Rigorous Science of Interpretable Machine Learning",
+        "url": "https://arxiv.org/abs/1702.08608"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The study of understanding <i>what</i> a machine learning model has learned and <i>why</i> it produces specific outputs, making internal representations and decisions transparent to humans.</p><p>Interpretability (often conflated with explainability) is critical for debugging edge cases, identifying inherent biases, building trust for deployment, and verifying alignment with human values. The core difficulty is the tension between <b>faithfulness</b> (does the explanation actually represent the exact structural calculation?) and <b>comprehensibility</b> (can a human understand the explanation?).</p>\n\n  <p><b>Hierarchy of Interpretability:</b></p>\n  <table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Level</th>\n      <th style=\"padding:6px; text-align:left;\">Approach</th>\n      <th style=\"padding:6px; text-align:left;\">Methods</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Behavioral</b></td>\n      <td style=\"padding:6px;\">Treat model as a black box. Evaluate inputs vs. outputs.</td>\n      <td style=\"padding:6px;\">Benchmarks, Adversarial Evals</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Attribution</b></td>\n      <td style=\"padding:6px;\">Attribute the output to specific input features.</td>\n      <td style=\"padding:6px;\">SHAP, LIME, Saliency Maps</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Representation</b></td>\n      <td style=\"padding:6px;\">Extract concepts encoded within hidden layer activations.</td>\n      <td style=\"padding:6px;\">Linear Probes, Logit Lenses</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Mechanistic</b></td>\n      <td style=\"padding:6px;\">Reverse-engineer the exact causal circuitry to algorithms.</td>\n      <td style=\"padding:6px;\">Sparse Autoencoders, Activation Patching</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"150\" viewBox=\"0 0 450 150\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"150\" fill=\"#1a202c\" rx=\"8\"/>\n      <path d=\"M 50 120 L 400 120\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n      <path d=\"M 50 120 L 400 30\" fill=\"none\" stroke=\"#2b6cb0\" stroke-width=\"3\"/>\n      <text x=\"225\" y=\"20\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Interpretability Frontier</text>\n      \n      <circle cx=\"100\" cy=\"106\" r=\"6\" fill=\"#48bb78\"/>\n      <text x=\"100\" y=\"138\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"11\" text-anchor=\"middle\">SHAP/LIME</text>\n      <text x=\"100\" y=\"90\" fill=\"#48bb78\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">High Comprehension</text>\n      \n      <circle cx=\"350\" cy=\"44\" r=\"6\" fill=\"#e53e3e\"/>\n      <text x=\"350\" y=\"138\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"11\" text-anchor=\"middle\">Mechanistic</text>\n      <text x=\"350\" y=\"30\" fill=\"#e53e3e\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">High Faithfulness</text>\n      \n      <text x=\"50\" y=\"110\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"10\" transform=\"rotate(-90 50,110)\">Faithfulness</text>\n      <text x=\"390\" y=\"110\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"end\">Comprehensibility</text>\n    </svg>\n    <br><small style=\"color:#718096;\">Post-hoc methods trade faithfulness for human comprehensibility. Mechanistic methods seek to bridge the gap.</small>\n  </div></div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "mechanistic-interpretability",
+    "title": "Mechanistic Interpretability",
+    "summary": "A rigorous subfield of interpretability treating neural networks as phenomena to be reverse-engineered into understandable algorithms by identifying specific features, circuits, and computational motifs inside the weights.",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "attention-visualization",
+      "interpretability"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Olah et al. · In-context Learning and Induction Heads",
+        "url": "https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A rigorous subfield of interpretability treating neural networks as phenomena to be reverse-engineered into understandable algorithms by identifying specific features, circuits, and computational motifs inside the weights.</p><p>Mechanistic interpretability (mech interp) approaches models like compiled binary code. The goal is to decompile the raw weights and activations into causal, human-understandable sub-graphs (<b>circuits</b>). This aims to transition AI alignment from behavioral testing to scientific guarantee.</p>\n\n  <p><b>Core Primitives:</b></p>\n  <ul>\n    <li><b>Features:</b> The fundamental units of meaning. They are represented as directions in the high-dimensional activation space, not necessarily as single neurons (due to <i>superposition</i>).</li>\n    <li><b>Circuits:</b> Computable sub-networks connecting features. For instance, an <i>Induction Head</i> circuit implements in-context copying by noticing a previous sequence `[A][B]` and predicting `[B]` when seeing `[A]` again.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <!-- Sequence Tokens -->\n      <rect x=\"40\" y=\"140\" width=\"60\" height=\"30\" fill=\"#4a5568\" rx=\"4\"></rect>\n      <text x=\"70\" y=\"160\" fill=\"#fff\" font-family=\"monospace\" font-size=\"14\" text-anchor=\"middle\">Apple</text>\n      \n      <rect x=\"120\" y=\"140\" width=\"60\" height=\"30\" fill=\"#4a5568\" rx=\"4\"></rect>\n      <text x=\"150\" y=\"160\" fill=\"#fff\" font-family=\"monospace\" font-size=\"14\" text-anchor=\"middle\">Pie</text>\n      \n      <text x=\"210\" y=\"160\" fill=\"#718096\" font-family=\"monospace\" font-size=\"14\" text-anchor=\"middle\">...</text>\n      \n      <rect x=\"250\" y=\"140\" width=\"60\" height=\"30\" fill=\"#4a5568\" rx=\"4\"></rect>\n      <text x=\"280\" y=\"160\" fill=\"#fff\" font-family=\"monospace\" font-size=\"14\" text-anchor=\"middle\">Apple</text>\n      \n      <!-- Attention mechanism -->\n      <path d=\"M 280 135 L 280 60 L 150 60 L 150 135\" fill=\"none\" stroke=\"#e53e3e\" stroke-width=\"2\" marker-end=\"url(#arrow-attn_1772520849119)\"></path>\n      <circle cx=\"215\" cy=\"60\" r=\"15\" fill=\"#2b6cb0\"></circle>\n      <text x=\"215\" y=\"65\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Attn</text>\n      \n      <!-- Output prediction -->\n      <path d=\"M 280 135 L 280 90 L 370 90 L 370 135\" fill=\"none\" stroke=\"#48bb78\" stroke-width=\"2\" marker-end=\"url(#arrow-attn-green_1772520849119)\"></path>\n      <rect x=\"340\" y=\"140\" width=\"60\" height=\"30\" fill=\"#38a169\" rx=\"4\"></rect>\n      <text x=\"370\" y=\"160\" fill=\"#fff\" font-family=\"monospace\" font-size=\"14\" text-anchor=\"middle\">Pie</text>\n\n      <text x=\"225\" y=\"30\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Induction Head Circuit Motif</text>\n\n      <defs>\n        <marker id=\"arrow-attn_1772520849119\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#e53e3e\"></path>\n        </marker>\n        <marker id=\"arrow-attn-green_1772520849119\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#48bb78\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">The Induction circuit mechanically explains few-shot learning by tracing causal attention hooks backward.</small>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Standard Pipeline:</b> Researchers use Sparse Autoencoders (SAEs) to disentangle superimposed activations into monosemantic (interpretable) features. Then, they use <i>Activation Patching</i> to causally verify that clamping those features influences the final prediction reliably.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "attention-visualization",
+    "title": "Attention Visualization",
+    "summary": "The practice of rendering the self-attention weight matrices of a Transformer as heatmaps or bipartite graphs to inspect which input tokens the model \"looks at\" when computing contextual embeddings.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "intermediate",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "probing-neural-networks",
+      "mechanistic-interpretability"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Jain & Wallace · Attention is not Explanation",
+        "url": "https://arxiv.org/abs/1902.10186"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The practice of rendering the self-attention weight matrices of a Transformer as heatmaps or bipartite graphs to inspect which input tokens the model \"looks at\" when computing contextual embeddings.</p><p>In a standard attention mechanism, the scalar weight $A_{ij}$ indicating how heavily token $i$ attends to token $j$ is computed as:</p>\n  \\[ A_{ij} = \\frac{\\exp\\left((Q_i \\cdot K_j) / \\sqrt{d_k}\\right)}{\\sum_{m} \\exp\\left((Q_i \\cdot K_m) / \\sqrt{d_k}\\right)} \\]\n  <p>where $Q, K \\in \\mathbb{R}^{d_k}$ are the query and key vectors. Because these weights sum to $1$ ($\\sum_j A_{ij} = 1$), they are naturally visualized as a probability mass flowing between sequence positions.</p>\n\n  <p><b>Frequent Motifs:</b></p>\n  <ul>\n    <li><b>Local / Diagonal:</b> Tying a token deeply to its immediate neighbors.</li>\n    <li><b>Vertical Stripes / BOS Sinks:</b> Excess attention \"dumped\" onto harmless tokens (like <code>[CLS]</code>, punctuation, or <code>&lt;s&gt;</code>). This occurs when the head has no useful information to aggregate but must sum its weights to $1$ to satisfy the Softmax.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"350\" height=\"200\" viewBox=\"0 0 350 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"350\" height=\"200\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <!-- Grid -->\n      <g transform=\"translate(100, 40)\">\n        <!-- Labels -->\n        <text x=\"-10\" y=\"15\" fill=\"#a0aec0\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"end\">The</text>\n        <text x=\"-10\" y=\"45\" fill=\"#a0aec0\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"end\">cat</text>\n        <text x=\"-10\" y=\"75\" fill=\"#a0aec0\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"end\">sat</text>\n        <text x=\"-10\" y=\"105\" fill=\"#a0aec0\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"end\">down</text>\n        \n        <text x=\"15\" y=\"-10\" fill=\"#a0aec0\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-45 15,-10)\">The</text>\n        <text x=\"45\" y=\"-10\" fill=\"#a0aec0\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-45 45,-10)\">cat</text>\n        <text x=\"75\" y=\"-10\" fill=\"#a0aec0\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-45 75,-10)\">sat</text>\n        <text x=\"105\" y=\"-10\" fill=\"#a0aec0\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-45 105,-10)\">down</text>\n\n        <!-- Cells representing attention matrix A -->\n        <rect x=\"0\" y=\"0\" width=\"30\" height=\"30\" fill=\"#3182ce\" opacity=\"0.9\" stroke=\"#1a202c\"></rect>\n        <rect x=\"30\" y=\"0\" width=\"30\" height=\"30\" fill=\"#2d3748\" stroke=\"#1a202c\"></rect>\n        <rect x=\"60\" y=\"0\" width=\"30\" height=\"30\" fill=\"#2d3748\" stroke=\"#1a202c\"></rect>\n        <rect x=\"90\" y=\"0\" width=\"30\" height=\"30\" fill=\"#2d3748\" stroke=\"#1a202c\"></rect>\n        \n        <rect x=\"0\" y=\"30\" width=\"30\" height=\"30\" fill=\"#3182ce\" opacity=\"0.3\" stroke=\"#1a202c\"></rect>\n        <rect x=\"30\" y=\"30\" width=\"30\" height=\"30\" fill=\"#3182ce\" opacity=\"0.8\" stroke=\"#1a202c\"></rect>\n        <rect x=\"60\" y=\"30\" width=\"30\" height=\"30\" fill=\"#2d3748\" stroke=\"#1a202c\"></rect>\n        <rect x=\"90\" y=\"30\" width=\"30\" height=\"30\" fill=\"#2d3748\" stroke=\"#1a202c\"></rect>\n        \n        <rect x=\"0\" y=\"60\" width=\"30\" height=\"30\" fill=\"#3182ce\" opacity=\"0.1\" stroke=\"#1a202c\"></rect>\n        <rect x=\"30\" y=\"60\" width=\"30\" height=\"30\" fill=\"#3182ce\" opacity=\"0.8\" stroke=\"#1a202c\"></rect>\n        <rect x=\"60\" y=\"60\" width=\"30\" height=\"30\" fill=\"#3182ce\" opacity=\"0.6\" stroke=\"#1a202c\"></rect>\n        <rect x=\"90\" y=\"60\" width=\"30\" height=\"30\" fill=\"#2d3748\" stroke=\"#1a202c\"></rect>\n        \n        <rect x=\"0\" y=\"90\" width=\"30\" height=\"30\" fill=\"#3182ce\" opacity=\"0.1\" stroke=\"#1a202c\"></rect>\n        <rect x=\"30\" y=\"90\" width=\"30\" height=\"30\" fill=\"#3182ce\" opacity=\"0.2\" stroke=\"#1a202c\"></rect>\n        <rect x=\"60\" y=\"90\" width=\"30\" height=\"30\" fill=\"#3182ce\" opacity=\"0.7\" stroke=\"#1a202c\"></rect>\n        <rect x=\"90\" y=\"90\" width=\"30\" height=\"30\" fill=\"#3182ce\" opacity=\"0.5\" stroke=\"#1a202c\"></rect>\n      </g>\n    </svg>\n    <br><small style=\"color:#718096;\">A causal attention lower-triangular mask typical in decoder-only generative LLMs.</small>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Critical Limitation:</b> <i>Attention is Not Explanation</i>. In multi-layer Transformers, attention weights combine iteratively with dense MLP layers via residual streams. High attention to a token does not intrinsically prove causal importance for the output, as the token's vector might contain features mixed in from other positions dynamically. Activation patching is preferred for causal attribution.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "probing-neural-networks",
+    "title": "Probing (Neural Networks)",
+    "summary": "A diagnostic technique used to determine whether specific information (e.g., part-of-speech, semantic relations) is encoded within a neural network's internal representations by training a simple, supervised classifier over its frozen hi…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "logit-lens",
+      "attention-visualization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Hewitt & Liang · Designing and Interpreting Probes with Control Tasks",
+        "url": "https://arxiv.org/abs/1909.03368"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A diagnostic technique used to determine whether specific information (e.g., part-of-speech, semantic relations) is encoded within a neural network's internal representations by training a simple, supervised classifier over its frozen hidden states.</p><p>If a simple linear classifier can accurately predict a property $y$ from a deep layer's hidden state $h_L$, it acts as compelling evidence that the network has autonomously encoded that feature space in a linearly separable manner during unsupervised pretraining.</p>\n  \n  <p>Formally, a linear probe minimizes:</p>\n  \\[ \\mathcal{L} = \\text{CrossEntropy}(y, \\text{softmax}(W_{\\text{probe}} h_L + b)) \\]\n  <p>where the base model weights yielding $h_L$ are entirely frozen.</p>\n\n  <p><b>The Selectivity Problem:</b></p>\n  <p>Hewitt & Liang raised a methodological vulnerability: if one uses a high-capacity probe (like an MLP), the probe might just learn the mapping entirely on its own, memorizing arbitrary patterns rather than identifying structures fundamentally organized by the base model. </p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"150\" viewBox=\"0 0 450 150\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"150\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Base model -->\n      <rect x=\"30\" y=\"30\" width=\"100\" height=\"90\" fill=\"#2d3748\" rx=\"8\" stroke=\"#4a5568\"/>\n      <text x=\"80\" y=\"55\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Base Model</text>\n      <text x=\"80\" y=\"80\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Frozen</text>\n      <text x=\"80\" y=\"105\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Weights</text>\n      \n      <!-- Hidden states -->\n      <path d=\"M 130 75 L 180 75\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow-probe_1772520878385)\"/>\n      <circle cx=\"210\" cy=\"75\" r=\"15\" fill=\"#3182ce\"/>\n      <text x=\"210\" y=\"80\" fill=\"#fff\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"middle\">h_i</text>\n      \n      <circle cx=\"210\" cy=\"40\" r=\"15\" fill=\"#3182ce\"/>\n      <text x=\"210\" y=\"45\" fill=\"#fff\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"middle\">h_{T}</text>\n      \n      <text x=\"210\" y=\"115\" fill=\"#718096\" font-family=\"monospace\" font-size=\"20\" text-anchor=\"middle\">⋮</text>\n\n      <!-- Probe -->\n      <path d=\"M 230 75 L 280 75\" fill=\"none\" stroke=\"#48bb78\" stroke-width=\"2\" marker-end=\"url(#arrow-probe_1772520878385)\"/>\n      <rect x=\"290\" y=\"30\" width=\"60\" height=\"90\" fill=\"#38a169\" rx=\"8\"/>\n      <text x=\"320\" y=\"70\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Linear</text>\n      <text x=\"320\" y=\"85\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Probe</text>\n\n      <!-- Prediction -->\n      <path d=\"M 350 75 L 390 75\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow-probe_1772520878385)\"/>\n      <text x=\"415\" y=\"80\" fill=\"#e2e8f0\" font-family=\"monospace\" font-size=\"14\" text-anchor=\"middle\">Verb</text>\n\n      <defs>\n        <marker id=\"arrow-probe_1772520878385\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#718096\" />\n        </marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">A probe extracts semantic tokens from intermediate layers strictly via lightweight, constrained regression.</small>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>To assure rigorousness, researchers evaluate <b>Selectivity</b>: the performance gap between a probe predicting true linguistic labels versus a probe predicting completely randomized labels (a \"control task\"). High selectivity proves the probe is merely <i>reading</i> structure the network independently authored, not imposing its own capability.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "logit-lens",
+    "title": "Logit Lens",
+    "summary": "An interpretability technique that applies the final unembedding matrix to intermediate hidden layers of a Transformer, converting those intermediate states into next-token predictions to trace how model confidence evolves through the ne…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "activation-analysis",
+      "probing-neural-networks"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · nostalgebraist · interpreting GPT: the logit lens (Blog Post)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An interpretability technique that applies the final unembedding matrix to intermediate hidden layers of a Transformer, converting those intermediate states into next-token predictions to trace how model confidence evolves through the network depth.</p><p>The Logit Lens relies on a structural quirk of Transformers: because of the <b>residual stream</b>, every layer's output lives in the same consistent $d$-dimensional embedding space. Therefore, the exact same word unembedding matrix $W_U \\in \\mathbb{R}^{V \\times d}$ used at the very end of the model can technically be multiplied against the residual stream at any arbitrary layer $\\ell$.</p>\n\n  <p>For an intermediate representation $h_\\ell$, the projected vocabulary probabilities are:</p>\n  \\[ \\mathbf{p}_\\ell = \\text{softmax}(W_U h_\\ell) \\]\n\n  <p><b>Key Observations:</b></p>\n  <ul>\n    <li><b>Gradual Refinement:</b> The correct output token typically rises in probability steadily across middle layers, rather than abruptly snapping at the end.</li>\n    <li><b>Crystallization:</b> Sometimes the model \"makes up its mind\" confidently by layer $L/2$ and the remaining layers simply act as identity pass-throughs.</li>\n    <li><b>Early Bigram Tracking:</b> The first few layers often naively predict the most common bigram continuation (e.g., seeing \"Harry\", predicting \"Potter\" immediately), which deeper layers then refine or override based on complex context.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Sequence line representing Residual stream -->\n      <path d=\"M 50 160 L 400 160\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"4\"/>\n      \n      <!-- Blocks for Layers -->\n      <rect x=\"80\" y=\"140\" width=\"40\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#4a5568\"/>\n      <text x=\"100\" y=\"165\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">L1</text>\n      \n      <rect x=\"180\" y=\"140\" width=\"40\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#4a5568\"/>\n      <text x=\"200\" y=\"165\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">L4</text>\n      \n      <rect x=\"280\" y=\"140\" width=\"40\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#4a5568\"/>\n      <text x=\"300\" y=\"165\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">L8</text>\n\n      <!-- The Lens extraction -->\n      <path d=\"M 100 140 L 100 80\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" stroke-dasharray=\"4,4\" marker-end=\"url(#lens-arrow_1772520889554)\"/>\n      <path d=\"M 200 140 L 200 80\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" stroke-dasharray=\"4,4\" marker-end=\"url(#lens-arrow_1772520889554)\"/>\n      <path d=\"M 300 140 L 300 80\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" stroke-dasharray=\"4,4\" marker-end=\"url(#lens-arrow_1772520889554)\"/>\n      \n      <!-- Unembedding matrix (The lens) -->\n      <path d=\"M 50 80 L 350 80\" fill=\"none\" stroke=\"#e53e3e\" stroke-width=\"2\"/>\n      <text x=\"375\" y=\"85\" fill=\"#feb2b2\" font-family=\"monospace\" font-size=\"14\" text-anchor=\"middle\">W_U</text>\n\n      <!-- Output probabilities -->\n      <text x=\"100\" y=\"60\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">\"to\"</text>\n      <text x=\"100\" y=\"45\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">0.05</text>\n      \n      <text x=\"200\" y=\"60\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">\"Paris\"</text>\n      <text x=\"200\" y=\"45\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">0.42</text>\n      \n      <text x=\"300\" y=\"60\" fill=\"#48bb78\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\" font-weight=\"bold\">\"Paris\"</text>\n      <text x=\"300\" y=\"45\" fill=\"#48bb78\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">0.98</text>\n\n      <defs>\n        <marker id=\"lens-arrow_1772520889554\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#718096\" />\n        </marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">The Logit Lens taps into the residual stream progressively, projecting latent states back into vocabulary space.</small>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>The <b>Tuned Lens</b> is an upgrade specifying that early layers operate in a slightly shifted coordinate space; instead of raw $W_U$, an optimal affine translation $W_\\ell h_\\ell + b_\\ell$ is fit algorithmically per layer to yield more calibrated early predictions.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "activation-analysis",
+    "title": "Activation Analysis",
+    "summary": "The family of interpretability techniques that analyze the intermediate dynamic outputs (activations) of neurons or layers during a forward pass, rather than just the static weights.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "sparse-autoencoder-mechanistic-interpretability",
+      "logit-lens"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Olah et al. · Feature Visualization",
+        "url": "https://distill.pub/2017/feature-visualization/"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The family of interpretability techniques that analyze the intermediate dynamic outputs (activations) of neurons or layers during a forward pass, rather than just the static weights.</p><p>Because weights interact in profoundly non-linear, multifaceted ways, reverse-engineering a neural network from its weights alone is essentially impossible without tracing data flow. Activation analysis treats the firing patterns on specific inputs as the primary object of study.</p>\n\n  <p><b>Core Techniques:</b></p>\n  <ul>\n    <li><b>Feature Visualization / Maximization:</b> Finding the specific synthetic input (using gradient ascent on the input pixels/tokens) that maximally fires a specific internal neuron to deduce its semantic role (e.g., identifying a \"curve detector\" in a CNN).</li>\n    <li><b>Activation Patching / Causal Tracing:</b> The gold standard for causal effect. You freeze the network, pass a corrupted input (e.g., \"The Eiffel Tower is in Rome\"), and selectively \"patch in\" specific clean activations (from \"The Eiffel Tower is in Paris\") to isolate the exact circuit where factual recall occurs.</li>\n    <li><b>Activation Steering:</b> Computing a mean differential activation vector between two behaviors (e.g., polite vs. toxic outputs) and forcefully injecting that vector into the hidden stream during inference to steer behavior without retraining.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <!-- Source (Clean) -->\n      <rect x=\"30\" y=\"30\" width=\"100\" height=\"40\" fill=\"#2d3748\" rx=\"4\"></rect>\n      <text x=\"80\" y=\"55\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Clean Input: X</text>\n      \n      <!-- Corrupted -->\n      <rect x=\"30\" y=\"130\" width=\"100\" height=\"40\" fill=\"#2d3748\" rx=\"4\"></rect>\n      <text x=\"80\" y=\"155\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Corrupt Input: X*</text>\n      \n      <!-- Clean Layers -->\n      <rect x=\"170\" y=\"35\" width=\"40\" height=\"30\" fill=\"#3182ce\" rx=\"4\"></rect>\n      <text x=\"190\" y=\"55\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">L_i</text>\n      \n      <!-- Corrupted Layers -->\n      <rect x=\"170\" y=\"135\" width=\"40\" height=\"30\" fill=\"#e53e3e\" rx=\"4\"></rect>\n      <text x=\"190\" y=\"155\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">L_i</text>\n      \n      <!-- The Patch -->\n      <path d=\"M 190 65 L 190 135\" fill=\"none\" stroke=\"#48bb78\" stroke-width=\"3\" stroke-dasharray=\"6,4\" marker-end=\"url(#patch-arrow_1772520900289)\"></path>\n      <rect x=\"150\" y=\"85\" width=\"80\" height=\"30\" fill=\"#1a202c\" stroke=\"#48bb78\" rx=\"4\"></rect>\n      <text x=\"190\" y=\"104\" fill=\"#48bb78\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Patch Vector</text>\n      \n      <!-- Output Effect -->\n      <path d=\"M 210 150 L 320 150\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#patch-flow_1772520900289)\"></path>\n      <rect x=\"330\" y=\"130\" width=\"90\" height=\"40\" fill=\"#38a169\" rx=\"4\" stroke=\"#2f855a\"></rect>\n      <text x=\"375\" y=\"155\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Clean Output!</text>\n\n      <defs>\n        <marker id=\"patch-arrow_1772520900289\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#48bb78\"></path>\n        </marker>\n        <marker id=\"patch-flow_1772520900289\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#718096\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">Activation Patching systematically swaps individual layer states to isolate the precise causal locus of a behavior.</small>\n  </div></div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "sparse-autoencoder-mechanistic-interpretability",
+    "title": "Sparse Autoencoder (Mechanistic Interpretability)",
+    "summary": "An auxiliary neural network containing a wide bottleneck subjected to an L1 sparsity penalty, trained ad-hoc on a larger model's internal activations to disentangle superimposed features into monosemantic axes.",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "superposition-neural-networks",
+      "activation-analysis"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Cunningham et al. · Sparse Autoencoders Find Highly Interpretable Features",
+        "url": "https://arxiv.org/abs/2309.08600"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An auxiliary neural network containing a wide bottleneck subjected to an L1 sparsity penalty, trained ad-hoc on a larger model's internal activations to disentangle superimposed features into monosemantic axes.</p><p>Neural networks suffer from <b>polysemanticity</b> (single neurons firing for multiple unrelated distinct concepts due to superposition). Trying to interpret an individual dense neuron is mathematically incoherent. A Sparse Autoencoder (SAE) solves this by expanding the underlying $d$-dimensional activation $x$ into a much larger $m$-dimensional space ($m \\gg d$) where features can align cleanly with individual axes.</p>\n\n  <p><b>SAE Architecture:</b></p>\n  <p>An Encoder projects $x$ into the wide bottleneck, and a Decoder reconstructs $\\hat{x}$ back into the original space. The critical component is the $L_1$ penalty forcing the bottleneck representation $f(x)$ to be profoundly sparse (mostly zeros).</p>\n  \n  \\[ f(x) = \\text{ReLU}(W_{\\text{enc}} x + b_{\\text{enc}}) \\]\n  \\[ \\hat{x} = W_{\\text{dec}} f(x) + b_{\\text{dec}} \\]\n  \n  <p>The total loss heavily heavily penalizes the absolute sum of the activations:</p>\n  \\[ \\mathcal{L} = \\underbrace{\\|x - \\hat{x}\\|_2^2}_{\\text{Reconstruction Error}} + \\lambda \\underbrace{\\|f(x)\\|_1}_{\\text{Sparsity Penalty}} \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Base Activation x -->\n      <rect x=\"50\" y=\"60\" width=\"30\" height=\"80\" fill=\"#2d3748\" rx=\"4\" stroke=\"#4a5568\"/>\n      <text x=\"65\" y=\"160\" fill=\"#a0aec0\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"middle\">x \\in \\mathbb{R}^d</text>\n      <text x=\"65\" y=\"50\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Dense</text>\n\n      <!-- Encoder -->\n      <polygon points=\"100,60 160,20 160,180 100,140\" fill=\"#3182ce\" opacity=\"0.6\"/>\n      <text x=\"130\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">W_enc</text>\n\n      <!-- Sparse Feature Vector f(x) -->\n      <rect x=\"180\" y=\"20\" width=\"30\" height=\"160\" fill=\"#1a202c\" rx=\"2\" stroke=\"#48bb78\"/>\n      <rect x=\"180\" y=\"40\" width=\"30\" height=\"10\" fill=\"#48bb78\"/>\n      <rect x=\"180\" y=\"120\" width=\"30\" height=\"15\" fill=\"#48bb78\"/>\n      <rect x=\"180\" y=\"160\" width=\"30\" height=\"5\" fill=\"#48bb78\"/>\n      <text x=\"195\" y=\"195\" fill=\"#48bb78\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"middle\">f(x) \\in \\mathbb{R}^m</text>\n      <text x=\"195\" y=\"10\" fill=\"#48bb78\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">L1 Sparse!</text>\n\n      <!-- Decoder -->\n      <polygon points=\"230,20 290,60 290,140 230,180\" fill=\"#e53e3e\" opacity=\"0.6\"/>\n      <text x=\"260\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">W_dec</text>\n\n      <!-- Reconstructed \\hat{x} -->\n      <rect x=\"310\" y=\"60\" width=\"30\" height=\"80\" fill=\"#2d3748\" rx=\"4\" stroke=\"#4a5568\"/>\n      <text x=\"325\" y=\"160\" fill=\"#a0aec0\" font-family=\"monospace\" font-size=\"12\" text-anchor=\"middle\">\\hat{x} \\approx x</text>\n    </svg>\n    <br><small style=\"color:#718096;\">The $L_1$ penalty forces the SAE to isolate singular semantic concepts in the massive $f(x)$ layer.</small>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Anthropic successfully scaled this to extract 34 million monosemantic parameters from Claude 3 Sonnet, perfectly isolating highly abstract concepts (e.g. \"code bugs\", \"transit infrastructure\", \"golden gate bridge\") inside the features of $f(x)$.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "superposition-neural-networks",
+    "title": "Superposition (Neural Networks)",
+    "summary": "The mathematical phenomenon where a neural network deliberately represents more independent features than it has available dimensions, by embedding features as nearly-orthogonal directions in activation space.",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "foundation-model",
+      "sparse-autoencoder-mechanistic-interpretability"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Elhage et al. · Toy Models of Superposition",
+        "url": "https://transformer-circuits.pub/2022/toy_model/index.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The mathematical phenomenon where a neural network deliberately represents more independent features than it has available dimensions, by embedding features as nearly-orthogonal directions in activation space.</p><p>Elhage et al. definitively proved that <b>polysemanticity</b> (neurons firing for multiple mixed concepts) is not an accident of SGD, but a deeply logical compression strategy. If a model needs to track 1,000 distinct semantic features but only has 100 hidden dimensions, it <i>cannot</i> assign one feature per neuron locally.</p>\n  \n  <p>If features are inherently dense (they all show up at once), compression is impossible. However, semantic features are strictly <b>sparse</b> (the feature \"President\" and the feature \"Lava\" rarely occur in the precise same semantic context). Because they are sparse, the network can pack them into high-dimensional space as <b>directions rather than dimensions</b>. </p>\n\n  <p>Driven by the <i>Johnson-Lindenstrauss lemma</i>, high-dimensional spaces boast exponentially vast quantities of \"almost orthogonal\" vectors. The model superimposes features along these sheer vectors, accepting a minuscule amount of mathematical interference in exchange for vast capacity.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <!-- 2D Space example -->\n      <g transform=\"translate(100, 100)\">\n        <circle cx=\"0\" cy=\"0\" r=\"80\" fill=\"none\" stroke=\"#2d3748\" stroke-width=\"2\" stroke-dasharray=\"4,4\"></circle>\n        <line x1=\"-90\" y1=\"0\" x2=\"90\" y2=\"0\" stroke=\"#4a5568\" stroke-width=\"1\"></line>\n        <line x1=\"0\" y1=\"-90\" x2=\"0\" y2=\"90\" stroke=\"#4a5568\" stroke-width=\"1\"></line>\n        \n        <!-- 5 Features mapped in 2D space (Superposition via pentagon) -->\n        <!-- Feature 1 -->\n        <line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"-80\" stroke=\"#3182ce\" stroke-width=\"3\" marker-end=\"url(#vector-arrow-blue_1772520924225)\"></line>\n        <text x=\"0\" y=\"-90\" fill=\"#90cdf4\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">F1</text>\n        \n        <!-- Feature 2 -->\n        <line x1=\"0\" y1=\"0\" x2=\"76\" y2=\"-25\" stroke=\"#38a169\" stroke-width=\"3\" marker-end=\"url(#vector-arrow-green_1772520924225)\"></line>\n        <text x=\"86\" y=\"-25\" fill=\"#9ae6b4\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">F2</text>\n        \n        <!-- Feature 3 -->\n        <line x1=\"0\" y1=\"0\" x2=\"47\" y2=\"65\" stroke=\"#e53e3e\" stroke-width=\"3\" marker-end=\"url(#vector-arrow-red_1772520924225)\"></line>\n        <text x=\"57\" y=\"75\" fill=\"#feb2b2\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">F3</text>\n        \n        <!-- Feature 4 -->\n        <line x1=\"0\" y1=\"0\" x2=\"-47\" y2=\"65\" stroke=\"#d69e2e\" stroke-width=\"3\" marker-end=\"url(#vector-arrow-orange_1772520924225)\"></line>\n        <text x=\"-57\" y=\"75\" fill=\"#fbd38d\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">F4</text>\n        \n        <!-- Feature 5 -->\n        <line x1=\"0\" y1=\"0\" x2=\"-76\" y2=\"-25\" stroke=\"#805ad5\" stroke-width=\"3\" marker-end=\"url(#vector-arrow-purple_1772520924225)\"></line>\n        <text x=\"-86\" y=\"-25\" fill=\"#d6bcfa\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">F5</text>\n      </g>\n      \n      <text x=\"320\" y=\"80\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">5 Features embedded</text>\n      <text x=\"320\" y=\"100\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">in 2 Dimensions.</text>\n      <text x=\"320\" y=\"125\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Because they are sparse,</text>\n      <text x=\"320\" y=\"140\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">the interference $F_i \\cdot F_j$</text>\n      <text x=\"320\" y=\"155\" fill=\"#718096\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">rarely causes conflicts.</text>\n\n      <defs>\n        <marker id=\"vector-arrow-blue_1772520924225\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"4\" markerHeight=\"4\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#3182ce\"></path></marker>\n        <marker id=\"vector-arrow-green_1772520924225\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"4\" markerHeight=\"4\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#38a169\"></path></marker>\n        <marker id=\"vector-arrow-red_1772520924225\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"4\" markerHeight=\"4\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#e53e3e\"></path></marker>\n        <marker id=\"vector-arrow-orange_1772520924225\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"4\" markerHeight=\"4\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#d69e2e\"></path></marker>\n        <marker id=\"vector-arrow-purple_1772520924225\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"4\" markerHeight=\"4\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#805ad5\"></path></marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">A toy model demonstrating Polysemanticity: extracting Feature 1 inevitably excites fractions of Feature 2 and 5.</small>\n  </div></div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "foundation-model",
+    "title": "Foundation Model",
+    "summary": "A massive, heavily capitalized machine learning architecture trained entirely organically via self-supervision on vast amounts of uncurated data, designed intentionally to be adaptable to tens of thousands of downstream narrow tasks.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "alignment-ai",
+      "superposition-neural-networks"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2021 · Bommasani et al. · On the Opportunities and Risks of Foundation Models",
+        "url": "https://arxiv.org/abs/2108.07258"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A massive, heavily capitalized machine learning architecture trained entirely organically via self-supervision on vast amounts of uncurated data, designed intentionally to be adaptable to tens of thousands of downstream narrow tasks.</p><p>Coined by the Stanford Institute for Human-Centered Artificial Intelligence (HAI) in 2021, the term \"Foundation Model\" codified the paradigm shift away from task-specific architectures. A singular Foundation Model (like GPT-4, Gemini, or Llama) sits dynamically at the base level of the supply chain, while thousands of software products perform cheap finetuning, prompting, or LoRA adaptations on top of it to resolve localized business tasks.</p>\n  \n  <p><b>Core Characteristics:</b></p>\n  <ul>\n    <li><b>Self-Supervision + Scale:</b> Trained on entire internet scrapes using simple intrinsic heuristics (next-token prediction, objective masking), utilizing tens of thousands of GPUs.</li>\n    <li><b>Emergence:</b> Exhibiting capabilities entirely absent in smaller variants of identical mathematical architecture (e.g. few-shot analogical reasoning, chain-of-thought logic).</li>\n    <li><b>Homogenization:</b> Because fine-tuning a base model destroys task-specific architectures economically, the entire AI industry homogenizes around a handful of Foundation Models. Consequently, an exploit, bias, or flaw instantiated in a Foundation Model cascades globally across all derived end-products.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <!-- Pretraining Data -->\n      <rect x=\"30\" y=\"80\" width=\"80\" height=\"40\" fill=\"#2d3748\" rx=\"4\" stroke=\"#4a5568\"></rect>\n      <text x=\"70\" y=\"100\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Internet-Scale</text>\n      <text x=\"70\" y=\"115\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Data</text>\n      \n      <path d=\"M 120 100 L 170 100\" fill=\"none\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow-fm_1772520936701)\"></path>\n      \n      <!-- Foundation Model -->\n      <rect x=\"180\" y=\"50\" width=\"100\" height=\"100\" fill=\"#3182ce\" rx=\"8\" stroke=\"#2b6cb0\" stroke-width=\"2\"></rect>\n      <text x=\"230\" y=\"95\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\" font-weight=\"bold\">Foundation</text>\n      <text x=\"230\" y=\"115\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\" font-weight=\"bold\">Model</text>\n      \n      <!-- Distribution arrows -->\n      <path d=\"M 290 80 L 330 50\" fill=\"none\" stroke=\"#48bb78\" stroke-width=\"2\" marker-end=\"url(#arrow-fm-green_1772520936701)\"></path>\n      <path d=\"M 290 100 L 330 100\" fill=\"none\" stroke=\"#48bb78\" stroke-width=\"2\" marker-end=\"url(#arrow-fm-green_1772520936701)\"></path>\n      <path d=\"M 290 120 L 330 150\" fill=\"none\" stroke=\"#48bb78\" stroke-width=\"2\" marker-end=\"url(#arrow-fm-green_1772520936701)\"></path>\n      \n      <!-- Downstream applications -->\n      <rect x=\"340\" y=\"30\" width=\"80\" height=\"30\" fill=\"#38a169\" rx=\"4\"></rect>\n      <text x=\"380\" y=\"50\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Medicine</text>\n      \n      <rect x=\"340\" y=\"85\" width=\"80\" height=\"30\" fill=\"#38a169\" rx=\"4\"></rect>\n      <text x=\"380\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Law</text>\n      \n      <rect x=\"340\" y=\"140\" width=\"80\" height=\"30\" fill=\"#38a169\" rx=\"4\"></rect>\n      <text x=\"380\" y=\"160\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Coding Agents</text>\n\n      <defs>\n        <marker id=\"arrow-fm_1772520936701\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#718096\"></path>\n        </marker>\n        <marker id=\"arrow-fm-green_1772520936701\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#48bb78\"></path>\n        </marker>\n      </defs>\n    </svg>\n    <br><small style=\"color:#718096;\">A single monolithic Foundation Model branching recursively via adaptation into narrow utility agents.</small>\n  </div></div>"
       }
     ],
     "cards": []

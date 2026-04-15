@@ -7629,6 +7629,432 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "continual-learning",
+      "title": "Continual Learning",
+      "summary": "A learning paradigm where a model sequentially acquires knowledge from a stream of tasks or data distributions without forgetting previously learned information.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "what-is-catastrophic-forgetting",
+        "ai-safety"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "what-is-catastrophic-forgetting",
+      "title": "What is catastrophic forgetting?",
+      "summary": "The tendency of neural networks to abruptly and severely lose performance on previously learned tasks when trained on new ones.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "curriculum-learning",
+        "continual-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "curriculum-learning",
+      "title": "Curriculum Learning",
+      "summary": "A training strategy where examples are presented to a model in a structured order of increasing difficulty, mimicking the human educational curriculum, to accelerate convergence and find better local optima.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "pretraining-corpus",
+        "what-is-catastrophic-forgetting"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pretraining-corpus",
+      "title": "Pretraining Corpus",
+      "summary": "The vast, unstructured text dataset used to train a language model's base weights during self-supervised learning (e.g., next-token prediction), establishing its fundamental linguistic capabilities and world knowledge.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "instruction-dataset",
+        "curriculum-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "instruction-dataset",
+      "title": "Instruction Dataset",
+      "summary": "A curated collection of (instruction, response) pairs used during the Supervised Fine-Tuning (SFT) phase to teach a foundation model to act as a helpful assistant rather than a pure text-continuation engine.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "preference-dataset",
+        "pretraining-corpus"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "preference-dataset",
+      "title": "Preference Dataset",
+      "summary": "A dataset mapping human or AI evaluation queries to pairwise or ranked responses &mdash; typically a collection of (prompt, chosen, rejected) pairs &mdash; used to train Reward Models in RLHF or directly optimize language models via DPO.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "reward-signal",
+        "instruction-dataset"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "reward-signal",
+      "title": "Reward Signal",
+      "summary": "A scalar value returned by the environment (or a learned model) that indicates the desirability of an agent's recent action, serving as the sole objective function optimized in Reinforcement Learning.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "reinforcement",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "policy-reinforcement-learning",
+        "preference-dataset"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "policy-reinforcement-learning",
+      "title": "Policy (Reinforcement Learning)",
+      "summary": "A mapping from environment states to actions (or a probability distribution over actions) defining an RL agent's behavior. In modern LLMs, the neural network itself embodies the policy layer $\\pi_\\theta(a \\mid s)$.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "reinforcement",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "value-function",
+        "reward-signal"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "value-function",
+      "title": "Value Function",
+      "summary": "A mapping that evaluates how \"good\" it is for an agent to be in a given state (or to take a given action from that state), defined mathematically as the expected cumulative future reward under a specific policy.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "reinforcement",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "ai-safety",
+        "policy-reinforcement-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "ai-safety",
+      "title": "AI Safety",
+      "summary": "An interdisciplinary field of machine learning dedicated to understanding, evaluating, and mitigating the risks associated with highly capable artificial intelligence systems to ensure they remain reliably aligned with human intent.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "continual-learning",
+        "value-function"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "alignment-ai",
+      "title": "Alignment (AI)",
+      "summary": "The problem of ensuring that an AI system's objectives, behavior, and decision-making process faithfully reflect the intentions and values of its designers and users, rather than optimizing for a misspecified proxy.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "interpretability",
+        "foundation-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "interpretability",
+      "title": "Interpretability",
+      "summary": "The study of understanding what a machine learning model has learned and why it produces specific outputs, making internal representations and decisions transparent to humans.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "mechanistic-interpretability",
+        "alignment-ai"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "mechanistic-interpretability",
+      "title": "Mechanistic Interpretability",
+      "summary": "A rigorous subfield of interpretability treating neural networks as phenomena to be reverse-engineered into understandable algorithms by identifying specific features, circuits, and computational motifs inside the weights.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "attention-visualization",
+        "interpretability"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "attention-visualization",
+      "title": "Attention Visualization",
+      "summary": "The practice of rendering the self-attention weight matrices of a Transformer as heatmaps or bipartite graphs to inspect which input tokens the model \"looks at\" when computing contextual embeddings.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "probing-neural-networks",
+        "mechanistic-interpretability"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "probing-neural-networks",
+      "title": "Probing (Neural Networks)",
+      "summary": "A diagnostic technique used to determine whether specific information (e.g., part-of-speech, semantic relations) is encoded within a neural network's internal representations by training a simple, supervised classifier over its frozen hi…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "logit-lens",
+        "attention-visualization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "logit-lens",
+      "title": "Logit Lens",
+      "summary": "An interpretability technique that applies the final unembedding matrix to intermediate hidden layers of a Transformer, converting those intermediate states into next-token predictions to trace how model confidence evolves through the ne…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "activation-analysis",
+        "probing-neural-networks"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "activation-analysis",
+      "title": "Activation Analysis",
+      "summary": "The family of interpretability techniques that analyze the intermediate dynamic outputs (activations) of neurons or layers during a forward pass, rather than just the static weights.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "sparse-autoencoder-mechanistic-interpretability",
+        "logit-lens"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sparse-autoencoder-mechanistic-interpretability",
+      "title": "Sparse Autoencoder (Mechanistic Interpretability)",
+      "summary": "An auxiliary neural network containing a wide bottleneck subjected to an L1 sparsity penalty, trained ad-hoc on a larger model's internal activations to disentangle superimposed features into monosemantic axes.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "superposition-neural-networks",
+        "activation-analysis"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "superposition-neural-networks",
+      "title": "Superposition (Neural Networks)",
+      "summary": "The mathematical phenomenon where a neural network deliberately represents more independent features than it has available dimensions, by embedding features as nearly-orthogonal directions in activation space.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "foundation-model",
+        "sparse-autoencoder-mechanistic-interpretability"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "foundation-model",
+      "title": "Foundation Model",
+      "summary": "A massive, heavily capitalized machine learning architecture trained entirely organically via self-supervision on vast amounts of uncurated data, designed intentionally to be adaptable to tens of thousands of downstream narrow tasks.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "alignment-ai",
+        "superposition-neural-networks"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
