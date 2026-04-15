@@ -65,6 +65,18 @@ Follow these rules when converting HTML backs (or when extending `seed-five-note
 3. **One place for bibliography** — If the note ends with a `<small>…</small>` footer (year · authors · title), **remove it from the body** and store a single line in `papers` (for example `{ "citation": "…", "url": "…" }`). Do **not** repeat the same reference in `sections` or `referencesHtml` unless you are adding extra commentary. **arXiv:** whenever the work has an arXiv preprint, set `papers[].url` to the abstract page **`https://arxiv.org/abs/<arxiv-id>`** (canonical, stable). If the deck footer has no link, look up the paper and add that URL during import or in a quick edit pass; only use a non-arXiv `url` when there is no arXiv listing (books, proprietary reports, essays hosted elsewhere).
 4. **Strip the Anki wrapper div** — Remove the outer `max-width:680px` deck wrapper; the site layout already constrains width. Centered SVG/diagram blocks can be wrapped in `<div class="wiki-deck-figure-wrap">…</div>` for spacing (see `globals.css`).
 5. **Headings as sections** — Turn `<p><b>Mechanism:</b></p>`-style lines into `section.title` + following HTML in `section.body`, so the page reads like a structured article.
+6. **Math inside HTML: `<` is not safe in raw TeX** — Topic prose in `sections[].body` is rendered as HTML (see `SectionBlock.tsx`: `dangerouslySetInnerHTML`). MathJax then typesets `\(...\)` and `\[...\]` inside that HTML. The HTML parser runs **first**: any literal **`<`** begins a tag. Subscripts such as `w_{<t}` or `u_{<i}` are therefore parsed as malformed HTML, which **cuts the DOM** in the middle of an equation. Symptoms include raw `\[` / `\]` text on the page and the **following** paragraph fused into the broken math.
+
+   **Authoring fixes (pick one):**
+
+   - Escape the less-than as an HTML entity inside the string: `w_{&lt;t}` (MathJax still sees the intended subscript after entity decode), or
+   - Prefer notation without `<` in HTML at all, e.g. prefix form **`w_{1:t-1}`** / **`u_{1:i-1}`** instead of “strictly before index \(t\)” shorthand.
+
+   The same rule applies to TeX inside **SVG `<text>`** nodes, since those strings live in the same HTML document.
+
+   **Angle brackets (TeX `\langle`/`\rangle`) and `<code>`:** MathJax does not typeset `\(...\)` inside `<code>…</code>` by default, so delimiters such as `\(\langle X \rangle\)` show up as literal TeX. For monospace examples (e.g. T5 sentinels), use Unicode **mathematical angle brackets** `⟨` `⟩` (U+27E8 / U+27E9), e.g. `⟨X⟩`, or keep `\langle … \rangle` only in ordinary prose/math **outside** `<code>`.
+
+7. **`cards[].answer` and MathJax** — If you keep the “Check your understanding” block (`cards` non-empty), answers are HTML injected only **after** the user expands a row. The wiki runs an extra MathJax pass on that panel when it opens (`typesetMathInSubtree` from `CardEvidence.tsx`), so `\(...\)` / `\[...\]` in `cards[].answer` is supported. The `<` rules in (6) still apply to card HTML.
 
 The preview script `seed-five-notes.mjs` implements the above for the five lowest note IDs (see below).
 
@@ -101,6 +113,26 @@ npm run ml-wiki:validate
 ```
 
 Runs the same integrity checks the app uses at build time (slug set parity, prerequisites/related, path references).
+
+## Routine: arXiv / `papers[]` URL pass (agent- or human-run)
+
+Use this as a **repeatable checklist** (same idea as a short Cursor skill, but kept here so it stays next to the import pipeline). Run after a batch import or whenever outbound links look thin.
+
+1. **Find gaps** — List every `papers[]` object in `topics.json` that has no `url`:
+
+   ```bash
+   node -e "const t=require('./src/app/ml/wiki/content/topics.json'); for (const x of t) for (const p of x.papers||[]) if(!p.url) console.log(x.slug+'\t'+p.citation);"
+   ```
+
+2. **Decide arXiv vs non-arXiv** — If the work is (or was) posted on arXiv, set **`papers[].url`** to **`https://arxiv.org/abs/<arxiv-id>`** (abstract page, stable). Prefer that over `arxiv.org/pdf/…` for reader UX.
+
+3. **Resolve IDs** — Search [arxiv.org](https://arxiv.org/), use `https://export.arxiv.org/api/query?id_list=…` for metadata, or follow DOI / conference page from the citation. Do **not** guess an ID; confirm title/authors match.
+
+4. **Citation vs link** — The importer often copies a **shortened** deck footer. If the linked arXiv work has a different full title or author list, **update `citation`** to match the linked paper, or keep the deck line and add a short **`note`** on that `papers[]` object explaining the mapping (see `WikiPaperRef` in `types.ts`).
+
+5. **No arXiv listing** — Textbooks, old journal-only articles, OpenAI PDFs, ACL Anthology-only, etc.: use a stable non-arXiv `url` (publisher PDF, DOI `https://doi.org/…`, or ACL Anthology) or leave `url` unset if there is no good open link.
+
+6. **Verify** — `npm run ml-wiki:validate` and `npm run build`.
 
 ---
 
