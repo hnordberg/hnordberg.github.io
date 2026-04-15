@@ -3827,6 +3827,221 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "f1-score",
+      "title": "F1 Score",
+      "summary": "The harmonic mean of precision and recall, providing a single metric that balances both. It ranges from 0 to 1, with 1 indicating perfect precision and recall. F1 is the standard metric for imbalanced classification tasks where accuracy…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "rouge",
+        "principal-component-analysis-pca"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "rouge",
+      "title": "ROUGE",
+      "summary": "Recall-Oriented Understudy for Gisting Evaluation — a family of metrics for evaluating automatic summarisation and text generation by measuring n-gram overlap between a candidate and reference text. Unlike BLEU (which is precision-orient…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "longest-common-subsequence",
+        "f1-score"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "longest-common-subsequence",
+      "title": "Longest Common Subsequence",
+      "summary": "The longest common subsequence (LCS) of two sequences is the longest sequence of elements that appear in both, in the same relative order, but not necessarily contiguously. It is a classic dynamic programming problem and the basis for RO…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "edit-distance",
+        "rouge"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "edit-distance",
+      "title": "Edit Distance",
+      "summary": "The minimum number of single-character operations (insertions, deletions, substitutions) required to transform one string into another. Also called Levenshtein distance, it is a fundamental metric for measuring string similarity in NLP a…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "perceptron",
+        "longest-common-subsequence"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "perceptron",
+      "title": "Perceptron",
+      "summary": "The simplest neural network: a single linear unit followed by a step function that outputs a binary decision. The perceptron learning algorithm is guaranteed to converge on linearly separable data, but it cannot learn non-linear decision…",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "decision-tree",
+        "edit-distance"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "decision-tree",
+      "title": "Decision Tree",
+      "summary": "A supervised learning model that recursively partitions the feature space using axis-aligned splits, forming a tree structure where each leaf assigns a class label (classification) or a continuous value (regression). Decision trees are i…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "random-forest",
+        "perceptron"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "random-forest",
+      "title": "Random Forest",
+      "summary": "An ensemble method that trains many decision trees on random bootstrap samples of the data, with random feature subsets at each split, and aggregates their predictions by majority vote (classification) or averaging (regression). This red…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "support-vector-machine-svm",
+        "decision-tree"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "support-vector-machine-svm",
+      "title": "Support Vector Machine (SVM)",
+      "summary": "A classifier that finds the maximum-margin hyperplane separating two classes. The decision boundary is determined by a small subset of training points called support vectors. SVMs can learn non-linear boundaries via the kernel trick.",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "kernel-methods",
+        "random-forest"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "kernel-methods",
+      "title": "Kernel Methods",
+      "summary": "A family of algorithms that operate in high-dimensional (possibly infinite) feature spaces by using kernel functions to compute inner products without explicitly constructing the feature map. This is the \"kernel trick\" — it makes non-lin…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "principal-component-analysis-pca",
+        "support-vector-machine-svm"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "principal-component-analysis-pca",
+      "title": "Principal Component Analysis (PCA)",
+      "summary": "An unsupervised method that finds orthogonal directions of maximum variance in the data, projecting it onto a lower-dimensional subspace while preserving as much variance as possible. PCA is the most widely used linear dimensionality red…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "f1-score",
+        "kernel-methods"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

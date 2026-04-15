@@ -8406,5 +8406,427 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "f1-score",
+    "title": "F1 Score",
+    "summary": "The harmonic mean of precision and recall, providing a single metric that balances both. It ranges from 0 to 1, with 1 indicating perfect precision and recall. F1 is the standard metric for imbalanced classification tasks where accuracy…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "rouge",
+      "principal-component-analysis-pca"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1979 · C. J. van Rijsbergen · Information Retrieval (2nd ed.)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The harmonic mean of precision and recall, providing a single metric that balances both. It ranges from 0 to 1, with 1 indicating perfect precision and recall. F1 is the standard metric for imbalanced classification tasks where accuracy is misleading.</p><p>In binary classification, predictions fall into four categories: true positives (TP), false positives (FP), true negatives (TN), and false negatives (FN). From these:</p>\n\n\\[ \\text{Precision} = \\frac{\\text{TP}}{\\text{TP} + \\text{FP}}, \\qquad \\text{Recall} = \\frac{\\text{TP}}{\\text{TP} + \\text{FN}} \\]\n\n<p>The F1 score combines both into a single number:</p>\n\n\\[ F_1 = 2 \\cdot \\frac{\\text{Precision} \\cdot \\text{Recall}}{\\text{Precision} + \\text{Recall}} = \\frac{2\\,\\text{TP}}{2\\,\\text{TP} + \\text{FP} + \\text{FN}} \\]\n\n<p>The <b>harmonic mean</b> is used rather than the arithmetic mean because it penalises extreme imbalances: if either precision or recall is near zero, the F1 score is also near zero. For example, a model with Precision = 1.0 and Recall = 0.01 achieves an arithmetic mean of 0.505 but an F1 of only 0.0198 — correctly reflecting its poor utility.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why not accuracy?</b> In a dataset with 99% negatives and 1% positives, a trivial \"always predict negative\" classifier achieves 99% accuracy but 0% recall and 0% F1. F1 is informative precisely because it ignores TN, focusing on the model's ability to find and correctly identify positive instances.</p>\n\n<p>The generalised form is the <b>F-beta score</b>, which weights recall \\( \\beta^2 \\) times as much as precision:</p>\n\n\\[ F_\\beta = (1 + \\beta^2) \\cdot \\frac{\\text{Precision} \\cdot \\text{Recall}}{\\beta^2 \\cdot \\text{Precision} + \\text{Recall}} \\]\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Variant</th><th style=\"padding:6px; text-align:left;\">\\(\\beta\\)</th><th style=\"padding:6px; text-align:left;\">Emphasis</th><th style=\"padding:6px; text-align:left;\">Use case</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">F0.5</td><td style=\"padding:6px;\">0.5</td><td style=\"padding:6px;\">Precision-weighted</td><td style=\"padding:6px;\">Spam filtering (minimise false positives)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">F1</td><td style=\"padding:6px;\">1</td><td style=\"padding:6px;\">Equal weight</td><td style=\"padding:6px;\">General default for imbalanced tasks</td></tr>\n<tr><td style=\"padding:6px;\">F2</td><td style=\"padding:6px;\">2</td><td style=\"padding:6px;\">Recall-weighted</td><td style=\"padding:6px;\">Medical screening (minimise false negatives)</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Multiclass extensions",
+        "body": "<ul>\n<li><b>Macro-averaged F1</b> — compute F1 per class, then take the unweighted mean. Treats all classes equally regardless of support.</li>\n<li><b>Micro-averaged F1</b> — aggregate TP, FP, FN globally across all classes, then compute F1. Equivalent to accuracy in multiclass single-label settings.</li>\n<li><b>Weighted F1</b> — macro-average weighted by class support (number of true instances per class).</li>\n</ul>\n\n<p>F1 is widely used in NLP tasks (NER, relation extraction, question answering) and information retrieval, where it originated. For ranking tasks, precision@k and mean average precision (MAP) are often preferred.</p><details>\n<summary>Derivations</summary>\n<p>F1 as the harmonic mean of precision \\( P \\) and recall \\( R \\):</p>\n\\[ \\frac{1}{F_1} = \\frac{1}{2}\\left(\\frac{1}{P} + \\frac{1}{R}\\right) = \\frac{P + R}{2PR} \\]\n\\[ F_1 = \\frac{2PR}{P + R} \\]\n<p>Substituting \\( P = \\text{TP}/(\\text{TP}+\\text{FP}) \\) and \\( R = \\text{TP}/(\\text{TP}+\\text{FN}) \\):</p>\n\\[ F_1 = \\frac{2 \\cdot \\frac{\\text{TP}}{\\text{TP}+\\text{FP}} \\cdot \\frac{\\text{TP}}{\\text{TP}+\\text{FN}}}{\\frac{\\text{TP}}{\\text{TP}+\\text{FP}} + \\frac{\\text{TP}}{\\text{TP}+\\text{FN}}} = \\frac{2\\,\\text{TP}}{2\\,\\text{TP} + \\text{FP} + \\text{FN}} \\]\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "rouge",
+    "title": "ROUGE",
+    "summary": "Recall-Oriented Understudy for Gisting Evaluation — a family of metrics for evaluating automatic summarisation and text generation by measuring n-gram overlap between a candidate and reference text. Unlike BLEU (which is precision-orient…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "longest-common-subsequence",
+      "f1-score"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2004 · Chin-Yew Lin · ROUGE: A Package for Automatic Evaluation of Summaries"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Recall-Oriented Understudy for Gisting Evaluation — a family of metrics for evaluating automatic summarisation and text generation by measuring n-gram overlap between a candidate and reference text. Unlike BLEU (which is precision-oriented), ROUGE emphasises recall.</p><p>ROUGE was developed by Chin-Yew Lin at USC/ISI and became the standard evaluation metric for summarisation tasks, adopted by the Document Understanding Conference (DUC) and later TAC. The key variants are:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Variant</th><th style=\"padding:6px; text-align:left;\">What it measures</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">ROUGE-N</td><td style=\"padding:6px;\">N-gram recall between candidate and reference</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">ROUGE-1</td><td style=\"padding:6px;\">Unigram overlap — captures content adequacy</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">ROUGE-2</td><td style=\"padding:6px;\">Bigram overlap — captures fluency and local word order</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">ROUGE-L</td><td style=\"padding:6px;\">Longest common subsequence (LCS)-based F-measure</td></tr>\n<tr><td style=\"padding:6px;\">ROUGE-S</td><td style=\"padding:6px;\">Skip-bigram co-occurrence — allows arbitrary gaps between word pairs</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>ROUGE-N</b> computes recall over n-grams:</p>\n\n\\[ \\text{ROUGE-N} = \\frac{\\sum_{s \\in \\text{ref}} \\sum_{\\text{gram}_n \\in s} \\text{Count}_{\\text{match}}(\\text{gram}_n)}{\\sum_{s \\in \\text{ref}} \\sum_{\\text{gram}_n \\in s} \\text{Count}(\\text{gram}_n)} \\]\n\n<p>where \\(\\text{Count}_{\\text{match}}(\\text{gram}_n)\\) is the number of n-grams in the reference that also appear in the candidate. The denominator normalises by total reference n-grams, making this a recall measure.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>ROUGE-L</b> uses the longest common subsequence, which captures sentence-level word order without requiring contiguous matches:</p>\n\n\\[ R_{\\text{lcs}} = \\frac{\\text{LCS}(X, Y)}{m}, \\quad P_{\\text{lcs}} = \\frac{\\text{LCS}(X, Y)}{n}, \\quad F_{\\text{lcs}} = \\frac{(1+\\beta^2) R_{\\text{lcs}} P_{\\text{lcs}}}{R_{\\text{lcs}} + \\beta^2 P_{\\text{lcs}}} \\]\n\n<p>where \\( m \\) and \\( n \\) are the lengths of reference and candidate, respectively, and \\( \\beta \\) is typically set to favour recall (\\( \\beta = 1.2 \\) in the original implementation).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>ROUGE vs BLEU:</b> BLEU uses precision with a brevity penalty (penalising short candidates), while ROUGE uses recall (penalising candidates that miss reference content). BLEU was designed for machine translation; ROUGE for summarisation. In practice, modern NLG evaluation often reports both, along with ROUGE-L and sometimes BERTScore or METEOR.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Limitations:</b> ROUGE captures only surface-level lexical overlap and cannot recognise paraphrases or semantic equivalence. A summary that restates ideas in different words scores poorly. This has driven interest in model-based metrics like BERTScore (Zhang et al., 2020), which computes cosine similarity between contextual BERT embeddings of candidate and reference tokens.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "longest-common-subsequence",
+    "title": "Longest Common Subsequence",
+    "summary": "The longest common subsequence (LCS) of two sequences is the longest sequence of elements that appear in both, in the same relative order, but not necessarily contiguously. It is a classic dynamic programming problem and the basis for RO…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "edit-distance",
+      "rouge"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1974 · Daniel Hirschberg · A Linear Space Algorithm for Computing Maximal Common Subsequences"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The longest common subsequence (LCS) of two sequences is the longest sequence of elements that appear in both, in the same relative order, but not necessarily contiguously. It is a classic dynamic programming problem and the basis for ROUGE-L and diff algorithms.</p><p>Given sequences \\( X = (x_1, \\ldots, x_m) \\) and \\( Y = (y_1, \\ldots, y_n) \\), the LCS length is computed via the recurrence:</p>\n\n\\[ L(i,j) = \\begin{cases} 0 & \\text{if } i=0 \\text{ or } j=0 \\\\ L(i-1,j-1) + 1 & \\text{if } x_i = y_j \\\\ \\max(L(i-1,j),\\; L(i,j-1)) & \\text{otherwise} \\end{cases} \\]\n\n<p>The time and space complexity is \\( O(mn) \\). The LCS can be recovered by tracing back through the DP table.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Applications in ML/NLP",
+        "body": "<ul>\n<li><b>ROUGE-L</b> uses LCS to evaluate summarisation quality without requiring contiguous n-gram matches</li>\n<li><b>Diff tools</b> (e.g., Unix <code>diff</code>) use LCS to compute minimal edit scripts between files</li>\n<li><b>Sequence alignment</b> in bioinformatics is a generalisation of LCS with gap penalties</li>\n</ul>\n\n<p>LCS differs from the longest common <i>substring</i> (which requires contiguity). For example, LCS(\"ABCDE\", \"ACE\") = \"ACE\" (length 3), while the longest common substring is \"A\" (length 1).</p><details>\n<summary>Python</summary>\n<pre><code>def lcs_length(X, Y):\n    m, n = len(X), len(Y)\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            if X[i-1] == Y[j-1]:\n                dp[i][j] = dp[i-1][j-1] + 1\n            else:\n                dp[i][j] = max(dp[i-1][j], dp[i][j-1])\n    return dp[m][n]</code></pre>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "edit-distance",
+    "title": "Edit Distance",
+    "summary": "The minimum number of single-character operations (insertions, deletions, substitutions) required to transform one string into another. Also called Levenshtein distance, it is a fundamental metric for measuring string similarity in NLP a…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "perceptron",
+      "longest-common-subsequence"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1966 · Vladimir Levenshtein · Binary Codes Capable of Correcting Deletions, Insertions and Reversals"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The minimum number of single-character operations (insertions, deletions, substitutions) required to transform one string into another. Also called Levenshtein distance, it is a fundamental metric for measuring string similarity in NLP and information retrieval.</p><p>Given strings \\( a \\) of length \\( m \\) and \\( b \\) of length \\( n \\), the Levenshtein distance is defined by the recurrence:</p>\n\n\\[ d(i,j) = \\begin{cases} j & \\text{if } i = 0 \\\\ i & \\text{if } j = 0 \\\\ d(i-1,j-1) & \\text{if } a_i = b_j \\\\ 1 + \\min\\bigl(d(i-1,j),\\; d(i,j-1),\\; d(i-1,j-1)\\bigr) & \\text{otherwise} \\end{cases} \\]\n\n<p>The three operations in the \\(\\min\\) correspond to <b>deletion</b> (removing \\(a_i\\)), <b>insertion</b> (inserting \\(b_j\\)), and <b>substitution</b> (replacing \\(a_i\\) with \\(b_j\\)), respectively. Time and space complexity: \\( O(mn) \\). Space can be reduced to \\( O(\\min(m,n)) \\) since only two rows of the DP table are needed at any time.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Concrete example:</b> edit_distance(\"kitten\", \"sitting\") = 3:</p>\n<ol>\n<li>kitten → sitten (substitute k → s)</li>\n<li>sitten → sittin (substitute e → i)</li>\n<li>sittin → sitting (insert g)</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Applications in ML/NLP",
+        "body": "<ul>\n<li><b>Spelling correction</b> — rank candidate corrections by edit distance to the misspelled word (e.g., Norvig's spell checker)</li>\n<li><b>Word error rate (WER)</b> in speech recognition is a normalised edit distance at the word level: \\( \\text{WER} = \\frac{S + D + I}{N} \\) where \\(S\\), \\(D\\), \\(I\\) are substitutions, deletions, insertions and \\(N\\) is the number of reference words</li>\n<li><b>Character error rate (CER)</b> in OCR is character-level edit distance normalised by reference length</li>\n<li><b>Approximate string matching</b> for fuzzy search and entity deduplication</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Variant</th><th style=\"padding:6px; text-align:left;\">Allowed operations</th><th style=\"padding:6px; text-align:left;\">Notes</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Levenshtein</td><td style=\"padding:6px;\">Insert, delete, substitute</td><td style=\"padding:6px;\">All operations cost 1</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Damerau-Levenshtein</td><td style=\"padding:6px;\">+ transposition of adjacent chars</td><td style=\"padding:6px;\">Captures common typos (e.g., \"teh\" → \"the\")</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Hamming</td><td style=\"padding:6px;\">Substitution only</td><td style=\"padding:6px;\">Equal-length strings only</td></tr>\n<tr><td style=\"padding:6px;\">Weighted edit distance</td><td style=\"padding:6px;\">Insert, delete, substitute</td><td style=\"padding:6px;\">Non-uniform costs (e.g., keyboard proximity)</td></tr>\n</table>\n\n<p>Edit distance is closely related to sequence alignment in bioinformatics (Needleman-Wunsch and Smith-Waterman algorithms), which generalise the cost model to allow position-dependent gap penalties and substitution matrices (e.g., BLOSUM for amino acids).</p><details>\n<summary>Python</summary>\n<pre><code>def edit_distance(a, b):\n    m, n = len(a), len(b)\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n    for i in range(m + 1):\n        dp[i][0] = i\n    for j in range(n + 1):\n        dp[0][j] = j\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            if a[i-1] == b[j-1]:\n                dp[i][j] = dp[i-1][j-1]\n            else:\n                dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])\n    return dp[m][n]</code></pre>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "perceptron",
+    "title": "Perceptron",
+    "summary": "The simplest neural network: a single linear unit followed by a step function that outputs a binary decision. The perceptron learning algorithm is guaranteed to converge on linearly separable data, but it cannot learn non-linear decision…",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "landmark",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "decision-tree",
+      "edit-distance"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1958 · Frank Rosenblatt · The Perceptron: A Probabilistic Model for Information Storage and Organization in the Brain"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The simplest neural network: a single linear unit followed by a step function that outputs a binary decision. The perceptron learning algorithm is guaranteed to converge on linearly separable data, but it cannot learn non-linear decision boundaries — a limitation famously demonstrated by Minsky and Papert.</p><p>The perceptron computes:</p>\n\n\\[ \\hat{y} = \\begin{cases} 1 &amp; \\text{if } \\mathbf{w}^\\top \\mathbf{x} + b \\geq 0 \\\\ 0 &amp; \\text{otherwise} \\end{cases} \\]\n\n<p>The <b>perceptron learning rule</b> updates weights only on misclassified examples:</p>\n\n\\[ \\mathbf{w} \\leftarrow \\mathbf{w} + \\eta\\,(y_i - \\hat{y}_i)\\,\\mathbf{x}_i \\]\n\n<p>where \\( \\eta \\) is the learning rate. The <b>Perceptron Convergence Theorem</b> guarantees that if the data is linearly separable, the algorithm converges in a finite number of steps.</p>\n\n<p>Rosenblatt's perceptron (1958) generated enormous excitement as one of the first learning machines. Minsky and Papert's 1969 book <i>Perceptrons</i> showed that a single-layer perceptron cannot compute XOR or any non-linearly-separable function, contributing to the first \"AI winter.\" This limitation was later overcome by multilayer perceptrons trained with backpropagation.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">Single Perceptron</th><th style=\"padding:6px; text-align:left;\">MLP</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Decision boundary</td><td style=\"padding:6px;\">Linear hyperplane</td><td style=\"padding:6px;\">Non-linear (universal approx.)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Activation</td><td style=\"padding:6px;\">Step function</td><td style=\"padding:6px;\">ReLU, sigmoid, etc.</td></tr>\n<tr><td style=\"padding:6px;\">Training</td><td style=\"padding:6px;\">Perceptron rule</td><td style=\"padding:6px;\">Backpropagation</td></tr>\n</tbody></table><details>\n<summary>Python</summary>\n<pre><code>import numpy as np\n\ndef perceptron_train(X, y, lr=1.0, max_iter=1000):\n    w = np.zeros(X.shape[1])\n    b = 0.0\n    for _ in range(max_iter):\n        errors = 0\n        for xi, yi in zip(X, y):\n            pred = 1 if (w @ xi + b) &gt;= 0 else 0\n            if pred != yi:\n                w += lr * (yi - pred) * xi\n                b += lr * (yi - pred)\n                errors += 1\n        if errors == 0:\n            break\n    return w, b</code></pre>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "decision-tree",
+    "title": "Decision Tree",
+    "summary": "A supervised learning model that recursively partitions the feature space using axis-aligned splits, forming a tree structure where each leaf assigns a class label (classification) or a continuous value (regression). Decision trees are i…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "random-forest",
+      "perceptron"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1984 · Leo Breiman, Jerome Friedman, Richard Olshen, Charles Stone · Classification and Regression Trees (CART)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A supervised learning model that recursively partitions the feature space using axis-aligned splits, forming a tree structure where each leaf assigns a class label (classification) or a continuous value (regression). Decision trees are interpretable but prone to overfitting.</p><p>At each internal node, the algorithm selects the feature and threshold that best separate the data according to an impurity criterion. For classification:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Criterion</th><th style=\"padding:6px; text-align:left;\">Formula</th><th style=\"padding:6px; text-align:left;\">Used by</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Gini impurity</td><td style=\"padding:6px;\">\\( G = 1 - \\sum_{k} p_k^2 \\)</td><td style=\"padding:6px;\">CART</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Entropy</td><td style=\"padding:6px;\">\\( H = -\\sum_{k} p_k \\log_2 p_k \\)</td><td style=\"padding:6px;\">ID3, C4.5</td></tr>\n<tr><td style=\"padding:6px;\">MSE</td><td style=\"padding:6px;\">\\( \\frac{1}{n}\\sum(y_i - \\bar{y})^2 \\)</td><td style=\"padding:6px;\">Regression trees</td></tr>\n</tbody></table>\n\n<p>where \\( p_k \\) is the proportion of samples belonging to class \\( k \\) in the node. The split that maximises <b>information gain</b> (reduction in impurity) is chosen greedily:</p>\n\n\\[ \\text{Gain}(S, A) = H(S) - \\sum_{v \\in \\text{values}(A)} \\frac{|S_v|}{|S|} H(S_v) \\]\n\n<p>where \\( S \\) is the parent set and \\( S_v \\) is the subset where feature \\( A \\) takes value \\( v \\). Finding the globally optimal tree is NP-hard, so all practical algorithms use greedy, top-down heuristics.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Regularisation and pruning:</b> Without constraints, a tree can perfectly memorise the training set (zero training error). Key regularisation strategies:</p>\n<ul>\n<li><b>Pre-pruning</b> — limit max depth, require minimum samples per leaf/split, or set a minimum impurity decrease</li>\n<li><b>Post-pruning (cost-complexity pruning)</b> — grow a full tree, then remove branches that do not improve validation performance. CART uses minimal cost-complexity pruning with parameter \\( \\alpha \\): \\( R_\\alpha(T) = R(T) + \\alpha |T| \\), where \\( R(T) \\) is the misclassification rate and \\( |T| \\) is the number of leaves</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key historical algorithms",
+        "body": "<ul>\n<li><b>ID3</b> (Quinlan, 1986) — uses entropy/information gain, categorical features only</li>\n<li><b>C4.5</b> (Quinlan, 1993) — extends ID3 with gain ratio (corrects information gain's bias toward many-valued features), handles continuous features and missing values</li>\n<li><b>CART</b> (Breiman et al., 1984) — binary splits only, supports regression, introduced cost-complexity pruning</li>\n</ul>\n\n<p>Decision trees are the building blocks of powerful ensemble methods: random forests (Breiman, 2001) and gradient boosted trees (Friedman, 2001). While a single deep tree overfits, ensembles of shallow trees achieve state-of-the-art performance on tabular data.</p><details>\n<summary>Python</summary>\n<pre><code>import numpy as np\n\ndef gini(y):\n    \"\"\"Gini impurity of a label array.\"\"\"\n    classes, counts = np.unique(y, return_counts=True)\n    probs = counts / len(y)\n    return 1 - np.sum(probs ** 2)\n\ndef best_split(X, y):\n    \"\"\"Find the best feature and threshold (greedy, Gini).\"\"\"\n    best_gain, best_feat, best_thresh = -1, None, None\n    parent_gini = gini(y)\n    for feat in range(X.shape[1]):\n        thresholds = np.unique(X[:, feat])\n        for t in thresholds:\n            left = y[X[:, feat] &lt;= t]\n            right = y[X[:, feat] &gt; t]\n            if len(left) == 0 or len(right) == 0:\n                continue\n            w_l, w_r = len(left) / len(y), len(right) / len(y)\n            gain = parent_gini - w_l * gini(left) - w_r * gini(right)\n            if gain &gt; best_gain:\n                best_gain, best_feat, best_thresh = gain, feat, t\n    return best_feat, best_thresh</code></pre>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "random-forest",
+    "title": "Random Forest",
+    "summary": "An ensemble method that trains many decision trees on random bootstrap samples of the data, with random feature subsets at each split, and aggregates their predictions by majority vote (classification) or averaging (regression). This red…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "support-vector-machine-svm",
+      "decision-tree"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2001 · Leo Breiman · Random Forests"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An ensemble method that trains many decision trees on random bootstrap samples of the data, with random feature subsets at each split, and aggregates their predictions by majority vote (classification) or averaging (regression). This reduces variance while maintaining low bias.</p><p>The random forest algorithm combines two sources of randomness:</p>\n<ol>\n<li><b>Bagging</b> (bootstrap aggregating): each tree is trained on a bootstrap sample (sampling with replacement) of size \\( n \\) from the original dataset.</li>\n<li><b>Feature subsampling</b>: at each split, only a random subset of \\( m \\) features (out of \\( d \\) total) is considered. Typical defaults: \\( m = \\lfloor\\sqrt{d}\\rfloor \\) for classification, \\( m = \\lfloor d/3 \\rfloor \\) for regression.</li>\n</ol>\n\n<p>The feature subsampling decorrelates the trees, which is crucial. Averaging \\( B \\) correlated estimators with variance \\( \\sigma^2 \\) and pairwise correlation \\( \\rho \\) gives:</p>\n\n\\[ \\text{Var}_{\\text{avg}} = \\rho\\sigma^2 + \\frac{1-\\rho}{B}\\sigma^2 \\]\n\n<p>The second term vanishes as \\( B \\to \\infty \\), but the first term \\( \\rho\\sigma^2 \\) is irreducible. Reducing \\( \\rho \\) via feature subsampling directly shrinks this floor. This is why random forests outperform simple bagging: bagged trees on the same features remain correlated (they all split on the strongest feature first).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Out-of-bag (OOB) error:</b> Each bootstrap sample excludes roughly \\( 1 - (1 - 1/n)^n \\approx 36.8\\% \\) of the data. These out-of-bag samples provide a free internal validation estimate without needing a separate holdout set. The OOB error converges to the leave-one-out cross-validation error as \\( B \\to \\infty \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Feature importance</b> can be estimated two ways:</p>\n<ul>\n<li><b>Impurity-based</b> — sum the decrease in Gini/entropy from each feature across all trees. Fast but biased toward high-cardinality features.</li>\n<li><b>Permutation importance</b> — measure the increase in OOB error when a feature's values are randomly shuffled. More reliable but slower.</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Hyperparameter</th><th style=\"padding:6px; text-align:left;\">Effect</th><th style=\"padding:6px; text-align:left;\">Typical default</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Number of trees \\( B \\)</td><td style=\"padding:6px;\">More trees → lower variance, diminishing returns</td><td style=\"padding:6px;\">100-500</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Features per split \\( m \\)</td><td style=\"padding:6px;\">Lower → less correlation, possibly higher bias</td><td style=\"padding:6px;\">\\(\\sqrt{d}\\) (clf), \\(d/3\\) (reg)</td></tr>\n<tr><td style=\"padding:6px;\">Max depth</td><td style=\"padding:6px;\">Deeper → lower bias but more overfitting per tree</td><td style=\"padding:6px;\">None (grow fully)</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Random forests vs gradient boosting:</b> Both are tree ensembles, but they differ fundamentally. Random forests build trees independently in parallel (variance reduction via averaging), while gradient boosting builds trees sequentially, each correcting the errors of the previous ensemble (bias reduction via boosting). Gradient boosting (XGBoost, LightGBM) generally achieves higher accuracy with tuning, but random forests are more robust to hyperparameter choices and easier to parallelise.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "support-vector-machine-svm",
+    "title": "Support Vector Machine (SVM)",
+    "summary": "A classifier that finds the maximum-margin hyperplane separating two classes. The decision boundary is determined by a small subset of training points called support vectors. SVMs can learn non-linear boundaries via the kernel trick.",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "landmark",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "kernel-methods",
+      "random-forest"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1995 · Corinna Cortes, Vladimir Vapnik · Support-Vector Networks",
+        "url": "https://link.springer.com/article/10.1007/BF00994018"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A classifier that finds the maximum-margin hyperplane separating two classes. The decision boundary is determined by a small subset of training points called support vectors. SVMs can learn non-linear boundaries via the kernel trick.</p><p>For linearly separable data, the hard-margin SVM solves:</p>\n\n\\[ \\min_{\\mathbf{w}, b} \\frac{1}{2}\\|\\mathbf{w}\\|^2 \\quad \\text{s.t.} \\quad y_i(\\mathbf{w}^\\top \\mathbf{x}_i + b) \\geq 1 \\;\\; \\forall i \\]\n\n<p>The margin is \\( 2/\\|\\mathbf{w}\\| \\), and maximising it is equivalent to minimising \\( \\|\\mathbf{w}\\|^2 \\). In practice, data is rarely separable, so the <b>soft-margin</b> formulation introduces slack variables \\( \\xi_i \\geq 0 \\):</p>\n\n\\[ \\min_{\\mathbf{w}, b, \\boldsymbol{\\xi}} \\frac{1}{2}\\|\\mathbf{w}\\|^2 + C\\sum_{i=1}^{n}\\xi_i \\quad \\text{s.t.} \\quad y_i(\\mathbf{w}^\\top \\mathbf{x}_i + b) \\geq 1 - \\xi_i, \\;\\; \\xi_i \\geq 0 \\]\n\n<p>The hyperparameter \\( C \\) controls the trade-off between margin width and training error. Large \\( C \\) → narrow margin, fewer misclassifications (risk of overfitting). Small \\( C \\) → wide margin, more tolerant of errors (risk of underfitting).</p>\n\n<p>The <b>dual formulation</b> (via Lagrange multipliers \\( \\alpha_i \\)) reveals the kernel trick:</p>\n\n\\[ \\max_{\\boldsymbol{\\alpha}} \\sum_{i=1}^{n}\\alpha_i - \\frac{1}{2}\\sum_{i,j}\\alpha_i \\alpha_j y_i y_j \\mathbf{x}_i^\\top \\mathbf{x}_j \\quad \\text{s.t.} \\quad 0 \\leq \\alpha_i \\leq C, \\;\\; \\sum_i \\alpha_i y_i = 0 \\]\n\n<p>Since the data appears only through inner products \\( \\mathbf{x}_i^\\top \\mathbf{x}_j \\), replacing these with a kernel function \\( K(\\mathbf{x}_i, \\mathbf{x}_j) \\) enables non-linear boundaries without explicitly computing the feature map.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Kernel</th><th style=\"padding:6px; text-align:left;\">Formula</th><th style=\"padding:6px; text-align:left;\">Use case</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Linear</td><td style=\"padding:6px;\">\\( K(\\mathbf{x}, \\mathbf{z}) = \\mathbf{x}^\\top \\mathbf{z} \\)</td><td style=\"padding:6px;\">Text classification, high-\\(d\\) sparse data</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Polynomial</td><td style=\"padding:6px;\">\\( K(\\mathbf{x}, \\mathbf{z}) = (\\mathbf{x}^\\top \\mathbf{z} + c)^d \\)</td><td style=\"padding:6px;\">NLP (degree 2-3 common)</td></tr>\n<tr><td style=\"padding:6px;\">RBF (Gaussian)</td><td style=\"padding:6px;\">\\( K(\\mathbf{x}, \\mathbf{z}) = \\exp(-\\gamma\\|\\mathbf{x}-\\mathbf{z}\\|^2) \\)</td><td style=\"padding:6px;\">General non-linear; infinite-dim feature space</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Support vectors</b> are the training points with \\( \\alpha_i > 0 \\). By the KKT conditions, only points on or within the margin have non-zero \\( \\alpha_i \\). The decision function depends only on these points: \\( f(\\mathbf{x}) = \\text{sign}\\left(\\sum_{i \\in \\text{SV}} \\alpha_i y_i K(\\mathbf{x}_i, \\mathbf{x}) + b\\right) \\). This sparsity is both a computational advantage and a form of compression.</p>\n\n<p>SVMs dominated ML in the 2000s, particularly for text classification (linear SVM) and image recognition (RBF kernel on HOG features). Training is \\( O(n^2) \\) to \\( O(n^3) \\) due to quadratic programming, which limits scalability. The SMO algorithm (Platt, 1998) made training practical by decomposing the QP into small sub-problems. SVMs have largely been superseded by deep learning for high-dimensional tasks, but linear SVMs remain competitive for sparse, high-dimensional data.</p><details>\n<summary>Derivations</summary>\n<p>The Lagrangian for the hard-margin primal is:</p>\n\\[ \\mathcal{L} = \\frac{1}{2}\\|\\mathbf{w}\\|^2 - \\sum_{i=1}^{n}\\alpha_i\\bigl[y_i(\\mathbf{w}^\\top\\mathbf{x}_i + b) - 1\\bigr] \\]\n<p>Setting \\(\\partial \\mathcal{L}/\\partial \\mathbf{w} = 0\\):</p>\n\\[ \\mathbf{w} = \\sum_{i=1}^{n}\\alpha_i y_i \\mathbf{x}_i \\]\n<p>Setting \\(\\partial \\mathcal{L}/\\partial b = 0\\):</p>\n\\[ \\sum_{i=1}^{n}\\alpha_i y_i = 0 \\]\n<p>Substituting back yields the dual:</p>\n\\[ \\max_{\\boldsymbol{\\alpha}} \\sum_i \\alpha_i - \\frac{1}{2}\\sum_{i,j}\\alpha_i\\alpha_j y_i y_j \\mathbf{x}_i^\\top\\mathbf{x}_j \\quad \\text{s.t.} \\quad \\alpha_i \\geq 0, \\; \\sum_i \\alpha_i y_i = 0 \\]\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "kernel-methods",
+    "title": "Kernel Methods",
+    "summary": "A family of algorithms that operate in high-dimensional (possibly infinite) feature spaces by using kernel functions to compute inner products without explicitly constructing the feature map. This is the \"kernel trick\" — it makes non-lin…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "principal-component-analysis-pca",
+      "support-vector-machine-svm"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1964 · Mark Aizerman, Emmanuel Braverman, Lev Rozonoer (potential functions) · Popularised by Vapnik (1990s)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A family of algorithms that operate in high-dimensional (possibly infinite) feature spaces by using kernel functions to compute inner products without explicitly constructing the feature map. This is the \"kernel trick\" — it makes non-linear methods computationally tractable.</p><p>A kernel function \\( K: \\mathcal{X} \\times \\mathcal{X} \\to \\mathbb{R} \\) implicitly computes the inner product in a feature space \\( \\mathcal{H} \\):</p>\n\n\\[ K(\\mathbf{x}, \\mathbf{z}) = \\langle \\phi(\\mathbf{x}), \\phi(\\mathbf{z}) \\rangle_{\\mathcal{H}} \\]\n\n<p>where \\( \\phi: \\mathcal{X} \\to \\mathcal{H} \\) is a (possibly infinite-dimensional) feature map. By <b>Mercer's theorem</b>, any continuous, symmetric, positive semi-definite function is a valid kernel corresponding to some feature space.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Concrete example:</b> The polynomial kernel \\( K(\\mathbf{x}, \\mathbf{z}) = (\\mathbf{x}^\\top\\mathbf{z})^2 \\) for \\( \\mathbf{x}, \\mathbf{z} \\in \\mathbb{R}^2 \\) implicitly maps to:\n\\[ \\phi(x_1, x_2) = (x_1^2,\\; x_2^2,\\; \\sqrt{2}\\,x_1 x_2) \\]\nComputing \\( K \\) costs \\( O(d) \\) (a dot product), while explicitly computing \\( \\phi \\) and taking the inner product in feature space costs \\( O(d^2) \\). For the RBF kernel, \\( \\phi \\) is infinite-dimensional, so the kernel trick is not merely efficient — it is the only option.</p>\n\n<p>The kernel trick works because many algorithms (SVM, PCA, ridge regression) depend on the data only through pairwise inner products. Replacing \\( \\mathbf{x}_i^\\top \\mathbf{x}_j \\) with \\( K(\\mathbf{x}_i, \\mathbf{x}_j) \\) \"kernelises\" the algorithm.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Examples of kernelised algorithms",
+        "body": "<ul>\n<li><b>Kernel SVM</b> — non-linear classification via the dual formulation</li>\n<li><b>Kernel PCA</b> — non-linear dimensionality reduction by eigendecomposition of the kernel matrix</li>\n<li><b>Gaussian processes</b> — non-parametric Bayesian regression where the kernel defines the prior covariance</li>\n<li><b>Kernel ridge regression</b> — closed-form: \\( \\boldsymbol{\\alpha} = (\\mathbf{K} + \\lambda \\mathbf{I})^{-1}\\mathbf{y} \\)</li>\n</ul>\n\n<p>The <b>representer theorem</b> guarantees that the optimal solution of a regularised risk minimisation problem in a reproducing kernel Hilbert space (RKHS) can be written as a linear combination of kernel evaluations at the training points:</p>\n\n\\[ f^*(\\mathbf{x}) = \\sum_{i=1}^{n} \\alpha_i K(\\mathbf{x}_i, \\mathbf{x}) \\]\n\n<p>This means we only need \\( n \\) parameters regardless of the (possibly infinite) dimensionality of \\( \\mathcal{H} \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Scalability:</b> Kernel methods require constructing and operating on the \\( n \\times n \\) Gram matrix \\( \\mathbf{K}_{ij} = K(\\mathbf{x}_i, \\mathbf{x}_j) \\), giving \\( O(n^2) \\) storage and \\( O(n^3) \\) for inversion. This limits applicability to large datasets. <b>Random Fourier features</b> (Rahimi and Recht, 2007) approximate shift-invariant kernels using random projections: \\( K(\\mathbf{x}, \\mathbf{z}) \\approx \\hat{\\phi}(\\mathbf{x})^\\top \\hat{\\phi}(\\mathbf{z}) \\) where \\( \\hat{\\phi} \\in \\mathbb{R}^D \\) with \\( D \\ll n \\), enabling linear-time algorithms.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "principal-component-analysis-pca",
+    "title": "Principal Component Analysis (PCA)",
+    "summary": "An unsupervised method that finds orthogonal directions of maximum variance in the data, projecting it onto a lower-dimensional subspace while preserving as much variance as possible. PCA is the most widely used linear dimensionality red…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "f1-score",
+      "kernel-methods"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1901 · Karl Pearson · On Lines and Planes of Closest Fit to Systems of Points in Space"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An unsupervised method that finds orthogonal directions of maximum variance in the data, projecting it onto a lower-dimensional subspace while preserving as much variance as possible. PCA is the most widely used linear dimensionality reduction technique.</p><p>Given centred data \\( \\mathbf{X} \\in \\mathbb{R}^{n \\times d} \\), PCA finds the directions (principal components) that maximise projected variance. The first principal component solves:</p>\n\n\\[ \\mathbf{v}_1 = \\arg\\max_{\\|\\mathbf{v}\\|=1} \\mathbf{v}^\\top \\mathbf{S} \\mathbf{v} \\]\n\n<p>where \\( \\mathbf{S} = \\frac{1}{n}\\mathbf{X}^\\top\\mathbf{X} \\) is the covariance matrix. By the method of Lagrange multipliers, the solution satisfies \\( \\mathbf{S}\\mathbf{v} = \\lambda\\mathbf{v} \\) — i.e., the principal components are eigenvectors of the covariance matrix, sorted by descending eigenvalue. The top \\( k \\) eigenvectors form the projection matrix \\( \\mathbf{V}_k \\in \\mathbb{R}^{d \\times k} \\).</p>\n\n<p>Equivalently, PCA can be computed via the <b>singular value decomposition</b> (SVD) of \\( \\mathbf{X} = \\mathbf{U}\\boldsymbol{\\Sigma}\\mathbf{V}^\\top \\). The columns of \\( \\mathbf{V} \\) are the principal components, and the projected data is \\( \\mathbf{Z} = \\mathbf{X}\\mathbf{V}_k = \\mathbf{U}_k\\boldsymbol{\\Sigma}_k \\). The SVD approach is numerically more stable than explicit eigendecomposition of the covariance matrix.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Dual interpretation:</b> PCA simultaneously (1) maximises variance of the projection and (2) minimises reconstruction error \\( \\|\\mathbf{X} - \\mathbf{X}\\mathbf{V}_k\\mathbf{V}_k^\\top\\|_F^2 \\). These two objectives yield the same solution.</p>\n\n<p>The <b>explained variance ratio</b> for component \\( j \\) is \\( \\lambda_j / \\sum_i \\lambda_i \\), indicating what fraction of total variance that component captures. A common heuristic: choose \\( k \\) to retain 95% of total variance.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">PCA</th><th style=\"padding:6px; text-align:left;\">Alternative</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Linearity</td><td style=\"padding:6px;\">Linear</td><td style=\"padding:6px;\">Kernel PCA (non-linear)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Objective</td><td style=\"padding:6px;\">Max variance / min reconstruction error</td><td style=\"padding:6px;\">t-SNE/UMAP preserve local structure</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Complexity</td><td style=\"padding:6px;\">\\( O(\\min(nd^2, n^2d)) \\) via SVD</td><td style=\"padding:6px;\">Randomised PCA: \\( O(ndk) \\)</td></tr>\n<tr><td style=\"padding:6px;\">Limitations</td><td style=\"padding:6px;\">Linear; sensitive to scaling; captures variance, not class structure</td><td style=\"padding:6px;\">LDA uses class labels</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Practical considerations",
+        "body": "<ul>\n<li><b>Standardise features</b> before PCA (zero mean, unit variance) — otherwise high-variance features dominate</li>\n<li><b>Whitening:</b> projecting onto principal components and dividing by \\(\\sqrt{\\lambda_j}\\) yields uncorrelated, unit-variance features — useful as preprocessing for downstream models</li>\n<li><b>Randomised PCA</b> (Halko et al., 2011) uses random projections to approximate the top \\( k \\) components in \\( O(ndk) \\) time, making PCA practical for very large datasets</li>\n</ul><details>\n<summary>Derivations</summary>\n<p>Maximise variance subject to unit norm constraint:</p>\n\\[ \\max_{\\mathbf{v}} \\mathbf{v}^\\top \\mathbf{S} \\mathbf{v} \\quad \\text{s.t.} \\quad \\mathbf{v}^\\top\\mathbf{v} = 1 \\]\n<p>Lagrangian: \\( \\mathcal{L} = \\mathbf{v}^\\top \\mathbf{S} \\mathbf{v} - \\lambda(\\mathbf{v}^\\top\\mathbf{v} - 1) \\)</p>\n<p>Setting \\( \\nabla_\\mathbf{v} \\mathcal{L} = 0 \\):</p>\n\\[ 2\\mathbf{S}\\mathbf{v} - 2\\lambda\\mathbf{v} = 0 \\implies \\mathbf{S}\\mathbf{v} = \\lambda\\mathbf{v} \\]\n<p>So \\(\\mathbf{v}\\) must be an eigenvector of \\(\\mathbf{S}\\). The projected variance is \\(\\mathbf{v}^\\top\\mathbf{S}\\mathbf{v} = \\lambda\\), so choosing the largest eigenvalue maximises variance.</p>\n</details>\n\n<details>\n<summary>Python</summary>\n<pre><code>import numpy as np\n\ndef pca(X, k):\n    \"\"\"Project X onto its top-k principal components.\"\"\"\n    X_centered = X - X.mean(axis=0)\n    U, S, Vt = np.linalg.svd(X_centered, full_matrices=False)\n    components = Vt[:k]          # top-k right singular vectors\n    projected = X_centered @ components.T\n    explained_var = (S[:k] ** 2) / (S ** 2).sum()\n    return projected, components, explained_var</code></pre>\n</details>"
+      }
+    ],
+    "cards": []
   }
 ]
