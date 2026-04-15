@@ -8828,5 +8828,473 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "dimensionality-reduction",
+    "title": "Dimensionality Reduction",
+    "summary": "The process of reducing the number of features (dimensions) in a dataset while preserving as much relevant structure as possible. Dimensionality reduction combats the curse of dimensionality, reduces computational cost, removes collinear…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "transformer",
+      "attention-mask"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Umbrella concept · PCA (Pearson, 1901; Hotelling, 1933), t-SNE (van der Maaten & Hinton, 2008), UMAP (McInnes et al., 2018)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The process of reducing the number of features (dimensions) in a dataset while preserving as much relevant structure as possible. Dimensionality reduction combats the curse of dimensionality, reduces computational cost, removes collinear features, and can improve generalisation by discarding noise dimensions.</p><p>The <b>curse of dimensionality</b> motivates the entire field: in high dimensions, distances between points concentrate (become nearly equal), volumes grow exponentially, and data becomes hopelessly sparse. Covering a \\( d \\)-dimensional unit cube with spacing 0.1 requires \\( 10^d \\) points — manageable for \\( d = 3 \\) (1,000 points) but astronomical for \\( d = 100 \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Linear methods</b> project data onto a lower-dimensional subspace:</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Principal Component Analysis (PCA)</b> finds the orthogonal directions of maximum variance. Given centred data \\( \\mathbf{X} \\in \\mathbb{R}^{n \\times d} \\), PCA solves the eigendecomposition of the covariance matrix:</p>\n\n\\[ \\mathbf{C} = \\frac{1}{n-1}\\mathbf{X}^\\top \\mathbf{X} = \\mathbf{U}\\boldsymbol{\\Lambda}\\mathbf{U}^\\top \\]\n\n<p>where \\( \\mathbf{U} \\) contains the eigenvectors (principal components) and \\( \\boldsymbol{\\Lambda} = \\text{diag}(\\lambda_1, \\ldots, \\lambda_d) \\) the eigenvalues sorted in descending order. Projecting onto the top \\( k \\) eigenvectors gives the optimal rank-\\( k \\) approximation in the least-squares sense (Eckart–Young theorem). The fraction of variance retained is \\( \\sum_{i=1}^{k} \\lambda_i / \\sum_{i=1}^{d} \\lambda_i \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Linear Discriminant Analysis (LDA)</b> is the supervised counterpart — it maximises the ratio of between-class to within-class scatter:</p>\n\n\\[ \\mathbf{w}^* = \\arg\\max_{\\mathbf{w}} \\frac{\\mathbf{w}^\\top \\mathbf{S}_B \\mathbf{w}}{\\mathbf{w}^\\top \\mathbf{S}_W \\mathbf{w}} \\]\n\n<p>where \\( \\mathbf{S}_B \\) and \\( \\mathbf{S}_W \\) are the between-class and within-class scatter matrices. LDA projects to at most \\( C - 1 \\) dimensions for \\( C \\) classes.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Random projections</b> exploit the Johnson–Lindenstrauss lemma: for any \\( \\epsilon > 0 \\), \\( n \\) points in \\( \\mathbb{R}^d \\) can be projected to \\( k = O(\\epsilon^{-2} \\log n) \\) dimensions while preserving all pairwise distances within a factor of \\( 1 \\pm \\epsilon \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Non-linear methods</b> (manifold learning) capture curved structures:</p>\n<ul>\n<li><b>t-SNE</b> (van der Maaten & Hinton, 2008) — minimises KL divergence between pairwise similarity distributions in high and low dimensions; excels at visualisation but is non-parametric and non-convex</li>\n<li><b>UMAP</b> (McInnes et al., 2018) — similar motivation using fuzzy simplicial sets; faster than t-SNE and better at preserving global structure</li>\n<li><b>Autoencoders</b> — neural networks with a bottleneck layer; learn a non-linear encoding \\( f: \\mathbb{R}^d \\to \\mathbb{R}^k \\) and decoding \\( g: \\mathbb{R}^k \\to \\mathbb{R}^d \\) minimising reconstruction error \\( \\| \\mathbf{x} - g(f(\\mathbf{x})) \\|^2 \\)</li>\n<li><b>Isomap</b> (Tenenbaum et al., 2000) — applies MDS to geodesic distances estimated via a nearest-neighbour graph</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Type</th><th style=\"padding:6px; text-align:left;\">Parametric?</th><th style=\"padding:6px; text-align:left;\">Best for</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">PCA</td><td style=\"padding:6px;\">Linear</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">General preprocessing, denoising, whitening</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LDA</td><td style=\"padding:6px;\">Linear</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">Supervised classification with Gaussian classes</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">t-SNE</td><td style=\"padding:6px;\">Non-linear</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">2D/3D visualisation of clusters</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">UMAP</td><td style=\"padding:6px;\">Non-linear</td><td style=\"padding:6px;\">Optional</td><td style=\"padding:6px;\">Visualisation + downstream tasks</td></tr>\n<tr><td style=\"padding:6px;\">Autoencoder</td><td style=\"padding:6px;\">Non-linear</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">Learned representations, generative models</td></tr>\n</table>\n\n<p>In modern deep learning, explicit dimensionality reduction as a preprocessing step is less common — networks learn their own representations internally. However, PCA remains widely used for data exploration, and t-SNE/UMAP are standard tools for visualising embedding spaces (e.g., plotting word2vec or BERT embeddings in 2D).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "transformer",
+    "title": "Transformer",
+    "summary": "A neural network architecture based entirely on attention mechanisms, dispensing with recurrence and convolutions. The Transformer processes all positions in parallel via self-attention and has become the dominant architecture for NLP, v…",
+    "domain": "history",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "landmark",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "decoder-block",
+      "dimensionality-reduction"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, Polosukhin · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A neural network architecture based entirely on attention mechanisms, dispensing with recurrence and convolutions. The Transformer processes all positions in parallel via self-attention and has become the dominant architecture for NLP, vision, protein folding, and increasingly all of deep learning.</p><p>The original Transformer (Vaswani et al., 2017) uses an <b>encoder-decoder</b> structure, designed for sequence-to-sequence tasks like machine translation. Each encoder layer contains:</p>\n<ol>\n<li><b>Multi-head self-attention</b></li>\n<li><b>Position-wise feed-forward network</b> (two linear layers with ReLU: \\( \\text{FFN}(x) = W_2 \\max(0, W_1 x + b_1) + b_2 \\), with inner dimension \\( d_{ff} = 4d_{\\text{model}} \\))</li>\n</ol>\n<p>Each sub-layer has a <b>residual connection</b> and <b>layer normalisation</b>: \\( \\text{output} = \\text{LayerNorm}(x + \\text{Sublayer}(x)) \\). The decoder adds a third sub-layer: cross-attention over the encoder output, with causal masking in the self-attention to prevent attending to future tokens.</p>\n\n<p>The <b>self-attention</b> mechanism computes:</p>\n\n\\[ \\text{Attention}(Q, K, V) = \\text{softmax}\\!\\left(\\frac{QK^\\top}{\\sqrt{d_k}}\\right)V \\]\n\n<p>where \\( Q = XW^Q \\), \\( K = XW^K \\), \\( V = XW^V \\) are linear projections with \\( W^Q, W^K \\in \\mathbb{R}^{d \\times d_k} \\), \\( W^V \\in \\mathbb{R}^{d \\times d_v} \\). The \\( \\sqrt{d_k} \\) scaling prevents dot products from growing with dimension, avoiding softmax saturation.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Multi-head attention</b> runs \\( h \\) parallel attention heads with separate projections, then concatenates and projects:</p>\n\n\\[ \\text{MultiHead}(Q,K,V) = \\text{Concat}(\\text{head}_1, \\ldots, \\text{head}_h)W^O \\]\n\n<p>where each \\( \\text{head}_i = \\text{Attention}(QW_i^Q, KW_i^K, VW_i^V) \\). The original model uses \\( h = 8 \\) heads with \\( d_k = d_v = d_{\\text{model}} / h = 64 \\). Multiple heads allow the model to attend to information from different representation subspaces at different positions simultaneously.</p>\n\n<p>Since attention is permutation-equivariant (it has no notion of position), <b>positional encodings</b> are added to the input embeddings. The original paper used sinusoidal encodings:</p>\n\n\\[ PE_{(pos, 2i)} = \\sin\\!\\left(\\frac{pos}{10000^{2i/d}}\\right), \\quad PE_{(pos, 2i+1)} = \\cos\\!\\left(\\frac{pos}{10000^{2i/d}}\\right) \\]\n\n<p>These were chosen because they allow the model to learn relative positions via linear projections. Modern variants use rotary embeddings (RoPE), ALiBi, or learned encodings.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Parameter count:</b> For a model with \\( L \\) layers, \\( d \\)-dimensional embeddings, and vocabulary size \\( |V| \\):</p>\n<ul>\n<li>Attention: \\( 4d^2 \\) per layer (Q, K, V, output projections)</li>\n<li>FFN: \\( 8d^2 \\) per layer (two matrices of size \\( d \\times 4d \\))</li>\n<li>Embeddings: \\( |V| \\cdot d \\)</li>\n<li>Total \\( \\approx 12Ld^2 + |V|d \\)</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Variant</th><th style=\"padding:6px; text-align:left;\">Architecture</th><th style=\"padding:6px; text-align:left;\">Examples</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Encoder-only</td><td style=\"padding:6px;\">Bidirectional self-attention</td><td style=\"padding:6px;\">BERT, RoBERTa</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Decoder-only</td><td style=\"padding:6px;\">Causal self-attention</td><td style=\"padding:6px;\">GPT, LLaMA, Claude</td></tr>\n<tr><td style=\"padding:6px;\">Encoder-decoder</td><td style=\"padding:6px;\">Full original architecture</td><td style=\"padding:6px;\">T5, BART, original Transformer</td></tr>\n</tbody></table>\n\n<p>The Transformer's \\( O(n^2) \\) attention cost with respect to sequence length has motivated efficient variants (FlashAttention, sparse attention, linear attention), but the quadratic mechanism remains standard for most production models. The paper's title — \"Attention Is All You Need\" — proved prophetic: the architecture's simplicity, parallelisability, and scalability made it the foundation of the large language model era.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "decoder-block",
+    "title": "Decoder Block",
+    "summary": "A single processing layer within the decoder stack of a Transformer. In a decoder-only model (e.g., GPT, LLaMA), each decoder block consists of masked self-attention, a feed-forward network, residual connections, and normalisation layers.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "decoder-only-transformer",
+      "transformer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A single processing layer within the decoder stack of a Transformer. In a decoder-only model (e.g., GPT, LLaMA), each decoder block consists of masked self-attention, a feed-forward network, residual connections, and normalisation layers.</p><p>A standard decoder block processes a sequence of hidden states \\( \\mathbf{H} \\in \\mathbb{R}^{n \\times d} \\) through two sub-layers:</p>\n\n<ol>\n<li><b>Masked multi-head self-attention:</b> Each token attends only to itself and preceding tokens (causal mask), preventing information leakage from future positions during autoregressive generation. The causal mask is a lower-triangular matrix applied to the score matrix before softmax, setting future positions to \\( -\\infty \\).</li>\n<li><b>Position-wise feed-forward network (FFN):</b> Two linear transformations with a non-linearity:\n\\[ \\text{FFN}(\\mathbf{x}) = W_2\\,\\sigma(W_1\\mathbf{x} + b_1) + b_2 \\]\nwhere \\( W_1 \\in \\mathbb{R}^{d \\times d_{ff}} \\), \\( W_2 \\in \\mathbb{R}^{d_{ff} \\times d} \\), and \\( d_{ff} = 4d \\) by convention. The FFN accounts for roughly two-thirds of the parameters in each block.</li>\n</ol>\n\n<p>Each sub-layer is wrapped with a <b>residual connection</b> and <b>normalisation</b>. Modern architectures use <b>pre-norm</b> (normalise before the sub-layer) rather than the original post-norm, as it improves training stability:</p>\n\n\\[ \\mathbf{H}' = \\mathbf{H} + \\text{Attn}(\\text{Norm}(\\mathbf{H})) \\]\n\\[ \\mathbf{H}'' = \\mathbf{H}' + \\text{FFN}(\\text{Norm}(\\mathbf{H}')) \\]\n\n<p>In encoder-decoder Transformers, the decoder block has a third sub-layer: <b>cross-attention</b> over the encoder output, inserted between self-attention and the FFN.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Modern variants</b> introduce several modifications to the original design:</p>\n<ul>\n<li><b>RMSNorm</b> instead of LayerNorm — removes the mean-centering step, reducing computation with no loss in quality (used in LLaMA, Gemma)</li>\n<li><b>SwiGLU / GeGLU</b> activation in the FFN — replaces the ReLU with a gated linear unit: \\( \\text{SwiGLU}(\\mathbf{x}) = (\\mathbf{x} W_1 \\odot \\text{Swish}(\\mathbf{x} W_3)) W_2 \\), adding a third weight matrix but improving performance (used in LLaMA, PaLM)</li>\n<li><b>Grouped-query attention (GQA)</b> — shares key-value heads across query heads to reduce KV-cache memory during inference (used in LLaMA 2 70B, Mistral)</li>\n<li><b>Rotary position embeddings (RoPE)</b> — encodes relative position directly into the attention computation rather than adding positional embeddings to the input</li>\n</ul>\n\n<p>A full Transformer decoder stacks \\( L \\) such blocks (e.g., GPT-3 uses 96 layers, LLaMA-70B uses 80). The final block's output is projected to vocabulary logits via an unembedding matrix \\( W_U \\in \\mathbb{R}^{d \\times |V|} \\) for next-token prediction.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "decoder-only-transformer",
+    "title": "Decoder-only Transformer",
+    "summary": "A Transformer architecture that uses only the decoder stack with causal (masked) self-attention, trained to predict the next token autoregressively. This is the architecture behind GPT, LLaMA, Claude, and most modern large language models.",
+    "domain": "history",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "intermediate",
+      "landmark",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "self-attention",
+      "decoder-block"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2018 · Radford, Narasimhan, Salimans, Sutskever · Improving Language Understanding by Generative Pre-Training (GPT-1)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A Transformer architecture that uses only the decoder stack with causal (masked) self-attention, trained to predict the next token autoregressively. This is the architecture behind GPT, LLaMA, Claude, and most modern large language models.</p><p>The decoder-only design removes the encoder and cross-attention entirely, leaving a stack of \\( L \\) identical blocks each containing:</p>\n<ol>\n<li><b>Causal self-attention</b> — each position attends only to positions \\( \\leq t \\), enforced by a lower-triangular mask</li>\n<li><b>Feed-forward network</b> — typically with \\( d_{ff} = 4d \\) inner dimension</li>\n</ol>\n<p>Both sub-layers use residual connections and normalisation (pre-norm in modern variants).</p>\n\n<p>Training uses the <b>causal language modelling (CLM)</b> objective — maximum likelihood over next-token prediction:</p>\n\n\\[ \\mathcal{L}(\\theta) = -\\sum_{t=1}^{T} \\log P(x_t \\mid x_1, \\ldots, x_{t-1}; \\theta) \\]\n\n<p>Every prefix of the input serves as both context and target simultaneously, making training efficient — a single forward pass over a sequence of length \\( T \\) produces \\( T \\) training signals (teacher forcing). This is more sample-efficient than masked language modelling (BERT), which only predicts ~15% of tokens per pass.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why decoder-only won:</b> Several factors drove the dominance of this architecture:</p>\n<ul>\n<li><b>Simplicity</b> — one unified architecture, no encoder-decoder split, fewer design decisions</li>\n<li><b>Scalability</b> — no encoder bottleneck; the entire model is a single homogeneous stack that scales predictably (Kaplan et al., 2020 scaling laws)</li>\n<li><b>Emergent versatility</b> — despite seeing only left context during training, decoder-only models perform well on understanding tasks through in-context learning, eliminating the need for task-specific architectures</li>\n<li><b>KV caching</b> — during autoregressive inference, the key-value tensors from previous positions can be cached and reused, so each new token requires only a single-row attention computation rather than reprocessing the full sequence</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Architecture</th><th style=\"padding:6px; text-align:left;\">Attention</th><th style=\"padding:6px; text-align:left;\">Training signal</th><th style=\"padding:6px; text-align:left;\">Strengths</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Encoder-only (BERT)</td><td style=\"padding:6px;\">Bidirectional</td><td style=\"padding:6px;\">~15% masked tokens</td><td style=\"padding:6px;\">Classification, NLU</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Encoder-decoder (T5)</td><td style=\"padding:6px;\">Bidirectional + causal</td><td style=\"padding:6px;\">Corrupted spans</td><td style=\"padding:6px;\">Seq2seq, translation</td></tr>\n<tr><td style=\"padding:6px;\">Decoder-only (GPT)</td><td style=\"padding:6px;\">Causal only</td><td style=\"padding:6px;\">100% of tokens</td><td style=\"padding:6px;\">Generation, in-context learning, scalability</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Key models in the lineage:</b> GPT-1 (117M params, 2018) demonstrated generative pre-training; GPT-2 (1.5B, 2019) showed zero-shot task transfer; GPT-3 (175B, 2020) demonstrated in-context learning at scale; subsequent models (PaLM, LLaMA, Claude) refined the architecture with improvements like RMSNorm, SwiGLU, RoPE, and GQA but retained the core decoder-only structure.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "self-attention",
+    "title": "Self-Attention",
+    "summary": "A mechanism where each element in a sequence computes a weighted sum over all other elements, with weights determined by pairwise compatibility scores. Self-attention allows every position to directly attend to every other position, capt…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "attention-score",
+      "decoder-only-transformer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A mechanism where each element in a sequence computes a weighted sum over all other elements, with weights determined by pairwise compatibility scores. Self-attention allows every position to directly attend to every other position, capturing long-range dependencies in \\( O(1) \\) sequential operations.</p><p>Given an input sequence \\( \\mathbf{X} \\in \\mathbb{R}^{n \\times d} \\), self-attention projects it into queries, keys, and values using learned weight matrices:</p>\n\n\\[ Q = XW^Q, \\quad K = XW^K, \\quad V = XW^V \\]\n\n<p>where \\( W^Q, W^K \\in \\mathbb{R}^{d \\times d_k} \\) and \\( W^V \\in \\mathbb{R}^{d \\times d_v} \\). The attention output is:</p>\n\n\\[ \\text{Attention}(Q, K, V) = \\text{softmax}\\!\\left(\\frac{QK^\\top}{\\sqrt{d_k}}\\right)V \\]\n\n<p>Each row of the output is a weighted combination of value vectors, where the weights reflect how much each query \"matches\" each key. The \\( \\sqrt{d_k} \\) scaling prevents dot products from growing with dimension, which would push the softmax into near-one-hot distributions and kill gradients.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Intuition via information retrieval:</b> Self-attention can be understood through a retrieval analogy. Each token broadcasts a query (\"what am I looking for?\"), a key (\"what do I contain?\"), and a value (\"what do I provide if selected?\"). The dot product \\( \\mathbf{q}_i^\\top \\mathbf{k}_j \\) measures relevance, and the softmax converts scores into a probability distribution over which values to aggregate.</p>\n\n<p>Self-attention differs from <b>cross-attention</b> in that Q, K, and V all come from the same sequence. This allows the model to build contextualised representations where each token's representation depends on the entire sequence context.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Computational cost:</b> \\( O(n^2 d) \\) time and \\( O(n^2) \\) memory for the attention matrix, where \\( n \\) is sequence length. This quadratic scaling is the primary bottleneck for long sequences and has motivated efficient variants:</p>\n<ul>\n<li><b>FlashAttention</b> — fuses the attention computation to avoid materialising the \\( n \\times n \\) matrix, achieving exact attention with reduced memory</li>\n<li><b>Sparse attention</b> (Longformer, BigBird) — restricts the attention pattern to local windows plus global tokens</li>\n<li><b>Linear attention</b> — replaces softmax with kernel approximations to achieve \\( O(n) \\) complexity</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to other mechanisms:</b> Unlike RNNs (which compress history into a fixed-size hidden state, creating an information bottleneck) or CNNs (which have limited receptive fields that grow logarithmically with depth), self-attention provides direct \\( O(1) \\) path length between any two positions. Self-attention can also be viewed as a form of associative memory or a soft dictionary lookup — it has connections to Hopfield networks, where the softmax attention rule corresponds to the update rule of modern continuous Hopfield networks (Ramsauer et al., 2020).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "attention-score",
+    "title": "Attention Score",
+    "summary": "The raw compatibility value between a query and a key, computed before normalisation. In scaled dot-product attention, the attention score is the dot product of the query and key vectors, divided by \\( \\sqrt{d_k} \\), measuring how releva…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "what-is-a-scaled-attention-score",
+      "self-attention"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The raw compatibility value between a query and a key, computed before normalisation. In scaled dot-product attention, the attention score is the dot product of the query and key vectors, divided by \\( \\sqrt{d_k} \\), measuring how relevant a key position is to a given query.</p><p>For a query vector \\( \\mathbf{q}_i \\in \\mathbb{R}^{d_k} \\) and key vector \\( \\mathbf{k}_j \\in \\mathbb{R}^{d_k} \\), the attention score is:</p>\n\n\\[ e_{ij} = \\frac{\\mathbf{q}_i^\\top \\mathbf{k}_j}{\\sqrt{d_k}} \\]\n\n<p>The full score matrix for a sequence of length \\( n \\) is \\( \\mathbf{E} = \\frac{QK^\\top}{\\sqrt{d_k}} \\in \\mathbb{R}^{n \\times n} \\), requiring \\( O(n^2 d_k) \\) operations to compute. These raw scores are then transformed into attention weights via softmax (and optionally masking).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Geometric interpretation:</b> The dot product \\( \\mathbf{q}_i^\\top \\mathbf{k}_j = \\|\\mathbf{q}_i\\| \\|\\mathbf{k}_j\\| \\cos\\theta \\) measures both the alignment (angle) and magnitude of the query and key vectors. Unlike cosine similarity, which normalises by magnitude, dot-product scores allow the model to modulate attention strength through vector norms — a property the model can learn to exploit.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Alternative scoring functions</b> have been proposed in the attention literature:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Scoring function</th><th style=\"padding:6px; text-align:left;\">Formula</th><th style=\"padding:6px; text-align:left;\">Origin</th><th style=\"padding:6px; text-align:left;\">Properties</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Dot-product</td><td style=\"padding:6px;\">\\( \\mathbf{q}^\\top \\mathbf{k} \\)</td><td style=\"padding:6px;\">Luong (2015)</td><td style=\"padding:6px;\">Fast, no extra params</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Scaled dot-product</td><td style=\"padding:6px;\">\\( \\mathbf{q}^\\top \\mathbf{k} / \\sqrt{d_k} \\)</td><td style=\"padding:6px;\">Vaswani (2017)</td><td style=\"padding:6px;\">Variance-normalised</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Additive (concat)</td><td style=\"padding:6px;\">\\( \\mathbf{v}^\\top \\tanh(W_1\\mathbf{q} + W_2\\mathbf{k}) \\)</td><td style=\"padding:6px;\">Bahdanau (2015)</td><td style=\"padding:6px;\">More expressive, slower</td></tr>\n<tr><td style=\"padding:6px;\">Multiplicative (bilinear)</td><td style=\"padding:6px;\">\\( \\mathbf{q}^\\top W \\mathbf{k} \\)</td><td style=\"padding:6px;\">Luong (2015)</td><td style=\"padding:6px;\">Learned interaction matrix</td></tr>\n</tbody></table>\n\n<p>Vaswani et al. found that scaled dot-product and additive attention perform similarly in quality, but dot-product attention is significantly faster in practice because it can be implemented as a single matrix multiplication \\( QK^\\top \\), leveraging highly optimised BLAS/GPU kernels. The scaling factor \\( \\sqrt{d_k} \\) is critical: without it, for large \\( d_k \\), the variance of the dot products grows as \\( d_k \\), pushing the softmax into near-one-hot outputs with vanishing gradients.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Relationship to the attention pipeline:</b> Attention scores are the first stage in a three-step process: (1) compute scores \\( e_{ij} \\), (2) optionally mask and normalise via softmax to get attention weights \\( \\alpha_{ij} \\), (3) compute weighted sum of value vectors to produce the output.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "what-is-a-scaled-attention-score",
+    "title": "What is a scaled attention score?",
+    "summary": "An attention score divided by \\( \\sqrt{d_k} \\) (the square root of the key/query dimension) to prevent the dot products from growing too large, which would push the softmax into extremely peaked distributions and cause vanishing gradients.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "masked-attention-score",
+      "attention-score"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An attention score divided by \\( \\sqrt{d_k} \\) (the square root of the key/query dimension) to prevent the dot products from growing too large, which would push the softmax into extremely peaked distributions and cause vanishing gradients.</p>\\[ \\text{score}(i,j) = \\frac{\\mathbf{q}_i^\\top \\mathbf{k}_j}{\\sqrt{d_k}} \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why scale?</b> If \\( \\mathbf{q} \\) and \\( \\mathbf{k} \\) have independent components with zero mean and unit variance, their dot product has:</p>\n\n\\[ \\mathbb{E}[\\mathbf{q}^\\top \\mathbf{k}] = 0, \\qquad \\text{Var}(\\mathbf{q}^\\top \\mathbf{k}) = d_k \\]\n\n<p>As \\( d_k \\) grows (e.g., \\( d_k = 64 \\) per head in the original Transformer), the dot products become large in magnitude. This pushes the softmax into saturation:</p>\n\n<ul>\n<li>The softmax output becomes near-one-hot — the model makes hard attention decisions rather than smooth, differentiable weightings</li>\n<li>Gradients through the softmax become vanishingly small: for a peaked softmax output \\( \\alpha_i \\approx 1 \\), the Jacobian entries \\( \\alpha_i(1 - \\alpha_i) \\approx 0 \\)</li>\n<li>Learning stalls because the attention pattern is effectively frozen</li>\n</ul>\n\n<p>Dividing by \\( \\sqrt{d_k} \\) normalises the variance back to \\( O(1) \\), keeping the softmax in a regime where gradients flow well and the model can smoothly distribute attention across relevant positions.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Comparison with additive attention:</b> Bahdanau-style additive attention \\( \\mathbf{v}^\\top \\tanh(W_1 \\mathbf{q} + W_2 \\mathbf{k}) \\) does not suffer from this scaling issue because the \\(\\tanh\\) saturates at \\(\\pm 1\\) regardless of dimension. Vaswani et al. showed that scaled dot-product attention matches additive attention in quality while being faster and more memory-efficient (leveraging optimised matrix multiplication).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Practical note:</b> The scaling factor is typically built into the attention kernel and is not a tunable hyperparameter. Some implementations (e.g., in multi-query attention or alternative architectures) have experimented with learned temperature parameters \\( \\tau \\) replacing \\( \\sqrt{d_k} \\), but the original fixed scaling remains standard.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "masked-attention-score",
+    "title": "Masked Attention Score",
+    "summary": "An attention score that has been modified by a mask to prevent certain positions from being attended to. In causal (autoregressive) models, future positions are masked to \\( -\\infty \\) before softmax, ensuring each token can only attend…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "attention-weights",
+      "what-is-a-scaled-attention-score"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An attention score that has been modified by a mask to prevent certain positions from being attended to. In causal (autoregressive) models, future positions are masked to \\( -\\infty \\) before softmax, ensuring each token can only attend to itself and preceding tokens.</p><p>The masking is applied to the score matrix before the softmax:</p>\n\n\\[ \\text{MaskedScore}_{ij} = \\begin{cases} \\dfrac{\\mathbf{q}_i^\\top \\mathbf{k}_j}{\\sqrt{d_k}} &amp; \\text{if } j \\leq i \\\\ -\\infty &amp; \\text{if } j &gt; i \\end{cases} \\]\n\n<p>After softmax, positions masked with \\( -\\infty \\) receive zero weight since \\( e^{-\\infty} = 0 \\). This is mathematically equivalent to restricting the normalisation denominator to only the unmasked positions:</p>\n\n\\[ \\alpha_{ij} = \\frac{\\exp(e_{ij})}{\\sum_{k \\leq i} \\exp(e_{ik})} \\quad \\text{for } j \\leq i, \\qquad \\alpha_{ij} = 0 \\quad \\text{for } j &gt; i \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Types of masks used in Transformer models",
+        "body": "<ul>\n<li><b>Causal mask</b> — lower-triangular matrix; prevents attending to future tokens. Essential for autoregressive generation so the model cannot \"cheat\" by looking ahead. Used in all decoder-only models (GPT, LLaMA, Claude).</li>\n<li><b>Padding mask</b> — masks out padding tokens in variable-length batches so they contribute neither as keys nor queries. Without padding masks, padding tokens would absorb and dilute attention weight.</li>\n<li><b>Prefix mask</b> — allows bidirectional attention over a prefix (prompt) while maintaining causal attention over the generated continuation. Used in prefix-tuning (Li &amp; Liang, 2021) and some infilling models.</li>\n<li><b>Sliding window mask</b> — restricts attention to a local window of \\( w \\) tokens, reducing complexity from \\( O(n^2) \\) to \\( O(nw) \\). Used in Mistral and Longformer.</li>\n</ul>\n\n<p>In practice, the mask is implemented as a boolean or binary tensor. The masked score is computed as \\( \\hat{e}_{ij} = e_{ij} + (1 - M_{ij}) \\cdot c \\), where \\( c \\) is a large negative constant (typically \\(-10^9\\) or <code>-float('inf')</code>). Using \\(-10^9\\) instead of true \\(-\\infty\\) avoids NaN issues when an entire row is masked in mixed-precision (fp16) training.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "attention-weights",
+    "title": "Attention Weights",
+    "summary": "The normalised probability distribution over positions that determines how much each value vector contributes to a given position's output. Attention weights are obtained by applying softmax to the (optionally masked and scaled) attentio…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "attention-mask",
+      "masked-attention-score"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The normalised probability distribution over positions that determines how much each value vector contributes to a given position's output. Attention weights are obtained by applying softmax to the (optionally masked and scaled) attention scores.</p><p>Given scaled attention scores \\( e_{ij} \\), the attention weight from position \\( i \\) to position \\( j \\) is:</p>\n\n\\[ \\alpha_{ij} = \\text{softmax}_j(e_{ij}) = \\frac{\\exp(e_{ij})}{\\sum_{k=1}^{n} \\exp(e_{ik})} \\]\n\n<p>The output for position \\( i \\) is then the weighted combination of value vectors:</p>\n\n\\[ \\mathbf{o}_i = \\sum_{j=1}^{n} \\alpha_{ij} \\mathbf{v}_j \\]\n\n<p>In matrix form: \\( \\mathbf{A} = \\text{softmax}\\!\\left(\\frac{QK^\\top}{\\sqrt{d_k}}\\right) \\in \\mathbb{R}^{n \\times n} \\) and \\( O = AV \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key properties",
+        "body": "<ul>\n<li><b>Non-negative</b> and <b>sum to 1</b> across the key dimension — forming a valid probability distribution per query position</li>\n<li><b>Differentiable</b> — the softmax and weighted sum are smooth, allowing gradient-based training. The Jacobian of softmax is \\( \\frac{\\partial \\alpha_i}{\\partial e_j} = \\alpha_i(\\delta_{ij} - \\alpha_j) \\)</li>\n<li><b>Temperature sensitivity</b> — multiplying scores by a temperature \\( \\tau \\) (or equivalently changing the scaling factor) controls the sharpness: low temperature produces peaked weights (hard attention), high temperature produces uniform weights</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Interpretability:</b> Attention weight matrices are commonly visualised as heatmaps to understand which tokens a position attends to. However, interpreting these patterns requires caution — Jain & Wallace (2019) showed that attention weights often do not reliably indicate feature importance, and different heads can produce similar outputs with very different attention patterns. Attention weights reflect the model's information routing, not necessarily the causal importance of input tokens.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Multi-head specialisation:</b> In multi-head attention, each head produces its own \\( n \\times n \\) weight matrix, often specialising in different linguistic patterns. Clark et al. (2019) found that BERT heads learn interpretable patterns: some attend to the previous/next token, some to syntactic dependents, and one head in each layer broadly attends to the [SEP] token. The full attention weight tensor for all \\( h \\) heads across \\( L \\) layers uses \\( O(Lhn^2) \\) memory — this is why FlashAttention avoids materialising it, instead computing attention output tile-by-tile in SRAM.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "attention-mask",
+    "title": "Attention Mask",
+    "summary": "A binary or boolean tensor applied to the attention score matrix to control which positions can attend to which. Masks enforce structural constraints like causality (no peeking at future tokens) and padding exclusion (ignore filler token…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "dimensionality-reduction",
+      "attention-weights"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A binary or boolean tensor applied to the attention score matrix to control which positions can attend to which. Masks enforce structural constraints like causality (no peeking at future tokens) and padding exclusion (ignore filler tokens in batched sequences).</p><p>The mask \\( \\mathbf{M} \\in \\{0, 1\\}^{n \\times n} \\) is applied by setting masked positions to \\( -\\infty \\) before softmax:</p>\n\n\\[ \\hat{e}_{ij} = e_{ij} + (1 - M_{ij}) \\cdot (-\\infty) \\]\n\n<p>After softmax, masked positions receive zero weight since \\( \\exp(-\\infty) = 0 \\). The mask shapes the information flow graph of the model — it determines which tokens can influence which other tokens.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Common mask types",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Mask</th><th style=\"padding:6px; text-align:left;\">Shape</th><th style=\"padding:6px; text-align:left;\">Purpose</th><th style=\"padding:6px; text-align:left;\">Used by</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Causal</td><td style=\"padding:6px;\">Lower-triangular</td><td style=\"padding:6px;\">Autoregressive generation</td><td style=\"padding:6px;\">GPT, LLaMA, Claude</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Padding</td><td style=\"padding:6px;\">Row/column mask</td><td style=\"padding:6px;\">Variable-length batching</td><td style=\"padding:6px;\">All batched models</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Prefix</td><td style=\"padding:6px;\">Bidirectional prefix + causal rest</td><td style=\"padding:6px;\">Prefix-tuning, infilling</td><td style=\"padding:6px;\">T5, UL2, prefix LMs</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Sliding window</td><td style=\"padding:6px;\">Band diagonal (\\( w \\)-wide)</td><td style=\"padding:6px;\">Efficient long-context attention</td><td style=\"padding:6px;\">Longformer, Mistral</td></tr>\n<tr><td style=\"padding:6px;\">Global + local</td><td style=\"padding:6px;\">Sparse structured pattern</td><td style=\"padding:6px;\">Combining local and global attention</td><td style=\"padding:6px;\">BigBird, ETC</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Implementation details:</b> In Hugging Face Transformers, the <code>attention_mask</code> argument typically refers to the <b>padding mask</b> (1 = attend, 0 = ignore), while causal masking is handled internally by the model class. The two masks are combined before being applied. For causal models, the library constructs a lower-triangular mask and adds it to the user-supplied padding mask.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Broadcasting:</b> Masks are typically shaped as \\( (B, 1, 1, n) \\) for padding masks (broadcast across heads and query positions) or \\( (1, 1, n, n) \\) for causal masks (broadcast across batch and heads). This avoids redundant memory allocation.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to graph neural networks:</b> The attention mask can be viewed as an adjacency matrix defining a directed graph — self-attention with a causal mask is equivalent to message passing on a directed acyclic graph where each node receives messages only from itself and its predecessors. Sparse masks like those in Longformer explicitly design this graph structure to balance expressiveness against computational cost.</p>"
+      }
+    ],
+    "cards": []
   }
 ]

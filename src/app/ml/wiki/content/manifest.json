@@ -4042,6 +4042,235 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "dimensionality-reduction",
+      "title": "Dimensionality Reduction",
+      "summary": "The process of reducing the number of features (dimensions) in a dataset while preserving as much relevant structure as possible. Dimensionality reduction combats the curse of dimensionality, reduces computational cost, removes collinear…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "transformer",
+        "attention-mask"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "transformer",
+      "title": "Transformer",
+      "summary": "A neural network architecture based entirely on attention mechanisms, dispensing with recurrence and convolutions. The Transformer processes all positions in parallel via self-attention and has become the dominant architecture for NLP, v…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "landmark",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "decoder-block",
+        "dimensionality-reduction"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "decoder-block",
+      "title": "Decoder Block",
+      "summary": "A single processing layer within the decoder stack of a Transformer. In a decoder-only model (e.g., GPT, LLaMA), each decoder block consists of masked self-attention, a feed-forward network, residual connections, and normalisation layers.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "decoder-only-transformer",
+        "transformer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "decoder-only-transformer",
+      "title": "Decoder-only Transformer",
+      "summary": "A Transformer architecture that uses only the decoder stack with causal (masked) self-attention, trained to predict the next token autoregressively. This is the architecture behind GPT, LLaMA, Claude, and most modern large language models.",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "landmark",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "self-attention",
+        "decoder-block"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "self-attention",
+      "title": "Self-Attention",
+      "summary": "A mechanism where each element in a sequence computes a weighted sum over all other elements, with weights determined by pairwise compatibility scores. Self-attention allows every position to directly attend to every other position, capt…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "attention-score",
+        "decoder-only-transformer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "attention-score",
+      "title": "Attention Score",
+      "summary": "The raw compatibility value between a query and a key, computed before normalisation. In scaled dot-product attention, the attention score is the dot product of the query and key vectors, divided by \\( \\sqrt{d_k} \\), measuring how releva…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "what-is-a-scaled-attention-score",
+        "self-attention"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "what-is-a-scaled-attention-score",
+      "title": "What is a scaled attention score?",
+      "summary": "An attention score divided by \\( \\sqrt{d_k} \\) (the square root of the key/query dimension) to prevent the dot products from growing too large, which would push the softmax into extremely peaked distributions and cause vanishing gradients.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "masked-attention-score",
+        "attention-score"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "masked-attention-score",
+      "title": "Masked Attention Score",
+      "summary": "An attention score that has been modified by a mask to prevent certain positions from being attended to. In causal (autoregressive) models, future positions are masked to \\( -\\infty \\) before softmax, ensuring each token can only attend…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "attention-weights",
+        "what-is-a-scaled-attention-score"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "attention-weights",
+      "title": "Attention Weights",
+      "summary": "The normalised probability distribution over positions that determines how much each value vector contributes to a given position's output. Attention weights are obtained by applying softmax to the (optionally masked and scaled) attentio…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "attention-mask",
+        "masked-attention-score"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "attention-mask",
+      "title": "Attention Mask",
+      "summary": "A binary or boolean tensor applied to the attention score matrix to control which positions can attend to which. Masks enforce structural constraints like causality (no peeking at future tokens) and padding exclusion (ignore filler token…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "dimensionality-reduction",
+        "attention-weights"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
