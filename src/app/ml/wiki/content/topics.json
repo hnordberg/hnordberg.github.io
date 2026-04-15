@@ -3613,5 +3613,526 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "affine-transformation",
+    "title": "Affine transformation",
+    "summary": "A transformation composed of a linear map followed by a translation: \\( f(\\mathbf{x}) = W\\mathbf{x} + \\mathbf{b} \\). It is the fundamental computational unit inside every fully connected (dense) neural network layer.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "loss-function",
+      "regularization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "18th Century · Euler · Formalized in linear algebra and analytic geometry"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A transformation composed of a linear map followed by a translation: \\( f(\\mathbf{x}) = W\\mathbf{x} + \\mathbf{b} \\). It is the fundamental computational unit inside every fully connected (dense) neural network layer.</p><div style=\"text-align: center; margin: 16px 0;\">\n<svg viewBox=\"0 0 400 200\" width=\"100%\" height=\"200\" style=\"background:#1a202c; border-radius:8px; font-family:sans-serif;\">\n  <line x1=\"50\" y1=\"150\" x2=\"350\" y2=\"150\" stroke=\"#4a5568\" stroke-width=\"2\"></line>\n  <line x1=\"150\" y1=\"20\" x2=\"150\" y2=\"180\" stroke=\"#4a5568\" stroke-width=\"2\"></line>\n  <rect x=\"150\" y=\"100\" width=\"50\" height=\"50\" fill=\"none\" stroke=\"#63b3ed\" stroke-width=\"2\" stroke-dasharray=\"4\"></rect>\n  <text x=\"175\" y=\"130\" fill=\"#63b3ed\" font-size=\"14\" text-anchor=\"middle\">x</text>\n  <polygon points=\"200,150 250,150 300,100 250,100\" fill=\"rgba(252,129,129,0.3)\" stroke=\"#fc8181\" stroke-width=\"2\"></polygon>\n  <text x=\"250\" y=\"130\" fill=\"#fc8181\" font-size=\"14\" text-anchor=\"middle\">Wx + b</text>\n  <text x=\"340\" y=\"170\" fill=\"#cbd5e0\" font-size=\"12\">x<tspan baseline-shift=\"sub\">1</tspan></text>\n  <text x=\"130\" y=\"30\" fill=\"#cbd5e0\" font-size=\"12\">x<tspan baseline-shift=\"sub\">2</tspan></text>\n</svg>\n<div style=\"color:#a0aec0; font-size:0.85em; margin-top:8px;\">Geometric interpretation: An affine transformation shears, scales, and translates the original space (blue square to red parallelogram).</div>\n</div>\n\n\n  <p>An affine transformation maps an input vector \\( \\mathbf{x} \\in \\mathbb{R}^n \\) to an output \\( \\mathbf{y} \\in \\mathbb{R}^m \\) via:</p>\n\n  \\[ \\mathbf{y} = W\\mathbf{x} + \\mathbf{b} \\]\n\n  <p>where \\( W \\in \\mathbb{R}^{m \\times n} \\) is the weight matrix and \\( \\mathbf{b} \\in \\mathbb{R}^m \\) is the bias vector. Unlike a purely linear map (which must satisfy \\( f(\\mathbf{0}) = \\mathbf{0} \\)), the bias term shifts the output, allowing the transformation to model functions that do not pass through the origin.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Parameter count.</b> A single affine layer mapping \\( n \\) inputs to \\( m \\) outputs has \\( mn + m \\) learnable parameters. For example, a layer mapping 512 to 256 units has \\( 512 \\times 256 + 256 = 131{,}328 \\) parameters. This quadratic scaling in hidden size is why fully connected layers are parameter-expensive compared to convolutional layers.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Collapse property.</b> Composing two affine transformations without a non-linearity yields another affine transformation:</p>\n\n  \\[ W_2(W_1 \\mathbf{x} + \\mathbf{b}_1) + \\mathbf{b}_2 = (W_2 W_1)\\mathbf{x} + (W_2 \\mathbf{b}_1 + \\mathbf{b}_2) \\]\n\n  <p>This means a deep stack of purely affine layers has no more representational power than a single affine layer. Inserting non-linear activation functions (ReLU, GELU, sigmoid) between affine layers is what gives deep networks their expressive power, enabling them to approximate arbitrary continuous functions (Universal Approximation Theorem).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Where affine layers appear",
+        "body": "<ul>\n    <li><b>MLPs:</b> every hidden layer is an affine transformation followed by an activation.</li>\n    <li><b>CNNs:</b> the classifier head typically uses one or more affine (fully connected) layers after the convolutional feature extractor.</li>\n    <li><b>Transformers:</b> the position-wise feed-forward network in each block consists of two affine transformations with a non-linearity between them: \\( \\text{FFN}(\\mathbf{x}) = W_2 \\, \\sigma(W_1 \\mathbf{x} + \\mathbf{b}_1) + \\mathbf{b}_2 \\).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Geometric intuition.</b> An affine transformation can perform rotation, scaling, shearing, reflection, and translation of the input space. Each layer of a neural network progressively reshapes the data geometry so that the final representation is linearly separable (for classification) or lies on the target manifold (for regression).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "loss-function",
+    "title": "Loss function",
+    "summary": "A scalar function \\( \\mathcal{L}(\\hat{y}, y) \\) that quantifies the discrepancy between a model's prediction \\( \\hat{y} \\) and the ground-truth target \\( y \\), providing the signal that drives parameter optimization.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "mean-squared-error-mse",
+      "affine-transformation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1805 · Legendre, Gauss · Least squares method"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A scalar function \\( \\mathcal{L}(\\hat{y}, y) \\) that quantifies the discrepancy between a model's prediction \\( \\hat{y} \\) and the ground-truth target \\( y \\), providing the signal that drives parameter optimization.</p><div style=\"text-align: center; margin: 16px 0;\">\n<svg viewBox=\"0 0 400 200\" width=\"100%\" height=\"200\" style=\"background:#1a202c; border-radius:8px; font-family:sans-serif;\">\n  <path d=\"M 50 20 Q 200 350 350 20\" fill=\"none\" stroke=\"#63b3ed\" stroke-width=\"3\"></path>\n  <circle cx=\"120\" cy=\"115\" r=\"5\" fill=\"#fc8181\"></circle>\n  <line x1=\"80\" y1=\"65\" x2=\"160\" y2=\"165\" stroke=\"#fc8181\" stroke-width=\"2\" stroke-dasharray=\"4\"></line>\n  <line x1=\"120\" y1=\"115\" x2=\"90\" y2=\"78\" stroke=\"#f6ad55\" stroke-width=\"2\" marker-end=\"url(#arrow_1772478271843)\"></line>\n  <line x1=\"30\" y1=\"180\" x2=\"370\" y2=\"180\" stroke=\"#4a5568\" stroke-width=\"2\"></line>\n  <text x=\"200\" y=\"195\" fill=\"#cbd5e0\" font-size=\"14\" text-anchor=\"middle\">Parameters (θ)</text>\n  <text x=\"200\" y=\"25\" fill=\"#cbd5e0\" font-size=\"14\" text-anchor=\"middle\">Loss L(θ)</text>\n  <text x=\"135\" y=\"115\" fill=\"#fc8181\" font-size=\"14\">θ<tspan baseline-shift=\"sub\">t</tspan></text>\n  <text x=\"65\" y=\"75\" fill=\"#f6ad55\" font-size=\"14\">-∇L</text>\n  <defs>\n    <marker id=\"arrow_1772478271843\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#f6ad55\"></path>\n    </marker>\n  </defs>\n</svg>\n<div style=\"color:#a0aec0; font-size:0.85em; margin-top:8px;\">The loss function maps parameter configurations to a scalar error. Optimization seeks the global minimum.</div>\n</div>\n\n\n  <p>The loss function (also called objective, cost, or criterion) is the quantity that training seeks to minimize. Given model parameters \\( \\theta \\), the empirical risk over a dataset of \\( N \\) examples is:</p>\n\n  \\[ J(\\theta) = \\frac{1}{N} \\sum_{i=1}^{N} \\mathcal{L}\\bigl(f_\\theta(x_i),\\; y_i\\bigr) \\]\n\n  <p>Gradient-based optimizers compute \\( \\nabla_\\theta J(\\theta) \\) and update parameters to reduce this quantity iteratively.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Common loss functions",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Loss</th>\n      <th style=\"padding:6px; text-align:left;\">Formula</th>\n      <th style=\"padding:6px; text-align:left;\">Use case</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">MSE</td>\n      <td style=\"padding:6px;\">\\( \\frac{1}{N}\\sum(y_i - \\hat{y}_i)^2 \\)</td>\n      <td style=\"padding:6px;\">Regression</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">MAE</td>\n      <td style=\"padding:6px;\">\\( \\frac{1}{N}\\sum|y_i - \\hat{y}_i| \\)</td>\n      <td style=\"padding:6px;\">Robust regression</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Cross-Entropy</td>\n      <td style=\"padding:6px;\">\\( -\\sum_c y_c \\log \\hat{y}_c \\)</td>\n      <td style=\"padding:6px;\">Classification</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Binary CE</td>\n      <td style=\"padding:6px;\">\\( -[y\\log\\hat{y} + (1-y)\\log(1-\\hat{y})] \\)</td>\n      <td style=\"padding:6px;\">Binary classification</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Hinge</td>\n      <td style=\"padding:6px;\">\\( \\max(0, 1 - y \\cdot \\hat{y}) \\)</td>\n      <td style=\"padding:6px;\">SVMs, margin-based</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Probabilistic interpretation.</b> Many losses correspond to maximum likelihood estimation under specific distributional assumptions. MSE is the MLE solution when errors are i.i.d. Gaussian; cross-entropy is the MLE for a categorical (softmax) output distribution. This connection to probability theory explains why different tasks require different losses: the loss implicitly specifies the noise model.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Regularized objectives.</b> In practice, the total objective often includes an explicit regularization penalty: \\( J_{\\text{total}}(\\theta) = J(\\theta) + \\lambda \\, \\Omega(\\theta) \\), where \\( \\Omega(\\theta) \\) might be L2 weight decay (\\( \\|\\theta\\|_2^2 \\)) or L1 sparsity (\\( \\|\\theta\\|_1 \\)). This trades off data fidelity against model complexity.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Desirable properties:</b> a good loss function should be (1) differentiable almost everywhere (for gradient-based optimization), (2) bounded below (so a minimum exists), and (3) well-matched to the task's evaluation metric. Mismatches between training loss and evaluation metric (e.g., training with cross-entropy but evaluating with BLEU) are a persistent challenge in NLP and other domains.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "mean-squared-error-mse",
+    "title": "Mean squared error (MSE)",
+    "summary": "A regression loss function that computes the average squared error between predicted and actual values: \\( \\text{MSE} = \\frac{1}{N}\\sum_{i=1}^{N}(y_i - \\hat{y}_i)^2 \\). Minimizing MSE is equivalent to maximum likelihood estimation under…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "prediction-error",
+      "loss-function"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1805 · Legendre, Gauss · Method of least squares"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A regression loss function that computes the average squared error between predicted and actual values: \\( \\text{MSE} = \\frac{1}{N}\\sum_{i=1}^{N}(y_i - \\hat{y}_i)^2 \\). Minimizing MSE is equivalent to maximum likelihood estimation under Gaussian noise.</p><div style=\"text-align: center; margin: 16px 0;\">\n<svg viewBox=\"0 0 400 200\" width=\"100%\" height=\"200\" style=\"background:#1a202c; border-radius:8px; font-family:sans-serif;\">\n  <line x1=\"50\" y1=\"160\" x2=\"350\" y2=\"160\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n  <line x1=\"200\" y1=\"20\" x2=\"200\" y2=\"180\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n  <path d=\"M 120 32 Q 200 220 280 32\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"3\"/>\n  <text x=\"260\" y=\"50\" fill=\"#fc8181\" font-size=\"14\">MSE (L2)</text>\n  <path d=\"M 100 60 L 200 160 L 300 60\" fill=\"none\" stroke=\"#63b3ed\" stroke-width=\"3\"/>\n  <text x=\"290\" y=\"80\" fill=\"#63b3ed\" font-size=\"14\">MAE (L1)</text>\n  <text x=\"340\" y=\"180\" fill=\"#cbd5e0\" font-size=\"12\">y - ŷ</text>\n  <text x=\"210\" y=\"30\" fill=\"#cbd5e0\" font-size=\"12\">Loss</text>\n</svg>\n<div style=\"color:#a0aec0; font-size:0.85em; margin-top:8px;\">MSE scales quadratically with the residual error, heavily penalizing large outliers compared to MAE.</div>\n</div>\n\n\n  <p>Given \\( N \\) predictions \\( \\hat{y}_i \\) and targets \\( y_i \\), the mean squared error is:</p>\n\n  \\[ \\text{MSE} = \\frac{1}{N} \\sum_{i=1}^{N} (y_i - \\hat{y}_i)^2 \\]\n\n  <p>The gradient with respect to a single prediction is \\( \\frac{\\partial}{\\partial \\hat{y}_i} \\text{MSE} = -\\frac{2}{N}(y_i - \\hat{y}_i) \\), which is linear in the residual. This means large errors produce proportionally large gradients, making MSE sensitive to outliers.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Probabilistic derivation.</b> If we assume targets are generated as \\( y_i = f_\\theta(x_i) + \\epsilon_i \\) where \\( \\epsilon_i \\sim \\mathcal{N}(0, \\sigma^2) \\), the negative log-likelihood of the data is:</p>\n\n  \\[ -\\log p(\\mathbf{y} \\mid \\mathbf{X}, \\theta) = \\frac{N}{2}\\log(2\\pi\\sigma^2) + \\frac{1}{2\\sigma^2}\\sum_{i=1}^{N}(y_i - f_\\theta(x_i))^2 \\]\n\n  <p>Minimizing this with respect to \\( \\theta \\) is equivalent to minimizing MSE, since the first term is constant. This is why MSE is the natural loss for regression with homoscedastic Gaussian noise.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Comparison with other regression losses",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Loss</th>\n      <th style=\"padding:6px; text-align:left;\">Gradient behavior</th>\n      <th style=\"padding:6px; text-align:left;\">Outlier sensitivity</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">MSE</td>\n      <td style=\"padding:6px;\">Linear in residual</td>\n      <td style=\"padding:6px;\">High (quadratic penalty)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">MAE / L1</td>\n      <td style=\"padding:6px;\">Constant magnitude</td>\n      <td style=\"padding:6px;\">Low (linear penalty)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Huber</td>\n      <td style=\"padding:6px;\">Linear near 0, constant far</td>\n      <td style=\"padding:6px;\">Moderate (best of both)</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Practical notes.</b> MSE is the default loss for regression in virtually all deep learning frameworks (<code>nn.MSELoss</code> in PyTorch, <code>tf.keras.losses.MeanSquaredError</code>). When targets have vastly different scales across dimensions, normalizing the targets or using a per-dimension weighting is important to prevent one dimension from dominating the loss.</p><details>\n    <summary>Derivations</summary>\n    <p>Starting from the Gaussian likelihood assumption:</p>\n    \\[ p(y_i \\mid x_i, \\theta) = \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp\\!\\left(-\\frac{(y_i - f_\\theta(x_i))^2}{2\\sigma^2}\\right) \\]\n    <p>For \\( N \\) i.i.d. samples, the log-likelihood is:</p>\n    \\[ \\log p(\\mathbf{y} \\mid \\mathbf{X}, \\theta) = -\\frac{N}{2}\\log(2\\pi\\sigma^2) - \\frac{1}{2\\sigma^2}\\sum_{i=1}^{N}(y_i - f_\\theta(x_i))^2 \\]\n    <p>Maximizing this is equivalent to minimizing \\( \\sum(y_i - f_\\theta(x_i))^2 \\), i.e., MSE.</p>\n  </details>\n\n  <details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef mse_loss(y_true, y_pred):\n    \"\"\"Mean Squared Error with gradient.\"\"\"\n    N = len(y_true)\n    loss = np.mean((y_true - y_pred) ** 2)\n    grad = -2 / N * (y_true - y_pred)  # dL/d(y_pred)\n    return loss, grad</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "prediction-error",
+    "title": "Prediction error",
+    "summary": "The difference between a model's prediction and the true target value, \\( e_i = y_i - \\hat{y}_i \\). Also called the residual, it is the atomic quantity from which all loss functions are constructed.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "gradient-descent",
+      "mean-squared-error-mse"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1800s · Gauss, Legendre · Foundational to the method of least squares"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The difference between a model's prediction and the true target value, \\( e_i = y_i - \\hat{y}_i \\). Also called the residual, it is the atomic quantity from which all loss functions are constructed.</p><div style=\"text-align: center; margin: 16px 0;\">\n<svg viewBox=\"0 0 400 200\" width=\"100%\" height=\"200\" style=\"background:#1a202c; border-radius:8px; font-family:sans-serif;\">\n  <line x1=\"40\" y1=\"170\" x2=\"360\" y2=\"170\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n  <line x1=\"60\" y1=\"20\" x2=\"60\" y2=\"190\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n  <line x1=\"60\" y1=\"150\" x2=\"340\" y2=\"50\" stroke=\"#fc8181\" stroke-width=\"2\"/>\n  <text x=\"300\" y=\"40\" fill=\"#fc8181\" font-size=\"14\">f(x)</text>\n  <line x1=\"120\" y1=\"128\" x2=\"120\" y2=\"90\" stroke=\"#f6ad55\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n  <circle cx=\"120\" cy=\"90\" r=\"4\" fill=\"#63b3ed\"/>\n  <text x=\"100\" y=\"115\" fill=\"#f6ad55\" font-size=\"12\">e<tspan baseline-shift=\"sub\">1</tspan></text>\n  <line x1=\"200\" y1=\"100\" x2=\"200\" y2=\"130\" stroke=\"#f6ad55\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n  <circle cx=\"200\" cy=\"130\" r=\"4\" fill=\"#63b3ed\"/>\n  <text x=\"210\" y=\"120\" fill=\"#f6ad55\" font-size=\"12\">e<tspan baseline-shift=\"sub\">2</tspan></text>\n  <line x1=\"280\" y1=\"71\" x2=\"280\" y2=\"50\" stroke=\"#f6ad55\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n  <circle cx=\"280\" cy=\"50\" r=\"4\" fill=\"#63b3ed\"/>\n  <text x=\"260\" y=\"65\" fill=\"#f6ad55\" font-size=\"12\">e<tspan baseline-shift=\"sub\">3</tspan></text>\n</svg>\n<div style=\"color:#a0aec0; font-size:0.85em; margin-top:8px;\">Prediction errors (residuals) are the vertical distances from the ground-truth observations to the model's predictive surface.</div>\n</div>\n\n\n  <p>For a model \\( f_\\theta \\) producing prediction \\( \\hat{y}_i = f_\\theta(x_i) \\), the prediction error (residual) for the \\( i \\)-th example is:</p>\n\n  \\[ e_i = y_i - \\hat{y}_i \\]\n\n  <p>Loss functions aggregate these residuals into a single scalar. Different aggregation strategies yield different losses:</p>\n\n  <table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Loss</th>\n      <th style=\"padding:6px; text-align:left;\">Aggregation of residuals</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">MSE</td>\n      <td style=\"padding:6px;\">\\( \\frac{1}{N}\\sum e_i^2 \\)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">MAE</td>\n      <td style=\"padding:6px;\">\\( \\frac{1}{N}\\sum |e_i| \\)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Huber</td>\n      <td style=\"padding:6px;\">\\( \\frac{1}{N}\\sum h_\\delta(e_i) \\) (quadratic near 0, linear beyond \\( \\delta \\))</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Diagnostic value.</b> Analyzing the distribution and structure of prediction errors is a primary tool for model diagnosis:</p>\n  <ul>\n    <li><b>Systematic bias</b> (non-zero mean of residuals): indicates underfitting or a misspecified model that consistently over- or under-predicts.</li>\n    <li><b>Heteroscedasticity</b> (variance of residuals changes with input magnitude): suggests the model should use a heteroscedastic loss or log-transform targets.</li>\n    <li><b>Heavy tails</b> (large residuals more frequent than Gaussian): signals outliers or the need for a robust loss like MAE or Huber.</li>\n    <li><b>Autocorrelation</b> in residuals (for time-series): indicates the model is not capturing temporal patterns.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bias-variance decomposition.</b> The expected prediction error for a model can be decomposed as:</p>\n\n  \\[ \\mathbb{E}[(y - \\hat{y})^2] = \\text{Bias}[\\hat{y}]^2 + \\text{Var}[\\hat{y}] + \\sigma^2 \\]\n\n  <p>where \\( \\sigma^2 \\) is irreducible noise. This decomposition explains the fundamental trade-off: reducing bias (more complex models) typically increases variance, and vice versa.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "gradient-descent",
+    "title": "Gradient descent",
+    "summary": "A first-order iterative optimization algorithm that minimizes an objective function by repeatedly stepping in the direction of the negative gradient: \\( \\theta_{t+1} = \\theta_t - \\eta \\nabla_\\theta J(\\theta_t) \\).",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "mini-batch-gradient-descent",
+      "prediction-error"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1847 · Augustin-Louis Cauchy"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A first-order iterative optimization algorithm that minimizes an objective function by repeatedly stepping in the direction of the negative gradient: \\( \\theta_{t+1} = \\theta_t - \\eta \\nabla_\\theta J(\\theta_t) \\).</p><div style=\"text-align: center; margin: 16px 0;\">\n<svg viewBox=\"0 0 400 200\" width=\"100%\" height=\"200\" style=\"background:#1a202c; border-radius:8px; font-family:sans-serif;\">\n  <ellipse cx=\"260\" cy=\"100\" rx=\"30\" ry=\"15\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"1\"></ellipse>\n  <ellipse cx=\"260\" cy=\"100\" rx=\"60\" ry=\"30\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"1\"></ellipse>\n  <ellipse cx=\"260\" cy=\"100\" rx=\"90\" ry=\"45\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"1\"></ellipse>\n  <ellipse cx=\"260\" cy=\"100\" rx=\"120\" ry=\"60\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"1\"></ellipse>\n  <text x=\"260\" y=\"105\" fill=\"#cbd5e0\" font-size=\"14\" text-anchor=\"middle\">θ*</text>\n  <path d=\"M 120 160 L 180 60 L 220 120 L 245 85 L 255 105\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"2\" marker-end=\"url(#arrow-gd_1772478271848)\"></path>\n  <circle cx=\"120\" cy=\"160\" r=\"4\" fill=\"#fc8181\"></circle>\n  <text x=\"100\" y=\"175\" fill=\"#fc8181\" font-size=\"14\">θ<tspan baseline-shift=\"sub\">0</tspan></text>\n  <defs>\n    <marker id=\"arrow-gd_1772478271848\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fc8181\"></path>\n    </marker>\n  </defs>\n</svg>\n<div style=\"color:#a0aec0; font-size:0.85em; margin-top:8px;\">Gradient descent iteratively updates parameters orthogonal to the loss contours to find the global minimum.</div>\n</div>\n\n\n  <p>Given a differentiable loss function \\( J(\\theta) \\), gradient descent updates the parameter vector \\( \\theta \\) by moving opposite to the gradient (the direction of steepest ascent):</p>\n\n  \\[ \\theta_{t+1} = \\theta_t - \\eta \\, \\nabla_\\theta J(\\theta_t) \\]\n\n  <p>where \\( \\eta &gt; 0 \\) is the <b>learning rate</b> (step size) and \\( \\nabla_\\theta J(\\theta_t) \\) is the gradient of the full loss over the entire training set of \\( N \\) examples.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why it works.</b> A first-order Taylor expansion gives \\( J(\\theta + \\Delta\\theta) \\approx J(\\theta) + \\nabla_\\theta J(\\theta)^\\top \\Delta\\theta \\). Choosing \\( \\Delta\\theta = -\\eta \\nabla_\\theta J \\) guarantees the loss decreases (for sufficiently small \\( \\eta \\)), since the inner product \\( -\\eta \\|\\nabla_\\theta J\\|^2 &lt; 0 \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Convergence properties",
+        "body": "<ul>\n    <li>For <b>convex</b> functions with Lipschitz-continuous gradients (constant \\( L \\)), GD with \\( \\eta \\leq 1/L \\) converges at rate \\( O(1/T) \\).</li>\n    <li>For <b>strongly convex</b> functions (condition number \\( \\kappa = L/\\mu \\)), convergence is linear: \\( O\\!\\left(\\left(1 - 1/\\kappa\\right)^T\\right) \\).</li>\n    <li>For <b>non-convex</b> functions (typical in deep learning), GD converges to a stationary point (\\( \\nabla J \\approx 0 \\)) but with no guarantee it is a global minimum.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Learning rate sensitivity.</b> If \\( \\eta \\) is too large, the updates overshoot and the loss diverges. If too small, convergence is impractically slow. The optimal rate depends on the local curvature (Hessian eigenvalues), motivating adaptive methods like Adam that maintain per-parameter rates.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Variants and extensions",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Variant</th>\n      <th style=\"padding:6px; text-align:left;\">Batch size</th>\n      <th style=\"padding:6px; text-align:left;\">Key trade-off</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Full-batch GD</td>\n      <td style=\"padding:6px;\">\\( N \\) (all data)</td>\n      <td style=\"padding:6px;\">Exact gradient, slow per step</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">SGD</td>\n      <td style=\"padding:6px;\">1</td>\n      <td style=\"padding:6px;\">Noisy gradient, fast per step, implicit regularization</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Mini-batch GD</td>\n      <td style=\"padding:6px;\">\\( b \\) (e.g. 32-512)</td>\n      <td style=\"padding:6px;\">Variance reduction + GPU parallelism</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to second-order methods.</b> Newton's method uses the Hessian \\( H \\) to compute \\( \\Delta\\theta = -H^{-1}\\nabla J \\), which accounts for curvature and converges quadratically. However, computing and inverting the Hessian is \\( O(d^3) \\) for \\( d \\) parameters, making it infeasible for modern neural networks with millions of parameters. Quasi-Newton methods (L-BFGS) approximate the Hessian cheaply and are used for small-to-medium-scale problems.</p><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "title": "Gradient of MSE for linear regression",
+        "body": "<p>For \\( J(\\theta) = \\frac{1}{2N}\\|X\\theta - y\\|^2 \\):</p>\n    \\[ \\nabla_\\theta J = \\frac{1}{N} X^\\top(X\\theta - y) \\]\n    <p>The update becomes: \\( \\theta_{t+1} = \\theta_t - \\frac{\\eta}{N} X^\\top(X\\theta_t - y) \\).</p>\n  </details>\n\n  <details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef gradient_descent(X, y, theta, lr=0.01, epochs=1000, tol=1e-6):\n    \"\"\"Full-batch gradient descent for linear regression.\"\"\"\n    N = len(y)\n    losses = []\n    for t in range(epochs):\n        preds = X.dot(theta)\n        loss = np.mean((preds - y) ** 2)\n        losses.append(loss)\n        grad = (2 / N) * X.T.dot(preds - y)\n        theta = theta - lr * grad\n        if np.linalg.norm(grad) &lt; tol:\n            break\n    return theta, losses</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "mini-batch-gradient-descent",
+    "title": "Mini-batch gradient descent",
+    "summary": "A variant of gradient descent that computes the gradient over a small, randomly sampled subset (mini-batch) of the training data at each step, balancing the exact gradient of full-batch GD against the high variance of single-sample SGD.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "optimization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "stochastic-gradient-descent-sgd",
+      "gradient-descent"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2012+ · Popularized by deep learning practice · See: Goyal et al., \"Accurate, Large Minibatch SGD\"",
+        "url": "https://arxiv.org/abs/1706.02677"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A variant of gradient descent that computes the gradient over a small, randomly sampled subset (mini-batch) of the training data at each step, balancing the exact gradient of full-batch GD against the high variance of single-sample SGD.</p><div style=\"text-align: center; margin: 16px 0;\">\n<svg viewBox=\"0 0 400 200\" width=\"100%\" height=\"200\" style=\"background:#1a202c; border-radius:8px; font-family:sans-serif;\">\n  <circle cx=\"280\" cy=\"100\" r=\"20\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"1\"/>\n  <circle cx=\"280\" cy=\"100\" r=\"50\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"1\"/>\n  <circle cx=\"280\" cy=\"100\" r=\"80\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"1\"/>\n  <circle cx=\"280\" cy=\"100\" r=\"110\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"1\"/>\n  <path d=\"M 100 160 Q 180 180 280 100\" fill=\"none\" stroke=\"#63b3ed\" stroke-width=\"2\" stroke-dasharray=\"4\"/>\n  <text x=\"150\" y=\"190\" fill=\"#63b3ed\" font-size=\"12\">Full-batch</text>\n  <polyline points=\"100,160 140,140 160,160 200,130 230,140 260,110 280,100\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"2\"/>\n  <circle cx=\"100\" cy=\"160\" r=\"4\" fill=\"#cbd5e0\"/>\n  <text x=\"110\" y=\"145\" fill=\"#fc8181\" font-size=\"12\">Mini-batch</text>\n</svg>\n<div style=\"color:#a0aec0; font-size:0.85em; margin-top:8px;\">Mini-batch GD paths are noisier than full-batch GD due to estimation variance, but step significantly faster in wall-clock time.</div>\n</div>\n\n\n  <p>At each iteration, a mini-batch \\( \\mathcal{B} \\subset \\{1, \\dots, N\\} \\) of size \\( b \\) is sampled (typically without replacement within an epoch), and the gradient is estimated as:</p>\n\n  \\[ g_t = \\frac{1}{b} \\sum_{i \\in \\mathcal{B}_t} \\nabla_\\theta \\ell\\bigl(f_\\theta(x_i),\\, y_i\\bigr) \\]\n\n  <p>The parameter update is then \\( \\theta_{t+1} = \\theta_t - \\eta \\, g_t \\). This estimate is <b>unbiased</b>: \\( \\mathbb{E}[g_t] = \\nabla_\\theta J(\\theta_t) \\), meaning it equals the true full-batch gradient in expectation.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Variance reduction.</b> The variance of the mini-batch gradient estimate decreases as \\( O(1/b) \\):</p>\n\n  \\[ \\text{Var}[g_t] = \\frac{1}{b}\\,\\text{Var}\\bigl[\\nabla_\\theta \\ell_i\\bigr] \\]\n\n  <p>Increasing batch size reduces noise but with diminishing returns, and very large batches can hurt generalization (the \"generalization gap\" observed by Keskar et al., 2017).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Hardware efficiency.</b> Modern GPUs/TPUs are designed for parallel matrix operations. A batch of 32-512 examples can be processed in roughly the same wall-clock time as a single example due to SIMD parallelism. This makes mini-batch GD dramatically faster than pure SGD in practice. The optimal batch size is typically the largest that fits in accelerator memory while still generalizing well.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Typical batch sizes and their effects",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Batch size</th>\n      <th style=\"padding:6px; text-align:left;\">Gradient noise</th>\n      <th style=\"padding:6px; text-align:left;\">GPU utilization</th>\n      <th style=\"padding:6px; text-align:left;\">Generalization</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">1 (SGD)</td>\n      <td style=\"padding:6px;\">Very high</td>\n      <td style=\"padding:6px;\">Poor</td>\n      <td style=\"padding:6px;\">Good (implicit regularization)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">32 &ndash; 256</td>\n      <td style=\"padding:6px;\">Moderate</td>\n      <td style=\"padding:6px;\">Good</td>\n      <td style=\"padding:6px;\">Good</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">512 &ndash; 4096</td>\n      <td style=\"padding:6px;\">Low</td>\n      <td style=\"padding:6px;\">High</td>\n      <td style=\"padding:6px;\">Can degrade without LR scaling</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">\\( > \\)8192</td>\n      <td style=\"padding:6px;\">Very low</td>\n      <td style=\"padding:6px;\">Saturated</td>\n      <td style=\"padding:6px;\">Often worse; needs warmup + LARS/LAMB</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Linear scaling rule.</b> When increasing batch size by factor \\( k \\), the learning rate should also be scaled by \\( k \\) (Goyal et al., 2017). With very large batches, a gradual warmup phase prevents early training instability. Optimizers like LARS and LAMB were designed specifically for large-batch training.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Epoch structure.</b> One pass through all \\( N \\) examples constitutes an epoch. Within each epoch, data is typically shuffled and partitioned into \\( \\lceil N/b \\rceil \\) non-overlapping mini-batches. This without-replacement sampling reduces variance compared to sampling with replacement.</p><details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef minibatch_gd(X, y, theta, lr=0.01, batch_size=32, epochs=100):\n    \"\"\"Mini-batch gradient descent for linear regression.\"\"\"\n    N = len(y)\n    for epoch in range(epochs):\n        indices = np.random.permutation(N)\n        for start in range(0, N, batch_size):\n            batch_idx = indices[start:start + batch_size]\n            X_b, y_b = X[batch_idx], y[batch_idx]\n            grad = (2 / len(y_b)) * X_b.T.dot(X_b.dot(theta) - y_b)\n            theta = theta - lr * grad\n    return theta</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "stochastic-gradient-descent-sgd",
+    "title": "Stochastic gradient descent (SGD)",
+    "summary": "An optimization algorithm that approximates the true gradient by computing it from a single randomly selected training example at each step: \\( \\theta_{t+1} = \\theta_t - \\eta \\nabla_\\theta \\ell(f_\\theta(x_i), y_i) \\). The high variance o…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "convergence",
+      "mini-batch-gradient-descent"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1951 · Robbins, Monro · \"A Stochastic Approximation Method\"",
+        "url": "https://doi.org/10.1214/aoms/1177729586"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An optimization algorithm that approximates the true gradient by computing it from a single randomly selected training example at each step: \\( \\theta_{t+1} = \\theta_t - \\eta \\nabla_\\theta \\ell(f_\\theta(x_i), y_i) \\). The high variance of these updates provides implicit regularization.</p><div style=\"text-align: center; margin: 16px 0;\">\n<svg viewBox=\"0 0 400 200\" width=\"100%\" height=\"200\" style=\"background:#1a202c; border-radius:8px; font-family:sans-serif;\">\n  <ellipse cx=\"300\" cy=\"100\" rx=\"30\" ry=\"80\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"1\"/>\n  <ellipse cx=\"300\" cy=\"100\" rx=\"60\" ry=\"120\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"1\"/>\n  <polyline points=\"50,150 70,80 100,160 140,60 160,130 200,80 220,120 250,90 280,110 300,100\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\"/>\n  <circle cx=\"50\" cy=\"150\" r=\"4\" fill=\"#cbd5e0\"/>\n  <path d=\"M 50 150 L 150 150 L 300 100\" fill=\"none\" stroke=\"#63b3ed\" stroke-width=\"1\" stroke-dasharray=\"2\"/>\n  <text x=\"120\" y=\"170\" fill=\"#63b3ed\" font-size=\"12\">Mean Path</text>\n</svg>\n<div style=\"color:#a0aec0; font-size:0.85em; margin-top:8px;\">SGD computes gradients from single examples, producing a highly erratic path. This injected noise acts as an implicit regularizer.</div>\n</div>\n\n\n  <p>In full-batch gradient descent, the gradient is computed over all \\( N \\) training examples, which is expensive. SGD instead samples a single example \\( (x_i, y_i) \\) uniformly at random and performs the update:</p>\n\n  \\[ \\theta_{t+1} = \\theta_t - \\eta \\, \\nabla_\\theta \\ell\\bigl(f_\\theta(x_i),\\, y_i\\bigr) \\]\n\n  <p>This per-sample gradient is an <b>unbiased estimator</b> of the true gradient: \\( \\mathbb{E}_i[\\nabla_\\theta \\ell_i] = \\nabla_\\theta J(\\theta) \\), but has high variance since it is based on a single data point.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Convergence theory.</b> The Robbins-Monro conditions guarantee convergence if the learning rate schedule satisfies:</p>\n\n  \\[ \\sum_{t=1}^{\\infty} \\eta_t = \\infty \\quad \\text{and} \\quad \\sum_{t=1}^{\\infty} \\eta_t^2 < \\infty \\]\n\n  <p>A common schedule satisfying these conditions is \\( \\eta_t = \\eta_0 / (1 + \\alpha t) \\). For convex functions, SGD converges at rate \\( O(1/\\sqrt{T}) \\), which is slower than full-batch GD's \\( O(1/T) \\) but each iteration is \\( N \\times \\) cheaper, making overall wall-clock time much lower.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Implicit regularization.</b> The noise injected by random sampling helps SGD escape sharp local minima and saddle points, biasing convergence toward flatter minima that tend to generalize better. This has been formalized by viewing SGD as approximate Bayesian inference (Mandt et al., 2017) and through the lens of stochastic differential equations, where SGD approximates Langevin dynamics with a noise term proportional to the learning rate.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Momentum.</b> Plain SGD is rarely used alone in practice. SGD with momentum (Polyak, 1964) accumulates an exponentially weighted moving average of past gradients:</p>\n\n  \\[ v_t = \\beta v_{t-1} + \\nabla_\\theta \\ell_i, \\quad \\theta_{t+1} = \\theta_t - \\eta \\, v_t \\]\n\n  <p>where \\( \\beta \\approx 0.9 \\). This dampens oscillations across high-curvature directions and accelerates progress along consistent gradient directions. Nesterov momentum computes the gradient at a \"look-ahead\" position \\( \\theta_t - \\eta \\beta v_{t-1} \\) for improved convergence.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "SGD vs. adaptive methods",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Property</th>\n      <th style=\"padding:6px; text-align:left;\">SGD + momentum</th>\n      <th style=\"padding:6px; text-align:left;\">Adam</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Tuning difficulty</td>\n      <td style=\"padding:6px;\">High (LR sensitive)</td>\n      <td style=\"padding:6px;\">Low (robust defaults)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Final generalization</td>\n      <td style=\"padding:6px;\">Often better</td>\n      <td style=\"padding:6px;\">Sometimes worse</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Convergence speed</td>\n      <td style=\"padding:6px;\">Slower initially</td>\n      <td style=\"padding:6px;\">Faster initially</td>\n    </tr>\n  </table>\n\n  <p>In practice, SGD with momentum remains the preferred optimizer for training image classifiers (ResNets, etc.) and often achieves better test accuracy than Adam, though Adam is preferred for Transformers and NLP tasks where its adaptive rates handle sparse gradients well.</p><details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef sgd(X, y, theta, lr=0.01, epochs=10, momentum=0.9):\n    \"\"\"SGD with optional momentum for linear regression.\"\"\"\n    N = len(y)\n    v = np.zeros_like(theta)\n    for epoch in range(epochs):\n        indices = np.random.permutation(N)\n        for i in indices:\n            xi = X[i:i+1]\n            yi = y[i:i+1]\n            grad = 2 * xi.T.dot(xi.dot(theta) - yi)\n            v = momentum * v + grad\n            theta = theta - lr * v\n    return theta</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "convergence",
+    "title": "Convergence",
+    "summary": "The property that an optimization algorithm reaches a point where the loss stabilizes and parameters cease to change significantly, formally when \\( \\nabla_\\theta J(\\theta) \\to 0 \\).",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "generalization",
+      "stochastic-gradient-descent-sgd"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "19th Century · Cauchy (gradient descent), Robbins & Monro (stochastic convergence)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The property that an optimization algorithm reaches a point where the loss stabilizes and parameters cease to change significantly, formally when \\( \\nabla_\\theta J(\\theta) \\to 0 \\).</p><div style=\"text-align: center; margin: 16px 0;\">\n<svg viewBox=\"0 0 400 200\" width=\"100%\" height=\"200\" style=\"background:#1a202c; border-radius:8px; font-family:sans-serif;\">\n  <line x1=\"50\" y1=\"160\" x2=\"360\" y2=\"160\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n  <line x1=\"50\" y1=\"20\" x2=\"50\" y2=\"160\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n  <text x=\"200\" y=\"190\" fill=\"#cbd5e0\" font-size=\"14\" text-anchor=\"middle\">Epochs</text>\n  <text x=\"30\" y=\"90\" fill=\"#cbd5e0\" font-size=\"14\" text-anchor=\"middle\" transform=\"rotate(-90 30 90)\">Loss</text>\n  <path d=\"M 50 40 Q 150 140 350 145\" fill=\"none\" stroke=\"#63b3ed\" stroke-width=\"2\"/>\n  <text x=\"280\" y=\"155\" fill=\"#63b3ed\" font-size=\"12\">Train Loss</text>\n  <path d=\"M 50 50 Q 150 120 250 115 T 350 125\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"2\"/>\n  <text x=\"280\" y=\"110\" fill=\"#fc8181\" font-size=\"12\">Validation Loss</text>\n  <line x1=\"250\" y1=\"20\" x2=\"250\" y2=\"160\" stroke=\"#f6ad55\" stroke-width=\"1\" stroke-dasharray=\"4\"/>\n  <text x=\"240\" y=\"30\" fill=\"#f6ad55\" font-size=\"12\" text-anchor=\"end\">Optimal Stopping</text>\n</svg>\n<div style=\"color:#a0aec0; font-size:0.85em; margin-top:8px;\">Convergence is reached when the loss plateaus. Practitioners monitor validation loss to halt training before overfitting begins.</div>\n</div>\n\n\n  <p>Convergence means the iterative optimization process has found a stationary point of the loss function. Formally, a point \\( \\theta^* \\) is stationary if \\( \\nabla_\\theta J(\\theta^*) = 0 \\). In the landscape of possible solutions, stationary points can be:</p>\n\n  <ul>\n    <li><b>Global minimum:</b> the lowest possible loss value. Guaranteed to be found only for convex objectives.</li>\n    <li><b>Local minimum:</b> lower than all nearby points but potentially far from the global minimum.</li>\n    <li><b>Saddle point:</b> a point where the gradient is zero but it is a minimum along some directions and a maximum along others. In high-dimensional spaces (typical of deep learning), saddle points vastly outnumber local minima (Dauphin et al., 2014).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Convergence rates for gradient descent",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Function class</th>\n      <th style=\"padding:6px; text-align:left;\">GD rate</th>\n      <th style=\"padding:6px; text-align:left;\">SGD rate</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Convex, Lipschitz gradient</td>\n      <td style=\"padding:6px;\">\\( O(1/T) \\)</td>\n      <td style=\"padding:6px;\">\\( O(1/\\sqrt{T}) \\)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Strongly convex (\\( \\kappa = L/\\mu \\))</td>\n      <td style=\"padding:6px;\">\\( O(e^{-T/\\kappa}) \\) (linear)</td>\n      <td style=\"padding:6px;\">\\( O(1/T) \\)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Non-convex (deep nets)</td>\n      <td style=\"padding:6px;\">\\( O(1/\\sqrt{T}) \\) to stationary</td>\n      <td style=\"padding:6px;\">\\( O(1/\\sqrt{T}) \\) to stationary</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Practical convergence in deep learning.</b> True convergence to a global minimum is neither achievable nor necessary for deep networks. Instead, practitioners monitor convergence heuristically:</p>\n  <ul>\n    <li><b>Training loss plateau:</b> the training loss flattens and oscillates within a small band.</li>\n    <li><b>Validation loss monitoring:</b> training is stopped when validation loss stops improving, which is <b>early stopping</b> — itself a form of regularization.</li>\n    <li><b>Gradient norm:</b> \\( \\|\\nabla_\\theta J\\| \\) approaches a small threshold.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Learning rate and convergence.</b> The learning rate \\( \\eta \\) directly controls whether and how fast convergence occurs. For a quadratic loss with Hessian eigenvalues in \\( [\\mu, L] \\), convergence requires \\( \\eta &lt; 2/L \\). The optimal fixed rate is \\( \\eta^* = 2/(\\mu + L) \\). Modern learning rate schedules (cosine annealing, linear warmup + decay) are designed to ensure rapid initial progress while still converging to a good solution.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Loss landscape geometry.</b> Recent work (Li et al., 2018) visualizes loss landscapes and shows that skip connections (as in ResNets and Transformers) dramatically smooth the loss surface, making convergence easier and less sensitive to initialization. Without skip connections, the loss surface is highly chaotic with many sharp local minima.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "generalization",
+    "title": "Generalization",
+    "summary": "A model's ability to perform accurately on unseen data drawn from the same distribution as the training set. Generalization is the central goal of supervised learning — a model that memorizes training data but fails on new data is useles…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "regularization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "regularization",
+      "convergence"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1971 · Vapnik, Chervonenkis · \"On the Uniform Convergence of Relative Frequencies of Events to Their Probabilities\""
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A model's ability to perform accurately on unseen data drawn from the same distribution as the training set. Generalization is the central goal of supervised learning — a model that memorizes training data but fails on new data is useless in practice.</p><div style=\"text-align: center; margin: 16px 0;\">\n<svg viewBox=\"0 0 400 200\" width=\"100%\" height=\"200\" style=\"background:#1a202c; border-radius:8px; font-family:sans-serif;\">\n  <line x1=\"50\" y1=\"180\" x2=\"360\" y2=\"180\" stroke=\"#4a5568\" stroke-width=\"2\"></line>\n  <line x1=\"50\" y1=\"20\" x2=\"50\" y2=\"180\" stroke=\"#4a5568\" stroke-width=\"2\"></line>\n  <text x=\"200\" y=\"195\" fill=\"#cbd5e0\" font-size=\"12\" text-anchor=\"middle\">Model Complexity / Capacity</text>\n  <text x=\"15\" y=\"100\" fill=\"#cbd5e0\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90 15 100)\">Error</text>\n  <path d=\"M 50 150 Q 200 150 350 30\" fill=\"none\" stroke=\"#63b3ed\" stroke-width=\"2\"></path>\n  <text x=\"310\" y=\"45\" fill=\"#63b3ed\" font-size=\"12\">Train Error</text>\n  <path d=\"M 50 160 Q 200 20 350 160\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"2\"></path>\n  <text x=\"310\" y=\"145\" fill=\"#fc8181\" font-size=\"12\">Generalization Error</text>\n  <line x1=\"200\" y1=\"20\" x2=\"200\" y2=\"180\" stroke=\"#f6ad55\" stroke-width=\"1\" stroke-dasharray=\"4\"></line>\n  <text x=\"195\" y=\"30\" fill=\"#f6ad55\" font-size=\"12\" text-anchor=\"end\">Optimal Capacity</text>\n</svg>\n<div style=\"color:#a0aec0; font-size:0.85em; margin-top:8px;\">The classical bias-variance trade-off illustrates how increasing capacity minimizes underfitting (bias) but eventually worsens generalization by overfitting (variance).</div>\n</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Generalization error</b> is the difference between the model's expected loss on the true data distribution \\( p(x, y) \\) and its empirical loss on the training set:</p>\n\n  \\[ \\text{Generalization gap} = \\mathbb{E}_{(x,y) \\sim p}[\\ell(f_\\theta(x), y)] - \\frac{1}{N}\\sum_{i=1}^{N}\\ell(f_\\theta(x_i), y_i) \\]\n\n  <p>A small training loss with a large generalization gap indicates overfitting; a high training loss indicates underfitting.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bias-variance trade-off.</b> For squared error loss, the expected prediction error decomposes as:</p>\n\n  \\[ \\mathbb{E}[(y - \\hat{y})^2] = \\underbrace{\\text{Bias}[\\hat{y}]^2}_{\\text{systematic error}} + \\underbrace{\\text{Var}[\\hat{y}]}_{\\text{sensitivity to training set}} + \\underbrace{\\sigma^2}_{\\text{irreducible noise}} \\]\n\n  <p>Simple models (few parameters) have high bias but low variance; complex models have low bias but high variance. The sweet spot minimizes total error. However, modern deep networks challenge this classical picture — they can have zero training error yet still generalize well (the \"double descent\" phenomenon).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>PAC learning and VC theory.</b> Vapnik-Chervonenkis theory provides distribution-free bounds on generalization error. For a hypothesis class with VC dimension \\( d_{\\text{VC}} \\), with probability \\( 1 - \\delta \\):</p>\n\n  \\[ \\text{Generalization gap} \\leq O\\!\\left(\\sqrt{\\frac{d_{\\text{VC}} \\log(N/d_{\\text{VC}}) + \\log(1/\\delta)}{N}}\\right) \\]\n\n  <p>This bound says generalization improves with more data (\\( N \\)) and degrades with model complexity (\\( d_{\\text{VC}} \\)). However, VC bounds are often vacuous for modern deep networks (where \\( d_{\\text{VC}} \\gg N \\)), suggesting that classical theory does not fully explain deep learning generalization.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Techniques that improve generalization",
+        "body": "<ul>\n    <li><b>Regularization:</b> L2/L1 penalties, dropout, weight decay constrain model complexity.</li>\n    <li><b>Data augmentation:</b> synthetically expanding the training distribution.</li>\n    <li><b>Early stopping:</b> halting training when validation loss increases, limiting effective model complexity.</li>\n    <li><b>Ensemble methods:</b> averaging predictions from multiple models reduces variance.</li>\n    <li><b>Cross-validation:</b> \\( k \\)-fold CV provides a better estimate of generalization error than a single held-out set.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Double descent.</b> Belkin et al. (2019) showed that test error follows a \"double descent\" curve: it first decreases, then increases near the interpolation threshold (where the model has just enough capacity to fit the training data), then decreases again as the model becomes highly overparameterized. This contradicts the classical U-shaped bias-variance curve and suggests that overparameterization can be beneficial.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "regularization",
+    "title": "Regularization",
+    "summary": "A family of techniques that constrain or modify the learning process to reduce overfitting and improve generalization, typically by penalizing model complexity or injecting noise during training.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "regularization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "affine-transformation",
+      "generalization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1943 · Tikhonov · Tikhonov regularization (ridge regression)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A family of techniques that constrain or modify the learning process to reduce overfitting and improve generalization, typically by penalizing model complexity or injecting noise during training.</p><div style=\"text-align: center; margin: 16px 0;\">\n<svg viewBox=\"0 0 400 200\" width=\"100%\" height=\"200\" style=\"background:#1a202c; border-radius:8px; font-family:sans-serif;\">\n  <g transform=\"translate(100, 100)\">\n    <line x1=\"-80\" y1=\"0\" x2=\"80\" y2=\"0\" stroke=\"#4a5568\" stroke-width=\"1\"></line>\n    <line x1=\"0\" y1=\"-80\" x2=\"0\" y2=\"80\" stroke=\"#4a5568\" stroke-width=\"1\"></line>\n    <polygon points=\"0,-40 40,0 0,40 -40,0\" fill=\"rgba(99,179,237,0.3)\" stroke=\"#63b3ed\" stroke-width=\"2\"></polygon>\n    <ellipse cx=\"60\" cy=\"20\" rx=\"40\" ry=\"20\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"1\" transform=\"rotate(-30 60 20)\"></ellipse>\n    <ellipse cx=\"60\" cy=\"20\" rx=\"60\" ry=\"30\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"1\" transform=\"rotate(-30 60 20)\"></ellipse>\n    <circle cx=\"40\" cy=\"0\" r=\"4\" fill=\"#f6ad55\"></circle>\n    <text x=\"0\" y=\"90\" fill=\"#cbd5e0\" font-size=\"14\" text-anchor=\"middle\">L1 Regularization</text>\n  </g>\n  <g transform=\"translate(300, 100)\">\n    <line x1=\"-80\" y1=\"0\" x2=\"80\" y2=\"0\" stroke=\"#4a5568\" stroke-width=\"1\"></line>\n    <line x1=\"0\" y1=\"-80\" x2=\"0\" y2=\"80\" stroke=\"#4a5568\" stroke-width=\"1\"></line>\n    <circle cx=\"0\" cy=\"0\" r=\"40\" fill=\"rgba(99,179,237,0.3)\" stroke=\"#63b3ed\" stroke-width=\"2\"></circle>\n    <ellipse cx=\"60\" cy=\"20\" rx=\"40\" ry=\"20\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"1\" transform=\"rotate(-30 60 20)\"></ellipse>\n    <ellipse cx=\"60\" cy=\"20\" rx=\"60\" ry=\"30\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"1\" transform=\"rotate(-30 60 20)\"></ellipse>\n    <circle cx=\"38\" cy=\"12\" r=\"4\" fill=\"#f6ad55\"></circle>\n    <text x=\"0\" y=\"90\" fill=\"#cbd5e0\" font-size=\"14\" text-anchor=\"middle\">L2 Regularization</text>\n  </g>\n</svg>\n<div style=\"color:#a0aec0; font-size:0.85em; margin-top:8px;\">Geometric intuition for regularization. The sharp corners of the L1 penalty (left) cause intersections on the axes, driving specific parameters exactly to zero (sparsity). L2 (right) shrinks all parameters uniformly.</div>\n</div>\n\n\n  <p>Regularization addresses the fundamental problem that a model with sufficient capacity can memorize the training set perfectly while failing on unseen data. All regularization methods work by restricting the effective hypothesis space, either explicitly through the objective function or implicitly through the training procedure.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Explicit regularization</b> adds a penalty term \\( \\Omega(\\theta) \\) to the loss function:</p>\n\n  \\[ J_{\\text{reg}}(\\theta) = \\frac{1}{N}\\sum_{i=1}^{N}\\ell(f_\\theta(x_i), y_i) + \\lambda\\,\\Omega(\\theta) \\]\n\n  <p>where \\( \\lambda &gt; 0 \\) controls the regularization strength. Common penalty terms:</p>\n\n  <table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Method</th>\n      <th style=\"padding:6px; text-align:left;\">Penalty \\( \\Omega(\\theta) \\)</th>\n      <th style=\"padding:6px; text-align:left;\">Effect on weights</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">L2 (Ridge / weight decay)</td>\n      <td style=\"padding:6px;\">\\( \\frac{1}{2}\\|\\theta\\|_2^2 = \\frac{1}{2}\\sum \\theta_j^2 \\)</td>\n      <td style=\"padding:6px;\">Shrinks all weights toward zero; no exact zeros</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">L1 (Lasso)</td>\n      <td style=\"padding:6px;\">\\( \\|\\theta\\|_1 = \\sum |\\theta_j| \\)</td>\n      <td style=\"padding:6px;\">Induces sparsity; drives some weights exactly to zero</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Elastic Net</td>\n      <td style=\"padding:6px;\">\\( \\alpha\\|\\theta\\|_1 + (1-\\alpha)\\frac{1}{2}\\|\\theta\\|_2^2 \\)</td>\n      <td style=\"padding:6px;\">Combines sparsity with grouping effect</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bayesian interpretation.</b> L2 regularization is equivalent to placing a Gaussian prior \\( p(\\theta) = \\mathcal{N}(0, \\frac{1}{\\lambda}I) \\) on the weights and performing maximum a posteriori (MAP) estimation. L1 corresponds to a Laplace prior, which has heavier tails and more mass at zero, explaining why it promotes sparsity.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Implicit regularization</b> does not alter the loss function directly but modifies the training dynamics to favor simpler solutions:</p>\n  <ul>\n    <li><b>Dropout</b> (Srivastava et al., 2014): randomly zeroes each neuron's activation with probability \\( p \\) during training, forcing the network to learn redundant representations. At test time, activations are scaled by \\( (1-p) \\). Equivalent to training an exponentially large ensemble of thinned networks.</li>\n    <li><b>Data augmentation:</b> applies random transformations (flips, crops, color jitter, mixup) to training examples, effectively expanding the training distribution and teaching invariances.</li>\n    <li><b>Early stopping:</b> halting training when validation loss begins to increase. Equivalent to L2 regularization in certain settings (Bishop, 1995), with the number of training iterations playing the role of inverse regularization strength.</li>\n    <li><b>SGD noise:</b> the gradient noise from mini-batch sampling acts as an implicit regularizer, biasing the optimizer toward flat minima that generalize better.</li>\n    <li><b>Batch normalization:</b> the noise from estimating batch statistics provides a mild regularization effect, which is why BN reduces the need for dropout.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Structural regularization</b> constrains the architecture itself: weight sharing in CNNs (each filter has far fewer parameters than a fully connected layer), skip connections (which smooth the loss landscape), and parameter-efficient architectures like depthwise separable convolutions all reduce effective model complexity.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Choosing \\( \\lambda \\).</b> The regularization hyperparameter is typically selected by cross-validation or monitoring the validation loss. Too much regularization causes underfitting (high bias); too little allows overfitting (high variance).</p>"
+      }
+    ],
+    "cards": []
   }
 ]

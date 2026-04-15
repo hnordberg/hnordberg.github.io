@@ -1623,6 +1623,227 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "affine-transformation",
+      "title": "Affine transformation",
+      "summary": "A transformation composed of a linear map followed by a translation: \\( f(\\mathbf{x}) = W\\mathbf{x} + \\mathbf{b} \\). It is the fundamental computational unit inside every fully connected (dense) neural network layer.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "loss-function",
+        "regularization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "loss-function",
+      "title": "Loss function",
+      "summary": "A scalar function \\( \\mathcal{L}(\\hat{y}, y) \\) that quantifies the discrepancy between a model's prediction \\( \\hat{y} \\) and the ground-truth target \\( y \\), providing the signal that drives parameter optimization.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "mean-squared-error-mse",
+        "affine-transformation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "mean-squared-error-mse",
+      "title": "Mean squared error (MSE)",
+      "summary": "A regression loss function that computes the average squared error between predicted and actual values: \\( \\text{MSE} = \\frac{1}{N}\\sum_{i=1}^{N}(y_i - \\hat{y}_i)^2 \\). Minimizing MSE is equivalent to maximum likelihood estimation under…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "prediction-error",
+        "loss-function"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "prediction-error",
+      "title": "Prediction error",
+      "summary": "The difference between a model's prediction and the true target value, \\( e_i = y_i - \\hat{y}_i \\). Also called the residual, it is the atomic quantity from which all loss functions are constructed.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "gradient-descent",
+        "mean-squared-error-mse"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gradient-descent",
+      "title": "Gradient descent",
+      "summary": "A first-order iterative optimization algorithm that minimizes an objective function by repeatedly stepping in the direction of the negative gradient: \\( \\theta_{t+1} = \\theta_t - \\eta \\nabla_\\theta J(\\theta_t) \\).",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "mini-batch-gradient-descent",
+        "prediction-error"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "mini-batch-gradient-descent",
+      "title": "Mini-batch gradient descent",
+      "summary": "A variant of gradient descent that computes the gradient over a small, randomly sampled subset (mini-batch) of the training data at each step, balancing the exact gradient of full-batch GD against the high variance of single-sample SGD.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "stochastic-gradient-descent-sgd",
+        "gradient-descent"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "stochastic-gradient-descent-sgd",
+      "title": "Stochastic gradient descent (SGD)",
+      "summary": "An optimization algorithm that approximates the true gradient by computing it from a single randomly selected training example at each step: \\( \\theta_{t+1} = \\theta_t - \\eta \\nabla_\\theta \\ell(f_\\theta(x_i), y_i) \\). The high variance o…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "convergence",
+        "mini-batch-gradient-descent"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "convergence",
+      "title": "Convergence",
+      "summary": "The property that an optimization algorithm reaches a point where the loss stabilizes and parameters cease to change significantly, formally when \\( \\nabla_\\theta J(\\theta) \\to 0 \\).",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "generalization",
+        "stochastic-gradient-descent-sgd"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "generalization",
+      "title": "Generalization",
+      "summary": "A model's ability to perform accurately on unseen data drawn from the same distribution as the training set. Generalization is the central goal of supervised learning — a model that memorizes training data but fails on new data is useles…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "regularization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "regularization",
+        "convergence"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "regularization",
+      "title": "Regularization",
+      "summary": "A family of techniques that constrain or modify the learning process to reduce overfitting and improve generalization, typically by penalizing model complexity or injecting noise during training.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "regularization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "affine-transformation",
+        "generalization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
