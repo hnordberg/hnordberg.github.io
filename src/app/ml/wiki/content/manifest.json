@@ -6300,6 +6300,226 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "model-sharding",
+      "title": "Model Sharding",
+      "summary": "The practice of splitting a model's parameters (and associated optimizer states and gradients) across multiple devices so that no single device needs to hold the entire model in memory. Sharding is the core mechanism behind FSDP and Deep…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "floating-point-operations-flops",
+        "vocabulary-size"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "floating-point-operations-flops",
+      "title": "Floating-Point Operations (FLOPs)",
+      "summary": "A measure of the computational cost of a neural network, counting the number of floating-point multiply-add operations required for a forward (and optionally backward) pass. FLOPs are the standard unit for comparing model efficiency, est…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "mixed-precision-training",
+        "model-sharding"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "mixed-precision-training",
+      "title": "Mixed Precision Training",
+      "summary": "A training technique that uses lower-precision floating-point formats (FP16 or BF16) for most computations while maintaining a master copy of weights in FP32 for numerical stability. Mixed precision roughly halves memory usage and double…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "long-context-pretraining",
+        "floating-point-operations-flops"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "long-context-pretraining",
+      "title": "Long-Context Pretraining",
+      "summary": "A training strategy that extends a pretrained model's effective context length by continuing training on progressively longer sequences, typically as a separate phase after the bulk of pretraining at a shorter context. This enables model…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "needle-in-a-haystack",
+        "mixed-precision-training"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "needle-in-a-haystack",
+      "title": "Needle in a Haystack",
+      "summary": "A benchmark that evaluates a language model's ability to retrieve a specific piece of information (the \"needle\") embedded at various positions within a long context (the \"haystack\"). It tests whether models can effectively utilise their…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "product",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "positional-encoding",
+        "long-context-pretraining"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "positional-encoding",
+      "title": "Positional Encoding",
+      "summary": "A mechanism that injects sequence-order information into a Transformer's input representations. Self-attention is inherently permutation-equivariant — without positional encoding, \"the cat sat on the mat\" and \"mat the on sat cat the\" wou…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "absolute-position-encoding",
+        "needle-in-a-haystack"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "absolute-position-encoding",
+      "title": "Absolute Position Encoding",
+      "summary": "A positional encoding scheme that assigns a unique, fixed vector to each absolute position in the sequence and adds it to the token embedding. Each position has the same representation regardless of the surrounding context or other tokens.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "relative-position-encoding",
+        "positional-encoding"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "relative-position-encoding",
+      "title": "Relative Position Encoding",
+      "summary": "A family of positional encoding methods that represent the distance between tokens rather than their absolute positions. By encoding relative offsets \\( (i - j) \\) directly into the attention computation, these methods generalise better…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "token-id",
+        "absolute-position-encoding"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "token-id",
+      "title": "Token ID",
+      "summary": "The integer index that uniquely identifies a token within a tokenizer's vocabulary. Token IDs are the actual numerical inputs to a neural language model — text is first split into subword tokens and then mapped to integer IDs, which are…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "vocabulary-size",
+        "relative-position-encoding"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "vocabulary-size",
+      "title": "Vocabulary Size",
+      "summary": "The total number of unique tokens in a tokenizer's vocabulary, denoted \\( |V| \\). Vocabulary size determines the dimensions of the embedding and output projection matrices and governs a fundamental trade-off between sequence compression…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "model-sharding",
+        "token-id"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

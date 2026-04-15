@@ -13841,5 +13841,528 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "model-sharding",
+    "title": "Model Sharding",
+    "summary": "The practice of splitting a model's parameters (and associated optimizer states and gradients) across multiple devices so that no single device needs to hold the entire model in memory. Sharding is the core mechanism behind FSDP and Deep…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "floating-point-operations-flops",
+      "vocabulary-size"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Rajbhandari, Rasley, Raste, He · ZeRO: Memory Optimizations Toward Training Trillion Parameter Models",
+        "url": "https://arxiv.org/abs/1910.02054"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The practice of splitting a model's parameters (and associated optimizer states and gradients) across multiple devices so that no single device needs to hold the entire model in memory. Sharding is the core mechanism behind FSDP and DeepSpeed ZeRO, enabling training of models with hundreds of billions of parameters.</p><p>A single parameter in mixed-precision Adam training requires ~16 bytes of state: 2 bytes for the FP16 weight, 2 bytes for the FP16 gradient, 4 bytes for the FP32 master weight, 4 bytes for the first moment \\( m \\), and 4 bytes for the second moment \\( v \\). For a 70B-parameter model, this totals ~1.12 TB — far exceeding single-GPU memory.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Sharding strategies (DeepSpeed ZeRO stages)",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Stage</th><th style=\"padding:6px; text-align:left;\">What is sharded</th><th style=\"padding:6px; text-align:left;\">Memory per GPU</th><th style=\"padding:6px; text-align:left;\">Communication</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">ZeRO-1</td><td style=\"padding:6px;\">Optimizer states only</td><td style=\"padding:6px;\">\\( 4\\Psi + 12\\Psi/N \\) bytes</td><td style=\"padding:6px;\">Same as data parallelism</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">ZeRO-2</td><td style=\"padding:6px;\">Optimizer states + gradients</td><td style=\"padding:6px;\">\\( 2\\Psi + 14\\Psi/N \\) bytes</td><td style=\"padding:6px;\">Reduce-scatter for gradients</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">ZeRO-3 / FSDP</td><td style=\"padding:6px;\">Optimizer states + gradients + parameters</td><td style=\"padding:6px;\">\\( 16\\Psi/N \\) bytes</td><td style=\"padding:6px;\">All-gather before forward/backward; reduce-scatter for gradients</td></tr>\n</table>\n\n<p>where \\( \\Psi \\) is the number of parameters and \\( N \\) is the number of GPUs.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Communication pattern for FSDP (ZeRO-3):</b> Before each layer's forward pass, an <i>all-gather</i> collects the full parameters from all ranks. After the backward pass, a <i>reduce-scatter</i> distributes averaged gradients back to each rank's shard. The key insight is that each GPU only needs the full parameters <i>transiently</i> during computation — they can be discarded immediately after use.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Sharding vs. other parallelism strategies",
+        "body": "<ul>\n<li><b>Data parallelism:</b> Each GPU holds a full model copy — sharding generalises this by partitioning the model state</li>\n<li><b>Tensor parallelism:</b> Splits individual matrix operations (e.g., splitting \\( W \\in \\mathbb{R}^{d \\times 4d} \\) column-wise across GPUs), requires intra-node high-bandwidth communication</li>\n<li><b>Pipeline parallelism:</b> Assigns different layers to different GPUs, introduces bubble overhead</li>\n</ul>\n\n<p>Sharding preserves mathematical equivalence with single-GPU training — it is purely a memory optimisation. In practice, large-scale training combines all three: FSDP across nodes, tensor parallelism within a node, and pipeline parallelism across node groups.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "floating-point-operations-flops",
+    "title": "Floating-Point Operations (FLOPs)",
+    "summary": "A measure of the computational cost of a neural network, counting the number of floating-point multiply-add operations required for a forward (and optionally backward) pass. FLOPs are the standard unit for comparing model efficiency, est…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "mixed-precision-training",
+      "model-sharding"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Standard computational measure; scaling laws by Kaplan et al. (2020) · Scaling Laws for Neural Language Models",
+        "url": "https://arxiv.org/abs/2001.08361"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A measure of the computational cost of a neural network, counting the number of floating-point multiply-add operations required for a forward (and optionally backward) pass. FLOPs are the standard unit for comparing model efficiency, estimating training compute budgets, and formulating scaling laws.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Conventions:</b> \"FLOPs\" (capital S) refers to the total number of operations; \"FLOP/s\" refers to operations per second (hardware throughput). A fused multiply-add (FMA) is typically counted as 2 FLOPs (one multiply, one add), though some sources count it as 1.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "FLOP counting for common operations",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Operation</th><th style=\"padding:6px; text-align:left;\">FLOPs</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Matrix multiply \\( A \\in \\mathbb{R}^{m \\times k}, B \\in \\mathbb{R}^{k \\times n} \\)</td><td style=\"padding:6px;\">\\( 2mkn \\)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Self-attention (QKV projections + output)</td><td style=\"padding:6px;\">\\( 8d^2 T \\) per layer (where \\( d \\) = hidden dim, \\( T \\) = seq length)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Attention scores \\( QK^\\top \\) + softmax + weighted sum</td><td style=\"padding:6px;\">\\( 4dT^2 \\) per layer</td></tr>\n<tr><td style=\"padding:6px;\">FFN (two linear layers, \\( d \\to 4d \\to d \\))</td><td style=\"padding:6px;\">\\( 16d^2 T \\) per layer</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Transformer FLOP estimates:</b> For a model with \\( N \\) parameters processing \\( T \\) tokens:</p>\n<ul>\n<li>Forward pass: \\( \\approx 2NT \\) FLOPs (each parameter participates in one multiply-add per token)</li>\n<li>Backward pass: \\( \\approx 4NT \\) FLOPs (approximately 2x forward)</li>\n<li>Full training step: \\( \\approx 6NT \\) FLOPs per token</li>\n</ul>\n\n<p>For a complete training run on \\( D \\) tokens:</p>\n\\[ C \\approx 6ND \\text{ FLOPs} \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Concrete examples",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Params</th><th style=\"padding:6px; text-align:left;\">Training tokens</th><th style=\"padding:6px; text-align:left;\">Approx. FLOPs</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPT-3</td><td style=\"padding:6px;\">175B</td><td style=\"padding:6px;\">300B</td><td style=\"padding:6px;\">\\( 3.1 \\times 10^{23} \\)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 2 70B</td><td style=\"padding:6px;\">70B</td><td style=\"padding:6px;\">2T</td><td style=\"padding:6px;\">\\( 8.4 \\times 10^{23} \\)</td></tr>\n<tr><td style=\"padding:6px;\">LLaMA 3 405B</td><td style=\"padding:6px;\">405B</td><td style=\"padding:6px;\">15T</td><td style=\"padding:6px;\">\\( 3.8 \\times 10^{25} \\)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Model FLOPs Utilization (MFU):</b> The ratio of observed training throughput to theoretical peak FLOP/s of the hardware. MFU of 40–60% is typical for large training runs; the gap comes from memory bandwidth, communication overhead, and pipeline bubbles. MFU is a key efficiency metric for distributed training systems.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to scaling laws:</b> Kaplan et al. (2020) showed that cross-entropy loss decreases as a power law in compute \\( C \\): \\( L(C) \\propto C^{-\\alpha} \\), with \\( \\alpha \\approx 0.05 \\). Hoffmann et al. (2022, \"Chinchilla\") refined this to show that for a fixed compute budget \\( C \\), the optimal allocation is roughly \\( N \\propto C^{0.5} \\) and \\( D \\propto C^{0.5} \\) — model size and data should scale equally.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "mixed-precision-training",
+    "title": "Mixed Precision Training",
+    "summary": "A training technique that uses lower-precision floating-point formats (FP16 or BF16) for most computations while maintaining a master copy of weights in FP32 for numerical stability. Mixed precision roughly halves memory usage and double…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "long-context-pretraining",
+      "floating-point-operations-flops"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2018 · Micikevicius, Narang, Alben, Diamos et al. · Mixed Precision Training",
+        "url": "https://arxiv.org/abs/1710.03740"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A training technique that uses lower-precision floating-point formats (FP16 or BF16) for most computations while maintaining a master copy of weights in FP32 for numerical stability. Mixed precision roughly halves memory usage and doubles throughput on modern GPUs equipped with tensor cores.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The mixed precision workflow",
+        "body": "<ol>\n<li>Maintain <b>master weights</b> in FP32</li>\n<li>Cast weights to FP16/BF16 for the forward and backward pass</li>\n<li>Compute gradients in FP16/BF16</li>\n<li><b>Loss scaling:</b> Multiply the loss by a scale factor \\( S \\) before backpropagation to shift small gradient values into FP16's representable range, then divide gradients by \\( S \\) before the optimizer step</li>\n<li>Update master weights in FP32 — small gradient updates (e.g., \\( \\eta \\cdot g \\approx 10^{-7} \\)) would vanish in FP16 where the smallest representable positive value is \\( \\approx 6 \\times 10^{-8} \\)</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why loss scaling is needed for FP16:</b> FP16 has only a 5-bit exponent, giving a dynamic range of \\( [6 \\times 10^{-8}, 6.5 \\times 10^{4}] \\). Gradient values frequently fall below \\( 10^{-5} \\) during training. Without scaling, these underflow to zero. Dynamic loss scaling starts with a large \\( S \\) (e.g., \\( 2^{16} \\)) and halves it whenever an overflow (inf/NaN) is detected, then doubles it periodically when training is stable.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Format</th><th style=\"padding:6px; text-align:left;\">Bits</th><th style=\"padding:6px; text-align:left;\">Exponent / Mantissa</th><th style=\"padding:6px; text-align:left;\">Range</th><th style=\"padding:6px; text-align:left;\">Loss scaling needed?</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">FP32</td><td style=\"padding:6px;\">32</td><td style=\"padding:6px;\">8 / 23</td><td style=\"padding:6px;\">\\( \\pm 3.4 \\times 10^{38} \\)</td><td style=\"padding:6px;\">No</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">FP16</td><td style=\"padding:6px;\">16</td><td style=\"padding:6px;\">5 / 10</td><td style=\"padding:6px;\">\\( \\pm 6.5 \\times 10^{4} \\)</td><td style=\"padding:6px;\">Yes</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">BF16</td><td style=\"padding:6px;\">16</td><td style=\"padding:6px;\">8 / 7</td><td style=\"padding:6px;\">\\( \\pm 3.4 \\times 10^{38} \\)</td><td style=\"padding:6px;\">Generally no</td></tr>\n<tr><td style=\"padding:6px;\">FP8 (E4M3)</td><td style=\"padding:6px;\">8</td><td style=\"padding:6px;\">4 / 3</td><td style=\"padding:6px;\">\\( \\pm 448 \\)</td><td style=\"padding:6px;\">Yes (per-tensor scaling)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>BF16 vs. FP16:</b> BF16 shares FP32's 8-bit exponent, giving the same dynamic range. This eliminates the need for loss scaling, simplifying the training loop. The trade-off is reduced mantissa precision (7 bits vs. 10), meaning BF16 has ~2 fewer decimal digits of precision. In practice, this rarely matters for training because stochastic gradient noise dominates precision errors. Most modern LLM training (GPT-4, LLaMA, etc.) uses BF16.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Which operations stay in FP32:</b> Certain operations are numerically sensitive and are kept in full precision even in mixed-precision training: softmax, layer normalization, loss computation, and the weight update itself. This selective casting is handled automatically by frameworks like PyTorch AMP (<code>torch.cuda.amp</code>).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Performance gains:</b> NVIDIA tensor cores execute FP16/BF16 matrix multiplications at 2x the throughput of FP32 (e.g., A100: 312 TFLOP/s for BF16 vs. 156 TFLOP/s for FP32). Memory bandwidth is also halved, reducing both compute and I/O bottlenecks. Combined with reduced memory footprint (enabling larger batch sizes), mixed precision is essentially free performance.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "long-context-pretraining",
+    "title": "Long-Context Pretraining",
+    "summary": "A training strategy that extends a pretrained model's effective context length by continuing training on progressively longer sequences, typically as a separate phase after the bulk of pretraining at a shorter context. This enables model…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "needle-in-a-haystack",
+      "mixed-precision-training"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023–2024 · Dubey et al. (LLaMA 3, 2024); Peng et al. · YaRN: Efficient Context Window Extension of Large Language Models",
+        "url": "https://arxiv.org/abs/2309.00071"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A training strategy that extends a pretrained model's effective context length by continuing training on progressively longer sequences, typically as a separate phase after the bulk of pretraining at a shorter context. This enables models to attend to and reason over very long documents without retraining from scratch.</p><p>Most LLMs are pretrained at a relatively short context (4K–8K tokens) because attention cost scales as \\( O(T^2 d) \\) and memory scales as \\( O(T^2) \\) per layer, making long sequences expensive. Long-context pretraining extends this efficiently in a later phase:</p>\n\n<ol>\n<li><b>Short-context pretraining:</b> Train on the majority of tokens (e.g., 95–99%) at 4K–8K context</li>\n<li><b>Long-context extension:</b> Continue training on a smaller dataset with gradually increasing context length (e.g., 8K → 32K → 128K), adjusting positional encoding parameters at each stage</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>RoPE frequency scaling</b> is the key technical enabler. RoPE encodes position via rotation angles \\( \\theta_i = 10000^{-2i/d} \\). To extend beyond the trained length \\( L \\), the base frequency is increased:</p>\n\\[ \\theta_i' = \\left(\\beta \\cdot 10000\\right)^{-2i/d} \\]\n<p>where \\( \\beta > 1 \\) stretches the wavelengths so positions beyond \\( L \\) map to rotation angles the model has seen during training. YaRN (Peng et al., 2023) refines this with per-dimension scaling and a temperature correction factor:</p>\n\\[ s(r_i) = \\begin{cases} 1 & \\text{if } r_i < \\alpha \\\\ \\frac{r_i - \\alpha}{\\beta - \\alpha} & \\text{if } \\alpha \\leq r_i \\leq \\beta \\\\ 0 & \\text{if } r_i > \\beta \\end{cases} \\]\n<p>where \\( r_i \\) is the ratio of the target length to the wavelength at dimension \\( i \\), and \\( s \\) interpolates between no scaling and full interpolation.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Base context</th><th style=\"padding:6px; text-align:left;\">Extended context</th><th style=\"padding:6px; text-align:left;\">Method</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 3</td><td style=\"padding:6px;\">8K</td><td style=\"padding:6px;\">128K</td><td style=\"padding:6px;\">Gradual increase + RoPE base freq scaling</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Gemini 1.5</td><td style=\"padding:6px;\">—</td><td style=\"padding:6px;\">1M+</td><td style=\"padding:6px;\">Ring attention + undisclosed scaling</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Yi</td><td style=\"padding:6px;\">4K</td><td style=\"padding:6px;\">200K</td><td style=\"padding:6px;\">Continued pretraining + NTK-aware scaling</td></tr>\n<tr><td style=\"padding:6px;\">Code Llama</td><td style=\"padding:6px;\">4K</td><td style=\"padding:6px;\">100K</td><td style=\"padding:6px;\">Position interpolation (Chen et al., 2023)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Infrastructure requirements",
+        "body": "<ul>\n<li><b>Context parallelism:</b> Long sequences are split across GPUs, with each GPU computing attention over its chunk and exchanging KV states (ring attention)</li>\n<li><b>FlashAttention:</b> Tiled computation avoids materialising the full \\( T \\times T \\) attention matrix, reducing memory from \\( O(T^2) \\) to \\( O(T) \\)</li>\n<li><b>Data curation:</b> Long-context training requires genuine long documents (books, code repos, legal filings); padding short documents wastes compute and can degrade quality</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Evaluation:</b> Long-context models are typically evaluated with needle-in-a-haystack tests and long-document QA, though these simple retrieval tasks may not capture actual reasoning capability over long contexts.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "needle-in-a-haystack",
+    "title": "Needle in a Haystack",
+    "summary": "A benchmark that evaluates a language model's ability to retrieve a specific piece of information (the \"needle\") embedded at various positions within a long context (the \"haystack\"). It tests whether models can effectively utilise their…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "product",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "positional-encoding",
+      "long-context-pretraining"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Greg Kamradt (original test); Liu, Lin, Hewitt, Paranjape, Bevilacqua, Petroni, Liang · Lost in the Middle: How Language Models Use Long Contexts",
+        "url": "https://arxiv.org/abs/2307.03172"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A benchmark that evaluates a language model's ability to retrieve a specific piece of information (the \"needle\") embedded at various positions within a long context (the \"haystack\"). It tests whether models can effectively utilise their full context window or whether performance degrades for information at certain positions.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Test procedure",
+        "body": "<ol>\n<li>Construct a long context by concatenating irrelevant \"filler\" text (essays, documents, repeated passages)</li>\n<li>Insert a specific, easily verified fact — e.g., <i>\"The best thing to do in San Francisco is eat a sandwich at Dolores Park on a sunny day\"</i> — at a controlled position (beginning, 25%, 50%, 75%, end)</li>\n<li>Ask the model a question whose answer requires retrieving the inserted fact</li>\n<li>Sweep over both total context length (e.g., 1K to 128K tokens) and needle position to produce a 2D heatmap of retrieval accuracy</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Interpreting the heatmap",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Pattern</th><th style=\"padding:6px; text-align:left;\">Interpretation</th><th style=\"padding:6px; text-align:left;\">Cause</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Uniform green</td><td style=\"padding:6px;\">Full context window is functional</td><td style=\"padding:6px;\">Good position encoding + training</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Red/low accuracy in the middle</td><td style=\"padding:6px;\">\"Lost in the middle\" effect</td><td style=\"padding:6px;\">Recency + primacy bias in attention</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Red at long lengths</td><td style=\"padding:6px;\">Context window not functional at claimed length</td><td style=\"padding:6px;\">Insufficient long-context training or positional encoding failure</td></tr>\n<tr><td style=\"padding:6px;\">Degradation at extreme start</td><td style=\"padding:6px;\">Attention sink interference</td><td style=\"padding:6px;\">First tokens absorb disproportionate attention mass</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>\"Lost in the middle\"</b> (Liu et al., 2023): Many models exhibit a U-shaped retrieval curve — performing well on information near the beginning and end of the context but poorly in the middle. This was shown across 10+ models and context lengths from 4K–128K. The effect is hypothesised to stem from the training data distribution (most relevant information tends to appear at the start of documents) and from the recency bias inherent in causal attention.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Limitations of the benchmark",
+        "body": "<ul>\n<li><b>Single-fact retrieval is simplistic.</b> Real-world long-context tasks require multi-hop reasoning, aggregation, and synthesis across scattered information — not just finding one needle</li>\n<li><b>No reasoning component.</b> A model can \"pass\" needle-in-a-haystack while failing at summarising or comparing information spread across the context</li>\n<li><b>Filler text quality matters.</b> Random filler is easier than semantically distracting text that competes with the needle</li>\n</ul>\n\n<p>More rigorous long-context benchmarks like RULER (Hsieh et al., 2024) and SCROLLS test multi-needle retrieval, variable-tracking, and long-document QA to address these gaps.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "positional-encoding",
+    "title": "Positional Encoding",
+    "summary": "A mechanism that injects sequence-order information into a Transformer's input representations. Self-attention is inherently permutation-equivariant — without positional encoding, \"the cat sat on the mat\" and \"mat the on sat cat the\" wou…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "absolute-position-encoding",
+      "needle-in-a-haystack"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani, Shazeer, Parmar, Uszkoreit et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A mechanism that injects sequence-order information into a Transformer's input representations. Self-attention is inherently permutation-equivariant — without positional encoding, \"the cat sat on the mat\" and \"mat the on sat cat the\" would produce identical representations.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why position information is needed:</b> The self-attention operation \\( \\text{Attn}(Q, K, V) = \\text{softmax}(QK^\\top / \\sqrt{d_k})V \\) treats its inputs as a set, not a sequence. Any permutation of the input tokens produces the same permutation of the output — attention has no built-in notion of \"before\" or \"after.\" Positional encoding breaks this symmetry.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Major approaches",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Type</th><th style=\"padding:6px; text-align:left;\">Mechanism</th><th style=\"padding:6px; text-align:left;\">Models</th><th style=\"padding:6px; text-align:left;\">Length generalisation</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Absolute (sinusoidal)</td><td style=\"padding:6px;\">Fixed sinusoidal functions added to embeddings</td><td style=\"padding:6px;\">Original Transformer</td><td style=\"padding:6px;\">Limited in practice</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Absolute (learned)</td><td style=\"padding:6px;\">Learnable embedding \\( E_{\\text{pos}} \\in \\mathbb{R}^{L_{\\max} \\times d} \\)</td><td style=\"padding:6px;\">GPT-2, BERT</td><td style=\"padding:6px;\">None (hard cap at \\( L_{\\max} \\))</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Relative (ALiBi)</td><td style=\"padding:6px;\">Linear bias \\( -m|i-j| \\) on attention logits</td><td style=\"padding:6px;\">BLOOM, MPT</td><td style=\"padding:6px;\">Good (no learned params)</td></tr>\n<tr><td style=\"padding:6px;\">Rotary (RoPE)</td><td style=\"padding:6px;\">Rotate Q, K by position-dependent angles</td><td style=\"padding:6px;\">LLaMA, Mistral, Qwen</td><td style=\"padding:6px;\">Good (with frequency scaling)</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Original sinusoidal encoding</b> (Vaswani et al., 2017):</p>\n\\[ PE(pos, 2i) = \\sin\\!\\left(\\frac{pos}{10000^{2i/d}}\\right), \\quad PE(pos, 2i+1) = \\cos\\!\\left(\\frac{pos}{10000^{2i/d}}\\right) \\]\n<p>Each dimension oscillates at a different frequency, from wavelength \\( 2\\pi \\) (dimension 0) to \\( 2\\pi \\cdot 10000 \\) (last dimension). The sinusoidal form was chosen because \\( PE(pos + k) \\) can be written as a linear transformation of \\( PE(pos) \\), theoretically allowing the model to learn to attend by relative position.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>RoPE</b> (Su et al., 2021) has become the dominant approach in modern LLMs. It applies a rotation to query and key vectors:</p>\n\\[ \\tilde{q}_m = R_\\Theta^{(m)} q_m, \\quad \\tilde{k}_n = R_\\Theta^{(n)} k_n \\]\n<p>where \\( R_\\Theta^{(m)} \\) is a block-diagonal rotation matrix with angles \\( m\\theta_i \\). The attention score then depends only on relative position:</p>\n\\[ \\tilde{q}_m^\\top \\tilde{k}_n = q_m^\\top R_\\Theta^{(n-m)} k_n \\]\n\n<p>RoPE's advantages: encodes relative position without additive biases, is compatible with linear attention and KV caching, and supports context length extension through base frequency scaling (NTK-aware, YaRN).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Historical progression:</b> The field has moved from absolute to relative encodings as the need for length generalisation became clear with the rise of long-context applications. Nearly all LLMs since 2023 use RoPE.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "absolute-position-encoding",
+    "title": "Absolute Position Encoding",
+    "summary": "A positional encoding scheme that assigns a unique, fixed vector to each absolute position in the sequence and adds it to the token embedding. Each position has the same representation regardless of the surrounding context or other tokens.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "relative-position-encoding",
+      "positional-encoding"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, Polosukhin · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A positional encoding scheme that assigns a unique, fixed vector to each absolute position in the sequence and adds it to the token embedding. Each position has the same representation regardless of the surrounding context or other tokens.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Sinusoidal (fixed) variant</b> — used in the original Transformer (Vaswani et al., 2017):</p>\n\\[ PE(pos, 2i) = \\sin\\!\\left(\\frac{pos}{10000^{2i/d}}\\right), \\quad PE(pos, 2i+1) = \\cos\\!\\left(\\frac{pos}{10000^{2i/d}}\\right) \\]\n\n<p>where \\( pos \\) is the token position, \\( i \\) is the dimension index, and \\( d \\) is the embedding dimension. Each dimension oscillates at a different frequency:</p>\n<ul>\n<li>Dimension 0: wavelength \\( 2\\pi \\approx 6.3 \\) positions</li>\n<li>Dimension \\( d-1 \\): wavelength \\( 2\\pi \\cdot 10000 \\approx 62{,}832 \\) positions</li>\n</ul>\n\n<p>This creates a unique binary-like \"fingerprint\" for each position. The key mathematical property is that \\( PE(pos + k) \\) is a linear function of \\( PE(pos) \\) — specifically, there exists a matrix \\( M_k \\) (independent of \\( pos \\)) such that \\( PE(pos+k) = M_k \\cdot PE(pos) \\). This means the model can learn to attend by relative position using linear projections, even though the encoding is absolute.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Learned variant</b> — used in BERT and GPT-2:</p>\n<p>A trainable embedding matrix \\( E_{\\text{pos}} \\in \\mathbb{R}^{L_{\\max} \\times d} \\), where each row is a learned vector for that position. The model input becomes:</p>\n\\[ h_0^{(t)} = E_{\\text{token}}[x_t] + E_{\\text{pos}}[t] \\]\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Variant</th><th style=\"padding:6px; text-align:left;\">Parameters</th><th style=\"padding:6px; text-align:left;\">Pros</th><th style=\"padding:6px; text-align:left;\">Cons</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Sinusoidal</td><td style=\"padding:6px;\">0</td><td style=\"padding:6px;\">No learnable parameters; theoretical extrapolation via linear transform property</td><td style=\"padding:6px;\">Fixed; extrapolation degrades in practice beyond ~2x training length</td></tr>\n<tr><td style=\"padding:6px;\">Learned</td><td style=\"padding:6px;\">\\( L_{\\max} \\times d \\)</td><td style=\"padding:6px;\">Flexible; can capture complex positional patterns; slightly better performance at trained lengths</td><td style=\"padding:6px;\">Hard limit at \\( L_{\\max} \\); zero extrapolation; adds parameters</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why absolute encodings have been superseded:</b> Both variants conflate absolute identity with relative distance. The model must learn to extract relative information (\\( |i - j| \\)) from absolute signals — an indirect and wasteful computation. Relative methods (RoPE, ALiBi) encode relative position directly into the attention mechanism, leading to better length generalisation and simpler reasoning about token relationships. Since 2022, virtually all new LLMs use RoPE or ALiBi rather than absolute encodings.</p>\n\n<p>Vaswani et al. (2017) found no significant performance difference between sinusoidal and learned absolute encodings, and chose sinusoidal for its potential extrapolation properties.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "relative-position-encoding",
+    "title": "Relative Position Encoding",
+    "summary": "A family of positional encoding methods that represent the distance between tokens rather than their absolute positions. By encoding relative offsets \\( (i - j) \\) directly into the attention computation, these methods generalise better…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "token-id",
+      "absolute-position-encoding"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2018 · Shaw, Uszkoreit, Vaswani · Self-Attention with Relative Position Representations ; Su et al. (RoPE, 2021) · RoFormer ; Press et al. (ALiBi, 2022) · Train Short, Test Long",
+        "url": "https://arxiv.org/abs/1803.02155"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A family of positional encoding methods that represent the distance between tokens rather than their absolute positions. By encoding relative offsets \\( (i - j) \\) directly into the attention computation, these methods generalise better to sequence lengths unseen during training and are more naturally aligned with the pairwise nature of attention.</p><p>Absolute encodings add a fixed vector per position to the input. Relative encodings instead modify the attention scores to be a function of the distance between query position \\( i \\) and key position \\( j \\). The core insight: language semantics depend on relative word order (\"the dog bit the man\" vs. \"the man bit the dog\"), not absolute position indices.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Major approaches",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">How relative position enters</th><th style=\"padding:6px; text-align:left;\">Parameters</th><th style=\"padding:6px; text-align:left;\">Used in</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Shaw et al. (2018)</td><td style=\"padding:6px;\">Learnable bias vectors \\( a_{i-j}^K, a_{i-j}^V \\) added to keys/values, clipped to max distance \\( k \\)</td><td style=\"padding:6px;\">\\( 2k \\times d_k \\)</td><td style=\"padding:6px;\">Music Transformer, early T5</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">T5 relative bias</td><td style=\"padding:6px;\">Learnable scalar bias \\( b(i-j) \\) added to attention logits, bucketed logarithmically for long distances</td><td style=\"padding:6px;\">\\( h \\times n_{\\text{buckets}} \\)</td><td style=\"padding:6px;\">T5, FLAN-T5</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">ALiBi (Press et al., 2022)</td><td style=\"padding:6px;\">Fixed linear penalty: \\( \\text{score}(i,j) = q_i^\\top k_j - m \\cdot |i - j| \\), where \\( m \\) is a head-specific slope</td><td style=\"padding:6px;\">0</td><td style=\"padding:6px;\">BLOOM, MPT</td></tr>\n<tr><td style=\"padding:6px;\">RoPE (Su et al., 2021)</td><td style=\"padding:6px;\">Rotate Q, K vectors by position-dependent angle; dot product depends only on \\( i - j \\)</td><td style=\"padding:6px;\">0</td><td style=\"padding:6px;\">LLaMA, Mistral, Qwen, GPT-NeoX</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>RoPE in detail:</b> Each pair of dimensions \\( (2i, 2i+1) \\) in Q and K is rotated by an angle \\( m\\theta_i \\) at position \\( m \\), where \\( \\theta_i = 10000^{-2i/d} \\):</p>\n\\[ R_\\theta^{(m)} = \\begin{pmatrix} \\cos m\\theta_1 &amp; -\\sin m\\theta_1 &amp; &amp; \\\\ \\sin m\\theta_1 &amp; \\cos m\\theta_1 &amp; &amp; \\\\ &amp; &amp; \\ddots &amp; \\\\ &amp; &amp; &amp; \\cos m\\theta_{d/2} &amp; -\\sin m\\theta_{d/2} \\\\ &amp; &amp; &amp; \\sin m\\theta_{d/2} &amp; \\cos m\\theta_{d/2} \\end{pmatrix} \\]\n\n<p>The attention score becomes:</p>\n\\[ (R_\\theta^{(m)} q)^\\top (R_\\theta^{(n)} k) = q^\\top R_\\theta^{(n-m)} k \\]\n\n<p>This depends only on the relative distance \\( n - m \\), not the absolute positions. RoPE has become dominant because it: (1) adds no parameters, (2) is compatible with KV caching (each key is rotated once at its position), (3) supports length extension via frequency scaling (NTK-aware, YaRN), and (4) preserves the linear algebra of attention without additive biases.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>ALiBi</b> takes an even simpler approach — a fixed linear decay on attention scores that implicitly creates a recency bias. The slopes \\( m \\) are set geometrically across heads (e.g., \\( 2^{-1}, 2^{-2}, \\ldots, 2^{-H} \\) for \\( H \\) heads), giving different heads different \"attention spans.\" ALiBi generalises well to longer contexts but has been largely superseded by RoPE in practice.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "token-id",
+    "title": "Token ID",
+    "summary": "The integer index that uniquely identifies a token within a tokenizer's vocabulary. Token IDs are the actual numerical inputs to a neural language model — text is first split into subword tokens and then mapped to integer IDs, which are…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "vocabulary-size",
+      "relative-position-encoding"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Fundamental concept in neural NLP; subword tokenization popularised by Sennrich et al. (2016) · Neural Machine Translation of Rare Words with Subword Units",
+        "url": "https://arxiv.org/abs/1508.07909"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The integer index that uniquely identifies a token within a tokenizer's vocabulary. Token IDs are the actual numerical inputs to a neural language model — text is first split into subword tokens and then mapped to integer IDs, which are used to look up dense embedding vectors.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The full text-to-representation pipeline",
+        "body": "<ol>\n<li><b>Raw text:</b> <code>\"Hello world\"</code></li>\n<li><b>Tokenization:</b> Split into subword units → <code>[\"Hello\", \" world\"]</code></li>\n<li><b>Vocabulary lookup:</b> Map each token to its integer ID → <code>[15496, 995]</code></li>\n<li><b>Embedding lookup:</b> Index into the embedding matrix \\( E \\in \\mathbb{R}^{|V| \\times d} \\) to get dense vectors → \\( [\\mathbf{e}_{15496}, \\mathbf{e}_{995}] \\in \\mathbb{R}^{2 \\times d} \\)</li>\n<li><b>Add positional encoding</b> and pass to the model</li>\n</ol>\n\n<p>The embedding lookup is mathematically equivalent to multiplying a one-hot vector \\( \\mathbf{x} \\in \\{0,1\\}^{|V|} \\) by the embedding matrix: \\( \\mathbf{e} = E^\\top \\mathbf{x} \\). In practice, this is implemented as an efficient table lookup (<code>nn.Embedding</code>) rather than a full matrix multiply.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Special token IDs:</b> Every tokenizer reserves specific IDs for control tokens:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Token</th><th style=\"padding:6px; text-align:left;\">Purpose</th><th style=\"padding:6px; text-align:left;\">GPT-2 ID</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\"><code>&lt;|endoftext|&gt;</code></td><td style=\"padding:6px;\">End of sequence / document separator</td><td style=\"padding:6px;\">50256</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\"><code>[PAD]</code></td><td style=\"padding:6px;\">Padding for batched sequences</td><td style=\"padding:6px;\">Varies by model</td></tr>\n<tr><td style=\"padding:6px;\"><code>[BOS]</code> / <code>[EOS]</code></td><td style=\"padding:6px;\">Beginning / end of sequence</td><td style=\"padding:6px;\">Model-specific</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Token IDs are tokenizer-specific:</b> The same text produces completely different IDs under different tokenizers because each tokenizer has its own learned vocabulary and merge rules. This is why a model's tokenizer must always be distributed alongside its weights — they are tightly coupled. You cannot substitute one tokenizer for another without retraining the embedding layer.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Weight tying:</b> Many models (GPT-2, LLaMA, T5) share the embedding matrix between the input embedding layer and the output projection layer (the \"language model head\"). The output logits for vocabulary position \\( v \\) are computed as \\( z_v = \\mathbf{h}^\\top \\mathbf{e}_v \\), where \\( \\mathbf{h} \\) is the final hidden state and \\( \\mathbf{e}_v \\) is the embedding for token \\( v \\). This reduces parameters by \\( |V| \\times d \\) and acts as a regulariser by constraining the input and output representations to be consistent.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "vocabulary-size",
+    "title": "Vocabulary Size",
+    "summary": "The total number of unique tokens in a tokenizer's vocabulary, denoted \\( |V| \\). Vocabulary size determines the dimensions of the embedding and output projection matrices and governs a fundamental trade-off between sequence compression…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "model-sharding",
+      "token-id"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Practical design choice in all neural language models; vocabulary design discussed in Radford et al. (GPT-2, 2019) and Touvron et al. (LLaMA, 2023)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The total number of unique tokens in a tokenizer's vocabulary, denoted \\( |V| \\). Vocabulary size determines the dimensions of the embedding and output projection matrices and governs a fundamental trade-off between sequence compression (fewer tokens per text with larger \\( |V| \\)) and model size (more embedding parameters).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "How vocabulary size affects the model",
+        "body": "<ul>\n<li><b>Embedding parameters:</b> The input embedding matrix is \\( E \\in \\mathbb{R}^{|V| \\times d} \\). With weight tying (shared input/output embeddings), this is \\( |V| \\times d \\) parameters; without tying, it doubles to \\( 2|V| \\times d \\).</li>\n<li><b>Softmax cost:</b> At each generation step, the model computes \\( |V| \\) logits: \\( z = W_{\\text{out}} \\mathbf{h} \\), where \\( W_{\\text{out}} \\in \\mathbb{R}^{|V| \\times d} \\). For large vocabularies, this becomes a significant fraction of per-token compute.</li>\n<li><b>Sequence length:</b> Larger \\( |V| \\) means each token covers more text on average, reducing sequence length and thus reducing the quadratic attention cost \\( O(T^2) \\). This is one of the main motivations for larger vocabularies in modern models.</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">\\( |V| \\)</th><th style=\"padding:6px; text-align:left;\">Tokenizer</th><th style=\"padding:6px; text-align:left;\">Embedding params (\\( d \\))</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPT-2</td><td style=\"padding:6px;\">50,257</td><td style=\"padding:6px;\">BPE</td><td style=\"padding:6px;\">38.6M (\\( d=768 \\))</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 1</td><td style=\"padding:6px;\">32,000</td><td style=\"padding:6px;\">SentencePiece BPE</td><td style=\"padding:6px;\">131M (\\( d=4096 \\))</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 3</td><td style=\"padding:6px;\">128,256</td><td style=\"padding:6px;\">tiktoken BPE</td><td style=\"padding:6px;\">1.05B (\\( d=8192 \\))</td></tr>\n<tr><td style=\"padding:6px;\">Gemini</td><td style=\"padding:6px;\">256,000</td><td style=\"padding:6px;\">SentencePiece</td><td style=\"padding:6px;\">—</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "The vocabulary size trade-off in detail",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Larger \\( |V| \\)</th><th style=\"padding:6px; text-align:left;\">Smaller \\( |V| \\)</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Shorter token sequences → faster inference (less attention compute)</td><td style=\"padding:6px;\">Longer sequences → more attention compute per text</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Better coverage of multilingual text and rare terms</td><td style=\"padding:6px;\">Poor multilingual efficiency (e.g., GPT-2 tokenizer fragments Chinese into bytes)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Larger embedding matrix (can be >1B params)</td><td style=\"padding:6px;\">Smaller embedding table; each token trained on more data</td></tr>\n<tr><td style=\"padding:6px;\">Sparser gradient updates per token (rare tokens trained infrequently)</td><td style=\"padding:6px;\">Denser updates but more compositional burden on the model</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Multilingual motivation:</b> The trend toward larger vocabularies (32K → 128K → 256K) is largely driven by multilingual efficiency. Older English-centric tokenizers required 3–5x more tokens to represent non-Latin scripts (Chinese, Japanese, Korean, Arabic), wasting context window and increasing inference cost for non-English users. LLaMA 3's 4x vocabulary increase over LLaMA 1 specifically aimed to improve multilingual token efficiency.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Practical consideration — vocabulary size and compute-optimal training:</b> Embedding parameters are \"cheap\" in FLOPs because they involve only a table lookup (no matrix multiplication). However, they consume memory and can be undertrained: in a corpus of \\( D \\) tokens with uniform distribution, each token appears \\( D/|V| \\) times. For \\( |V| = 128K \\) and \\( D = 15T \\), each token is seen ~117M times — sufficient for learning, but rare tokens (bottom 10% by frequency) may see far fewer examples.</p>"
+      }
+    ],
+    "cards": []
   }
 ]
