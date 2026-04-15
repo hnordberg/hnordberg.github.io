@@ -2064,6 +2064,224 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "computational-graph",
+      "title": "Computational graph",
+      "summary": "A directed acyclic graph (DAG) where nodes represent mathematical operations or variables, and edges represent the flow of data (tensors). It forms the structural basis for automatic differentiation in modern deep learning frameworks.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "neural-network",
+        "tanh"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "neural-network",
+      "title": "Neural network",
+      "summary": "A parameterized function approximator composed of layers of interconnected neurons, each applying an affine transformation followed by a non-linear activation, optimized iteratively over data using gradient descent.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "learning-rate",
+        "computational-graph"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "learning-rate",
+      "title": "Learning rate",
+      "summary": "The scalar hyperparameter \\( \\eta \\) (often \\( \\alpha \\)) dictating the magnitude of parameter updates step size during gradient optimization, fundamentally controlling the trade-off between convergence speed and training stability.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "epoch",
+        "neural-network"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "epoch",
+      "title": "Epoch",
+      "summary": "One complete, comprehensive forward and backward pass of the entire training dataset through a machine learning algorithm, meaning every single example has contributed exactly once to a parameter update.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "overfitting",
+        "learning-rate"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "overfitting",
+      "title": "Overfitting",
+      "summary": "A modeling failure where the network learns the statistical noise and idiosyncratic details of its training data rather than the underlying generalizable distribution, yielding near-zero training error but catastrophic performance on uns…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "regularization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "underfitting",
+        "epoch"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "underfitting",
+      "title": "Underfitting",
+      "summary": "A modeling failure where a network has insufficient architectural capacity or mathematical flexibility to capture the structural patterns in the training data, resulting in unacceptably high error on both training and test sets.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "neuron",
+        "overfitting"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "neuron",
+      "title": "Neuron",
+      "summary": "The irreducible, foundational mathematical building block of a neural network: an independent node that computes a weighted sum of incident input signals, applies a scalar bias, and filters the result through a non-linear activation.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "activation-function",
+        "underfitting"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "activation-function",
+      "title": "Activation function",
+      "summary": "A non-linear scale/filter mathematically applied to a neuron's affine pre-activation value, indispensable for allowing modern neural architectures to map highly complex, non-linear manifolds.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "sigmoid",
+        "neuron"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sigmoid",
+      "title": "Sigmoid",
+      "summary": "A classic differentiable S-shaped activation continuously mapping the entire real domain strictly bounded to \\( (0, 1) \\), universally interpretable as producing probabilistic confidence indices.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "tanh",
+        "activation-function"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "tanh",
+      "title": "Tanh",
+      "summary": "A strictly zero-centered sigmoidal activation function bounded geometrically to \\( (-1, 1) \\) resolving the asymmetrical gradient zig-zag defect of the logistic Sigmoid to accelerate training convergence.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "computational-graph",
+        "sigmoid"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

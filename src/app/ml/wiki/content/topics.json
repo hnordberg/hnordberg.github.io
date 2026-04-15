@@ -4698,5 +4698,544 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "computational-graph",
+    "title": "Computational graph",
+    "summary": "A directed acyclic graph (DAG) where nodes represent mathematical operations or variables, and edges represent the flow of data (tensors). It forms the structural basis for automatic differentiation in modern deep learning frameworks.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "neural-network",
+      "tanh"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1970 · Linnainmaa · The representation of the cumulative rounding error of an algorithm as a Taylor expansion of the local rounding errors",
+        "url": "https://dl.acm.org/doi/10.1145/321941.321946"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A directed acyclic graph (DAG) where nodes represent mathematical operations or variables, and edges represent the flow of data (tensors). It forms the structural basis for automatic differentiation in modern deep learning frameworks.</p><p>Modern deep learning frameworks (like PyTorch, TensorFlow, and JAX) represent mathematical expressions as computational graphs. This abstraction enables the automatic and efficient computation of gradients required for backpropagation.</p>\n\n  <p><b>Graph Structure:</b></p>\n  <ul>\n    <li><b>Nodes:</b> Represent either variables (inputs, parameters) or operations (matrix multiplication, element-wise addition, non-linear activations).</li>\n    <li><b>Edges:</b> Represent the dependencies between nodes, indicating the flow of multi-dimensional arrays (tensors) from one operation to the next.</li>\n  </ul>\n\n  <!-- SVG Diagram of a Computational Graph -->"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 200\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <defs>\n        <marker id=\"arrow_1772480331697\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n        <marker id=\"arrow-back_1772480331697\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fc8181\"></path>\n        </marker>\n      </defs>\n      \n      <!-- Nodes -->\n      <circle cx=\"100\" cy=\"80\" r=\"20\" fill=\"#4a5568\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      <text x=\"100\" y=\"85\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"monospace\" text-anchor=\"middle\">x</text>\n      \n      <circle cx=\"100\" cy=\"140\" r=\"20\" fill=\"#4a5568\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      <text x=\"100\" y=\"145\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"monospace\" text-anchor=\"middle\">W</text>\n      \n      <circle cx=\"200\" cy=\"110\" r=\"24\" fill=\"#2b6cb0\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      <text x=\"200\" y=\"115\" fill=\"#f7fafc\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\">matmul</text>\n      \n      <circle cx=\"300\" cy=\"110\" r=\"24\" fill=\"#2b6cb0\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      <text x=\"300\" y=\"115\" fill=\"#f7fafc\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\">ReLU</text>\n      \n      <circle cx=\"400\" cy=\"110\" r=\"20\" fill=\"#4a5568\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      <text x=\"400\" y=\"115\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"monospace\" text-anchor=\"middle\">L</text>\n      \n      <!-- Forward Edges -->\n      <path d=\"M 118 89 L 175 105\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772480331697)\"></path>\n      <path d=\"M 118 131 L 175 115\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772480331697)\"></path>\n      <path d=\"M 224 110 L 270 110\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772480331697)\"></path>\n      <path d=\"M 324 110 L 374 110\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772480331697)\"></path>\n      \n      <!-- Forward Labels -->\n      <text x=\"250\" y=\"100\" fill=\"#cbd5e0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Forward Pass</text>\n      <text x=\"250\" y=\"140\" fill=\"#fc8181\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Backward Pass</text>\n      \n      <!-- Backward Edges -->\n      <path d=\"M 374 125 L 324 125\" stroke=\"#fc8181\" stroke-width=\"2\" fill=\"none\" stroke-dasharray=\"4\" marker-end=\"url(#arrow-back_1772480331697)\"></path>\n      <path d=\"M 270 125 L 224 125\" stroke=\"#fc8181\" stroke-width=\"2\" fill=\"none\" stroke-dasharray=\"4\" marker-end=\"url(#arrow-back_1772480331697)\"></path>\n      <path d=\"M 175 125 L 120 145\" stroke=\"#fc8181\" stroke-width=\"2\" fill=\"none\" stroke-dasharray=\"4\" marker-end=\"url(#arrow-back_1772480331697)\"></path>\n    </svg>\n    <div style=\"color:#cbd5e0; font-size:0.9em; margin-top:4px;\">Nodes as operations, edges as tensor flows, caching forward values for reverse-mode autodiff.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Forward and Backward Passes",
+        "body": "<p>During the <b>forward pass</b>, the graph is traversed topologically from inputs to outputs (the loss). Intermediate tensor values are computed and cached in memory. </p>\n  <p>During the <b>backward pass (reverse-mode autodiff)</b>, the graph is traversed in reverse. At each node, the local Jacobian is evaluated uses the cached forward values, and is multiplied by the upstream gradient using the chain rule to continuously flow gradients back to the parameters.</p>\n  \n  <p>If \\( y = f(u) \\) and \\( u = g(x) \\), the chain rule applied iteratively is:</p>\n  <p>\\[ \\frac{\\partial y}{\\partial x} = \\frac{\\partial y}{\\partial u} \\frac{\\partial u}{\\partial x} \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Static vs. Dynamic Graphs",
+        "body": "<ul>\n    <li><b>Static Graphs (Define-and-Run):</b> The graph topology is defined entirely before execution (e.g., TensorFlow 1.x). This allows for aggressive ahead-of-time compiler optimizations (like operator fusion) but makes debugging and dynamic control flow (like variable-length loops) difficult.</li>\n    <li><b>Dynamic Graphs (Define-by-Run):</b> The graph is constructed simultaneously as the forward pass executes on the fly (e.g., PyTorch). This allows arbitrary Python control flow (<code>if</code> statements, <code>for</code> loops) to dictate the graph's structure, offering vastly superior developer experience at a slight overhead cost.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "neural-network",
+    "title": "Neural network",
+    "summary": "A parameterized function approximator composed of layers of interconnected neurons, each applying an affine transformation followed by a non-linear activation, optimized iteratively over data using gradient descent.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "learning-rate",
+      "computational-graph"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1943 · McCulloch, Pitts · A logical calculus of the ideas immanent in nervous activity",
+        "url": "https://link.springer.com/article/10.1007/BF02478259"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A parameterized function approximator composed of layers of interconnected neurons, each applying an affine transformation followed by a non-linear activation, optimized iteratively over data using gradient descent.</p><p>An artificial neural network maps an input vector \\( x \\in \\mathbb{R}^{d_0} \\) to an output \\( \\hat{y} \\) by sequentially passing it through \\( L \\) hierarchical layers. At each hidden layer \\( l \\), the representation is transformed as:</p>\n\n  <p>\\[ h^{(l)} = \\sigma\\!\\left(W^{(l)} h^{(l-1)} + b^{(l)}\\right), \\quad h^{(0)} = x \\]</p>\n\n  <p>where \\( W^{(l)} \\in \\mathbb{R}^{d_l \\times d_{l-1}} \\) is the weight matrix mapping from dimension \\( d_{l-1} \\) to \\( d_l \\), \\( b^{(l)} \\in \\mathbb{R}^{d_l} \\) is the learnable bias, and \\( \\sigma \\) is a required non-linear activation function (like ReLU or GELU). Without \\( \\sigma \\), the entire composition of layers would algebraically collapse into a single linear map.</p>\n\n  <!-- SVG Diagram of an MLP -->"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <!-- Hidden layer nodes -->\n      <g stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"#4a5568\">\n        <!-- Input Layer -->\n        <circle cx=\"100\" cy=\"50\" r=\"15\"></circle>\n        <circle cx=\"100\" cy=\"110\" r=\"15\"></circle>\n        <circle cx=\"100\" cy=\"170\" r=\"15\"></circle>\n        \n        <!-- Hidden Layer 1 -->\n        <circle cx=\"250\" cy=\"30\" r=\"15\"></circle>\n        <circle cx=\"250\" cy=\"90\" r=\"15\"></circle>\n        <circle cx=\"250\" cy=\"150\" r=\"15\"></circle>\n        <circle cx=\"250\" cy=\"210\" r=\"15\"></circle>\n        \n        <!-- Output Layer -->\n        <circle cx=\"400\" cy=\"80\" r=\"15\" fill=\"#2b6cb0\"></circle>\n        <circle cx=\"400\" cy=\"140\" r=\"15\" fill=\"#2b6cb0\"></circle>\n      </g>\n      \n      <!-- Edges: Just drawing a dense pattern to symbolize fully connected -->\n      <g stroke=\"#4a5568\" stroke-width=\"1.5\" opacity=\"0.6\">\n        <!-- Input to Hidden -->\n        <path d=\"M 115 50 L 235 30\"></path> <path d=\"M 115 50 L 235 90\"></path> <path d=\"M 115 50 L 235 150\"></path> <path d=\"M 115 50 L 235 210\"></path>\n        <path d=\"M 115 110 L 235 30\"></path> <path d=\"M 115 110 L 235 90\"></path> <path d=\"M 115 110 L 235 150\"></path> <path d=\"M 115 110 L 235 210\"></path>\n        <path d=\"M 115 170 L 235 30\"></path> <path d=\"M 115 170 L 235 90\"></path> <path d=\"M 115 170 L 235 150\"></path> <path d=\"M 115 170 L 235 210\"></path>\n        \n        <!-- Hidden to Output -->\n        <path d=\"M 265 30 L 385 80\"></path> <path d=\"M 265 30 L 385 140\"></path>\n        <path d=\"M 265 90 L 385 80\"></path> <path d=\"M 265 90 L 385 140\"></path>\n        <path d=\"M 265 150 L 385 80\"></path> <path d=\"M 265 150 L 385 140\"></path>\n        <path d=\"M 265 210 L 385 80\"></path> <path d=\"M 265 210 L 385 140\"></path>\n      </g>\n      \n      <text x=\"100\" y=\"235\" fill=\"#cbd5e0\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">Input Layer</text>\n      <text x=\"250\" y=\"235\" fill=\"#cbd5e0\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">Hidden Layer</text>\n      <text x=\"400\" y=\"235\" fill=\"#cbd5e0\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">Output Layer</text>\n    </svg>\n    <div style=\"color:#cbd5e0; font-size:0.9em; margin-top:4px;\">A standard Multi-Layer Perceptron (MLP) mapping dense representations forward.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Universal Approximation Theorem:</b> Cybenko (1989) and Hornik (1991) proved that a network with a single hidden layer of sufficient width, utilizing a non-polynomial activation function, can approximate any continuous function on a compact domain to arbitrary precision. However, this is strictly an <i>existential</i> proof: it does not guarantee that gradient descent can find the desired weights, nor bounding the required width mathematically, often requiring an infeasibly exponential number of neurons.</p>\n  \n  <p>In practice, modern architectures rely entirely on <b>depth</b> rather than width; deeper architectures compose localized, hierarchal geometric warpings that are exponentially more parameter-efficient at representing complex natural manifolds (images, text) than wide, shallow networks.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Curse of Parameters:</b> The sheer parameter density of fully connected networks scales quadratically with successive layer widths. For high-dimensional data like images, utilizing local structure via weight-sharing (CNNs) was paramount until compute capability enabled dense attention (Transformers) to implicitly learn structure.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "learning-rate",
+    "title": "Learning rate",
+    "summary": "The scalar hyperparameter \\( \\eta \\) (often \\( \\alpha \\)) dictating the magnitude of parameter updates step size during gradient optimization, fundamentally controlling the trade-off between convergence speed and training stability.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "optimization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "epoch",
+      "neural-network"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · Rumelhart, Hinton, Williams · Learning representations by back-propagating errors",
+        "url": "https://www.nature.com/articles/323533a0"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The scalar hyperparameter \\( \\eta \\) (often \\( \\alpha \\)) dictating the magnitude of parameter updates step size during gradient optimization, fundamentally controlling the trade-off between convergence speed and training stability.</p><p>In vanilla Gradient Descent, parameters \\( \\theta \\) are iteratively updated by moving opposite the gradient of the loss \\( \\mathcal{L} \\):</p>\n\n  <p>\\[ \\theta_{t+1} = \\theta_t - \\eta \\nabla_\\theta \\mathcal{L}(\\theta_t) \\]</p>\n\n  <p>Choosing the correct learning rate is historically the most consequential hyperparameter decision in deep learning:</p>\n  <ul>\n    <li><b>Too high:</b> The optimizer will overshoot local minima. The loss will bounce erratically, or in worst-case scenarios, catastrophically diverge towards NaN.</li>\n    <li><b>Too low:</b> The optimizer barely advances, making training prohibitively slow. It also increases the risk of the model settling in sharp, suboptimal local minima that fail to generalize well.</li>\n    <li><b>Sweet spot:</b> It traverses steep areas efficiently, yet is small enough to settle into wide, flatter minima that generalize robustly to unseen data.</li>\n  </ul>\n\n  <!-- SVG Diagram of loss landscape and learning rate steps -->"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 600 220\" width=\"100%\" max-width=\"600px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <defs>\n        <marker id=\"arrow-high_1772480636015\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fc8181\"></path>\n        </marker>\n        <marker id=\"arrow-good_1772480636015\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#68d391\"></path>\n        </marker>\n        <marker id=\"arrow-low_1772480636015\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#f6ad55\"></path>\n        </marker>\n      </defs>\n      \n      <!-- Function Curve: U shape -->\n      <path d=\"M 50 50 Q 150 250 250 50\" fill=\"none\" stroke=\"#cbd5e0\" stroke-width=\"3\"></path>\n      \n      <!-- Too High (Diverging) -->\n      <path d=\"M 70 90 L 230 90\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"2\" marker-end=\"url(#arrow-high_1772480636015)\"></path>\n      <path d=\"M 230 90 L 60 70\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"2\" marker-end=\"url(#arrow-high_1772480636015)\"></path>\n      <path d=\"M 60 70 L 245 40\" fill=\"none\" stroke=\"#fc8181\" stroke-width=\"2\" marker-end=\"url(#arrow-high_1772480636015)\"></path>\n      <text x=\"150\" y=\"30\" fill=\"#fc8181\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">Too High (Diverging)</text>\n      \n      <!-- Function Curve: U shape (Right side) -->\n      <path d=\"M 350 50 Q 450 250 550 50\" fill=\"none\" stroke=\"#cbd5e0\" stroke-width=\"3\"></path>\n      \n      <!-- Too Low (Small steps down the left wall) -->\n      <circle cx=\"365\" cy=\"80\" r=\"3\" fill=\"#f6ad55\"></circle>\n      <path d=\"M 365 80 L 370 92\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\" marker-end=\"url(#arrow-low_1772480636015)\"></path>\n      <path d=\"M 370 92 L 375 104\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\" marker-end=\"url(#arrow-low_1772480636015)\"></path>\n      <text x=\"360\" y=\"65\" fill=\"#f6ad55\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">Too Low</text>\n      \n      <!-- Just Right (Good steps down to the minimum) -->\n      <circle cx=\"535\" cy=\"80\" r=\"3\" fill=\"#68d391\"></circle>\n      <path d=\"M 535 80 L 515 130\" fill=\"none\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow-good_1772480636015)\"></path>\n      <path d=\"M 515 130 L 490 170\" fill=\"none\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow-good_1772480636015)\"></path>\n      <path d=\"M 490 170 L 460 190\" fill=\"none\" stroke=\"#68d391\" stroke-width=\"2\" marker-end=\"url(#arrow-good_1772480636015)\"></path>\n      <text x=\"535\" y=\"65\" fill=\"#68d391\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">Just Right</text>\n\n    </svg>\n    <div style=\"color:#cbd5e0; font-size:0.9em; margin-top:4px;\">1D loss geometries demonstrating the consequence of varying step magnitudes.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Learning Rate Schedules",
+        "body": "<p>Training rarely maintains a static learning rate. Instead, it alters over epochs via a <b>schedule</b>. Typical protocols include:</p>\n  <ul>\n    <li><b>Warmup + Decay:</b> Standard in Transformers. Linearly ramp the LR from 0 to \\(\\eta_0\\) during the first 5-10% of training steps (preventing premature catastrophic gradients from uninitialized weights), followed by a gradual decay.</li>\n    <li><b>Cosine Annealing:</b> Gradually decays \\(\\eta\\) following a cosine curve \\( \\eta_t = \\eta_{\\min} + \\frac{1}{2}(\\eta_{\\max} - \\eta_{\\min})(1 + \\cos(\\pi \\frac{t}{T})) \\), cleanly transitioning from exploration to exploitation.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Adaptive Methods (Adam, RMSProp)",
+        "body": "<p>Adaptive optimizers like Adam maintain a distinct effective learning rate for <i>every single parameter</i> by dividing the global \\(\\eta\\) by the locally-estimated rolling variance \\( \\sqrt{\\hat{v}_t} \\) of gradients for that weight map. This dynamically tempers the step size for frequently changing parameters, dramatically reducing network dependence on fine-tuning the global \\( \\eta \\).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "epoch",
+    "title": "Epoch",
+    "summary": "One complete, comprehensive forward and backward pass of the entire training dataset through a machine learning algorithm, meaning every single example has contributed exactly once to a parameter update.",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "overfitting",
+      "learning-rate"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · Rumelhart, Hinton, Williams · Learning representations by back-propagating errors",
+        "url": "https://www.nature.com/articles/323533a0"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>One complete, comprehensive forward and backward pass of the entire training dataset through a machine learning algorithm, meaning every single example has contributed exactly once to a parameter update.</p><p>If a training dataset contains \\( N \\) examples and the optimizer partitions it into mini-batches of size \\( B \\), a single epoch will require \\( \\lceil N / B \\rceil \\) individual weight updates.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Epochs, Steps, and Iterations",
+        "body": "<ul>\n    <li><b>Iteration / Step:</b> A single update to the model weights computed from exactly one mini-batch.</li>\n    <li><b>Epoch:</b> Enough iterations to exhaust the entire full dataset exactly once.</li>\n    <li><b>Total Compute Budget:</b> Frequently expressed as (Epochs \\( \\times \\) Dataset Size), or the total number of processed tokens (in language modeling).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Dataset Shuffling",
+        "body": "<p>At the boundary of every epoch, datasets are virtually always <i>reshuffled</i>. If the model was exposed to precisely the same mini-batches in the exact same sequence every epoch, Stochastic Gradient Descent (SGD) could develop cyclic update patterns that severely impede convergence. Shuffling guarantees random gradients that traverse the loss landscape more robustly.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Diagnosing Performance via Epochs",
+        "body": "<p>Researchers monitor training health by mapping Training Loss and Validation Loss against the epoch integer:</p>\n  <ul>\n    <li><b>Both descending cleanly:</b> Model is successfully learning generalizable structure.</li>\n    <li><b>Train descending, Validation climbing:</b> Severe overfitting. The model is memorizing the specific training examples rather than generalizing. Trigger early stopping or regularization.</li>\n    <li><b>Both completely plateaued:</b> Learning has definitively stalled. This suggests either a learning rate issue, or that the model lacks the architectural capacity to model the complexity of the data.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "How many epochs?",
+        "body": "<p>There is no mathematical constant. Small dense MLPs on MNIST might converge in 10 epochs. Massive Large Language Models (LLMs) often only run for 1 or 2 epochs over immense multi-trillion token corpora. The Chinchilla scaling laws argue that, historically, large networks were often trained for far too many epochs relative to their insufficient data volumes, discovering compute-optimal ratios.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "overfitting",
+    "title": "Overfitting",
+    "summary": "A modeling failure where the network learns the statistical noise and idiosyncratic details of its training data rather than the underlying generalizable distribution, yielding near-zero training error but catastrophic performance on uns…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "regularization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "underfitting",
+      "epoch"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Belkin et al. · Reconciling modern machine learning practice and the bias-variance trade-off",
+        "url": "https://arxiv.org/abs/1812.11118"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A modeling failure where the network learns the statistical noise and idiosyncratic details of its training data rather than the underlying generalizable distribution, yielding near-zero training error but catastrophic performance on unseen data.</p><p><b>Bias–Variance Perspective:</b></p>\n  <p>Statistically, overfitting inhabits the <b>high-variance, low-bias</b> regime of the classical bias-variance decomposition. Because an overfit model is exceptionally complex, it contorts tightly to the training nodes (low structural bias), but its predictions swing wildly when presented with a slightly different dataset (high variance).</p>\n  \n  <p>\\[ \\mathbb{E}\\bigl[(y - \\hat{f}(x))^2\\bigr] = \\text{Bias}(\\hat{f})^2 + \\text{Var}(\\hat{f}) + \\sigma^2 \\]</p>\n  \n  <!-- SVG Diagram of Overfitting Curve -->"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <defs>\n        <marker id=\"arrow_1772480640117\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n      </defs>\n      \n      <!-- Axes -->\n      <path d=\"M 50 200 L 450 200\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772480640117)\"></path>\n      <path d=\"M 50 200 L 50 30\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772480640117)\"></path>\n      <text x=\"250\" y=\"230\" fill=\"#cbd5e0\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">Epoch / Model Complexity</text>\n      <text x=\"35\" y=\"115\" fill=\"#cbd5e0\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\" transform=\"rotate(-90 35,115)\">Error (Loss)</text>\n      \n      <!-- Training Loss (descends to bottom) -->\n      <path d=\"M 70 50 Q 150 180 430 190\" stroke=\"#68d391\" stroke-width=\"3\" fill=\"none\"></path>\n      \n      <!-- Validation Loss (U-shape) -->\n      <path d=\"M 70 60 Q 180 180 250 120 T 430 40\" stroke=\"#fc8181\" stroke-width=\"3\" fill=\"none\"></path>\n      \n      <!-- Optimal Stopping Point Line -->\n      <line x1=\"210\" y1=\"200\" x2=\"210\" y2=\"120\" stroke=\"#f6ad55\" stroke-width=\"2\" stroke-dasharray=\"5\"></line>\n      <text x=\"210\" y=\"215\" fill=\"#f6ad55\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Early Stop</text>\n\n      <text x=\"350\" y=\"175\" fill=\"#68d391\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">Training Loss</text>\n      <text x=\"350\" y=\"65\" fill=\"#fc8181\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">Validation Loss</text>\n    </svg>\n    <div style=\"color:#cbd5e0; font-size:0.9em; margin-top:4px;\">The quintessential diagnostic divergence distinguishing overfitting.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Diagnostic Signature",
+        "body": "<p>Overfitting is visually unmistakable on a training monitor. For the first stages, both training and validation losses descend continuously. Eventually, the validation curve stops improving, plateaus, and sharply diverges upwards as the model begins actively memorizing meaningless local noise, while the training loss continues coasting smoothly towards zero.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Primary Causes",
+        "body": "<ul>\n    <li>The model possesses vastly more architectural capacity (parameters) than the structural complexity of the task requires.</li>\n    <li>A critically undersized training dataset.</li>\n    <li>Training models for an unnecessary number of epochs long after generalization has plateaued.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Remedies",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Technique</th>\n      <th style=\"padding:6px; text-align:left;\">Mechanism</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">L2 Weight Decay</td>\n      <td style=\"padding:6px;\">Adds \\( \\lambda \\|\\theta\\|^2 \\) to the loss function, aggressively penalizing excessively large parameter weights to keep the function smooth.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Dropout</td>\n      <td style=\"padding:6px;\">Randomly disables a percentage of neurons every forward pass. This prevents neurons from co-adapting and forces the network to learn robust redundancies.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Early Stopping</td>\n      <td style=\"padding:6px;\">Programmatically halts training the exact epoch the validation loss definitively begins increasing.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Data Augmentation</td>\n      <td style=\"padding:6px;\">Synthetically diversifies the dataset (flipping, cropping, blurring images), directly simulating a significantly larger unobserved dataset.</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Double Descent Phenomenon",
+        "body": "<p>Classical statistical theory posits that continuous increases in model size will inevitably produce fatal overfitting (the U-curve). Recent empirical evidence (Belkin et al., 2019) demonstrated that, surprisingly, if you scale capacity <i>significantly</i> larger than the interpolation threshold (where train loss hits zero), test error will shockingly descend a second time. This \"Double Descent\" justifies why hyper-parameterized, massive LLMs function seamlessly rather than explosively overfitting.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "underfitting",
+    "title": "Underfitting",
+    "summary": "A modeling failure where a network has insufficient architectural capacity or mathematical flexibility to capture the structural patterns in the training data, resulting in unacceptably high error on both training and test sets.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "neuron",
+      "overfitting"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1950s—present · Various"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A modeling failure where a network has insufficient architectural capacity or mathematical flexibility to capture the structural patterns in the training data, resulting in unacceptably high error on both training and test sets.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Bias–Variance Perspective",
+        "body": "<p>Underfitting characterizes the <b>high-bias</b> regime. The model is so intrinsically simple or constrained that it introduces systematic structural biases that mathematically forbid it from approximating the actual unobserved data generating function, rendering more training data utterly useless.</p>\n\n  <p>An intuitive analogy is forcibly fitting a linear line \\( \\hat{y} = w_1 x + w_0 \\) to a mathematically complex sinusoid pattern \\( y = \\sin(x) \\). No choice of parameters can solve this representation constraint.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Diagnostic Signature",
+        "body": "<p>Unlike overfitting, where the training loss hits zero while validation skyrockets, an underfit model sustains terribly high loss on <b>both</b> splits. The learning curves will rapidly plateau at a high error magnitude early in training.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Common Causes",
+        "body": "<ul>\n    <li>The network possesses far too few layers or hidden dimensions to map the hierarchical features of complex manifolds like natural language.</li>\n    <li>A missing/incorrect non-linear activation function, accidentally collapsing the entire network into a single linear map.</li>\n    <li>An excessively aggressive learning rate causing violent instability around the global minima.</li>\n    <li>Counter-productive levels of regularization (e.g. 80% Dropout rate, or massive \\( L_2 \\) Weight Decay).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Direct Remedies",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Strategy</th>\n      <th style=\"padding:6px; text-align:left;\">Resolution</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Increase Model Capacity</td>\n      <td style=\"padding:6px;\">Increase hidden layer width, or deepen the layer count for inherently more complex topological representations.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">Relax Regularization</td>\n      <td style=\"padding:6px;\">Temporarily eliminate Dropout and drastically lower \\( \\lambda \\) weight decays to force the model to attempt memorization first.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Extend Compute Budget</td>\n      <td style=\"padding:6px;\">Simply increase the quantity of execution epochs; modern architectures sometimes require significant warm-up steps before descending the loss effectively.</td>\n    </tr>\n  </tbody></table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "neuron",
+    "title": "Neuron",
+    "summary": "The irreducible, foundational mathematical building block of a neural network: an independent node that computes a weighted sum of incident input signals, applies a scalar bias, and filters the result through a non-linear activation.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "activation-function",
+      "underfitting"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1943 · McCulloch, Pitts · A logical calculus of the ideas immanent in nervous activity",
+        "url": "https://dl.acm.org/doi/10.1007/BF02478259"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The irreducible, foundational mathematical building block of a neural network: an independent node that computes a weighted sum of incident input signals, applies a scalar bias, and filters the result through a non-linear activation.</p><p>Given an arbitrary dimensional input vector \\( x \\in \\mathbb{R}^n \\), a solitary artificial neuron executes the formula:</p>\n\n  <p>\\[ y = \\sigma\\!\\left( w^\\top x + b \\right) = \\sigma\\!\\left( \\sum_{i=1}^{n} w_i x_i + b \\right) \\]</p>\n\n  <p>Where \\( w \\in \\mathbb{R}^n \\) serves as the learnable weight vector, \\( b \\in \\mathbb{R} \\) is the bias threshold moving the boundary away from the origin, and \\( \\sigma \\) is any suitable non-linear activation mapping (e.g. ReLU, sigmoid).</p>\n\n  <p>The interior affine calculation \\( z = w^\\top x + b \\) is universally referred to as the <b>logit</b> or <b>pre-activation value</b>.</p>\n\n  <!-- SVG Diagram of a single neuron -->"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 200\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n      <defs>\n        <marker id=\"arrow_1772480644248\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n      </defs>\n      \n      <!-- Inputs -->\n      <circle cx=\"50\" cy=\"50\" r=\"15\" fill=\"#2b6cb0\"></circle>\n      <text x=\"50\" y=\"55\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">x₁</text>\n      \n      <circle cx=\"50\" cy=\"100\" r=\"15\" fill=\"#2b6cb0\"></circle>\n      <text x=\"50\" y=\"105\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">x₂</text>\n      \n      <circle cx=\"50\" cy=\"150\" r=\"15\" fill=\"#2b6cb0\"></circle>\n      <text x=\"50\" y=\"155\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">x₃</text>\n\n      <circle cx=\"50\" cy=\"20\" r=\"10\" fill=\"#4a5568\"></circle>\n      <text x=\"50\" y=\"24\" fill=\"#f7fafc\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">+1</text>\n      \n      <!-- Edges -->\n      <path d=\"M 65 50 L 220 90\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772480644248)\"></path>\n      <path d=\"M 65 100 L 220 100\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772480644248)\"></path>\n      <path d=\"M 65 150 L 220 110\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772480644248)\"></path>\n      \n      <path d=\"M 60 20 L 225 80\" stroke=\"#f6ad55\" stroke-width=\"1.5\" stroke-dasharray=\"4\" fill=\"none\" marker-end=\"url(#arrow_1772480644248)\"></path>\n      \n      <text x=\"140\" y=\"60\" fill=\"#cbd5e0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">w₁</text>\n      <text x=\"140\" y=\"95\" fill=\"#cbd5e0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">w₂</text>\n      <text x=\"140\" y=\"145\" fill=\"#cbd5e0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">w₃</text>\n      <text x=\"170\" y=\"32\" fill=\"#f6ad55\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">bias (b)</text>\n\n      <!-- Neuron Body -->\n      <circle cx=\"260\" cy=\"100\" r=\"40\" fill=\"#4a5568\" stroke=\"#cbd5e0\" stroke-width=\"2\"></circle>\n      \n      <line x1=\"260\" y1=\"60\" x2=\"260\" y2=\"140\" stroke=\"#cbd5e0\" stroke-width=\"2\"></line>\n      <text x=\"240\" y=\"105\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">∑</text>\n      <text x=\"280\" y=\"105\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">σ()</text>\n\n      <!-- Output Edge -->\n      <path d=\"M 300 100 L 400 100\" stroke=\"#68d391\" stroke-width=\"3\" fill=\"none\" marker-end=\"url(#arrow_1772480644248)\"></path>\n      <text x=\"350\" y=\"90\" fill=\"#68d391\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\">Output (y)</text>\n    </svg>\n    <div style=\"color:#cbd5e0; font-size:0.9em; margin-top:4px;\">Affinely transforming inputs before applying a scalar non-linear filter \\(\\sigma\\).</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Geometric Intuition",
+        "body": "<p>If you remove the activation function, the continuous equation \\( w^\\top x + b = 0 \\) rigorously defines a linear hyperplane bisecting the \\( \\mathbb{R}^n \\) dimension. In Rosenblatt's Perceptron, testing which side of this dividing hyperplane an input fell upon served as a binary classifier. By wrapping the equation in a smooth activation, the neuron expresses a soft probabilistic gradient of confidence across the boundary line.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Historical Origins",
+        "body": "<p>McCulloch and Pitts originated the formula in 1943 attempting to mathematically model biological synapses: dendrites ingest signals, the cellular soma sums them until surpassing an electrochemical threshold, whereupon the axon fires. Modern architectures have radically outgrown this analogy, leaning heavily into immense parallel geometries using dense matrices rather than modeling physical action potentials.</p><details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef artificial_neuron(x, w, b, activation='relu'):\n    # Inner Affine calculation (Pre-activation / Logit)\n    z = np.dot(w, x) + b\n    \n    # Non-linear Filtering\n    if activation == 'relu':\n        return np.maximum(0, z)\n    elif activation == 'sigmoid':\n        return 1.0 / (1.0 + np.exp(-z))\n\nx = np.array([12.0, 5.0, 3.2])\nw = np.array([0.5, -0.2, 0.9])\nb = -0.5\n\nprint(f\"Activation: {artificial_neuron(x, w, b, 'relu')}\") # Output</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "activation-function",
+    "title": "Activation function",
+    "summary": "A non-linear scale/filter mathematically applied to a neuron's affine pre-activation value, indispensable for allowing modern neural architectures to map highly complex, non-linear manifolds.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "sigmoid",
+      "neuron"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2010 · Nair, Hinton · Rectified Linear Units Improve Restricted Boltzmann Machines",
+        "url": "https://www.cs.toronto.edu/~fritz/absps/reluICML.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A non-linear scale/filter mathematically applied to a neuron's affine pre-activation value, indispensable for allowing modern neural architectures to map highly complex, non-linear manifolds.</p><p><b>Breaking the Linear Collapse:</b></p>\n  <p>Without independent non-linear activations, an arbitrary deep neural network identically unwinds back into a singular affine transformation matrix:</p>\n  <p>\\[ W_L \\cdots W_2 W_1 x = W_{\\text{collapsed}} x \\]</p>\n  <p>To acquire the Universal Approximation properties enabling deep-learning, the layers must geometrically buckle and fold the dimensional space. Activation functions uniquely warp the data sequentially, permitting multi-layer networks to construct intricate, tightly bound topological decision borders.</p>\n\n  <!-- SVG Plot of Activations -->"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px;\">\n  <defs>\n    <marker id=\"arrow_1772480646313\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n    </marker>\n    <marker id=\"arrow-v_1772480646313\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n      <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n    </marker>\n  </defs>\n  \n  <!-- Axes -->\n  <!-- X-axis: y=0 maps to map_y(0) = 120 -->\n  <path d=\"M 40 120 L 460 120\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772480646313)\"></path>\n  <!-- Y-axis: x=0 maps to map_x(0) = 250 -->\n  <path d=\"M 250 230 L 250 10\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow-v_1772480646313)\"></path>\n  \n  <text x=\"470\" y=\"125\" fill=\"#cbd5e0\" font-size=\"12\" font-family=\"sans-serif\">z</text>\n  <text x=\"250\" y=\"10\" fill=\"#cbd5e0\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">f(z)</text>\n\n  <!-- Sigmoid -->\n  <path d=\"M 50.0,118.5 L 54.0,118.4 L 58.1,118.2 L 62.1,118.1 L 66.2,117.9 L 70.2,117.8 L 74.2,117.6 L 78.3,117.4 L 82.3,117.2 L 86.4,117.0 L 90.4,116.7 L 94.4,116.4 L 98.5,116.2 L 102.5,115.9 L 106.6,115.5 L 110.6,115.2 L 114.6,114.8 L 118.7,114.4 L 122.7,113.9 L 126.8,113.5 L 130.8,113.0 L 134.8,112.4 L 138.9,111.9 L 142.9,111.2 L 147.0,110.6 L 151.0,109.9 L 155.1,109.1 L 159.1,108.4 L 163.1,107.5 L 167.2,106.6 L 171.2,105.7 L 175.3,104.7 L 179.3,103.7 L 183.3,102.6 L 187.4,101.5 L 191.4,100.3 L 195.5,99.0 L 199.5,97.8 L 203.5,96.4 L 207.6,95.0 L 211.6,93.6 L 215.7,92.1 L 219.7,90.6 L 223.7,89.0 L 227.8,87.4 L 231.8,85.8 L 235.9,84.2 L 239.9,82.5 L 243.9,80.9 L 248.0,79.2 L 252.0,77.5 L 256.1,75.8 L 260.1,74.1 L 264.1,72.5 L 268.2,70.8 L 272.2,69.2 L 276.3,67.6 L 280.3,66.1 L 284.3,64.6 L 288.4,63.1 L 292.4,61.6 L 296.5,60.3 L 300.5,58.9 L 304.5,57.6 L 308.6,56.4 L 312.6,55.2 L 316.7,54.1 L 320.7,53.0 L 324.7,51.9 L 328.8,50.9 L 332.8,50.0 L 336.9,49.1 L 340.9,48.3 L 344.9,47.5 L 349.0,46.8 L 353.0,46.1 L 357.1,45.4 L 361.1,44.8 L 365.2,44.2 L 369.2,43.7 L 373.2,43.2 L 377.3,42.7 L 381.3,42.3 L 385.4,41.9 L 389.4,41.5 L 393.4,41.1 L 397.5,40.8 L 401.5,40.5 L 405.6,40.2 L 409.6,40.0 L 413.6,39.7 L 417.7,39.5 L 421.7,39.3 L 425.8,39.1 L 429.8,38.9 L 433.8,38.7 L 437.9,38.6 L 441.9,38.4 L 446.0,38.3 L 450.0,38.2\" stroke=\"#f6ad55\" stroke-width=\"2\" fill=\"none\" stroke-dasharray=\"4\"></path>\n  \n  <!-- Tanh -->\n  <path d=\"M 50.0,203.3 L 54.0,203.3 L 58.1,203.3 L 62.1,203.2 L 66.2,203.2 L 70.2,203.2 L 74.2,203.2 L 78.3,203.2 L 82.3,203.1 L 86.4,203.1 L 90.4,203.1 L 94.4,203.0 L 98.5,202.9 L 102.5,202.9 L 106.6,202.8 L 110.6,202.7 L 114.6,202.6 L 118.7,202.5 L 122.7,202.3 L 126.8,202.1 L 130.8,201.9 L 134.8,201.7 L 138.9,201.4 L 142.9,201.1 L 147.0,200.7 L 151.0,200.2 L 155.1,199.7 L 159.1,199.1 L 163.1,198.3 L 167.2,197.5 L 171.2,196.5 L 175.3,195.4 L 179.3,194.0 L 183.3,192.5 L 187.4,190.7 L 191.4,188.7 L 195.5,186.4 L 199.5,183.8 L 203.5,180.9 L 207.6,177.5 L 211.6,173.8 L 215.7,169.7 L 219.7,165.1 L 223.7,160.1 L 227.8,154.8 L 231.8,149.0 L 235.9,143.0 L 239.9,136.6 L 243.9,130.1 L 248.0,123.4 L 252.0,116.6 L 256.1,109.9 L 260.1,103.4 L 264.1,97.0 L 268.2,91.0 L 272.2,85.2 L 276.3,79.9 L 280.3,74.9 L 284.3,70.3 L 288.4,66.2 L 292.4,62.5 L 296.5,59.1 L 300.5,56.2 L 304.5,53.6 L 308.6,51.3 L 312.6,49.3 L 316.7,47.5 L 320.7,46.0 L 324.7,44.6 L 328.8,43.5 L 332.8,42.5 L 336.9,41.7 L 340.9,40.9 L 344.9,40.3 L 349.0,39.8 L 353.0,39.3 L 357.1,38.9 L 361.1,38.6 L 365.2,38.3 L 369.2,38.1 L 373.2,37.9 L 377.3,37.7 L 381.3,37.5 L 385.4,37.4 L 389.4,37.3 L 393.4,37.2 L 397.5,37.1 L 401.5,37.1 L 405.6,37.0 L 409.6,36.9 L 413.6,36.9 L 417.7,36.9 L 421.7,36.8 L 425.8,36.8 L 429.8,36.8 L 433.8,36.8 L 437.9,36.8 L 441.9,36.7 L 446.0,36.7 L 450.0,36.7\" stroke=\"#fc8181\" stroke-width=\"2\" fill=\"none\"></path>\n\n  <!-- ReLU -->\n  <path d=\"M 50.0,120.0 L 54.0,120.0 L 58.1,120.0 L 62.1,120.0 L 66.2,120.0 L 70.2,120.0 L 74.2,120.0 L 78.3,120.0 L 82.3,120.0 L 86.4,120.0 L 90.4,120.0 L 94.4,120.0 L 98.5,120.0 L 102.5,120.0 L 106.6,120.0 L 110.6,120.0 L 114.6,120.0 L 118.7,120.0 L 122.7,120.0 L 126.8,120.0 L 130.8,120.0 L 134.8,120.0 L 138.9,120.0 L 142.9,120.0 L 147.0,120.0 L 151.0,120.0 L 155.1,120.0 L 159.1,120.0 L 163.1,120.0 L 167.2,120.0 L 171.2,120.0 L 175.3,120.0 L 179.3,120.0 L 183.3,120.0 L 187.4,120.0 L 191.4,120.0 L 195.5,120.0 L 199.5,120.0 L 203.5,120.0 L 207.6,120.0 L 211.6,120.0 L 215.7,120.0 L 219.7,120.0 L 223.7,120.0 L 227.8,120.0 L 231.8,120.0 L 235.9,120.0 L 239.9,120.0 L 243.9,120.0 L 248.0,120.0 L 252.0,116.6 L 256.1,109.9 L 260.1,103.2 L 264.1,96.4 L 268.2,89.7 L 272.2,83.0 L 276.3,76.2 L 280.3,69.5 L 284.3,62.8 L 288.4,56.0 L 292.4,49.3 L 296.5,42.6 L 300.5,35.8 L 304.5,29.1 L 308.6,22.4 L 312.6,15.6 L 316.7,8.9 L 320.7,2.2 L 324.7,-4.6 L 328.8,-11.3 L 332.8,-18.0 L 336.9,-24.8 L 340.9,-31.5 L 344.9,-38.2 L 349.0,-45.0 L 353.0,-51.7 L 357.1,-58.5 L 361.1,-65.2 L 365.2,-71.9 L 369.2,-78.7 L 373.2,-85.4 L 377.3,-92.1 L 381.3,-98.9 L 385.4,-105.6 L 389.4,-112.3 L 393.4,-119.1 L 397.5,-125.8 L 401.5,-132.5 L 405.6,-139.3 L 409.6,-146.0 L 413.6,-152.7 L 417.7,-159.5 L 421.7,-166.2 L 425.8,-172.9 L 429.8,-179.7 L 433.8,-186.4 L 437.9,-193.1 L 441.9,-199.9 L 446.0,-206.6 L 450.0,-213.3\" stroke=\"#68d391\" stroke-width=\"3\" fill=\"none\"></path>\n\n  <!-- Legend -->\n  <rect x=\"60\" y=\"20\" width=\"10\" height=\"10\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\" stroke-dasharray=\"4\"></rect>\n  <text x=\"80\" y=\"30\" fill=\"#f6ad55\" font-size=\"12\" font-family=\"sans-serif\">Sigmoid</text>\n  \n  <rect x=\"60\" y=\"40\" width=\"10\" height=\"10\" fill=\"#fc8181\"></rect>\n  <text x=\"80\" y=\"50\" fill=\"#fc8181\" font-size=\"12\" font-family=\"sans-serif\">Tanh</text>\n  \n  <rect x=\"60\" y=\"60\" width=\"10\" height=\"10\" fill=\"#68d391\"></rect>\n  <text x=\"80\" y=\"70\" fill=\"#68d391\" font-size=\"12\" font-family=\"sans-serif\">ReLU</text>\n\n</svg>\n    <div style=\"color:#cbd5e0; font-size:0.9em; margin-top:4px;\">Sigmoid/Tanh smoothly saturate mapping to fixed domains, while ReLU scales unboundedly.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Derivative Scale Determines Optimization",
+        "body": "<p>The derivative \\( f'(z) \\) of the selected activation definitively commands how efficiently backpropagation flows into deep layers via the chain rule.</p>\n  <ul>\n    <li><b>Sigmoid's \\( \\sigma'(z) \\):</b> Caps strictly at \\( 0.25 \\). Multiplying tiny fractions \\( 0.25 \\) across layers exponentially pulverizes backward gradients into an untrainable <i>Vanishing Gradient Minimum</i>.</li>\n    <li><b>ReLU's \\( f'(z) \\):</b> Is a perfect boolean \\( 1 \\) identically across all positive values, retaining robust, unscaled backpropagation directly through a network of essentially infinite depth.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Modern Compendium",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Formula</th>\n      <th style=\"padding:6px; text-align:left;\">Output Domain</th>\n      <th style=\"padding:6px; text-align:left;\">Utility Protocol</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>ReLU</b>: \\( \\max(0, z) \\)</td>\n      <td style=\"padding:6px;\">\\( [0, \\infty) \\)</td>\n      <td style=\"padding:6px;\">Sparsity generation. Prevents vanishing gradients entirely. Industry standard for Convolution / FC maps.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>GELU</b>: \\( z \\Phi(z) \\)</td>\n      <td style=\"padding:6px;\">\\( (-0.17, \\infty) \\)</td>\n      <td style=\"padding:6px;\">Smooth, non-monotonic approximation of ReLU blending probabilistic dropout. Default across all Transformer LLM architectures.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Sigmoid</b>: \\( \\frac{1}{1+e^{-z}} \\)</td>\n      <td style=\"padding:6px;\">\\( (0, 1) \\)</td>\n      <td style=\"padding:6px;\">Interpretable as absolute probability. Strict use-cases in Binary Classification layers, and information gating (e.g., LSTMs).</td>\n    </tr>\n  </tbody></table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "sigmoid",
+    "title": "Sigmoid",
+    "summary": "A classic differentiable S-shaped activation continuously mapping the entire real domain strictly bounded to \\( (0, 1) \\), universally interpretable as producing probabilistic confidence indices.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "tanh",
+      "activation-function"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · Rumelhart, Hinton, Williams · Learning representations by back-propagating errors",
+        "url": "https://www.nature.com/articles/323533a0"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A classic differentiable S-shaped activation continuously mapping the entire real domain strictly bounded to \\( (0, 1) \\), universally interpretable as producing probabilistic confidence indices.</p><p>The logistic sigmoid algebraically computes:</p>\n\n  <p>\\[ \\sigma(z) = \\frac{1}{1 + e^{-z}} \\]</p>\n\n  <p>The output scales elegantly from \\( \\sigma(-\\infty) = 0 \\) to \\( \\sigma(+\\infty) = 1 \\). In neural applications, mapping negative numbers to 0 mathematically drops information identically to biological 'rest', while large activations represent boolean 'firing'.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Derivative Collapse Mechanism",
+        "body": "<p>The derivative form expresses an elegant self-recursive factorization:</p>\n  <p>\\[ \\sigma'(z) = \\sigma(z)\\bigl(1 - \\sigma(z)\\bigr) \\]</p>\n\n  <p>At its maximum mathematically possible velocity \\( z = 0 \\), \\( \\sigma'(0) = 0.25 \\). Consequently, a backward pass through purely sigmoid layers enforces at minimum a 75% decay of signal <i>per layer</i>. Multiplying mathematically across \\( L=10 \\) layers obliterates gradients into the abyss (the <b>Vanishing Gradient Problem</b>), which rendered neural architecture stagnation a reality prior to ReLU architectures in 2012.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Center Asymmetry (Zig-Zagging)",
+        "body": "<p>Because outputs are exclusively positive, all downstream weights corresponding to an output layer will be mathematically forced to update via gradients bearing an identical sign (+ or - depending on the final loss delta). Optimization traverses in inefficient zigzag vectors to change multiple weights differently.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Strict Modern Usage Profiles",
+        "body": "<p>Sigmoid is entirely excised from modern hidden layer stacks, surviving strictly as:</p>\n  <ul>\n    <li><b>Binary Outcome:</b> Serving the terminal logit in binary cross-entropy calculations representing true probability \\( P(Y=1 | x) \\).</li>\n    <li><b>Cellular Gating:</b> Scaling arrays \\( 0 \\rightarrow 1 \\) in LSTM Forget/Input gating to probabilistically mask/pass sequential information.</li>\n  </ul><details>\n    <summary>Derivations</summary>\n    <p>Differentiating \\( \\sigma(z) = (1 + e^{-z})^{-1} \\) using the chain rule yields:</p>\n    <p>\\[ \\sigma'(z) = -\\bigl(1 + e^{-z}\\bigr)^{-2} \\cdot (-e^{-z}) = \\frac{e^{-z}}{(1 + e^{-z})^2} \\]</p>\n    <p>Factoring intuitively by injecting an algebraic \\( +1 -1 \\):</p>\n    <p>\\[ \\frac{1}{1+e^{-z}} \\cdot \\frac{e^{-z}}{1+e^{-z}} = \\sigma(z) \\cdot \\frac{1+e^{-z}-1}{1+e^{-z}} = \\sigma(z)\\bigl(1 - \\sigma(z)\\bigr) \\]</p>\n  </details>\n\n  <details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef stable_sigmoid(z):\n    '''Prevents exp overflow for extremely negative numbers'''\n    z = np.clip(z, -500, 500)\n    return np.where(z &gt;= 0, \n                    1 / (1 + np.exp(-z)), \n                    np.exp(z) / (1 + np.exp(z)))\n\nprint(stable_sigmoid(np.array([0, 5, -500]))) \n# [0.5, 0.993, 0.0]</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "tanh",
+    "title": "Tanh",
+    "summary": "A strictly zero-centered sigmoidal activation function bounded geometrically to \\( (-1, 1) \\) resolving the asymmetrical gradient zig-zag defect of the logistic Sigmoid to accelerate training convergence.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "computational-graph",
+      "sigmoid"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1998 · LeCun, Bottou, Orr, Müller · Efficient BackProp",
+        "url": "https://dl.acm.org/doi/10.1007/3-540-49430-8_2"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A strictly zero-centered sigmoidal activation function bounded geometrically to \\( (-1, 1) \\) resolving the asymmetrical gradient zig-zag defect of the logistic Sigmoid to accelerate training convergence.</p><p>The hyperbolic tangent calculates:</p>\n\n  <p>\\[ \\tanh(z) = \\frac{e^z - e^{-z}}{e^z + e^{-z}} \\]</p>\n\n  <p>Mathematically, it identically replicates the geometry of the standard sigmoid but expansively re-scales and centers it over the zero origin:</p>\n  <p>\\[ \\tanh(z) = 2\\sigma(2z) - 1 \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Derivative Dominance Over Sigmoid",
+        "body": "<p>Deriving the function yields:</p>\n  <p>\\[ \\tanh'(z) = 1 - \\tanh^2(z) \\]</p>\n  <p>The absolute derivative peaks at \\( z=0 \\) with \\( \\tanh'(0) = 1.0 \\), four times stronger than Sigmoid's \\( 0.25 \\) peak gradient fraction. While it strictly remains susceptible to vanishing gradients once the values drift away toward massive saturation tails, the center of the function transmits early-layer gradient updates losslessly.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Zero-Center Optimization Advantage",
+        "body": "<p>LeCun famously advocated the superiority of Tanh identically because it outputs values on both sides of zero. Downward gradients injected into identical upstream weight nodes will have mixed mathematical signs instead of strictly inheriting purely positive or negative scalar drift. The optimizer paths slice cleanly through parameter-space rather than zigzagging inefficiently over identical dimensions.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Contemporary Utilities",
+        "body": "<ul>\n    <li><b>LSTM Internal State:</b> The cell memory mapping utilizes bare Tanh: \\( \\tilde{c}_t = \\tanh(W_c [h_{t-1}, x_t] + b_c) \\), guaranteeing the internal cell sum \\( (-1, 1) \\) neither explodes identically nor collapses into zero permanently across sequential unrolls.</li>\n    <li><b>Data Stabilization:</b> Serving as identical output boundaries in explicit generative pipelines preventing extreme artifacts (such as bounding generator outputs exactly across pixel representations).</li>\n    <li><b>Xavier Initialization Base:</b> The classic Uniform Weight initialization standard derives directly assuming centered Tanh network expectations.</li>\n  </ul><details>\n    <summary>Derivations</summary>\n    <p>Applying the standard quotient rule directly to \\( t = \\tanh(z) \\):</p>\n    <p>Where \\( u = e^z - e^{-z} \\) and \\( v = e^z + e^{-z} \\):</p>\n    <p>\\[ u' = v, \\quad v' = u \\]</p>\n    <p>\\[ \\frac{d}{dz}\\tanh(z) = \\frac{v \\cdot v - u \\cdot u}{v^2} = 1 - \\left(\\frac{u}{v}\\right)^2 = 1 - \\tanh^2(z) \\]</p>\n  </details>\n\n  <details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef tanh_derivative(z):\n    t_val = np.tanh(z)\n    return 1 - t_val**2\n\nprint(tanh_derivative(0)) # Returns 1.0\nprint(tanh_derivative(5)) # Returns ~0.00018 (Vanished)</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
   }
 ]
