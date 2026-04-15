@@ -9712,5 +9712,514 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "autoregression",
+    "title": "Autoregression",
+    "summary": "A generation strategy where each output token is conditioned on all previously generated tokens. The model decomposes the joint probability of a sequence into a product of conditional probabilities, generating one token at a time from le…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "prompt",
+      "self-consistency"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Foundational concept in sequence modelling · Neural autoregressive LMs: Bengio et al. (2003) · Scaled by GPT: Radford et al. (2018)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A generation strategy where each output token is conditioned on all previously generated tokens. The model decomposes the joint probability of a sequence into a product of conditional probabilities, generating one token at a time from left to right.</p><p>An autoregressive model factorises the sequence probability using the chain rule of probability:</p>\n\n\\[ P(x_1, x_2, \\ldots, x_T) = \\prod_{t=1}^{T} P(x_t \\mid x_{&lt;t}) \\]\n\n<p>where \\( x_{&lt;t} = (x_1, \\ldots, x_{t-1}) \\) denotes all preceding tokens. At each step \\( t \\), a neural network \\( f_\\theta \\) maps the prefix to a distribution over the vocabulary \\( \\mathcal{V} \\):</p>\n\n\\[ P(x_t = w \\mid x_{&lt;t}) = \\text{softmax}(f_\\theta(x_{&lt;t}))_w \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Training objective.</b> The model is trained by maximising the log-likelihood of the training corpus, which is equivalent to minimising the cross-entropy loss:</p>\n\n\\[ \\mathcal{L}(\\theta) = -\\frac{1}{T} \\sum_{t=1}^{T} \\log P_\\theta(x_t \\mid x_{&lt;t}) \\]\n\n<p>During training, <b>teacher forcing</b> provides the ground-truth prefix at every step, enabling full parallelisation across positions (every conditional can be computed simultaneously via causal masking). During inference, the model must consume its own previous outputs sequentially — a discrepancy known as <b>exposure bias</b>.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Decoding strategies</b> control how tokens are selected from the predicted distribution:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Strategy</th><th style=\"padding:6px; text-align:left;\">Mechanism</th><th style=\"padding:6px; text-align:left;\">Trade-off</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Greedy</td><td style=\"padding:6px;\">\\( \\arg\\max \\) at each step</td><td style=\"padding:6px;\">Deterministic but repetitive</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Beam search</td><td style=\"padding:6px;\">Track top-\\( k \\) sequences</td><td style=\"padding:6px;\">Higher likelihood, but often bland</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Temperature sampling</td><td style=\"padding:6px;\">Sample from \\( \\text{softmax}(z / T) \\)</td><td style=\"padding:6px;\">\\( T &lt; 1 \\): sharper; \\( T &gt; 1 \\): more diverse</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Top-\\( k \\)</td><td style=\"padding:6px;\">Sample from \\( k \\) most probable tokens</td><td style=\"padding:6px;\">Truncates tail, reduces incoherence</td></tr>\n<tr><td style=\"padding:6px;\">Nucleus (top-\\( p \\))</td><td style=\"padding:6px;\">Sample from smallest set with cumulative prob \\( \\geq p \\)</td><td style=\"padding:6px;\">Adaptive vocabulary size per step</td></tr>\n</tbody></table>\n\n<p>Autoregression is the generation paradigm used by all decoder-only LLMs (GPT, LLaMA, Claude). Its <b>key advantage</b> is exact, tractable likelihood computation, which provides a clean training signal. Its <b>key limitation</b> is sequential generation at inference time — each token depends on the previous, preventing parallelisation across output positions and creating a latency bottleneck proportional to sequence length.</p>\n\n<p>Non-autoregressive alternatives (masked language models, diffusion models for text, speculative decoding) attempt to mitigate this by generating multiple tokens in parallel, but typically sacrifice quality or require iterative refinement to match autoregressive baselines.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "prompt",
+    "title": "Prompt",
+    "summary": "The input text provided to a language model to condition its generation. The prompt defines the task, provides context, and steers the model's output — it is the primary interface through which users interact with LLMs.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "system-prompt",
+      "autoregression"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Concept formalised with GPT-2/GPT-3 · Radford et al. (2019) · Brown et al. (2020)",
+        "url": "https://arxiv.org/abs/2005.14165"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The input text provided to a language model to condition its generation. The prompt defines the task, provides context, and steers the model's output — it is the primary interface through which users interact with LLMs.</p><p>In an autoregressive language model, the prompt is the initial token sequence \\( x_1, \\ldots, x_k \\) that the model conditions on when generating the continuation \\( x_{k+1}, x_{k+2}, \\ldots \\). Formally, the model computes:</p>\n\n\\[ P(x_{k+1}, \\ldots, x_T \\mid x_1, \\ldots, x_k) = \\prod_{t=k+1}^{T} P(x_t \\mid x_{&lt;t}) \\]\n\n<p>The prompt occupies positions in the <b>context window</b> (the model's maximum sequence length), so longer prompts leave less room for generation. The prompt is processed in a single forward pass (unlike generation, which is sequential), and its key-value representations are often <b>cached</b> (KV cache) to avoid recomputation during generation.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Prompt taxonomy",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Type</th><th style=\"padding:6px; text-align:left;\">Description</th><th style=\"padding:6px; text-align:left;\">Example</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Direct instruction</td><td style=\"padding:6px;\">Explicit task description</td><td style=\"padding:6px;\">\"Translate to French: ...\"</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Few-shot examples</td><td style=\"padding:6px;\">Input-output demonstrations</td><td style=\"padding:6px;\">3 labelled sentiment examples + new input</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Chain-of-thought</td><td style=\"padding:6px;\">Elicit step-by-step reasoning</td><td style=\"padding:6px;\">\"Let's think step by step...\"</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Structured template</td><td style=\"padding:6px;\">Role-based format with special tokens</td><td style=\"padding:6px;\">System / user / assistant messages</td></tr>\n<tr><td style=\"padding:6px;\">Soft prompt</td><td style=\"padding:6px;\">Learned continuous embeddings prepended to input</td><td style=\"padding:6px;\">Prefix tuning (Li &amp; Liang, 2021)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Prompt sensitivity.</b> LLM outputs are often highly sensitive to prompt phrasing — semantically equivalent prompts can produce different results. This fragility motivates prompt engineering as a systematic discipline, as well as automated prompt optimisation methods like DSPy and APE.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Prompt injection</b> is a security concern where adversarial user input overrides the intended system prompt instructions. Because prompts and user data share the same token stream, there is no architectural boundary between trusted instructions and untrusted input — a fundamental challenge for deployed LLM applications.</p>\n\n<p>The observation that LLMs can perform diverse tasks given only an appropriate prompt — without any gradient updates — is one of the most surprising results in modern AI and the basis for <b>in-context learning</b> (Brown et al., 2020).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "system-prompt",
+    "title": "System Prompt",
+    "summary": "A special prompt section, typically invisible to the end user, that defines the model's behaviour, persona, constraints, and instructions for a conversation. The system prompt is prepended to every interaction and takes precedence over u…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "prompting-format",
+      "prompt"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Formalised in OpenAI's Chat Completions API (2023) · Adopted by Claude, Gemini, and other chat APIs"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A special prompt section, typically invisible to the end user, that defines the model's behaviour, persona, constraints, and instructions for a conversation. The system prompt is prepended to every interaction and takes precedence over user messages in well-designed models.</p><p>In a typical chat API, messages are structured with distinct roles:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Role</th><th style=\"padding:6px; text-align:left;\">Purpose</th><th style=\"padding:6px; text-align:left;\">Who controls it</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\"><code>system</code></td><td style=\"padding:6px;\">Sets behaviour, persona, constraints</td><td style=\"padding:6px;\">Developer / application</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\"><code>user</code></td><td style=\"padding:6px;\">End-user input</td><td style=\"padding:6px;\">End user</td></tr>\n<tr><td style=\"padding:6px;\"><code>assistant</code></td><td style=\"padding:6px;\">Model's response</td><td style=\"padding:6px;\">Model (generated)</td></tr>\n</tbody></table>\n\n<p>The system prompt enables <b>application-level control</b>: a developer can instruct the model to behave as a specific agent (\"You are a helpful customer support agent for Acme Corp. Only answer questions about our products.\") without the user seeing or being able to easily override these instructions.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Implementation details.</b> During instruction tuning, the model learns to give system messages higher priority than user messages. However, this is a <b>soft constraint</b> learned through training — not an architectural guarantee. The system prompt is tokenised and concatenated with the rest of the conversation, sharing the same attention mechanism. There is no hard separation at the model level between \"trusted\" system tokens and \"untrusted\" user tokens.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key properties and trade-offs",
+        "body": "<ul>\n<li>Persists across the entire conversation (resent with every API call in stateless APIs)</li>\n<li>Consumes context window tokens — an overly long system prompt reduces space for conversation history and user content</li>\n<li>Used to implement safety guardrails, output formatting, tool use instructions, and persona</li>\n<li>Some providers (e.g., Anthropic) distinguish a <code>system</code> parameter from the message array, enabling special positional handling</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>System prompt robustness</b> is an active area of safety research. <b>Jailbreak attacks</b> attempt to override system prompt instructions through cleverly crafted user messages (e.g., \"ignore previous instructions\"). Defences include instruction hierarchy training (OpenAI, 2024), where the model learns to rank system-level instructions above user-level ones even when directly contradicted.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "prompting-format",
+    "title": "Prompting Format",
+    "summary": "The structured template used to format messages into a token sequence that a chat model expects. Each model family has its own format defining how system, user, and assistant messages are delimited by special tokens.",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "few-shot-prompting",
+      "system-prompt"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Evolved with instruction-tuned models · ChatML introduced by OpenAI (2023) · Model-specific templates standardised by Hugging Face"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The structured template used to format messages into a token sequence that a chat model expects. Each model family has its own format defining how system, user, and assistant messages are delimited by special tokens.</p><p>Chat models are fine-tuned on conversations formatted with specific special tokens. Using the wrong format degrades performance because the model sees out-of-distribution token patterns. The format tells the model <b>who is speaking</b> (system, user, assistant) and <b>where turns begin and end</b>.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Example formats",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Format sketch</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">ChatML (OpenAI)</td><td style=\"padding:6px;\"><code>&lt;|im_start|&gt;system\\n...&lt;|im_end|&gt;\\n&lt;|im_start|&gt;user\\n...&lt;|im_end|&gt;</code></td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 2</td><td style=\"padding:6px;\"><code>[INST] &lt;&lt;SYS&gt;&gt;\\n...\\n&lt;&lt;/SYS&gt;&gt;\\n\\n{user}[/INST]</code></td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 3</td><td style=\"padding:6px;\"><code>&lt;|begin_of_text|&gt;&lt;|start_header_id|&gt;system&lt;|end_header_id|&gt;\\n\\n...</code></td></tr>\n<tr><td style=\"padding:6px;\">Gemma</td><td style=\"padding:6px;\"><code>&lt;start_of_turn&gt;user\\n...&lt;end_of_turn&gt;\\n&lt;start_of_turn&gt;model\\n...</code></td></tr>\n</table>\n\n<p>The special tokens (e.g., <code>&lt;|im_start|&gt;</code>, <code>[INST]</code>) are added to the tokenizer vocabulary during fine-tuning and are not present in the base model's pretraining data. They serve as unambiguous markers that cannot be confused with natural language content.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Automation.</b> Hugging Face's <code>tokenizer.apply_chat_template()</code> reads a Jinja2 chat template stored in the tokenizer config and produces the correctly formatted token sequence for any supported model. This eliminates manual format handling and is the recommended approach for multi-model pipelines.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Turn-taking logic.</b> After the user's message and the appropriate end-of-turn delimiter, the model knows it should generate an assistant response. Incorrect formatting can cause the model to continue generating user messages, produce incoherent output, or fail to stop generating (missing stop tokens).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why formats differ.</b> Each lab makes independent design choices during instruction tuning. There is no universal standard, though ChatML has become a common convention for OpenAI-compatible APIs. The proliferation of formats is a practical pain point when switching between models or building model-agnostic applications.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "few-shot-prompting",
+    "title": "Few-Shot Prompting",
+    "summary": "A prompting strategy where a small number of input-output examples are included in the prompt to demonstrate the desired task, allowing the model to perform the task on a new input without any parameter updates. Few-shot prompting is the…",
+    "domain": "history",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "landmark",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "in-context-learning",
+      "prompting-format"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Tom Brown et al. · Language Models are Few-Shot Learners",
+        "url": "https://arxiv.org/abs/2005.14165"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A prompting strategy where a small number of input-output examples are included in the prompt to demonstrate the desired task, allowing the model to perform the task on a new input without any parameter updates. Few-shot prompting is the canonical form of in-context learning.</p><p>A typical few-shot prompt has the structure:</p>\n\n<pre style=\"background:#f5f5f5; padding:8px; border-radius:4px; font-size:0.9em;\">Input: The food was amazing → Positive\nInput: Terrible service, never again → Negative\nInput: Pretty good but overpriced → ???\n</pre>\n\n<p>The model infers the pattern from the demonstrations and generalises to the new input. The \"shot\" count refers to the number of examples:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Setting</th><th style=\"padding:6px; text-align:left;\">Examples</th><th style=\"padding:6px; text-align:left;\">Notes</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Zero-shot</td><td style=\"padding:6px;\">0</td><td style=\"padding:6px;\">Task description only; relies on instruction-following ability</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">One-shot</td><td style=\"padding:6px;\">1</td><td style=\"padding:6px;\">Single demonstration; sufficient for simple format tasks</td></tr>\n<tr><td style=\"padding:6px;\">Few-shot</td><td style=\"padding:6px;\">2–~30</td><td style=\"padding:6px;\">Multiple demonstrations; upper bound limited by context window</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Landmark result.</b> Brown et al. (2020) demonstrated that GPT-3's (175B) few-shot performance scales with model size, approaching fine-tuned baselines on many benchmarks without any gradient updates. On SuperGLUE, few-shot GPT-3 matched fine-tuned BERT-Large on several tasks — a paradigm shift from per-task fine-tuning to prompt-based interfaces.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why does it work?</b> The demonstrations effectively specify the task distribution, allowing the model to condition its generation on the implied input-output mapping. Mechanistic hypotheses include implicit Bayesian task inference (Xie et al., 2022) and transformer forward passes implementing mesa-gradient-descent on the in-context examples (von Oswald et al., 2023).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Practical considerations",
+        "body": "<ul>\n<li><b>Example quality</b> matters more than quantity — noisy or ambiguous examples hurt performance</li>\n<li><b>Label balance</b> affects results; skewed example distributions bias the model toward the majority label</li>\n<li><b>Ordering effects:</b> the order of examples significantly impacts performance (Lu et al., 2022); examples placed later in the prompt tend to be weighted more heavily due to recency bias</li>\n<li><b>Format consistency:</b> using a consistent delimiter and structure across examples improves reliability</li>\n</ul>\n\n<p>Few-shot prompting is contrasted with <b>fine-tuning</b>, which updates model parameters on task-specific data. Fine-tuning generally achieves higher accuracy but requires labelled data, compute, and a separate model checkpoint per task. Few-shot prompting trades some accuracy for extreme flexibility — the same model serves arbitrary tasks.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "in-context-learning",
+    "title": "In-Context Learning",
+    "summary": "The ability of large language models to learn new tasks at inference time from examples or instructions provided in the prompt, without any gradient updates or fine-tuning. The model's parameters remain frozen — all \"learning\" happens th…",
+    "domain": "history",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "landmark",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "prompt-engineering",
+      "few-shot-prompting"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Tom Brown et al. · Language Models are Few-Shot Learners",
+        "url": "https://arxiv.org/abs/2005.14165"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The ability of large language models to learn new tasks at inference time from examples or instructions provided in the prompt, without any gradient updates or fine-tuning. The model's parameters remain frozen — all \"learning\" happens through the forward pass conditioned on the context.</p><p>In-context learning (ICL) was first demonstrated at scale by Brown et al. (2020) with GPT-3 (175B parameters). Given a prompt containing \\( k \\) demonstration pairs \\( \\{(x_1, y_1), \\ldots, (x_k, y_k)\\} \\) followed by a query \\( x_{k+1} \\), the model produces:</p>\n\n\\[ \\hat{y}_{k+1} = \\arg\\max_y P_\\theta(y \\mid x_1, y_1, \\ldots, x_k, y_k, x_{k+1}) \\]\n\n<p>where \\( \\theta \\) is <b>fixed</b> — no gradient update occurs. This distinguishes ICL from meta-learning methods that modify parameters at test time.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>How does it work?</b> This remains an active research question with several competing hypotheses:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Hypothesis</th><th style=\"padding:6px; text-align:left;\">Mechanism</th><th style=\"padding:6px; text-align:left;\">Key paper</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Implicit Bayesian inference</td><td style=\"padding:6px;\">Model infers the latent task concept from examples and applies posterior predictive distribution</td><td style=\"padding:6px;\">Xie et al. (2022)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Mesa-gradient descent</td><td style=\"padding:6px;\">Transformer forward passes implement implicit gradient descent steps on in-context examples; attention layers act as linear regression solvers</td><td style=\"padding:6px;\">von Oswald et al. (2023), Akyürek et al. (2023)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Task location / retrieval</td><td style=\"padding:6px;\">Model recognises the task from pretraining distribution and retrieves learned behaviour</td><td style=\"padding:6px;\">Reynolds &amp; McDonell (2021)</td></tr>\n<tr><td style=\"padding:6px;\">Induction heads</td><td style=\"padding:6px;\">Specific attention head circuits (previous-token + induction heads) copy patterns from context to output</td><td style=\"padding:6px;\">Olsson et al. (2022)</td></tr>\n</tbody></table>\n\n<p>The mesa-gradient descent view is particularly striking: Garg et al. (2022) showed that transformers trained on random linear regression tasks learn to implement ridge regression in their forward pass, matching the Bayes-optimal estimator. For a linear model \\( y = Wx + \\varepsilon \\), the transformer effectively computes:</p>\n\n\\[ \\hat{W} = \\left(\\sum_{i=1}^{k} x_i x_i^\\top + \\lambda I\\right)^{-1} \\sum_{i=1}^{k} x_i y_i^\\top \\]\n\n<p>purely through attention operations, with \\( \\lambda \\) emerging implicitly.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Scaling behaviour.</b> ICL ability emerges with scale — small models cannot do it effectively. Brown et al. showed that few-shot performance improves log-linearly with model size, with a clear gap between models below and above ~10B parameters. This makes ICL one of the canonical \"emergent capabilities\" of large language models.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Surprising properties",
+        "body": "<ul>\n<li><b>Label flipping:</b> Min et al. (2022) showed that ICL performance is surprisingly robust to randomly flipped labels in demonstrations — suggesting the model partially relies on task format recognition rather than learning the input-output mapping from examples</li>\n<li><b>Recency bias:</b> Examples placed later in the prompt receive disproportionate weight, making example ordering matter significantly (Lu et al., 2022)</li>\n<li><b>Task generality:</b> ICL works across translation, classification, arithmetic, code generation, and reasoning — far beyond any single task distribution seen in training</li>\n</ul>\n\n<p>ICL fundamentally changed the NLP paradigm from per-task fine-tuning (train a separate model for each task) to prompt-based universal interfaces (one model, many tasks). It also underpins the practical utility of modern LLM APIs, where users specify tasks through natural language rather than training data.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "prompt-engineering",
+    "title": "Prompt Engineering",
+    "summary": "The practice of designing and iterating on prompts to elicit desired behaviour from language models. It encompasses the choice of instructions, examples, formatting, and reasoning strategies to maximise task performance without modifying…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "chain-of-thought",
+      "in-context-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Emerged as a discipline with GPT-3 (2020) · Systematised across 2021–2024 · Zhou et al. (2023), APE",
+        "url": "https://arxiv.org/abs/2302.11382"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The practice of designing and iterating on prompts to elicit desired behaviour from language models. It encompasses the choice of instructions, examples, formatting, and reasoning strategies to maximise task performance without modifying model parameters.</p><p>Prompt engineering emerged as a discipline once practitioners discovered that LLM outputs are highly sensitive to the exact phrasing, structure, and content of prompts. A well-engineered prompt can close much of the gap between zero-shot and fine-tuned performance, making it a cost-effective alternative to model adaptation.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Core techniques",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Technique</th><th style=\"padding:6px; text-align:left;\">Mechanism</th><th style=\"padding:6px; text-align:left;\">When to use</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Few-shot prompting</td><td style=\"padding:6px;\">Include \\( k \\) input-output demonstrations</td><td style=\"padding:6px;\">Format-sensitive tasks, classification, translation</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Chain of thought (CoT)</td><td style=\"padding:6px;\">Elicit intermediate reasoning steps before the answer</td><td style=\"padding:6px;\">Arithmetic, logic, multi-step reasoning</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Self-consistency</td><td style=\"padding:6px;\">Sample \\( k \\) CoT paths, majority-vote on the final answer</td><td style=\"padding:6px;\">Tasks with verifiable answers (math, factual QA)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">ReAct</td><td style=\"padding:6px;\">Interleave reasoning traces with tool-use actions (search, calculator, code execution)</td><td style=\"padding:6px;\">Knowledge-intensive or multi-tool tasks</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Role prompting</td><td style=\"padding:6px;\">\"You are an expert in X\" — activates domain-specific behaviour</td><td style=\"padding:6px;\">Domain-specific generation, persona control</td></tr>\n<tr><td style=\"padding:6px;\">Structured output</td><td style=\"padding:6px;\">Request JSON, XML, or markdown with schema examples</td><td style=\"padding:6px;\">API integrations, data extraction</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "General principles",
+        "body": "<ul>\n<li><b>Specificity over generality:</b> \"Summarise this text in 3 bullet points, each under 20 words\" outperforms \"Summarise this text\"</li>\n<li><b>Show, don't tell:</b> Providing output examples is more reliable than describing the desired format in prose</li>\n<li><b>Decomposition:</b> Break complex tasks into sub-tasks (e.g., extract entities first, then classify relationships) rather than asking for everything at once</li>\n<li><b>Iterate empirically:</b> Small wording changes can shift accuracy by 10–20 percentage points on benchmarks — prompt engineering is fundamentally an empirical discipline</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Automated prompt optimisation.</b> Manual prompt engineering is labour-intensive and does not scale. Several systems automate the process:</p>\n<ul>\n<li><b>APE</b> (Zhou et al., 2023): Uses an LLM to generate candidate prompts, scores them on a validation set, and selects the best-performing prompt</li>\n<li><b>DSPy</b> (Khattab et al., 2023): Treats prompts as programs with optimisable modules, compiling high-level task specifications into effective prompt chains</li>\n<li><b>OPRO</b> (Yang et al., 2023): Uses an LLM as the optimiser itself, iteratively refining prompts based on task performance feedback</li>\n</ul>\n\n<p>Prompt engineering bridges the gap between the raw capability of a pretrained model and its task-specific performance. It is the primary skill required to use LLM APIs effectively, and its techniques (CoT, few-shot, ReAct) compose — combining multiple strategies often yields the best results.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "chain-of-thought",
+    "title": "Chain of Thought",
+    "summary": "A prompting technique that encourages language models to generate intermediate reasoning steps before producing a final answer. Chain-of-thought (CoT) prompting dramatically improves performance on arithmetic, commonsense, and symbolic r…",
+    "domain": "history",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "landmark",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "tree-of-thought",
+      "prompt-engineering"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Jason Wei et al. · Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+        "url": "https://arxiv.org/abs/2201.11903"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A prompting technique that encourages language models to generate intermediate reasoning steps before producing a final answer. Chain-of-thought (CoT) prompting dramatically improves performance on arithmetic, commonsense, and symbolic reasoning tasks.</p><p>Standard prompting asks directly for the answer. CoT prompting elicits a reasoning trace:</p>\n\n<pre style=\"background:#f5f5f5; padding:8px; border-radius:4px; font-size:0.9em;\">Q: Roger has 5 tennis balls. He buys 2 cans of 3.\n   How many does he have now?\n\nStandard: 11\n\nCoT: Roger started with 5 balls. He bought 2 cans\nof 3 balls each, so 2 × 3 = 6 new balls.\n5 + 6 = 11. The answer is 11.\n</pre>\n\n<p>CoT can be elicited in two main ways:</p>\n<ul>\n<li><b>Few-shot CoT</b> (Wei et al., 2022): Include examples with reasoning traces in the prompt — the model mimics the demonstrated reasoning pattern</li>\n<li><b>Zero-shot CoT</b> (Kojima et al., 2022): Simply append \"Let's think step by step\" — no demonstrations needed. This works because instruction-tuned models have learned to associate such phrases with step-by-step reasoning during training</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why does it work?</b> Autoregressive models allocate a fixed amount of computation per token. For problems requiring multi-step reasoning (e.g., multi-digit arithmetic), a single token prediction is insufficient. By generating intermediate tokens, CoT effectively increases the model's computation budget — each reasoning step becomes a \"scratchpad\" that feeds information forward through the chain. Formally, without CoT the model must compute \\( P(y \\mid x) \\) directly, while with CoT it computes:</p>\n\n\\[ P(y \\mid x) = \\sum_{z} P(y \\mid z, x) \\cdot P(z \\mid x) \\]\n\n<p>where \\( z \\) represents the reasoning chain. The model approximates this by sampling a single chain \\( z^* \\) and computing \\( P(y \\mid z^*, x) \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Emergent scaling behaviour.</b> Wei et al. (2022) showed that CoT is an emergent capability that only helps models above approximately 100B parameters. Smaller models produce incoherent chains that do not improve (and can hurt) accuracy. This threshold effect is one of the most cited examples of emergent abilities in LLMs.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Benchmark results (PaLM 540B with CoT)",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Benchmark</th><th style=\"padding:6px; text-align:left;\">Standard prompting</th><th style=\"padding:6px; text-align:left;\">CoT prompting</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GSM8K (math)</td><td style=\"padding:6px;\">56.9%</td><td style=\"padding:6px;\">74.4%</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">SVAMP (math)</td><td style=\"padding:6px;\">79.0%</td><td style=\"padding:6px;\">86.6%</td></tr>\n<tr><td style=\"padding:6px;\">StrategyQA (commonsense)</td><td style=\"padding:6px;\">73.9%</td><td style=\"padding:6px;\">77.8%</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Extensions and variants",
+        "body": "<ul>\n<li><b>Self-consistency:</b> Sample multiple CoT chains, take majority vote on final answer — consistently improves over single-chain CoT</li>\n<li><b>Tree of Thought:</b> Explore branching reasoning paths with backtracking, enabling deliberate search</li>\n<li><b>Least-to-most prompting:</b> Decompose the problem into sub-problems, solve sequentially, each building on previous answers</li>\n<li><b>Faithful CoT</b> (Lyu et al., 2023): Generate symbolic reasoning (e.g., Python code) alongside natural language to ensure logical consistency</li>\n</ul>\n\n<p>A common misconception is that CoT chains are always faithful to the model's internal reasoning. In practice, models can arrive at correct answers through unfaithful chains (plausible-looking but logically disconnected steps), making CoT an unreliable window into the model's actual computation.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "tree-of-thought",
+    "title": "Tree of Thought",
+    "summary": "A reasoning framework that generalises chain-of-thought prompting by exploring multiple branching reasoning paths (a tree), evaluating intermediate states, and using search algorithms (BFS, DFS) to find the best solution. It enables deli…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "self-consistency",
+      "chain-of-thought"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Shunyu Yao et al. · Tree of Thoughts: Deliberate Problem Solving with Large Language Models",
+        "url": "https://arxiv.org/abs/2305.10601"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A reasoning framework that generalises chain-of-thought prompting by exploring multiple branching reasoning paths (a tree), evaluating intermediate states, and using search algorithms (BFS, DFS) to find the best solution. It enables deliberate planning and backtracking on complex problems.</p><p>While chain-of-thought follows a single linear reasoning path, Tree of Thought (ToT) treats problem-solving as a search over a tree where:</p>\n<ul>\n<li>Each <b>node</b> is a partial solution (intermediate reasoning state)</li>\n<li>Each <b>edge</b> is a reasoning step that extends the state</li>\n<li>The model <b>evaluates</b> nodes using self-assessment (\"Is this path promising?\")</li>\n<li>A search algorithm <b>navigates</b> the tree, pruning unpromising branches</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Formal framework.</b> At each reasoning step \\( t \\), the model generates a set of candidate \"thoughts\" \\( \\{z_t^{(1)}, \\ldots, z_t^{(b)}\\} \\) where \\( b \\) is the branching factor. A value function \\( V(s_t) \\), implemented by prompting the same LLM, evaluates each resulting state \\( s_t = (x, z_1, \\ldots, z_t) \\). The search algorithm selects which states to expand:</p>\n\n\\[ s_{t+1}^* = \\arg\\max_{s_{t+1} \\in \\text{children}(s_t^*)} V(s_{t+1}) \\]\n\n<p>The algorithm uses two components, both implemented via LLM prompting:</p>\n<ol>\n<li><b>Thought generation</b> — propose \\( b \\) candidate next steps via sampling or independent prompts</li>\n<li><b>State evaluation</b> — score each candidate on a scale (e.g., \"sure / likely / impossible\") or via majority vote across multiple evaluation prompts</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Search strategies",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Strategy</th><th style=\"padding:6px; text-align:left;\">Behaviour</th><th style=\"padding:6px; text-align:left;\">Best for</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">BFS</td><td style=\"padding:6px;\">Expand all nodes at depth \\( d \\) before moving to \\( d+1 \\); prune bottom-ranked states</td><td style=\"padding:6px;\">Tasks with early-distinguishable good/bad paths (Game of 24)</td></tr>\n<tr><td style=\"padding:6px;\">DFS</td><td style=\"padding:6px;\">Explore one branch deeply; backtrack when value drops below threshold</td><td style=\"padding:6px;\">Tasks with deep solution paths (creative writing, crosswords)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Results.</b> ToT dramatically outperforms standard CoT on tasks requiring exploration and backtracking:</p>\n<ul>\n<li><b>Game of 24:</b> 4% (CoT) &rarr; 74% (ToT) — the most striking result, because finding \\( a \\circ b \\circ c \\circ d = 24 \\) often requires trying and abandoning dead-end orderings</li>\n<li><b>Creative writing:</b> ToT produces more coherent multi-paragraph stories by planning paragraph-level structure before generating prose</li>\n<li><b>Crossword puzzles:</b> DFS with backtracking solves significantly more clues than linear generation</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Cost trade-off.</b> ToT requires \\( O(b \\times d \\times e) \\) LLM calls per problem, where \\( b \\) is the branching factor, \\( d \\) is tree depth, and \\( e \\) is the number of evaluation calls per node. A typical Game of 24 solution uses ~100 LLM calls vs. 1 for standard prompting. This makes ToT orders of magnitude more expensive, limiting it to high-value problems where accuracy matters more than cost.</p>\n\n<p>ToT connects LLM reasoning to classical AI search (A*, minimax), reintroducing deliberate planning into neural generation. Subsequent work (Besta et al., 2024, \"Graph of Thought\") generalises from trees to arbitrary DAGs, allowing thoughts to merge and form more flexible reasoning structures.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "self-consistency",
+    "title": "Self-Consistency",
+    "summary": "A decoding strategy that samples multiple chain-of-thought reasoning paths from a language model and selects the most frequent final answer by majority vote. It improves accuracy by marginalising over diverse reasoning traces rather than…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "autoregression",
+      "tree-of-thought"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Xuezhi Wang et al. · Self-Consistency Improves Chain of Thought Reasoning in Language Models",
+        "url": "https://arxiv.org/abs/2203.11171"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A decoding strategy that samples multiple chain-of-thought reasoning paths from a language model and selects the most frequent final answer by majority vote. It improves accuracy by marginalising over diverse reasoning traces rather than relying on a single greedy path.</p><p>The core insight is that for problems with a definite correct answer, multiple independent reasoning attempts are more likely to converge on the right answer than on any particular wrong answer. Incorrect reasoning paths tend to produce diverse wrong answers, while correct paths converge.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Algorithm",
+        "body": "<ol>\n<li>Given a prompt with CoT demonstrations and a query \\( x \\), sample \\( k \\) independent reasoning chains \\( z_1, \\ldots, z_k \\) using temperature sampling (typically \\( T \\in [0.5, 1.0] \\))</li>\n<li>Extract the final answer \\( a_i \\) from each chain \\( z_i \\)</li>\n<li>Return the plurality answer:</li>\n</ol>\n\n\\[ \\hat{a} = \\arg\\max_{a \\in \\mathcal{A}} \\sum_{i=1}^{k} \\mathbb{1}[\\text{answer}(z_i) = a] \\]\n\n<p>This can be viewed as an approximation to marginalisation over reasoning paths:</p>\n\n\\[ P(a \\mid x) = \\sum_{z} P(a \\mid z, x) \\cdot P(z \\mid x) \\approx \\frac{1}{k} \\sum_{i=1}^{k} \\mathbb{1}[\\text{answer}(z_i) = a] \\]\n\n<p>where the summation over all possible chains \\( z \\) is approximated by \\( k \\) samples from \\( P(z \\mid x) \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Comparison with alternative decoding strategies",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Paths</th><th style=\"padding:6px; text-align:left;\">Selection</th><th style=\"padding:6px; text-align:left;\">Requires</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Greedy CoT</td><td style=\"padding:6px;\">1 (greedy)</td><td style=\"padding:6px;\">Single answer</td><td style=\"padding:6px;\">Nothing extra</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Self-consistency</td><td style=\"padding:6px;\">\\( k \\) (sampled)</td><td style=\"padding:6px;\">Majority vote</td><td style=\"padding:6px;\">\\( k \\times \\) compute</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Best-of-\\( k \\) (BoN)</td><td style=\"padding:6px;\">\\( k \\) (sampled)</td><td style=\"padding:6px;\">Highest-scoring per a verifier</td><td style=\"padding:6px;\">Trained verifier / reward model</td></tr>\n<tr><td style=\"padding:6px;\">Universal self-consistency</td><td style=\"padding:6px;\">\\( k \\) (sampled)</td><td style=\"padding:6px;\">LLM selects most consistent answer from candidates</td><td style=\"padding:6px;\">Extra LLM call for selection</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Benchmark improvements</b> (Wang et al., 2023, using Codex and PaLM):</p>\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Benchmark</th><th style=\"padding:6px; text-align:left;\">Greedy CoT</th><th style=\"padding:6px; text-align:left;\">Self-consistency (\\( k=40 \\))</th><th style=\"padding:6px; text-align:left;\">Gain</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GSM8K</td><td style=\"padding:6px;\">56.5%</td><td style=\"padding:6px;\">74.4%</td><td style=\"padding:6px;\">+17.9pp</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">SVAMP</td><td style=\"padding:6px;\">78.7%</td><td style=\"padding:6px;\">86.6%</td><td style=\"padding:6px;\">+7.9pp</td></tr>\n<tr><td style=\"padding:6px;\">ARC-challenge</td><td style=\"padding:6px;\">85.2%</td><td style=\"padding:6px;\">88.7%</td><td style=\"padding:6px;\">+3.5pp</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Diminishing returns.</b> Performance improves rapidly with the first 5–10 samples, then saturates around \\( k = 40 \\). The optimal \\( k \\) depends on problem difficulty — harder problems benefit from more samples.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key properties",
+        "body": "<ul>\n<li>Requires no additional training — purely a test-time strategy</li>\n<li>Orthogonal to prompt improvements (CoT, few-shot) and composes with them</li>\n<li>Only applicable when final answers are discrete and extractable (does not work for open-ended generation)</li>\n<li>Directly trades compute for accuracy at inference time — an early example of \"test-time compute scaling\"</li>\n</ul>"
+      }
+    ],
+    "cards": []
   }
 ]

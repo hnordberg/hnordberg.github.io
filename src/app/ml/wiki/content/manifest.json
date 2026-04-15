@@ -4501,6 +4501,239 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "autoregression",
+      "title": "Autoregression",
+      "summary": "A generation strategy where each output token is conditioned on all previously generated tokens. The model decomposes the joint probability of a sequence into a product of conditional probabilities, generating one token at a time from le…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "prompt",
+        "self-consistency"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "prompt",
+      "title": "Prompt",
+      "summary": "The input text provided to a language model to condition its generation. The prompt defines the task, provides context, and steers the model's output — it is the primary interface through which users interact with LLMs.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "system-prompt",
+        "autoregression"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "system-prompt",
+      "title": "System Prompt",
+      "summary": "A special prompt section, typically invisible to the end user, that defines the model's behaviour, persona, constraints, and instructions for a conversation. The system prompt is prepended to every interaction and takes precedence over u…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "prompting-format",
+        "prompt"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "prompting-format",
+      "title": "Prompting Format",
+      "summary": "The structured template used to format messages into a token sequence that a chat model expects. Each model family has its own format defining how system, user, and assistant messages are delimited by special tokens.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "few-shot-prompting",
+        "system-prompt"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "few-shot-prompting",
+      "title": "Few-Shot Prompting",
+      "summary": "A prompting strategy where a small number of input-output examples are included in the prompt to demonstrate the desired task, allowing the model to perform the task on a new input without any parameter updates. Few-shot prompting is the…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "landmark",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "in-context-learning",
+        "prompting-format"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "in-context-learning",
+      "title": "In-Context Learning",
+      "summary": "The ability of large language models to learn new tasks at inference time from examples or instructions provided in the prompt, without any gradient updates or fine-tuning. The model's parameters remain frozen — all \"learning\" happens th…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "landmark",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "prompt-engineering",
+        "few-shot-prompting"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "prompt-engineering",
+      "title": "Prompt Engineering",
+      "summary": "The practice of designing and iterating on prompts to elicit desired behaviour from language models. It encompasses the choice of instructions, examples, formatting, and reasoning strategies to maximise task performance without modifying…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "chain-of-thought",
+        "in-context-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "chain-of-thought",
+      "title": "Chain of Thought",
+      "summary": "A prompting technique that encourages language models to generate intermediate reasoning steps before producing a final answer. Chain-of-thought (CoT) prompting dramatically improves performance on arithmetic, commonsense, and symbolic r…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "landmark",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "tree-of-thought",
+        "prompt-engineering"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "tree-of-thought",
+      "title": "Tree of Thought",
+      "summary": "A reasoning framework that generalises chain-of-thought prompting by exploring multiple branching reasoning paths (a tree), evaluating intermediate states, and using search algorithms (BFS, DFS) to find the best solution. It enables deli…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "self-consistency",
+        "chain-of-thought"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "self-consistency",
+      "title": "Self-Consistency",
+      "summary": "A decoding strategy that samples multiple chain-of-thought reasoning paths from a language model and selects the most frequent final answer by majority vote. It improves accuracy by marginalising over diverse reasoning traces rather than…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "autoregression",
+        "tree-of-thought"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
