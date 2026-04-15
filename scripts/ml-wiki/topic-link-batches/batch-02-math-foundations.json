@@ -1,0 +1,353 @@
+{
+  "linear-function": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "affine-transformation",
+      "composite-function",
+      "linear-regression",
+      "fully-connected-layer",
+      "ordinary-least-squares-ols-closed-form-solution"
+    ]
+  },
+  "affine-transformation": {
+    "level": "intro",
+    "prerequisites": ["linear-function"],
+    "related": [
+      "fully-connected-layer",
+      "composite-function",
+      "neural-network",
+      "multilayer-perceptron-mlp"
+    ]
+  },
+  "composite-function": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "chain-rule",
+      "deep-neural-network",
+      "multilayer-perceptron-mlp",
+      "backpropagation"
+    ]
+  },
+  "chain-rule": {
+    "level": "intro",
+    "prerequisites": ["composite-function"],
+    "related": [
+      "backpropagation",
+      "automatic-differentiation",
+      "backward-pass",
+      "gradient-descent"
+    ]
+  },
+  "automatic-differentiation": {
+    "level": "intro",
+    "prerequisites": ["chain-rule", "computational-graph"],
+    "related": [
+      "backpropagation",
+      "forward-pass",
+      "backward-pass"
+    ]
+  },
+  "computational-graph": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "automatic-differentiation",
+      "forward-pass",
+      "backward-pass",
+      "neural-network"
+    ]
+  },
+  "forward-pass": {
+    "level": "basic",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "backward-pass",
+      "computational-graph",
+      "backpropagation",
+      "activation-function"
+    ]
+  },
+  "backward-pass": {
+    "level": "intro",
+    "prerequisites": ["forward-pass", "chain-rule"],
+    "related": [
+      "backpropagation",
+      "automatic-differentiation",
+      "gradient-descent",
+      "computational-graph"
+    ]
+  },
+  "backpropagation": {
+    "level": "intro",
+    "prerequisites": ["chain-rule", "forward-pass", "backward-pass"],
+    "related": [
+      "automatic-differentiation",
+      "gradient-descent",
+      "neural-network",
+      "backpropagation-through-time-bptt",
+      "what-is-the-vanishing-gradient-problem"
+    ]
+  },
+  "shannon-entropy": {
+    "level": "intro",
+    "prerequisites": ["probability-distribution"],
+    "related": [
+      "cross-entropy",
+      "negative-log-likelihood",
+      "perplexity",
+      "information-gain-decision-trees",
+      "exponential-family-of-distributions"
+    ]
+  },
+  "conditional-probability": {
+    "level": "intro",
+    "prerequisites": ["probability-distribution"],
+    "related": [
+      "maximum-a-posteriori-map-estimation",
+      "laplace-smoothing",
+      "autoregressive-language-model",
+      "markov-chain-monte-carlo-mcmc"
+    ]
+  },
+  "probability-distribution": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "discrete-probability-distribution",
+      "conditional-probability",
+      "maximum-likelihood-estimate-mle",
+      "shannon-entropy"
+    ]
+  },
+  "discrete-probability-distribution": {
+    "level": "intro",
+    "prerequisites": ["probability-distribution"],
+    "related": [
+      "softmax",
+      "multiclass-classification",
+      "log-likelihood",
+      "shannon-entropy"
+    ]
+  },
+  "confidence-interval": {
+    "level": "intro",
+    "prerequisites": ["probability-distribution"],
+    "related": [
+      "bootstrap-resampling",
+      "a-b-testing-ml-systems",
+      "accuracy",
+      "pac-learning-probably-approximately-correct"
+    ]
+  },
+  "pairwise-comparison": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "bradley-terry-model",
+      "pairwise-ranking",
+      "elo-rating",
+      "reward-model",
+      "preference-based-alignment"
+    ]
+  },
+  "elo-rating": {
+    "level": "intro",
+    "prerequisites": ["pairwise-comparison"],
+    "related": [
+      "pairwise-ranking",
+      "bradley-terry-model",
+      "human-evaluation",
+      "ranking"
+    ]
+  },
+  "logit": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "sigmoid",
+      "softmax",
+      "logistic-regression",
+      "cross-entropy",
+      "logit-adjustment"
+    ]
+  },
+  "laplace-smoothing": {
+    "level": "intro",
+    "prerequisites": ["conditional-probability", "n-gram"],
+    "related": [
+      "count-based-language-model",
+      "maximum-likelihood-estimate-mle",
+      "backoff-n-gram-backoff"
+    ]
+  },
+  "zipf-s-law": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "n-gram",
+      "tokenization",
+      "tf-idf",
+      "bag-of-words",
+      "subword-tokenization"
+    ]
+  },
+  "the-markov-property": {
+    "level": "intro",
+    "prerequisites": ["probability-distribution"],
+    "related": [
+      "hidden-markov-model-hmm",
+      "the-bellman-equation",
+      "q-learning",
+      "reinforcement-learning-rl"
+    ]
+  },
+  "bootstrap-resampling": {
+    "level": "intro",
+    "prerequisites": ["probability-distribution"],
+    "related": [
+      "confidence-interval",
+      "bootstrap-aggregating-bagging",
+      "random-forest",
+      "pairwise-ranking"
+    ]
+  },
+  "lagrange-multipliers": {
+    "level": "intermediate",
+    "prerequisites": ["convex-function"],
+    "related": [
+      "support-vector-machine-svm",
+      "kernel-methods",
+      "ordinary-least-squares-ols-closed-form-solution",
+      "the-fisher-information-matrix"
+    ]
+  },
+  "convex-function": {
+    "level": "intermediate",
+    "prerequisites": [],
+    "related": [
+      "gradient-descent",
+      "lagrange-multipliers",
+      "stochastic-gradient-descent-sgd",
+      "ordinary-least-squares-ols-closed-form-solution"
+    ]
+  },
+  "l1-vs-l2-norms": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "l1-regularization-lasso",
+      "l2-regularization-ridge-weight-decay",
+      "sparsity",
+      "cosine-similarity"
+    ]
+  },
+  "log-sum-exp-trick": {
+    "level": "intermediate",
+    "prerequisites": ["softmax"],
+    "related": [
+      "softmax-normalization",
+      "cross-entropy",
+      "mixed-precision-training"
+    ]
+  },
+  "exponential-family-of-distributions": {
+    "level": "intermediate",
+    "prerequisites": ["probability-distribution", "maximum-likelihood-estimate-mle"],
+    "related": [
+      "logistic-regression",
+      "softmax",
+      "shannon-entropy",
+      "the-fisher-information-matrix"
+    ]
+  },
+  "singular-value-decomposition-svd": {
+    "level": "intermediate",
+    "prerequisites": ["linear-function"],
+    "related": [
+      "principal-component-analysis-pca",
+      "low-rank-adaptation-lora",
+      "dimensionality-reduction",
+      "ordinary-least-squares-ols-closed-form-solution"
+    ]
+  },
+  "pac-learning-probably-approximately-correct": {
+    "level": "intermediate",
+    "prerequisites": ["generalization", "probability-distribution"],
+    "related": [
+      "bias-variance-tradeoff",
+      "supervised-learning",
+      "confidence-interval"
+    ]
+  },
+  "bradley-terry-model": {
+    "level": "intermediate",
+    "prerequisites": ["pairwise-comparison", "maximum-likelihood-estimate-mle"],
+    "related": [
+      "elo-rating",
+      "reward-model",
+      "direct-preference-optimization-dpo",
+      "reinforcement-learning-from-human-feedback-rlhf"
+    ]
+  },
+  "pairwise-ranking": {
+    "level": "intermediate",
+    "prerequisites": ["pairwise-comparison"],
+    "related": [
+      "elo-rating",
+      "ranking",
+      "bradley-terry-model",
+      "bootstrap-resampling"
+    ]
+  },
+  "perplexity": {
+    "level": "intermediate",
+    "prerequisites": ["cross-entropy", "language-model"],
+    "related": [
+      "negative-log-likelihood",
+      "log-likelihood",
+      "shannon-entropy",
+      "n-gram"
+    ]
+  },
+  "what-is-the-vanishing-gradient-problem": {
+    "level": "intermediate",
+    "prerequisites": ["backpropagation", "chain-rule"],
+    "related": [
+      "long-short-term-memory-lstm",
+      "residual-connection-skip-connection",
+      "relu",
+      "weight-initialization",
+      "backpropagation-through-time-bptt"
+    ]
+  },
+  "the-fisher-information-matrix": {
+    "level": "intermediate",
+    "prerequisites": ["maximum-likelihood-estimate-mle", "probability-distribution"],
+    "related": [
+      "lagrange-multipliers",
+      "exponential-family-of-distributions",
+      "convex-function"
+    ]
+  },
+  "the-curse-of-dimensionality": {
+    "level": "intermediate",
+    "prerequisites": [],
+    "related": [
+      "dimensionality-reduction",
+      "principal-component-analysis-pca",
+      "neural-probabilistic-language-model",
+      "kernel-methods"
+    ]
+  },
+  "markov-chain-monte-carlo-mcmc": {
+    "level": "intermediate",
+    "prerequisites": ["conditional-probability", "probability-distribution"],
+    "related": [
+      "reparameterization-trick-vae",
+      "the-markov-property",
+      "autoencoders"
+    ]
+  }
+}

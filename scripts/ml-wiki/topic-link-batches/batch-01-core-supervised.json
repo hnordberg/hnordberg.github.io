@@ -1,0 +1,387 @@
+{
+  "supervised-learning": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "unsupervised-learning",
+      "reinforcement-learning-rl",
+      "classification",
+      "regression",
+      "loss-function",
+      "generalization"
+    ]
+  },
+  "unsupervised-learning": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "supervised-learning",
+      "reinforcement-learning-rl",
+      "k-means-objective-function-inertia",
+      "principal-component-analysis-pca",
+      "autoencoders",
+      "representation-learning"
+    ]
+  },
+  "reinforcement-learning-rl": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "supervised-learning",
+      "unsupervised-learning",
+      "the-markov-property",
+      "reward-signal",
+      "policy-reinforcement-learning",
+      "q-learning"
+    ]
+  },
+  "classification": {
+    "level": "intro",
+    "prerequisites": ["supervised-learning"],
+    "related": [
+      "binary-classification",
+      "multiclass-classification",
+      "regression",
+      "logistic-regression",
+      "accuracy",
+      "cross-entropy"
+    ]
+  },
+  "binary-classification": {
+    "level": "intro",
+    "prerequisites": ["classification"],
+    "related": [
+      "multiclass-classification",
+      "logistic-regression",
+      "binary-cross-entropy",
+      "sigmoid",
+      "receiver-operating-characteristic-roc-and-auc"
+    ]
+  },
+  "multiclass-classification": {
+    "level": "intro",
+    "prerequisites": ["classification"],
+    "related": [
+      "binary-classification",
+      "softmax",
+      "cross-entropy",
+      "logistic-regression"
+    ]
+  },
+  "regression": {
+    "level": "intro",
+    "prerequisites": ["supervised-learning"],
+    "related": [
+      "classification",
+      "linear-regression",
+      "mean-squared-error-mse",
+      "prediction-error",
+      "ordinary-least-squares-ols-closed-form-solution"
+    ]
+  },
+  "linear-regression": {
+    "level": "intro",
+    "prerequisites": ["regression", "linear-function"],
+    "related": [
+      "linear-regression-basics",
+      "ordinary-least-squares-ols-closed-form-solution",
+      "logistic-regression",
+      "mean-squared-error-mse",
+      "l2-regularization-ridge-weight-decay",
+      "l1-regularization-lasso"
+    ]
+  },
+  "linear-regression-basics": {
+    "level": "intro",
+    "prerequisites": ["linear-function", "loss-function"],
+    "related": [
+      "linear-regression",
+      "ordinary-least-squares-ols-closed-form-solution",
+      "mean-squared-error-mse",
+      "bias-variance-tradeoff",
+      "l2-regularization-ridge-weight-decay"
+    ]
+  },
+  "logistic-regression": {
+    "level": "intro",
+    "prerequisites": ["linear-regression", "binary-classification"],
+    "related": [
+      "sigmoid",
+      "binary-cross-entropy",
+      "maximum-likelihood-estimate-mle",
+      "support-vector-machine-svm",
+      "softmax"
+    ]
+  },
+  "ordinary-least-squares-ols-closed-form-solution": {
+    "level": "intro",
+    "prerequisites": ["linear-regression", "linear-function"],
+    "related": [
+      "linear-regression-basics",
+      "mean-squared-error-mse",
+      "singular-value-decomposition-svd",
+      "maximum-likelihood-estimate-mle",
+      "l2-regularization-ridge-weight-decay"
+    ]
+  },
+  "accuracy": {
+    "level": "intro",
+    "prerequisites": ["classification"],
+    "related": [
+      "precision",
+      "recall",
+      "f1-score",
+      "receiver-operating-characteristic-roc-and-auc",
+      "confidence-interval"
+    ]
+  },
+  "precision": {
+    "level": "intro",
+    "prerequisites": ["classification"],
+    "related": [
+      "recall",
+      "f1-score",
+      "accuracy",
+      "receiver-operating-characteristic-roc-and-auc"
+    ]
+  },
+  "recall": {
+    "level": "intro",
+    "prerequisites": ["classification"],
+    "related": [
+      "precision",
+      "f1-score",
+      "accuracy",
+      "receiver-operating-characteristic-roc-and-auc"
+    ]
+  },
+  "f1-score": {
+    "level": "intro",
+    "prerequisites": ["precision", "recall"],
+    "related": [
+      "accuracy",
+      "receiver-operating-characteristic-roc-and-auc",
+      "classification"
+    ]
+  },
+  "receiver-operating-characteristic-roc-and-auc": {
+    "level": "intro",
+    "prerequisites": ["binary-classification"],
+    "related": [
+      "precision",
+      "recall",
+      "accuracy",
+      "f1-score",
+      "calibration"
+    ]
+  },
+  "loss-function": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "mean-squared-error-mse",
+      "cross-entropy",
+      "negative-log-likelihood",
+      "prediction-error",
+      "gradient-descent",
+      "regularization"
+    ]
+  },
+  "mean-squared-error-mse": {
+    "level": "intro",
+    "prerequisites": ["loss-function"],
+    "related": [
+      "prediction-error",
+      "linear-regression",
+      "ordinary-least-squares-ols-closed-form-solution",
+      "cross-entropy",
+      "maximum-likelihood-estimate-mle"
+    ]
+  },
+  "prediction-error": {
+    "level": "intro",
+    "prerequisites": ["loss-function"],
+    "related": [
+      "mean-squared-error-mse",
+      "bias-variance-tradeoff",
+      "overfitting",
+      "generalization"
+    ]
+  },
+  "cross-entropy": {
+    "level": "intro",
+    "prerequisites": ["log-likelihood", "shannon-entropy"],
+    "related": [
+      "binary-cross-entropy",
+      "negative-log-likelihood",
+      "softmax",
+      "classification",
+      "perplexity"
+    ]
+  },
+  "binary-cross-entropy": {
+    "level": "intro",
+    "prerequisites": ["cross-entropy", "binary-classification"],
+    "related": [
+      "negative-log-likelihood",
+      "sigmoid",
+      "logistic-regression"
+    ]
+  },
+  "negative-log-likelihood": {
+    "level": "intro",
+    "prerequisites": ["log-likelihood", "maximum-likelihood-estimate-mle"],
+    "related": [
+      "cross-entropy",
+      "binary-cross-entropy",
+      "loss-function",
+      "perplexity"
+    ]
+  },
+  "log-likelihood": {
+    "level": "intro",
+    "prerequisites": ["maximum-likelihood-estimate-mle", "probability-distribution"],
+    "related": [
+      "negative-log-likelihood",
+      "cross-entropy",
+      "perplexity"
+    ]
+  },
+  "maximum-likelihood-estimate-mle": {
+    "level": "intro",
+    "prerequisites": ["probability-distribution", "log-likelihood"],
+    "related": [
+      "maximum-a-posteriori-map-estimation",
+      "negative-log-likelihood",
+      "ordinary-least-squares-ols-closed-form-solution",
+      "laplace-smoothing"
+    ]
+  },
+  "maximum-a-posteriori-map-estimation": {
+    "level": "intro",
+    "prerequisites": ["maximum-likelihood-estimate-mle", "conditional-probability"],
+    "related": [
+      "l2-regularization-ridge-weight-decay",
+      "log-likelihood",
+      "probability-distribution"
+    ]
+  },
+  "bias-variance-tradeoff": {
+    "level": "intermediate",
+    "prerequisites": ["generalization", "prediction-error"],
+    "related": [
+      "overfitting",
+      "underfitting",
+      "regularization",
+      "linear-regression-basics",
+      "pac-learning-probably-approximately-correct"
+    ]
+  },
+  "overfitting": {
+    "level": "intro",
+    "prerequisites": ["generalization"],
+    "related": [
+      "underfitting",
+      "bias-variance-tradeoff",
+      "regularization",
+      "dropout",
+      "early-stopping",
+      "data-leakage"
+    ]
+  },
+  "underfitting": {
+    "level": "intro",
+    "prerequisites": ["generalization"],
+    "related": [
+      "overfitting",
+      "bias-variance-tradeoff",
+      "deep-neural-network",
+      "hyperparameter"
+    ]
+  },
+  "generalization": {
+    "level": "intro",
+    "prerequisites": ["supervised-learning"],
+    "related": [
+      "overfitting",
+      "underfitting",
+      "bias-variance-tradeoff",
+      "regularization",
+      "pac-learning-probably-approximately-correct",
+      "convergence"
+    ]
+  },
+  "regularization": {
+    "level": "intro",
+    "prerequisites": ["overfitting", "loss-function"],
+    "related": [
+      "l1-regularization-lasso",
+      "l2-regularization-ridge-weight-decay",
+      "dropout",
+      "early-stopping",
+      "weight-decay",
+      "label-smoothing"
+    ]
+  },
+  "l1-regularization-lasso": {
+    "level": "intro",
+    "prerequisites": ["regularization", "l1-vs-l2-norms"],
+    "related": [
+      "l2-regularization-ridge-weight-decay",
+      "sparsity",
+      "weight-decay"
+    ]
+  },
+  "l2-regularization-ridge-weight-decay": {
+    "level": "intro",
+    "prerequisites": ["regularization", "l1-vs-l2-norms"],
+    "related": [
+      "l1-regularization-lasso",
+      "weight-decay",
+      "linear-regression",
+      "adamw-optimizer",
+      "maximum-a-posteriori-map-estimation"
+    ]
+  },
+  "early-stopping": {
+    "level": "intro",
+    "prerequisites": ["overfitting", "epoch"],
+    "related": [
+      "regularization",
+      "dropout",
+      "hyperparameter",
+      "bias-variance-tradeoff"
+    ]
+  },
+  "dropout": {
+    "level": "intro",
+    "prerequisites": ["regularization", "neural-network"],
+    "related": [
+      "batch-normalization",
+      "early-stopping",
+      "l2-regularization-ridge-weight-decay",
+      "weight-decay",
+      "bootstrap-aggregating-bagging"
+    ]
+  },
+  "hyperparameter": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "learning-rate",
+      "early-stopping",
+      "epoch",
+      "learning-rate-schedule",
+      "data-leakage"
+    ]
+  },
+  "data-leakage": {
+    "level": "intro",
+    "prerequisites": ["generalization"],
+    "related": [
+      "overfitting",
+      "hyperparameter",
+      "benchmark-ml-evaluation"
+    ]
+  }
+}

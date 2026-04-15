@@ -1,0 +1,210 @@
+{
+  "retrieval-augmented-generation-rag": {
+    "level": "intro",
+    "prerequisites": ["large-language-model-llm", "information-retrieval"],
+    "related": [
+      "semantic-search",
+      "vector-database",
+      "dense-retrieval",
+      "grounding",
+      "hallucination"
+    ]
+  },
+  "semantic-search": {
+    "level": "basic",
+    "prerequisites": ["information-retrieval", "embedding-vector"],
+    "related": [
+      "vector-database",
+      "dense-retrieval",
+      "cosine-similarity",
+      "nearest-neighbor-search",
+      "retrieval-augmented-generation-rag"
+    ]
+  },
+  "nearest-neighbor-search": {
+    "level": "intro",
+    "prerequisites": ["embedding-vector", "cosine-similarity"],
+    "related": [
+      "vector-database",
+      "semantic-search",
+      "dense-retrieval",
+      "embedding-space"
+    ]
+  },
+  "vector-database": {
+    "level": "basic",
+    "prerequisites": ["embedding-vector"],
+    "related": [
+      "nearest-neighbor-search",
+      "semantic-search",
+      "dense-retrieval",
+      "retrieval-augmented-generation-rag"
+    ]
+  },
+  "bm25": {
+    "level": "intro",
+    "prerequisites": ["tf-idf", "information-retrieval"],
+    "related": [
+      "sparse-retrieval",
+      "dense-retrieval",
+      "document-term-matrix"
+    ]
+  },
+  "sparse-retrieval": {
+    "level": "basic",
+    "prerequisites": ["information-retrieval", "sparse-vector"],
+    "related": [
+      "bm25",
+      "tf-idf",
+      "dense-retrieval",
+      "document-term-matrix"
+    ]
+  },
+  "dense-retrieval": {
+    "level": "intro",
+    "prerequisites": ["information-retrieval", "embedding-vector"],
+    "related": [
+      "sparse-retrieval",
+      "semantic-search",
+      "vector-database",
+      "cosine-similarity",
+      "nearest-neighbor-search"
+    ]
+  },
+  "grounding": {
+    "level": "intro",
+    "prerequisites": ["large-language-model-llm", "retrieval-augmented-generation-rag"],
+    "related": [
+      "faithfulness",
+      "factuality",
+      "hallucination"
+    ]
+  },
+  "faithfulness": {
+    "level": "intro",
+    "prerequisites": ["large-language-model-llm"],
+    "related": [
+      "grounding",
+      "factuality",
+      "hallucination",
+      "retrieval-augmented-generation-rag"
+    ]
+  },
+  "factuality": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "hallucination",
+      "grounding",
+      "faithfulness",
+      "benchmark-ml-evaluation"
+    ]
+  },
+  "information-retrieval": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "bm25",
+      "dense-retrieval",
+      "sparse-retrieval",
+      "vector-database",
+      "document-term-matrix"
+    ]
+  },
+  "benchmark-ml-evaluation": {
+    "level": "basic",
+    "prerequisites": ["model-evaluation"],
+    "related": [
+      "human-evaluation",
+      "automated-evaluation",
+      "bleu",
+      "rouge",
+      "a-b-testing-ml-systems"
+    ]
+  },
+  "human-evaluation": {
+    "level": "basic",
+    "prerequisites": ["model-evaluation"],
+    "related": [
+      "pairwise-comparison",
+      "automated-evaluation",
+      "elo-rating",
+      "benchmark-ml-evaluation"
+    ]
+  },
+  "automated-evaluation": {
+    "level": "basic",
+    "prerequisites": ["model-evaluation"],
+    "related": [
+      "bleu",
+      "rouge",
+      "human-evaluation",
+      "benchmark-ml-evaluation"
+    ]
+  },
+  "bleu": {
+    "level": "intro",
+    "prerequisites": ["automated-evaluation"],
+    "related": [
+      "rouge",
+      "n-gram",
+      "beam-search",
+      "edit-distance"
+    ]
+  },
+  "rouge": {
+    "level": "intro",
+    "prerequisites": ["automated-evaluation"],
+    "related": [
+      "bleu",
+      "longest-common-subsequence",
+      "n-gram",
+      "f1-score"
+    ]
+  },
+  "a-b-testing-ml-systems": {
+    "level": "intermediate",
+    "prerequisites": ["model-evaluation", "confidence-interval"],
+    "related": [
+      "shadow-deployment",
+      "bootstrap-resampling",
+      "human-evaluation",
+      "feedback-loop-ml-systems"
+    ]
+  },
+  "model-evaluation": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "benchmark-ml-evaluation",
+      "human-evaluation",
+      "automated-evaluation",
+      "shadow-deployment"
+    ]
+  },
+  "shadow-deployment": {
+    "level": "intermediate",
+    "prerequisites": ["model-evaluation"],
+    "related": [
+      "a-b-testing-ml-systems",
+      "feedback-loop-ml-systems"
+    ]
+  },
+  "feedback-loop-ml-systems": {
+    "level": "intermediate",
+    "prerequisites": ["model-evaluation"],
+    "related": [
+      "shadow-deployment",
+      "a-b-testing-ml-systems",
+      "bias-mitigation"
+    ]
+  },
+  "needle-in-a-haystack": {
+    "level": "intermediate",
+    "prerequisites": ["long-context-pretraining", "context-window"],
+    "related": [
+      "long-context-pretraining",
+      "benchmark-ml-evaluation"
+    ]
+  }
+}

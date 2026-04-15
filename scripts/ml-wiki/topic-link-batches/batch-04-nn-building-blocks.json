@@ -1,0 +1,258 @@
+{
+  "neural-network": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "neuron",
+      "activation-function",
+      "multilayer-perceptron-mlp",
+      "deep-neural-network",
+      "feedforward-neural-network"
+    ]
+  },
+  "neuron": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "activation-function",
+      "perceptron",
+      "fully-connected-layer",
+      "neural-network"
+    ]
+  },
+  "activation-function": {
+    "level": "basic",
+    "prerequisites": ["neuron"],
+    "related": [
+      "relu",
+      "sigmoid",
+      "tanh",
+      "softmax",
+      "swiglu-activation-function"
+    ]
+  },
+  "sigmoid": {
+    "level": "basic",
+    "prerequisites": ["activation-function"],
+    "related": [
+      "tanh",
+      "logistic-regression",
+      "binary-classification",
+      "logit",
+      "softmax"
+    ]
+  },
+  "tanh": {
+    "level": "basic",
+    "prerequisites": ["activation-function"],
+    "related": [
+      "sigmoid",
+      "relu",
+      "long-short-term-memory-lstm",
+      "recurrent-neural-network-rnn"
+    ]
+  },
+  "relu": {
+    "level": "basic",
+    "prerequisites": ["activation-function"],
+    "related": [
+      "sigmoid",
+      "tanh",
+      "he-initialization-kaiming-initialization",
+      "swiglu-activation-function",
+      "what-is-the-vanishing-gradient-problem"
+    ]
+  },
+  "softmax": {
+    "level": "intro",
+    "prerequisites": ["activation-function", "discrete-probability-distribution"],
+    "related": [
+      "cross-entropy",
+      "multiclass-classification",
+      "softmax-temperature",
+      "log-sum-exp-trick",
+      "softmax-normalization"
+    ]
+  },
+  "softmax-normalization": {
+    "level": "intro",
+    "prerequisites": ["softmax"],
+    "related": [
+      "softmax-temperature",
+      "log-sum-exp-trick",
+      "logit",
+      "logit-adjustment"
+    ]
+  },
+  "fully-connected-layer": {
+    "level": "basic",
+    "prerequisites": ["affine-transformation", "neuron"],
+    "related": [
+      "multilayer-perceptron-mlp",
+      "hidden-layer",
+      "projection-matrix",
+      "position-wise-mlp"
+    ]
+  },
+  "input-layer": {
+    "level": "basic",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "hidden-layer",
+      "output-layer",
+      "embedding-layer",
+      "fully-connected-layer"
+    ]
+  },
+  "hidden-layer": {
+    "level": "basic",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "input-layer",
+      "output-layer",
+      "deep-neural-network",
+      "multilayer-perceptron-mlp",
+      "activation-function"
+    ]
+  },
+  "output-layer": {
+    "level": "basic",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "input-layer",
+      "hidden-layer",
+      "softmax",
+      "softmax-head",
+      "classification-head"
+    ]
+  },
+  "multilayer-perceptron-mlp": {
+    "level": "basic",
+    "prerequisites": ["fully-connected-layer", "activation-function"],
+    "related": [
+      "deep-neural-network",
+      "feedforward-neural-network",
+      "neural-network",
+      "position-wise-mlp"
+    ]
+  },
+  "deep-neural-network": {
+    "level": "basic",
+    "prerequisites": ["multilayer-perceptron-mlp"],
+    "related": [
+      "deep-learning",
+      "feedforward-neural-network",
+      "convolutional-neural-network-cnn",
+      "recurrent-neural-network-rnn"
+    ]
+  },
+  "deep-learning": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "deep-neural-network",
+      "neural-network",
+      "backpropagation",
+      "representation-learning",
+      "the-bitter-lesson"
+    ]
+  },
+  "feedforward-neural-network": {
+    "level": "basic",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "multilayer-perceptron-mlp",
+      "convolutional-neural-network-cnn",
+      "recurrent-neural-network-rnn",
+      "computational-graph"
+    ]
+  },
+  "convolutional-neural-network-cnn": {
+    "level": "intro",
+    "prerequisites": ["feedforward-neural-network"],
+    "related": [
+      "imagenet-dataset",
+      "recurrent-neural-network-rnn",
+      "vision-encoder",
+      "deep-learning"
+    ]
+  },
+  "recurrent-neural-network-rnn": {
+    "level": "intro",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "hidden-state",
+      "elman-rnn",
+      "long-short-term-memory-lstm",
+      "gated-recurrent-unit-gru",
+      "backpropagation-through-time-bptt",
+      "sequence-to-sequence-seq2seq"
+    ]
+  },
+  "elman-rnn": {
+    "level": "intro",
+    "prerequisites": ["recurrent-neural-network-rnn"],
+    "related": [
+      "hidden-state",
+      "long-short-term-memory-lstm",
+      "backpropagation-through-time-bptt"
+    ]
+  },
+  "hidden-state": {
+    "level": "basic",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "recurrent-neural-network-rnn",
+      "long-short-term-memory-lstm",
+      "elman-rnn",
+      "residual-connection-skip-connection"
+    ]
+  },
+  "backpropagation-through-time-bptt": {
+    "level": "intermediate",
+    "prerequisites": ["backpropagation", "recurrent-neural-network-rnn"],
+    "related": [
+      "what-is-the-vanishing-gradient-problem",
+      "long-short-term-memory-lstm",
+      "hidden-state"
+    ]
+  },
+  "long-short-term-memory-lstm": {
+    "level": "intermediate",
+    "prerequisites": ["recurrent-neural-network-rnn", "what-is-the-vanishing-gradient-problem"],
+    "related": [
+      "gated-recurrent-unit-gru",
+      "xlstm",
+      "backpropagation-through-time-bptt",
+      "sequence-to-sequence-seq2seq"
+    ]
+  },
+  "gated-recurrent-unit-gru": {
+    "level": "intermediate",
+    "prerequisites": ["recurrent-neural-network-rnn"],
+    "related": [
+      "long-short-term-memory-lstm",
+      "xlstm",
+      "backpropagation-through-time-bptt"
+    ]
+  },
+  "xlstm": {
+    "level": "advanced",
+    "prerequisites": ["long-short-term-memory-lstm"],
+    "related": [
+      "minlstm",
+      "gated-recurrent-unit-gru",
+      "recurrent-neural-network-rnn"
+    ]
+  },
+  "minlstm": {
+    "level": "advanced",
+    "prerequisites": ["long-short-term-memory-lstm"],
+    "related": [
+      "xlstm",
+      "gated-recurrent-unit-gru",
+      "feedforward-neural-network",
+      "hidden-state"
+    ]
+  }
+}

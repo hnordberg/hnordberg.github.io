@@ -1,0 +1,389 @@
+{
+  "tokenization": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "token",
+      "subword-tokenization",
+      "byte-pair-encoding-bpe",
+      "vocabulary",
+      "tokenization-pipeline"
+    ]
+  },
+  "token": {
+    "level": "basic",
+    "prerequisites": ["tokenization"],
+    "related": [
+      "subword",
+      "token-id",
+      "vocabulary",
+      "special-tokens"
+    ]
+  },
+  "subword": {
+    "level": "basic",
+    "prerequisites": ["token"],
+    "related": [
+      "subword-tokenization",
+      "byte-pair-encoding-bpe",
+      "tokenization",
+      "vocabulary"
+    ]
+  },
+  "vocabulary": {
+    "level": "basic",
+    "prerequisites": ["tokenization"],
+    "related": [
+      "vocabulary-size",
+      "token",
+      "subword-tokenization",
+      "document-term-matrix"
+    ]
+  },
+  "vocabulary-size": {
+    "level": "basic",
+    "prerequisites": ["vocabulary"],
+    "related": [
+      "token-id",
+      "subword-tokenization",
+      "byte-pair-encoding-bpe",
+      "output-layer"
+    ]
+  },
+  "subword-tokenization": {
+    "level": "basic",
+    "prerequisites": ["tokenization", "subword"],
+    "related": [
+      "byte-pair-encoding-bpe",
+      "vocabulary",
+      "token",
+      "zipf-s-law"
+    ]
+  },
+  "special-tokens": {
+    "level": "basic",
+    "prerequisites": ["tokenization"],
+    "related": [
+      "padding-token",
+      "bos-token-beginning-of-sequence",
+      "eos-token-end-of-sequence",
+      "prompting-format"
+    ]
+  },
+  "padding-token": {
+    "level": "basic",
+    "prerequisites": ["special-tokens"],
+    "related": [
+      "attention-mask",
+      "bos-token-beginning-of-sequence",
+      "eos-token-end-of-sequence"
+    ]
+  },
+  "bos-token-beginning-of-sequence": {
+    "level": "basic",
+    "prerequisites": ["special-tokens"],
+    "related": [
+      "eos-token-end-of-sequence",
+      "padding-token",
+      "autoregressive-language-model"
+    ]
+  },
+  "eos-token-end-of-sequence": {
+    "level": "basic",
+    "prerequisites": ["special-tokens"],
+    "related": [
+      "bos-token-beginning-of-sequence",
+      "padding-token",
+      "autoregressive-language-model",
+      "greedy-decoding"
+    ]
+  },
+  "token-id": {
+    "level": "basic",
+    "prerequisites": ["token", "vocabulary"],
+    "related": [
+      "vocabulary-size",
+      "embedding-layer",
+      "tokenization-pipeline"
+    ]
+  },
+  "tokenization-pipeline": {
+    "level": "basic",
+    "prerequisites": ["tokenization"],
+    "related": [
+      "byte-pair-encoding-bpe",
+      "subword-tokenization",
+      "special-tokens",
+      "vocabulary"
+    ]
+  },
+  "byte-pair-encoding-bpe": {
+    "level": "intro",
+    "prerequisites": ["subword-tokenization"],
+    "related": [
+      "vocabulary-size",
+      "zipf-s-law",
+      "tokenization-pipeline",
+      "corpus"
+    ]
+  },
+  "embedding-layer": {
+    "level": "basic",
+    "prerequisites": ["one-hot-encoding", "vocabulary"],
+    "related": [
+      "embedding-vector",
+      "word-embedding",
+      "token-id",
+      "representation-learning"
+    ]
+  },
+  "embedding-vector": {
+    "level": "basic",
+    "prerequisites": ["dense-vector"],
+    "related": [
+      "embedding-space",
+      "word-embedding",
+      "embedding-layer",
+      "cosine-similarity"
+    ]
+  },
+  "embedding-space": {
+    "level": "basic",
+    "prerequisites": ["embedding-vector"],
+    "related": [
+      "latent-space",
+      "nearest-neighbor-search",
+      "semantic-space",
+      "cosine-similarity"
+    ]
+  },
+  "word-embedding": {
+    "level": "basic",
+    "prerequisites": ["embedding-vector"],
+    "related": [
+      "word2vec",
+      "glove-word-embeddings",
+      "fasttext",
+      "semantic-similarity",
+      "neural-probabilistic-language-model"
+    ]
+  },
+  "word2vec": {
+    "level": "intro",
+    "prerequisites": ["word-embedding", "neural-network"],
+    "related": [
+      "skip-gram",
+      "fasttext",
+      "glove-word-embeddings",
+      "semantic-similarity"
+    ]
+  },
+  "skip-gram": {
+    "level": "intro",
+    "prerequisites": ["word2vec"],
+    "related": [
+      "fasttext",
+      "word-embedding",
+      "cosine-similarity"
+    ]
+  },
+  "fasttext": {
+    "level": "intro",
+    "prerequisites": ["word2vec", "subword"],
+    "related": [
+      "skip-gram",
+      "word-embedding",
+      "glove-word-embeddings"
+    ]
+  },
+  "glove-word-embeddings": {
+    "level": "intro",
+    "prerequisites": ["word-embedding", "document-term-matrix"],
+    "related": [
+      "word2vec",
+      "tf-idf",
+      "semantic-similarity",
+      "cosine-similarity"
+    ]
+  },
+  "neural-probabilistic-language-model": {
+    "level": "intro",
+    "prerequisites": ["language-model", "neural-network"],
+    "related": [
+      "word2vec",
+      "count-based-language-model",
+      "the-curse-of-dimensionality",
+      "word-embedding"
+    ]
+  },
+  "elmo-embeddings-from-language-models": {
+    "level": "intermediate",
+    "prerequisites": ["word-embedding", "long-short-term-memory-lstm"],
+    "related": [
+      "word2vec",
+      "gpt-1-generative-pre-training",
+      "masked-language-model",
+      "representation-learning"
+    ]
+  },
+  "semantic-similarity": {
+    "level": "basic",
+    "prerequisites": ["embedding-vector"],
+    "related": [
+      "cosine-similarity",
+      "word-embedding",
+      "semantic-search",
+      "semantic-space"
+    ]
+  },
+  "semantic-space": {
+    "level": "basic",
+    "prerequisites": ["embedding-space"],
+    "related": [
+      "semantic-similarity",
+      "latent-space",
+      "word-embedding"
+    ]
+  },
+  "cosine-similarity": {
+    "level": "basic",
+    "prerequisites": ["dense-vector"],
+    "related": [
+      "semantic-similarity",
+      "l1-vs-l2-norms",
+      "embedding-space",
+      "nearest-neighbor-search",
+      "dense-retrieval"
+    ]
+  },
+  "language-model": {
+    "level": "basic",
+    "prerequisites": ["probability-distribution"],
+    "related": [
+      "autoregressive-language-model",
+      "masked-language-model",
+      "causal-language-model",
+      "perplexity",
+      "count-based-language-model"
+    ]
+  },
+  "autoregressive-language-model": {
+    "level": "intro",
+    "prerequisites": ["language-model", "conditional-probability"],
+    "related": [
+      "causal-language-model",
+      "masked-language-model",
+      "decoder-only-transformer",
+      "next-token-prediction-objective-causal-language-modeling",
+      "autoregression"
+    ]
+  },
+  "masked-language-model": {
+    "level": "intermediate",
+    "prerequisites": ["language-model", "self-attention"],
+    "related": [
+      "autoregressive-language-model",
+      "encoder-transformer",
+      "elmo-embeddings-from-language-models"
+    ]
+  },
+  "causal-language-model": {
+    "level": "intro",
+    "prerequisites": ["autoregressive-language-model"],
+    "related": [
+      "next-token-prediction-objective-causal-language-modeling",
+      "causal-mask",
+      "decoder-only-transformer",
+      "masked-language-model"
+    ]
+  },
+  "chat-language-model": {
+    "level": "basic",
+    "prerequisites": ["causal-language-model"],
+    "related": [
+      "supervised-fine-tuning-sft",
+      "prompting-format",
+      "conversational-ai",
+      "reinforcement-learning-from-human-feedback-rlhf"
+    ]
+  },
+  "neural-language-model": {
+    "level": "intro",
+    "prerequisites": ["language-model", "neural-network"],
+    "related": [
+      "neural-probabilistic-language-model",
+      "autoregressive-language-model",
+      "word2vec",
+      "recurrent-neural-network-rnn"
+    ]
+  },
+  "representation-learning": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "distributed-representation",
+      "embedding-vector",
+      "word2vec",
+      "autoencoders",
+      "deep-learning"
+    ]
+  },
+  "distributed-representation": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "representation-learning",
+      "embedding-vector",
+      "word-embedding",
+      "dense-vector"
+    ]
+  },
+  "latent-space": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "embedding-space",
+      "autoencoders",
+      "reparameterization-trick-vae",
+      "principal-component-analysis-pca"
+    ]
+  },
+  "luong-attention-global-and-local": {
+    "level": "intermediate",
+    "prerequisites": ["attention-mechanism", "sequence-to-sequence-seq2seq"],
+    "related": [
+      "self-attention",
+      "key-value-memory-networks",
+      "multi-head-attention"
+    ]
+  },
+  "key-value-memory-networks": {
+    "level": "intermediate",
+    "prerequisites": ["attention-mechanism"],
+    "related": [
+      "query-key-value-qkv",
+      "self-attention",
+      "luong-attention-global-and-local"
+    ]
+  },
+  "autoregression": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "autoregressive-language-model",
+      "causal-language-model",
+      "next-token-prediction-objective-causal-language-modeling",
+      "greedy-decoding"
+    ]
+  },
+  "next-token-prediction-objective-causal-language-modeling": {
+    "level": "intro",
+    "prerequisites": ["causal-language-model", "negative-log-likelihood"],
+    "related": [
+      "autoregressive-language-model",
+      "pretraining",
+      "cross-entropy",
+      "language-model"
+    ]
+  }
+}

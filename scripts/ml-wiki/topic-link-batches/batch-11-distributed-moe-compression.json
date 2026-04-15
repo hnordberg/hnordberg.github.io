@@ -1,0 +1,338 @@
+{
+  "data-parallelism": {
+    "level": "intermediate",
+    "prerequisites": ["distributed-computing-ml-training"],
+    "related": [
+      "model-parallelism",
+      "fully-sharded-data-parallel-fsdp",
+      "gradient-descent",
+      "mixed-precision-training"
+    ]
+  },
+  "model-parallelism": {
+    "level": "intermediate",
+    "prerequisites": ["distributed-computing-ml-training"],
+    "related": [
+      "data-parallelism",
+      "pipeline-parallelism",
+      "tensor-parallelism",
+      "model-sharding"
+    ]
+  },
+  "pipeline-parallelism": {
+    "level": "advanced",
+    "prerequisites": ["model-parallelism"],
+    "related": [
+      "tensor-parallelism",
+      "data-parallelism",
+      "fully-sharded-data-parallel-fsdp"
+    ]
+  },
+  "tensor-parallelism": {
+    "level": "advanced",
+    "prerequisites": ["model-parallelism"],
+    "related": [
+      "pipeline-parallelism",
+      "context-parallelism",
+      "fully-sharded-data-parallel-fsdp",
+      "model-sharding"
+    ]
+  },
+  "context-parallelism": {
+    "level": "advanced",
+    "prerequisites": ["tensor-parallelism", "self-attention"],
+    "related": [
+      "flashattention",
+      "long-context-pretraining",
+      "pipeline-parallelism"
+    ]
+  },
+  "fully-sharded-data-parallel-fsdp": {
+    "level": "advanced",
+    "prerequisites": ["data-parallelism", "model-sharding"],
+    "related": [
+      "zero-zero-redundancy-optimizer",
+      "tensor-parallelism",
+      "mixed-precision-training",
+      "memory-optimization-ml-training"
+    ]
+  },
+  "model-sharding": {
+    "level": "intermediate",
+    "prerequisites": ["distributed-computing-ml-training"],
+    "related": [
+      "fully-sharded-data-parallel-fsdp",
+      "model-parallelism",
+      "memory-optimization-ml-training"
+    ]
+  },
+  "zero-zero-redundancy-optimizer": {
+    "level": "advanced",
+    "prerequisites": ["data-parallelism", "adam-optimizer"],
+    "related": [
+      "fully-sharded-data-parallel-fsdp",
+      "mixed-precision-training",
+      "memory-optimization-ml-training"
+    ]
+  },
+  "distributed-computing-ml-training": {
+    "level": "intermediate",
+    "prerequisites": ["gpu-acceleration"],
+    "related": [
+      "data-parallelism",
+      "model-parallelism",
+      "model-sharding",
+      "memory-optimization-ml-training"
+    ]
+  },
+  "memory-optimization-ml-training": {
+    "level": "intermediate",
+    "prerequisites": ["gpu-acceleration"],
+    "related": [
+      "gradient-checkpointing-activation-recomputation",
+      "mixed-precision-training",
+      "fully-sharded-data-parallel-fsdp",
+      "zero-zero-redundancy-optimizer",
+      "pagedattention"
+    ]
+  },
+  "floating-point-operations-flops": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "scaling-laws",
+      "gpu-acceleration",
+      "mixed-precision-training",
+      "inference-optimization"
+    ]
+  },
+  "gpu-acceleration": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "cuda",
+      "floating-point-operations-flops",
+      "mixed-precision-training",
+      "distributed-computing-ml-training"
+    ]
+  },
+  "cuda": {
+    "level": "basic",
+    "prerequisites": ["gpu-acceleration"],
+    "related": [
+      "floating-point-operations-flops",
+      "flashattention",
+      "mixed-precision-training"
+    ]
+  },
+  "inference-optimization": {
+    "level": "intermediate",
+    "prerequisites": [],
+    "related": [
+      "key-value-kv-caching",
+      "speculative-decoding",
+      "pagedattention",
+      "quantization",
+      "flashattention"
+    ]
+  },
+  "sparsely-gated-mixture-of-experts-moe": {
+    "level": "advanced",
+    "prerequisites": ["multilayer-perceptron-mlp", "neural-network"],
+    "related": [
+      "sparse-mixture-of-experts-moe-layer",
+      "switch-transformer",
+      "router-network",
+      "expert-network"
+    ]
+  },
+  "sparse-mixture-of-experts-moe-layer": {
+    "level": "advanced",
+    "prerequisites": ["sparsely-gated-mixture-of-experts-moe"],
+    "related": [
+      "router-network",
+      "expert-network",
+      "top-k-routing",
+      "switch-transformer",
+      "load-balancing-moe"
+    ]
+  },
+  "router-network": {
+    "level": "advanced",
+    "prerequisites": ["sparse-mixture-of-experts-moe-layer"],
+    "related": [
+      "expert-network",
+      "top-k-routing",
+      "load-balancing-moe"
+    ]
+  },
+  "expert-network": {
+    "level": "advanced",
+    "prerequisites": ["sparse-mixture-of-experts-moe-layer"],
+    "related": [
+      "router-network",
+      "top-k-routing",
+      "position-wise-mlp"
+    ]
+  },
+  "top-k-routing": {
+    "level": "advanced",
+    "prerequisites": ["router-network"],
+    "related": [
+      "expert-network",
+      "switch-transformer",
+      "load-balancing-moe"
+    ]
+  },
+  "load-balancing-moe": {
+    "level": "advanced",
+    "prerequisites": ["sparse-mixture-of-experts-moe-layer"],
+    "related": [
+      "router-network",
+      "top-k-routing",
+      "switch-transformer"
+    ]
+  },
+  "switch-transformer": {
+    "level": "advanced",
+    "prerequisites": ["sparse-mixture-of-experts-moe-layer", "top-k-routing"],
+    "related": [
+      "load-balancing-moe",
+      "sparsely-gated-mixture-of-experts-moe",
+      "transformer"
+    ]
+  },
+  "model-compression": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "quantization",
+      "pruning",
+      "knowledge-distillation",
+      "model-merging"
+    ]
+  },
+  "knowledge-distillation": {
+    "level": "intermediate",
+    "prerequisites": ["model-compression", "cross-entropy"],
+    "related": [
+      "pruning",
+      "quantization",
+      "softmax-temperature",
+      "transfer-learning"
+    ]
+  },
+  "pruning": {
+    "level": "intermediate",
+    "prerequisites": ["model-compression"],
+    "related": [
+      "structured-pruning",
+      "unstructured-pruning",
+      "knowledge-distillation",
+      "quantization"
+    ]
+  },
+  "structured-pruning": {
+    "level": "intermediate",
+    "prerequisites": ["pruning"],
+    "related": [
+      "unstructured-pruning",
+      "model-compression",
+      "knowledge-distillation"
+    ]
+  },
+  "unstructured-pruning": {
+    "level": "intermediate",
+    "prerequisites": ["pruning"],
+    "related": [
+      "structured-pruning",
+      "sparsity",
+      "model-compression"
+    ]
+  },
+  "quantization": {
+    "level": "basic",
+    "prerequisites": ["model-compression"],
+    "related": [
+      "post-training-quantization-ptq",
+      "quantization-aware-training-qat",
+      "qlora-quantized-lora",
+      "mixed-precision-training",
+      "inference-optimization"
+    ]
+  },
+  "post-training-quantization-ptq": {
+    "level": "intermediate",
+    "prerequisites": ["quantization"],
+    "related": [
+      "quantization-aware-training-qat",
+      "qlora-quantized-lora",
+      "inference-optimization"
+    ]
+  },
+  "quantization-aware-training-qat": {
+    "level": "intermediate",
+    "prerequisites": ["quantization"],
+    "related": [
+      "post-training-quantization-ptq",
+      "mixed-precision-training",
+      "knowledge-distillation"
+    ]
+  },
+  "model-merging": {
+    "level": "intermediate",
+    "prerequisites": ["finetuning"],
+    "related": [
+      "model-soups",
+      "task-vector",
+      "ties-merging",
+      "dare-drop-and-rescale",
+      "slerp-spherical-linear-interpolation"
+    ]
+  },
+  "model-soups": {
+    "level": "intermediate",
+    "prerequisites": ["model-merging"],
+    "related": [
+      "slerp-spherical-linear-interpolation",
+      "task-vector",
+      "ties-merging"
+    ]
+  },
+  "slerp-spherical-linear-interpolation": {
+    "level": "intermediate",
+    "prerequisites": ["model-merging"],
+    "related": [
+      "model-soups",
+      "ties-merging",
+      "task-vector"
+    ]
+  },
+  "ties-merging": {
+    "level": "intermediate",
+    "prerequisites": ["model-merging", "task-vector"],
+    "related": [
+      "dare-drop-and-rescale",
+      "model-soups",
+      "slerp-spherical-linear-interpolation"
+    ]
+  },
+  "dare-drop-and-rescale": {
+    "level": "intermediate",
+    "prerequisites": ["model-merging", "task-vector"],
+    "related": [
+      "ties-merging",
+      "model-soups"
+    ]
+  },
+  "task-vector": {
+    "level": "intermediate",
+    "prerequisites": ["finetuning"],
+    "related": [
+      "model-merging",
+      "ties-merging",
+      "dare-drop-and-rescale",
+      "low-rank-adaptation-lora"
+    ]
+  }
+}

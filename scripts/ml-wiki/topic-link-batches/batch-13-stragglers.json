@@ -1,0 +1,31 @@
+{
+  "message-passing-in-graph-neural-networks-gnns": {
+    "level": "intermediate",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "attention-mechanism",
+      "embedding-vector",
+      "representation-learning"
+    ]
+  },
+  "ranking": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "pairwise-ranking",
+      "pairwise-comparison",
+      "elo-rating",
+      "information-retrieval"
+    ]
+  },
+  "over-parameterization": {
+    "level": "intermediate",
+    "prerequisites": ["generalization", "deep-neural-network"],
+    "related": [
+      "bias-variance-tradeoff",
+      "scaling-laws",
+      "regularization",
+      "dropout"
+    ]
+  }
+}

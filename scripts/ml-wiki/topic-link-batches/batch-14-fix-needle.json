@@ -1,0 +1,10 @@
+{
+  "needle-in-a-haystack": {
+    "prerequisites": ["context-window"],
+    "related": [
+      "long-context-pretraining",
+      "benchmark-ml-evaluation",
+      "rotary-positional-embedding-rope"
+    ]
+  }
+}

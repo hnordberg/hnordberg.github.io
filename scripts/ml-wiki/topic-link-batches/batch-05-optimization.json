@@ -1,0 +1,266 @@
+{
+  "gradient-descent": {
+    "level": "intro",
+    "prerequisites": ["loss-function", "linear-function"],
+    "related": [
+      "stochastic-gradient-descent-sgd",
+      "mini-batch-gradient-descent",
+      "momentum",
+      "convex-function",
+      "learning-rate",
+      "adam-optimizer"
+    ]
+  },
+  "stochastic-gradient-descent-sgd": {
+    "level": "intro",
+    "prerequisites": ["gradient-descent"],
+    "related": [
+      "mini-batch-gradient-descent",
+      "momentum",
+      "adam-optimizer",
+      "convergence",
+      "learning-rate"
+    ]
+  },
+  "mini-batch-gradient-descent": {
+    "level": "intro",
+    "prerequisites": ["gradient-descent"],
+    "related": [
+      "stochastic-gradient-descent-sgd",
+      "epoch",
+      "learning-rate",
+      "adam-optimizer"
+    ]
+  },
+  "momentum": {
+    "level": "intro",
+    "prerequisites": ["stochastic-gradient-descent-sgd"],
+    "related": [
+      "adam-optimizer",
+      "rmsprop",
+      "adagrad",
+      "learning-rate-schedule"
+    ]
+  },
+  "adam-optimizer": {
+    "level": "intro",
+    "prerequisites": ["gradient-descent", "momentum"],
+    "related": [
+      "adamw-optimizer",
+      "adagrad",
+      "rmsprop",
+      "learning-rate",
+      "weight-decay"
+    ]
+  },
+  "adamw-optimizer": {
+    "level": "intro",
+    "prerequisites": ["adam-optimizer"],
+    "related": [
+      "weight-decay",
+      "l2-regularization-ridge-weight-decay",
+      "learning-rate-schedule"
+    ]
+  },
+  "adagrad": {
+    "level": "intro",
+    "prerequisites": ["gradient-descent"],
+    "related": [
+      "rmsprop",
+      "adam-optimizer",
+      "learning-rate"
+    ]
+  },
+  "rmsprop": {
+    "level": "intro",
+    "prerequisites": ["adagrad"],
+    "related": [
+      "adam-optimizer",
+      "momentum",
+      "learning-rate"
+    ]
+  },
+  "learning-rate": {
+    "level": "basic",
+    "prerequisites": ["gradient-descent"],
+    "related": [
+      "learning-rate-schedule",
+      "warmup",
+      "hyperparameter",
+      "adam-optimizer"
+    ]
+  },
+  "learning-rate-schedule": {
+    "level": "intro",
+    "prerequisites": ["learning-rate"],
+    "related": [
+      "warmup",
+      "cosine-annealing",
+      "hyperparameter"
+    ]
+  },
+  "warmup": {
+    "level": "intro",
+    "prerequisites": ["learning-rate-schedule"],
+    "related": [
+      "cosine-annealing",
+      "learning-rate",
+      "adam-optimizer"
+    ]
+  },
+  "cosine-annealing": {
+    "level": "intro",
+    "prerequisites": ["learning-rate-schedule"],
+    "related": [
+      "warmup",
+      "learning-rate",
+      "adam-optimizer"
+    ]
+  },
+  "weight-decay": {
+    "level": "intro",
+    "prerequisites": ["regularization"],
+    "related": [
+      "l2-regularization-ridge-weight-decay",
+      "adamw-optimizer",
+      "adam-optimizer",
+      "dropout"
+    ]
+  },
+  "gradient-clipping": {
+    "level": "intro",
+    "prerequisites": ["gradient-descent", "backpropagation"],
+    "related": [
+      "what-is-the-vanishing-gradient-problem",
+      "layer-normalization",
+      "mixed-precision-training"
+    ]
+  },
+  "batch-normalization": {
+    "level": "intro",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "layer-normalization",
+      "dropout",
+      "root-mean-square-normalization-rmsnorm",
+      "convolutional-neural-network-cnn"
+    ]
+  },
+  "layer-normalization": {
+    "level": "intro",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "batch-normalization",
+      "root-mean-square-normalization-rmsnorm",
+      "pre-norm-vs-post-norm-architecture",
+      "transformer"
+    ]
+  },
+  "convergence": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "gradient-descent",
+      "stochastic-gradient-descent-sgd",
+      "learning-rate",
+      "loss-function"
+    ]
+  },
+  "epoch": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "mini-batch-gradient-descent",
+      "learning-rate",
+      "early-stopping",
+      "hyperparameter"
+    ]
+  },
+  "weight-initialization": {
+    "level": "intro",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "xavier-glorot-initialization",
+      "he-initialization-kaiming-initialization",
+      "what-is-the-vanishing-gradient-problem"
+    ]
+  },
+  "xavier-glorot-initialization": {
+    "level": "intro",
+    "prerequisites": ["weight-initialization"],
+    "related": [
+      "he-initialization-kaiming-initialization",
+      "sigmoid",
+      "tanh",
+      "what-is-the-vanishing-gradient-problem"
+    ]
+  },
+  "he-initialization-kaiming-initialization": {
+    "level": "intro",
+    "prerequisites": ["weight-initialization"],
+    "related": [
+      "xavier-glorot-initialization",
+      "relu",
+      "what-is-the-vanishing-gradient-problem",
+      "convolutional-neural-network-cnn"
+    ]
+  },
+  "label-smoothing": {
+    "level": "intro",
+    "prerequisites": ["cross-entropy", "classification"],
+    "related": [
+      "regularization",
+      "calibration",
+      "dropout"
+    ]
+  },
+  "data-augmentation": {
+    "level": "basic",
+    "prerequisites": ["supervised-learning"],
+    "related": [
+      "regularization",
+      "transfer-learning",
+      "overfitting",
+      "convolutional-neural-network-cnn"
+    ]
+  },
+  "mixed-precision-training": {
+    "level": "intermediate",
+    "prerequisites": ["backpropagation"],
+    "related": [
+      "gradient-clipping",
+      "log-sum-exp-trick",
+      "gpu-acceleration",
+      "floating-point-operations-flops"
+    ]
+  },
+  "gradient-checkpointing-activation-recomputation": {
+    "level": "intermediate",
+    "prerequisites": ["backpropagation", "forward-pass"],
+    "related": [
+      "mixed-precision-training",
+      "pagedattention",
+      "fully-sharded-data-parallel-fsdp",
+      "memory-optimization-ml-training"
+    ]
+  },
+  "calibration": {
+    "level": "intermediate",
+    "prerequisites": ["probability-distribution", "classification"],
+    "related": [
+      "temperature-scaling",
+      "label-smoothing",
+      "receiver-operating-characteristic-roc-and-auc",
+      "confidence-interval"
+    ]
+  },
+  "temperature-scaling": {
+    "level": "intermediate",
+    "prerequisites": ["calibration", "softmax"],
+    "related": [
+      "softmax-temperature",
+      "label-smoothing",
+      "logit"
+    ]
+  }
+}

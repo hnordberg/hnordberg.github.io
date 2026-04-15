@@ -1,0 +1,364 @@
+{
+  "transformer": {
+    "level": "intro",
+    "prerequisites": ["self-attention", "encoder-decoder-architecture"],
+    "related": [
+      "multi-head-attention",
+      "decoder-only-transformer",
+      "positional-encoding",
+      "residual-connection-skip-connection",
+      "layer-normalization"
+    ]
+  },
+  "attention-mechanism": {
+    "level": "intro",
+    "prerequisites": [],
+    "related": [
+      "self-attention",
+      "query-key-value-qkv",
+      "cross-attention",
+      "luong-attention-global-and-local",
+      "key-value-memory-networks"
+    ]
+  },
+  "self-attention": {
+    "level": "intro",
+    "prerequisites": ["attention-mechanism", "query-key-value-qkv"],
+    "related": [
+      "multi-head-attention",
+      "causal-masked-self-attention",
+      "attention-head",
+      "transformer"
+    ]
+  },
+  "query-key-value-qkv": {
+    "level": "intro",
+    "prerequisites": ["projection-matrix"],
+    "related": [
+      "self-attention",
+      "attention-score",
+      "multi-head-attention",
+      "key-value-memory-networks"
+    ]
+  },
+  "projection-matrix": {
+    "level": "intro",
+    "prerequisites": ["linear-function", "affine-transformation"],
+    "related": [
+      "query-key-value-qkv",
+      "fully-connected-layer",
+      "position-wise-mlp"
+    ]
+  },
+  "attention-score": {
+    "level": "intro",
+    "prerequisites": ["query-key-value-qkv"],
+    "related": [
+      "what-is-a-scaled-attention-score",
+      "attention-weights",
+      "masked-attention-score",
+      "self-attention"
+    ]
+  },
+  "what-is-a-scaled-attention-score": {
+    "level": "intro",
+    "prerequisites": ["attention-score"],
+    "related": [
+      "attention-weights",
+      "softmax",
+      "masked-attention-score",
+      "what-is-the-vanishing-gradient-problem"
+    ]
+  },
+  "masked-attention-score": {
+    "level": "intro",
+    "prerequisites": ["attention-score", "causal-mask"],
+    "related": [
+      "causal-masked-self-attention",
+      "attention-mask",
+      "attention-weights"
+    ]
+  },
+  "attention-weights": {
+    "level": "intro",
+    "prerequisites": ["attention-score", "softmax"],
+    "related": [
+      "attention-mask",
+      "what-is-a-scaled-attention-score",
+      "multi-head-attention"
+    ]
+  },
+  "attention-mask": {
+    "level": "intro",
+    "prerequisites": ["self-attention"],
+    "related": [
+      "causal-mask",
+      "masked-attention-score",
+      "padding-token",
+      "causal-masked-self-attention"
+    ]
+  },
+  "causal-mask": {
+    "level": "intro",
+    "prerequisites": ["self-attention"],
+    "related": [
+      "causal-masked-self-attention",
+      "attention-mask",
+      "autoregressive-language-model",
+      "decoder-only-transformer"
+    ]
+  },
+  "causal-masked-self-attention": {
+    "level": "intro",
+    "prerequisites": ["self-attention", "causal-mask"],
+    "related": [
+      "attention-mask",
+      "autoregressive-language-model",
+      "decoder-only-transformer",
+      "masked-attention-score"
+    ]
+  },
+  "multi-head-attention": {
+    "level": "intro",
+    "prerequisites": ["self-attention", "attention-head"],
+    "related": [
+      "grouped-query-attention-gqa",
+      "transformer",
+      "query-key-value-qkv",
+      "flashattention"
+    ]
+  },
+  "attention-head": {
+    "level": "intro",
+    "prerequisites": ["self-attention"],
+    "related": [
+      "multi-head-attention",
+      "query-key-value-qkv",
+      "grouped-query-attention-gqa",
+      "attention-visualization"
+    ]
+  },
+  "position-wise-mlp": {
+    "level": "basic",
+    "prerequisites": ["fully-connected-layer"],
+    "related": [
+      "multilayer-perceptron-mlp",
+      "swiglu-activation-function",
+      "residual-connection-skip-connection",
+      "transformer"
+    ]
+  },
+  "residual-connection-skip-connection": {
+    "level": "intro",
+    "prerequisites": ["neural-network"],
+    "related": [
+      "deep-neural-network",
+      "layer-normalization",
+      "transformer",
+      "what-is-the-vanishing-gradient-problem",
+      "pre-norm-vs-post-norm-architecture"
+    ]
+  },
+  "root-mean-square-normalization-rmsnorm": {
+    "level": "intro",
+    "prerequisites": ["layer-normalization"],
+    "related": [
+      "pre-norm-vs-post-norm-architecture",
+      "batch-normalization",
+      "transformer"
+    ]
+  },
+  "pre-norm-vs-post-norm-architecture": {
+    "level": "intermediate",
+    "prerequisites": ["layer-normalization", "residual-connection-skip-connection"],
+    "related": [
+      "root-mean-square-normalization-rmsnorm",
+      "transformer",
+      "what-is-the-vanishing-gradient-problem"
+    ]
+  },
+  "swiglu-activation-function": {
+    "level": "intermediate",
+    "prerequisites": ["activation-function"],
+    "related": [
+      "relu",
+      "position-wise-mlp",
+      "transformer"
+    ]
+  },
+  "decoder-block": {
+    "level": "intermediate",
+    "prerequisites": ["self-attention", "position-wise-mlp", "residual-connection-skip-connection"],
+    "related": [
+      "decoder-only-transformer",
+      "causal-masked-self-attention",
+      "transformer",
+      "pre-norm-vs-post-norm-architecture"
+    ]
+  },
+  "decoder-only-transformer": {
+    "level": "intermediate",
+    "prerequisites": ["decoder-block", "causal-masked-self-attention"],
+    "related": [
+      "transformer",
+      "autoregressive-language-model",
+      "gpt-1-generative-pre-training",
+      "encoder-decoder-architecture"
+    ]
+  },
+  "encoder-decoder-architecture": {
+    "level": "intermediate",
+    "prerequisites": ["transformer", "cross-attention"],
+    "related": [
+      "sequence-to-sequence-seq2seq",
+      "encoder-transformer",
+      "decoder-transformer",
+      "t5-text-to-text-transfer-transformer"
+    ]
+  },
+  "encoder-transformer": {
+    "level": "intro",
+    "prerequisites": ["transformer"],
+    "related": [
+      "decoder-transformer",
+      "masked-language-model",
+      "encoder-decoder-architecture",
+      "self-attention"
+    ]
+  },
+  "decoder-transformer": {
+    "level": "intro",
+    "prerequisites": ["transformer"],
+    "related": [
+      "encoder-transformer",
+      "decoder-only-transformer",
+      "autoregressive-language-model",
+      "causal-masked-self-attention"
+    ]
+  },
+  "sequence-to-sequence-seq2seq": {
+    "level": "intro",
+    "prerequisites": ["recurrent-neural-network-rnn"],
+    "related": [
+      "encoder-decoder-architecture",
+      "long-short-term-memory-lstm",
+      "attention-mechanism",
+      "luong-attention-global-and-local",
+      "t5-text-to-text-transfer-transformer"
+    ]
+  },
+  "context-window": {
+    "level": "basic",
+    "prerequisites": ["transformer"],
+    "related": [
+      "positional-encoding",
+      "needle-in-a-haystack",
+      "long-context-pretraining",
+      "key-value-kv-caching"
+    ]
+  },
+  "positional-encoding": {
+    "level": "intro",
+    "prerequisites": ["self-attention"],
+    "related": [
+      "absolute-position-encoding",
+      "relative-position-encoding",
+      "sinusoidal-positional-encoding",
+      "rotary-positional-embedding-rope"
+    ]
+  },
+  "absolute-position-encoding": {
+    "level": "intro",
+    "prerequisites": ["positional-encoding"],
+    "related": [
+      "sinusoidal-positional-encoding",
+      "relative-position-encoding"
+    ]
+  },
+  "relative-position-encoding": {
+    "level": "intro",
+    "prerequisites": ["positional-encoding"],
+    "related": [
+      "rotary-positional-embedding-rope",
+      "absolute-position-encoding",
+      "sinusoidal-positional-encoding"
+    ]
+  },
+  "sinusoidal-positional-encoding": {
+    "level": "intro",
+    "prerequisites": ["positional-encoding"],
+    "related": [
+      "rotary-positional-embedding-rope",
+      "absolute-position-encoding",
+      "transformer"
+    ]
+  },
+  "rotary-positional-embedding-rope": {
+    "level": "intermediate",
+    "prerequisites": ["positional-encoding", "relative-position-encoding"],
+    "related": [
+      "sinusoidal-positional-encoding",
+      "absolute-position-encoding",
+      "transformer"
+    ]
+  },
+  "grouped-query-attention-gqa": {
+    "level": "advanced",
+    "prerequisites": ["multi-head-attention", "key-value-kv-caching"],
+    "related": [
+      "attention-head",
+      "flashattention",
+      "pagedattention"
+    ]
+  },
+  "cross-attention": {
+    "level": "intermediate",
+    "prerequisites": ["self-attention", "query-key-value-qkv"],
+    "related": [
+      "encoder-decoder-architecture",
+      "sequence-to-sequence-seq2seq",
+      "vision-language-model-vlm",
+      "attention-mechanism"
+    ]
+  },
+  "key-value-kv-caching": {
+    "level": "intermediate",
+    "prerequisites": ["self-attention", "autoregressive-language-model"],
+    "related": [
+      "pagedattention",
+      "speculative-decoding",
+      "grouped-query-attention-gqa",
+      "inference-optimization"
+    ]
+  },
+  "flashattention": {
+    "level": "advanced",
+    "prerequisites": ["self-attention", "multi-head-attention"],
+    "related": [
+      "pagedattention",
+      "mixed-precision-training",
+      "gpu-acceleration",
+      "gradient-checkpointing-activation-recomputation"
+    ]
+  },
+  "pagedattention": {
+    "level": "advanced",
+    "prerequisites": ["key-value-kv-caching"],
+    "related": [
+      "flashattention",
+      "speculative-decoding",
+      "inference-optimization",
+      "memory-optimization-ml-training"
+    ]
+  },
+  "speculative-decoding": {
+    "level": "advanced",
+    "prerequisites": ["autoregressive-language-model", "sampling-in-language-models"],
+    "related": [
+      "greedy-decoding",
+      "key-value-kv-caching",
+      "inference-optimization",
+      "pagedattention"
+    ]
+  }
+}

@@ -1,0 +1,471 @@
+{
+  "large-language-model-llm": {
+    "level": "basic",
+    "prerequisites": ["language-model", "transformer"],
+    "related": [
+      "foundation-model",
+      "pretraining",
+      "scaling-laws",
+      "chat-language-model",
+      "gpt-3-and-few-shot-in-context-learning"
+    ]
+  },
+  "foundation-model": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "large-language-model-llm",
+      "pretraining",
+      "transfer-learning",
+      "scaling-laws",
+      "base-model"
+    ]
+  },
+  "pretraining": {
+    "level": "basic",
+    "prerequisites": ["language-model", "gradient-descent"],
+    "related": [
+      "pretraining-corpus",
+      "next-token-prediction-objective-causal-language-modeling",
+      "supervised-fine-tuning-sft",
+      "finetuning",
+      "scaling-laws"
+    ]
+  },
+  "pretraining-corpus": {
+    "level": "basic",
+    "prerequisites": ["corpus"],
+    "related": [
+      "data-mixture",
+      "pretraining",
+      "tokenization",
+      "instruction-dataset"
+    ]
+  },
+  "instruction-dataset": {
+    "level": "basic",
+    "prerequisites": ["supervised-fine-tuning-sft"],
+    "related": [
+      "preference-dataset",
+      "pretraining-corpus",
+      "instruction-tuning"
+    ]
+  },
+  "preference-dataset": {
+    "level": "intro",
+    "prerequisites": ["pairwise-comparison", "supervised-fine-tuning-sft"],
+    "related": [
+      "reward-model",
+      "direct-preference-optimization-dpo",
+      "reinforcement-learning-from-human-feedback-rlhf",
+      "bradley-terry-model"
+    ]
+  },
+  "data-mixture": {
+    "level": "intermediate",
+    "prerequisites": ["pretraining-corpus"],
+    "related": [
+      "scaling-laws",
+      "curriculum-learning",
+      "pretraining"
+    ]
+  },
+  "long-context-pretraining": {
+    "level": "intermediate",
+    "prerequisites": ["pretraining", "context-window"],
+    "related": [
+      "needle-in-a-haystack",
+      "rotary-positional-embedding-rope",
+      "scaling-laws"
+    ]
+  },
+  "domain-specific-pretraining": {
+    "level": "intermediate",
+    "prerequisites": ["pretraining"],
+    "related": [
+      "finetuning",
+      "supervised-fine-tuning-sft",
+      "pretraining-corpus"
+    ]
+  },
+  "scaling-laws": {
+    "level": "intro",
+    "prerequisites": ["pretraining"],
+    "related": [
+      "what-are-emergent-capabilities-in-large-language-models",
+      "the-bitter-lesson",
+      "foundation-model",
+      "floating-point-operations-flops"
+    ]
+  },
+  "what-are-emergent-capabilities-in-large-language-models": {
+    "level": "intermediate",
+    "prerequisites": ["scaling-laws", "large-language-model-llm"],
+    "related": [
+      "in-context-learning",
+      "gpt-3-and-few-shot-in-context-learning",
+      "chain-of-thought",
+      "zero-shot-learning"
+    ]
+  },
+  "zero-shot-learning": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "one-shot-learning",
+      "few-shot-prompting",
+      "in-context-learning",
+      "transfer-learning"
+    ]
+  },
+  "one-shot-learning": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "zero-shot-learning",
+      "few-shot-prompting",
+      "transfer-learning"
+    ]
+  },
+  "transfer-learning": {
+    "level": "basic",
+    "prerequisites": ["supervised-learning"],
+    "related": [
+      "finetuning",
+      "pretraining",
+      "data-augmentation",
+      "foundation-model"
+    ]
+  },
+  "finetuning": {
+    "level": "basic",
+    "prerequisites": ["pretraining", "supervised-learning"],
+    "related": [
+      "supervised-fine-tuning-sft",
+      "parameter-efficient-fine-tuning-peft",
+      "full-fine-tune",
+      "transfer-learning",
+      "instruction-tuning"
+    ]
+  },
+  "supervised-fine-tuning-sft": {
+    "level": "basic",
+    "prerequisites": ["finetuning", "language-model"],
+    "related": [
+      "instruction-dataset",
+      "instruction-tuning",
+      "preference-based-alignment",
+      "reinforcement-learning-from-human-feedback-rlhf",
+      "chat-language-model",
+      "parameter-efficient-fine-tuning-peft"
+    ]
+  },
+  "full-fine-tune": {
+    "level": "intro",
+    "prerequisites": ["finetuning"],
+    "related": [
+      "parameter-efficient-fine-tuning-peft",
+      "low-rank-adaptation-lora",
+      "supervised-fine-tuning-sft",
+      "memory-optimization-ml-training"
+    ]
+  },
+  "parameter-efficient-fine-tuning-peft": {
+    "level": "intro",
+    "prerequisites": ["finetuning"],
+    "related": [
+      "low-rank-adaptation-lora",
+      "qlora-quantized-lora",
+      "full-fine-tune",
+      "lora-adapter"
+    ]
+  },
+  "low-rank-adaptation-lora": {
+    "level": "intermediate",
+    "prerequisites": ["parameter-efficient-fine-tuning-peft", "singular-value-decomposition-svd"],
+    "related": [
+      "lora-adapter",
+      "qlora-quantized-lora",
+      "full-fine-tune",
+      "model-merging"
+    ]
+  },
+  "lora-adapter": {
+    "level": "intermediate",
+    "prerequisites": ["low-rank-adaptation-lora"],
+    "related": [
+      "qlora-quantized-lora",
+      "model-merging",
+      "parameter-efficient-fine-tuning-peft"
+    ]
+  },
+  "qlora-quantized-lora": {
+    "level": "advanced",
+    "prerequisites": ["low-rank-adaptation-lora", "quantization"],
+    "related": [
+      "post-training-quantization-ptq",
+      "memory-optimization-ml-training",
+      "lora-adapter"
+    ]
+  },
+  "base-model": {
+    "level": "basic",
+    "prerequisites": ["pretraining"],
+    "related": [
+      "foundation-model",
+      "open-weight-model",
+      "chat-language-model",
+      "supervised-fine-tuning-sft"
+    ]
+  },
+  "open-weight-model": {
+    "level": "basic",
+    "prerequisites": ["base-model"],
+    "related": [
+      "foundation-model",
+      "large-language-model-llm"
+    ]
+  },
+  "instruction-tuning": {
+    "level": "basic",
+    "prerequisites": ["supervised-fine-tuning-sft"],
+    "related": [
+      "instruction-dataset",
+      "chat-language-model",
+      "finetuning",
+      "prompt-engineering"
+    ]
+  },
+  "safety-alignment": {
+    "level": "basic",
+    "prerequisites": ["alignment-ai"],
+    "related": [
+      "red-teaming",
+      "constitutional-ai",
+      "reinforcement-learning-from-human-feedback-rlhf",
+      "preference-based-alignment"
+    ]
+  },
+  "alignment-ai": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "safety-alignment",
+      "ai-safety",
+      "misalignment",
+      "reinforcement-learning-from-human-feedback-rlhf",
+      "constitutional-ai"
+    ]
+  },
+  "preference-based-alignment": {
+    "level": "intermediate",
+    "prerequisites": ["finetuning", "pairwise-comparison"],
+    "related": [
+      "reinforcement-learning-from-human-feedback-rlhf",
+      "direct-preference-optimization-dpo",
+      "reward-model",
+      "bradley-terry-model"
+    ]
+  },
+  "reinforcement-learning-from-human-feedback-rlhf": {
+    "level": "advanced",
+    "prerequisites": ["preference-based-alignment", "proximal-policy-optimization-ppo"],
+    "related": [
+      "reward-model",
+      "kl-divergence-penalty-in-rlhf",
+      "direct-preference-optimization-dpo",
+      "constitutional-ai"
+    ]
+  },
+  "reward-model": {
+    "level": "intermediate",
+    "prerequisites": ["preference-dataset", "bradley-terry-model"],
+    "related": [
+      "reinforcement-learning-from-human-feedback-rlhf",
+      "direct-preference-optimization-dpo",
+      "reward-signal"
+    ]
+  },
+  "reward-signal": {
+    "level": "basic",
+    "prerequisites": ["reinforcement-learning-rl"],
+    "related": [
+      "reward-model",
+      "policy-reinforcement-learning",
+      "value-function",
+      "the-bellman-equation"
+    ]
+  },
+  "policy-reinforcement-learning": {
+    "level": "basic",
+    "prerequisites": ["reinforcement-learning-rl"],
+    "related": [
+      "value-function",
+      "reward-signal",
+      "q-learning",
+      "proximal-policy-optimization-ppo"
+    ]
+  },
+  "value-function": {
+    "level": "intro",
+    "prerequisites": ["policy-reinforcement-learning", "reward-signal"],
+    "related": [
+      "the-bellman-equation",
+      "q-learning",
+      "reinforcement-learning-rl"
+    ]
+  },
+  "proximal-policy-optimization-ppo": {
+    "level": "advanced",
+    "prerequisites": ["policy-reinforcement-learning", "gradient-descent"],
+    "related": [
+      "kl-divergence-penalty-in-rlhf",
+      "reinforcement-learning-from-human-feedback-rlhf",
+      "grpo-group-relative-policy-optimization",
+      "q-learning"
+    ]
+  },
+  "kl-divergence-penalty-in-rlhf": {
+    "level": "advanced",
+    "prerequisites": ["reinforcement-learning-from-human-feedback-rlhf", "cross-entropy"],
+    "related": [
+      "proximal-policy-optimization-ppo",
+      "reward-model",
+      "shannon-entropy"
+    ]
+  },
+  "direct-preference-optimization-dpo": {
+    "level": "advanced",
+    "prerequisites": ["preference-based-alignment", "bradley-terry-model"],
+    "related": [
+      "reinforcement-learning-from-human-feedback-rlhf",
+      "reward-model",
+      "preference-dataset"
+    ]
+  },
+  "constitutional-ai": {
+    "level": "advanced",
+    "prerequisites": ["reinforcement-learning-from-human-feedback-rlhf", "safety-alignment"],
+    "related": [
+      "self-critique",
+      "chain-of-thought-monitorability",
+      "constitutional-classifiers-plus-plus",
+      "alignment-ai"
+    ]
+  },
+  "self-critique": {
+    "level": "intermediate",
+    "prerequisites": ["chat-language-model"],
+    "related": [
+      "constitutional-ai",
+      "chain-of-thought",
+      "prompt-engineering"
+    ]
+  },
+  "ai-safety": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "alignment-ai",
+      "misalignment",
+      "safety-alignment",
+      "red-teaming",
+      "bias-fairness"
+    ]
+  },
+  "grpo-group-relative-policy-optimization": {
+    "level": "advanced",
+    "prerequisites": ["proximal-policy-optimization-ppo", "policy-reinforcement-learning"],
+    "related": [
+      "reinforcement-learning-from-human-feedback-rlhf",
+      "kl-divergence-penalty-in-rlhf",
+      "reward-model"
+    ]
+  },
+  "q-learning": {
+    "level": "intermediate",
+    "prerequisites": ["the-bellman-equation", "reinforcement-learning-rl"],
+    "related": [
+      "value-function",
+      "policy-reinforcement-learning",
+      "the-markov-property"
+    ]
+  },
+  "the-bellman-equation": {
+    "level": "intermediate",
+    "prerequisites": ["the-markov-property", "reinforcement-learning-rl"],
+    "related": [
+      "q-learning",
+      "value-function",
+      "policy-reinforcement-learning"
+    ]
+  },
+  "continual-learning": {
+    "level": "intermediate",
+    "prerequisites": ["finetuning"],
+    "related": [
+      "what-is-catastrophic-forgetting",
+      "curriculum-learning",
+      "transfer-learning"
+    ]
+  },
+  "what-is-catastrophic-forgetting": {
+    "level": "basic",
+    "prerequisites": ["finetuning"],
+    "related": [
+      "continual-learning",
+      "transfer-learning",
+      "low-rank-adaptation-lora"
+    ]
+  },
+  "curriculum-learning": {
+    "level": "intermediate",
+    "prerequisites": ["supervised-learning"],
+    "related": [
+      "data-mixture",
+      "pretraining",
+      "transfer-learning"
+    ]
+  },
+  "hallucination": {
+    "level": "basic",
+    "prerequisites": ["large-language-model-llm"],
+    "related": [
+      "grounding",
+      "faithfulness",
+      "factuality",
+      "retrieval-augmented-generation-rag",
+      "misalignment"
+    ]
+  },
+  "misalignment": {
+    "level": "intermediate",
+    "prerequisites": ["alignment-ai"],
+    "related": [
+      "ai-safety",
+      "bias-fairness",
+      "reward-model",
+      "reinforcement-learning-from-human-feedback-rlhf"
+    ]
+  },
+  "bias-fairness": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "bias-mitigation",
+      "explainability",
+      "ai-safety",
+      "misalignment"
+    ]
+  },
+  "explainability": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "interpretability",
+      "mechanistic-interpretability",
+      "bias-fairness",
+      "transparency-ai-systems"
+    ]
+  }
+}

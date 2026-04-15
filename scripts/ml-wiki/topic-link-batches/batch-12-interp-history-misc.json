@@ -1,0 +1,395 @@
+{
+  "interpretability": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "mechanistic-interpretability",
+      "explainability",
+      "attention-visualization",
+      "probing-neural-networks",
+      "transparency-ai-systems"
+    ]
+  },
+  "mechanistic-interpretability": {
+    "level": "intermediate",
+    "prerequisites": ["interpretability", "neural-network"],
+    "related": [
+      "logit-lens",
+      "activation-patching",
+      "sparse-autoencoder-mechanistic-interpretability",
+      "superposition-neural-networks",
+      "steering-vectors"
+    ]
+  },
+  "attention-visualization": {
+    "level": "intermediate",
+    "prerequisites": ["multi-head-attention", "interpretability"],
+    "related": [
+      "probing-neural-networks",
+      "mechanistic-interpretability",
+      "attention-head"
+    ]
+  },
+  "probing-neural-networks": {
+    "level": "intermediate",
+    "prerequisites": ["interpretability", "classification"],
+    "related": [
+      "logit-lens",
+      "attention-visualization",
+      "activation-analysis",
+      "representation-learning"
+    ]
+  },
+  "logit-lens": {
+    "level": "intermediate",
+    "prerequisites": ["mechanistic-interpretability"],
+    "related": [
+      "activation-analysis",
+      "activation-patching",
+      "projection-matrix",
+      "probing-neural-networks"
+    ]
+  },
+  "activation-analysis": {
+    "level": "intermediate",
+    "prerequisites": ["mechanistic-interpretability"],
+    "related": [
+      "logit-lens",
+      "sparse-autoencoder-mechanistic-interpretability",
+      "activation-patching",
+      "probing-neural-networks"
+    ]
+  },
+  "sparse-autoencoder-mechanistic-interpretability": {
+    "level": "advanced",
+    "prerequisites": ["mechanistic-interpretability", "autoencoders"],
+    "related": [
+      "superposition-neural-networks",
+      "activation-analysis",
+      "l1-regularization-lasso",
+      "steering-vectors"
+    ]
+  },
+  "superposition-neural-networks": {
+    "level": "advanced",
+    "prerequisites": ["mechanistic-interpretability"],
+    "related": [
+      "sparse-autoencoder-mechanistic-interpretability",
+      "embedding-space",
+      "distributed-representation"
+    ]
+  },
+  "activation-patching": {
+    "level": "advanced",
+    "prerequisites": ["mechanistic-interpretability"],
+    "related": [
+      "logit-lens",
+      "activation-analysis",
+      "steering-vectors",
+      "mechanistic-oocr-steering-vectors"
+    ]
+  },
+  "steering-vectors": {
+    "level": "intermediate",
+    "prerequisites": ["mechanistic-interpretability"],
+    "related": [
+      "activation-patching",
+      "activation-analysis",
+      "safety-alignment",
+      "mechanistic-oocr-steering-vectors"
+    ]
+  },
+  "transparency-ai-systems": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "explainability",
+      "interpretability",
+      "ai-safety",
+      "alignment-ai"
+    ]
+  },
+  "mechanistic-oocr-steering-vectors": {
+    "level": "advanced",
+    "prerequisites": ["steering-vectors", "mechanistic-interpretability"],
+    "related": [
+      "activation-patching",
+      "critical-representation-fine-tuning",
+      "safety-alignment"
+    ]
+  },
+  "critical-representation-fine-tuning": {
+    "level": "advanced",
+    "prerequisites": ["low-rank-adaptation-lora", "mechanistic-interpretability"],
+    "related": [
+      "steering-vectors",
+      "parameter-efficient-fine-tuning-peft",
+      "lora-adapter"
+    ]
+  },
+  "chain-of-thought-monitorability": {
+    "level": "advanced",
+    "prerequisites": ["chain-of-thought", "safety-alignment"],
+    "related": [
+      "constitutional-ai",
+      "constitutional-classifiers-plus-plus",
+      "self-critique",
+      "react-reason-act"
+    ]
+  },
+  "constitutional-classifiers-plus-plus": {
+    "level": "advanced",
+    "prerequisites": ["constitutional-ai"],
+    "related": [
+      "chain-of-thought-monitorability",
+      "safety-alignment",
+      "red-teaming"
+    ]
+  },
+  "autoencoders": {
+    "level": "intermediate",
+    "prerequisites": ["neural-network", "latent-space"],
+    "related": [
+      "reparameterization-trick-vae",
+      "gan-minimax-objective",
+      "principal-component-analysis-pca",
+      "representation-learning",
+      "dimensionality-reduction"
+    ]
+  },
+  "reparameterization-trick-vae": {
+    "level": "intermediate",
+    "prerequisites": ["autoencoders", "backpropagation"],
+    "related": [
+      "gan-minimax-objective",
+      "latent-space",
+      "markov-chain-monte-carlo-mcmc"
+    ]
+  },
+  "gan-minimax-objective": {
+    "level": "intermediate",
+    "prerequisites": ["neural-network", "binary-classification"],
+    "related": [
+      "autoencoders",
+      "reparameterization-trick-vae",
+      "loss-function"
+    ]
+  },
+  "the-bitter-lesson": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "scaling-laws",
+      "deep-learning",
+      "foundation-model",
+      "gpt-3-and-few-shot-in-context-learning"
+    ]
+  },
+  "imagenet-dataset": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "convolutional-neural-network-cnn",
+      "vision-encoder",
+      "deep-learning",
+      "transfer-learning"
+    ]
+  },
+  "gpt-1-generative-pre-training": {
+    "level": "intermediate",
+    "prerequisites": ["decoder-only-transformer", "pretraining"],
+    "related": [
+      "gpt-2-and-zero-shot-task-transfer",
+      "masked-language-model",
+      "elmo-embeddings-from-language-models",
+      "large-language-model-llm"
+    ]
+  },
+  "gpt-2-and-zero-shot-task-transfer": {
+    "level": "intermediate",
+    "prerequisites": ["gpt-1-generative-pre-training"],
+    "related": [
+      "gpt-3-and-few-shot-in-context-learning",
+      "zero-shot-learning",
+      "scaling-laws"
+    ]
+  },
+  "gpt-3-and-few-shot-in-context-learning": {
+    "level": "intermediate",
+    "prerequisites": ["gpt-2-and-zero-shot-task-transfer", "few-shot-prompting"],
+    "related": [
+      "in-context-learning",
+      "scaling-laws",
+      "large-language-model-llm",
+      "the-bitter-lesson"
+    ]
+  },
+  "t5-text-to-text-transfer-transformer": {
+    "level": "intermediate",
+    "prerequisites": ["encoder-decoder-architecture", "pretraining"],
+    "related": [
+      "masked-language-model",
+      "transfer-learning",
+      "sequence-to-sequence-seq2seq"
+    ]
+  },
+  "neural-turing-machine-ntm": {
+    "level": "advanced",
+    "prerequisites": ["recurrent-neural-network-rnn", "attention-mechanism"],
+    "related": [
+      "key-value-memory-networks",
+      "long-short-term-memory-lstm",
+      "luong-attention-global-and-local"
+    ]
+  },
+  "vision-language-model-vlm": {
+    "level": "advanced",
+    "prerequisites": ["vision-encoder", "large-language-model-llm"],
+    "related": [
+      "clip-contrastive-language-image-pre-training",
+      "cross-attention",
+      "multimodal-secure-alignment"
+    ]
+  },
+  "vision-encoder": {
+    "level": "intermediate",
+    "prerequisites": ["convolutional-neural-network-cnn"],
+    "related": [
+      "clip-contrastive-language-image-pre-training",
+      "vision-language-model-vlm",
+      "imagenet-dataset"
+    ]
+  },
+  "clip-contrastive-language-image-pre-training": {
+    "level": "intermediate",
+    "prerequisites": ["vision-encoder", "triplet-margin-loss"],
+    "related": [
+      "vision-language-model-vlm",
+      "word-embedding",
+      "zero-shot-learning",
+      "cosine-similarity"
+    ]
+  },
+  "program-aided-language-model": {
+    "level": "intermediate",
+    "prerequisites": ["chain-of-thought"],
+    "related": [
+      "react-reason-act",
+      "function-calling",
+      "tree-of-thought"
+    ]
+  },
+  "test-time-compute-scaling": {
+    "level": "advanced",
+    "prerequisites": ["large-language-model-llm", "chain-of-thought"],
+    "related": [
+      "self-consistency",
+      "tree-of-thought",
+      "scaling-laws",
+      "chain-of-thought-monitorability"
+    ]
+  },
+  "layer-dropping-and-progressive-pruning-trimllm": {
+    "level": "advanced",
+    "prerequisites": ["structured-pruning", "transformer"],
+    "related": [
+      "pruning",
+      "inference-optimization",
+      "knowledge-distillation"
+    ]
+  },
+  "multimodal-secure-alignment": {
+    "level": "advanced",
+    "prerequisites": ["vision-language-model-vlm", "safety-alignment"],
+    "related": [
+      "adversarial-prompting",
+      "constitutional-ai",
+      "what-is-a-jailbreak-in-the-context-of-llms",
+      "red-teaming"
+    ]
+  },
+  "continuous-thought-machines": {
+    "level": "advanced",
+    "prerequisites": ["recurrent-neural-network-rnn", "neural-network"],
+    "related": [
+      "neural-turing-machine-ntm",
+      "test-time-compute-scaling",
+      "kolmogorov-arnold-networks"
+    ]
+  },
+  "kolmogorov-arnold-networks": {
+    "level": "advanced",
+    "prerequisites": ["multilayer-perceptron-mlp"],
+    "related": [
+      "activation-function",
+      "deep-neural-network",
+      "continuous-thought-machines"
+    ]
+  },
+  "red-teaming": {
+    "level": "basic",
+    "prerequisites": ["safety-alignment"],
+    "related": [
+      "adversarial-prompting",
+      "what-is-a-jailbreak-in-the-context-of-llms",
+      "constitutional-classifiers-plus-plus",
+      "ai-safety"
+    ]
+  },
+  "what-is-a-jailbreak-in-the-context-of-llms": {
+    "level": "intermediate",
+    "prerequisites": ["safety-alignment"],
+    "related": [
+      "adversarial-prompting",
+      "red-teaming",
+      "constitutional-classifiers-plus-plus",
+      "chain-of-thought-monitorability"
+    ]
+  },
+  "adversarial-prompting": {
+    "level": "intermediate",
+    "prerequisites": ["prompt-engineering"],
+    "related": [
+      "what-is-a-jailbreak-in-the-context-of-llms",
+      "red-teaming",
+      "safety-alignment",
+      "constitutional-classifiers-plus-plus"
+    ]
+  },
+  "bias-mitigation": {
+    "level": "basic",
+    "prerequisites": ["bias-fairness"],
+    "related": [
+      "safety-alignment",
+      "ai-safety",
+      "feedback-loop-ml-systems",
+      "explainability"
+    ]
+  },
+  "conversational-ai": {
+    "level": "basic",
+    "prerequisites": ["chat-language-model"],
+    "related": [
+      "role-playing-llms",
+      "prompting-format",
+      "function-calling"
+    ]
+  },
+  "role-playing-llms": {
+    "level": "basic",
+    "prerequisites": ["system-prompt"],
+    "related": [
+      "conversational-ai",
+      "prompt-engineering",
+      "prompting-format"
+    ]
+  },
+  "weight-tying": {
+    "level": "intermediate",
+    "prerequisites": ["embedding-layer", "output-layer"],
+    "related": [
+      "softmax-head",
+      "embedding-vector"
+    ]
+  }
+}

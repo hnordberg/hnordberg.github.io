@@ -1,0 +1,228 @@
+{
+  "prompt": {
+    "level": "basic",
+    "prerequisites": ["chat-language-model"],
+    "related": [
+      "system-prompt",
+      "prompt-engineering",
+      "few-shot-prompting",
+      "prompting-format"
+    ]
+  },
+  "system-prompt": {
+    "level": "basic",
+    "prerequisites": ["prompt"],
+    "related": [
+      "prompting-format",
+      "prompt-engineering",
+      "chat-language-model",
+      "role-playing-llms"
+    ]
+  },
+  "prompting-format": {
+    "level": "basic",
+    "prerequisites": ["prompt", "chat-language-model"],
+    "related": [
+      "special-tokens",
+      "system-prompt",
+      "function-calling"
+    ]
+  },
+  "few-shot-prompting": {
+    "level": "basic",
+    "prerequisites": ["prompt"],
+    "related": [
+      "in-context-learning",
+      "zero-shot-learning",
+      "one-shot-learning",
+      "gpt-3-and-few-shot-in-context-learning"
+    ]
+  },
+  "in-context-learning": {
+    "level": "intro",
+    "prerequisites": ["few-shot-prompting", "large-language-model-llm"],
+    "related": [
+      "chain-of-thought",
+      "zero-shot-learning",
+      "what-are-emergent-capabilities-in-large-language-models",
+      "gpt-3-and-few-shot-in-context-learning"
+    ]
+  },
+  "prompt-engineering": {
+    "level": "basic",
+    "prerequisites": ["prompt"],
+    "related": [
+      "chain-of-thought",
+      "few-shot-prompting",
+      "system-prompt",
+      "instruction-tuning"
+    ]
+  },
+  "chain-of-thought": {
+    "level": "intro",
+    "prerequisites": ["prompt-engineering", "in-context-learning"],
+    "related": [
+      "tree-of-thought",
+      "self-consistency",
+      "react-reason-act",
+      "what-are-emergent-capabilities-in-large-language-models"
+    ]
+  },
+  "tree-of-thought": {
+    "level": "intermediate",
+    "prerequisites": ["chain-of-thought"],
+    "related": [
+      "self-consistency",
+      "react-reason-act",
+      "test-time-compute-scaling"
+    ]
+  },
+  "self-consistency": {
+    "level": "intermediate",
+    "prerequisites": ["chain-of-thought", "sampling-in-language-models"],
+    "related": [
+      "tree-of-thought",
+      "test-time-compute-scaling"
+    ]
+  },
+  "react-reason-act": {
+    "level": "intermediate",
+    "prerequisites": ["chain-of-thought", "function-calling"],
+    "related": [
+      "tree-of-thought",
+      "program-aided-language-model",
+      "chain-of-thought-monitorability"
+    ]
+  },
+  "function-calling": {
+    "level": "basic",
+    "prerequisites": ["prompt", "chat-language-model"],
+    "related": [
+      "react-reason-act",
+      "prompting-format",
+      "program-aided-language-model"
+    ]
+  },
+  "sampling-in-language-models": {
+    "level": "basic",
+    "prerequisites": ["autoregressive-language-model", "discrete-probability-distribution"],
+    "related": [
+      "greedy-decoding",
+      "top-k-sampling",
+      "top-p-sampling-nucleus-sampling",
+      "softmax-temperature",
+      "beam-search"
+    ]
+  },
+  "greedy-decoding": {
+    "level": "basic",
+    "prerequisites": ["sampling-in-language-models"],
+    "related": [
+      "beam-search",
+      "top-k-sampling",
+      "top-p-sampling-nucleus-sampling",
+      "softmax-temperature"
+    ]
+  },
+  "top-k-sampling": {
+    "level": "intro",
+    "prerequisites": ["sampling-in-language-models"],
+    "related": [
+      "top-p-sampling-nucleus-sampling",
+      "greedy-decoding",
+      "softmax-temperature"
+    ]
+  },
+  "top-p-sampling-nucleus-sampling": {
+    "level": "intro",
+    "prerequisites": ["sampling-in-language-models"],
+    "related": [
+      "top-k-sampling",
+      "softmax-temperature",
+      "greedy-decoding"
+    ]
+  },
+  "softmax-temperature": {
+    "level": "intro",
+    "prerequisites": ["softmax"],
+    "related": [
+      "temperature-scaling",
+      "top-k-sampling",
+      "top-p-sampling-nucleus-sampling",
+      "logit"
+    ]
+  },
+  "frequency-penalty": {
+    "level": "intro",
+    "prerequisites": ["sampling-in-language-models", "logit"],
+    "related": [
+      "presence-penalty",
+      "repetition-penalty",
+      "top-p-sampling-nucleus-sampling"
+    ]
+  },
+  "presence-penalty": {
+    "level": "intro",
+    "prerequisites": ["sampling-in-language-models", "logit"],
+    "related": [
+      "frequency-penalty",
+      "repetition-penalty"
+    ]
+  },
+  "repetition-penalty": {
+    "level": "intro",
+    "prerequisites": ["sampling-in-language-models", "logit"],
+    "related": [
+      "frequency-penalty",
+      "presence-penalty",
+      "greedy-decoding",
+      "top-p-sampling-nucleus-sampling"
+    ]
+  },
+  "beam-search": {
+    "level": "intro",
+    "prerequisites": ["sampling-in-language-models"],
+    "related": [
+      "greedy-decoding",
+      "top-k-sampling",
+      "sequence-to-sequence-seq2seq",
+      "bleu"
+    ]
+  },
+  "logit-adjustment": {
+    "level": "intermediate",
+    "prerequisites": ["softmax", "logit"],
+    "related": [
+      "softmax-normalization",
+      "temperature-scaling",
+      "repetition-penalty"
+    ]
+  },
+  "softmax-head": {
+    "level": "basic",
+    "prerequisites": ["softmax", "output-layer"],
+    "related": [
+      "classification-head",
+      "sampling-in-language-models",
+      "next-token-prediction-objective-causal-language-modeling"
+    ]
+  },
+  "classification-head": {
+    "level": "basic",
+    "prerequisites": ["output-layer", "softmax"],
+    "related": [
+      "softmax-head",
+      "finetuning",
+      "transfer-learning"
+    ]
+  },
+  "active-learning": {
+    "level": "intermediate",
+    "prerequisites": ["supervised-learning"],
+    "related": [
+      "data-augmentation",
+      "curriculum-learning",
+      "human-evaluation"
+    ]
+  }
+}

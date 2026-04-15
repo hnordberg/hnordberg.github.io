@@ -1,0 +1,277 @@
+{
+  "perceptron": {
+    "level": "basic",
+    "prerequisites": ["binary-classification"],
+    "related": [
+      "neuron",
+      "multilayer-perceptron-mlp",
+      "support-vector-machine-svm",
+      "logistic-regression",
+      "decision-tree"
+    ]
+  },
+  "decision-tree": {
+    "level": "basic",
+    "prerequisites": ["classification"],
+    "related": [
+      "random-forest",
+      "information-gain-decision-trees",
+      "gradient-boosting-machines-gbm",
+      "adaboost-adaptive-boosting",
+      "regression"
+    ]
+  },
+  "random-forest": {
+    "level": "basic",
+    "prerequisites": ["decision-tree", "bootstrap-aggregating-bagging"],
+    "related": [
+      "gradient-boosting-machines-gbm",
+      "support-vector-machine-svm",
+      "information-gain-decision-trees"
+    ]
+  },
+  "support-vector-machine-svm": {
+    "level": "intro",
+    "prerequisites": ["binary-classification", "linear-function"],
+    "related": [
+      "kernel-methods",
+      "lagrange-multipliers",
+      "logistic-regression",
+      "perceptron"
+    ]
+  },
+  "kernel-methods": {
+    "level": "intermediate",
+    "prerequisites": ["support-vector-machine-svm"],
+    "related": [
+      "principal-component-analysis-pca",
+      "lagrange-multipliers",
+      "cosine-similarity",
+      "the-curse-of-dimensionality"
+    ]
+  },
+  "principal-component-analysis-pca": {
+    "level": "intro",
+    "prerequisites": ["singular-value-decomposition-svd", "linear-function"],
+    "related": [
+      "dimensionality-reduction",
+      "autoencoders",
+      "kernel-methods",
+      "the-curse-of-dimensionality",
+      "unsupervised-learning"
+    ]
+  },
+  "k-means-objective-function-inertia": {
+    "level": "basic",
+    "prerequisites": ["unsupervised-learning"],
+    "related": [
+      "principal-component-analysis-pca",
+      "l1-vs-l2-norms",
+      "triplet-margin-loss",
+      "cosine-similarity"
+    ]
+  },
+  "hidden-markov-model-hmm": {
+    "level": "intermediate",
+    "prerequisites": ["the-markov-property", "conditional-probability"],
+    "related": [
+      "recurrent-neural-network-rnn",
+      "language-model",
+      "count-based-language-model",
+      "sequence-to-sequence-seq2seq"
+    ]
+  },
+  "bootstrap-aggregating-bagging": {
+    "level": "intro",
+    "prerequisites": ["supervised-learning", "bootstrap-resampling"],
+    "related": [
+      "random-forest",
+      "gradient-boosting-machines-gbm",
+      "decision-tree",
+      "dropout"
+    ]
+  },
+  "gradient-boosting-machines-gbm": {
+    "level": "intermediate",
+    "prerequisites": ["decision-tree", "gradient-descent"],
+    "related": [
+      "adaboost-adaptive-boosting",
+      "random-forest",
+      "bootstrap-aggregating-bagging",
+      "loss-function"
+    ]
+  },
+  "adaboost-adaptive-boosting": {
+    "level": "intermediate",
+    "prerequisites": ["decision-tree", "classification"],
+    "related": [
+      "gradient-boosting-machines-gbm",
+      "bootstrap-aggregating-bagging",
+      "random-forest"
+    ]
+  },
+  "information-gain-decision-trees": {
+    "level": "intro",
+    "prerequisites": ["decision-tree", "shannon-entropy"],
+    "related": [
+      "random-forest",
+      "gradient-boosting-machines-gbm",
+      "cross-entropy"
+    ]
+  },
+  "triplet-margin-loss": {
+    "level": "intermediate",
+    "prerequisites": ["loss-function", "cosine-similarity"],
+    "related": [
+      "clip-contrastive-language-image-pre-training",
+      "embedding-space",
+      "semantic-similarity",
+      "k-means-objective-function-inertia"
+    ]
+  },
+  "dimensionality-reduction": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "principal-component-analysis-pca",
+      "singular-value-decomposition-svd",
+      "autoencoders",
+      "the-curse-of-dimensionality",
+      "embedding-vector"
+    ]
+  },
+  "bag-of-words": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "tf-idf",
+      "document-term-matrix",
+      "n-gram",
+      "sparse-vector",
+      "word-embedding"
+    ]
+  },
+  "tf-idf": {
+    "level": "intro",
+    "prerequisites": ["bag-of-words", "document-term-matrix"],
+    "related": [
+      "bm25",
+      "sparse-retrieval",
+      "zipf-s-law",
+      "cosine-similarity"
+    ]
+  },
+  "document-term-matrix": {
+    "level": "basic",
+    "prerequisites": ["bag-of-words"],
+    "related": [
+      "tf-idf",
+      "sparse-vector",
+      "vocabulary",
+      "information-retrieval"
+    ]
+  },
+  "edit-distance": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "longest-common-subsequence",
+      "rouge",
+      "bleu",
+      "tokenization"
+    ]
+  },
+  "longest-common-subsequence": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "edit-distance",
+      "rouge",
+      "bleu"
+    ]
+  },
+  "n-gram": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "count-based-language-model",
+      "bag-of-words",
+      "laplace-smoothing",
+      "bleu",
+      "subword-tokenization"
+    ]
+  },
+  "corpus": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "pretraining-corpus",
+      "vocabulary",
+      "n-gram",
+      "language-model",
+      "tokenization"
+    ]
+  },
+  "count-based-language-model": {
+    "level": "intro",
+    "prerequisites": ["n-gram", "conditional-probability"],
+    "related": [
+      "laplace-smoothing",
+      "backoff-n-gram-backoff",
+      "language-model",
+      "hidden-markov-model-hmm",
+      "neural-probabilistic-language-model"
+    ]
+  },
+  "backoff-n-gram-backoff": {
+    "level": "intro",
+    "prerequisites": ["n-gram", "count-based-language-model"],
+    "related": [
+      "laplace-smoothing",
+      "language-model",
+      "conditional-probability"
+    ]
+  },
+  "sparsity": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "sparse-vector",
+      "l1-regularization-lasso",
+      "sparse-retrieval",
+      "unstructured-pruning",
+      "dense-vector"
+    ]
+  },
+  "dense-vector": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "sparse-vector",
+      "embedding-vector",
+      "dense-retrieval",
+      "word-embedding"
+    ]
+  },
+  "sparse-vector": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "dense-vector",
+      "one-hot-encoding",
+      "sparsity",
+      "bag-of-words",
+      "sparse-retrieval"
+    ]
+  },
+  "one-hot-encoding": {
+    "level": "basic",
+    "prerequisites": [],
+    "related": [
+      "sparse-vector",
+      "embedding-layer",
+      "vocabulary",
+      "softmax"
+    ]
+  }
+}
