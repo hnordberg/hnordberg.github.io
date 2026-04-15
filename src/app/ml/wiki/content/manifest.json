@@ -8489,6 +8489,352 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "distributed-computing-ml-training",
+      "title": "Distributed Computing (ML Training)",
+      "summary": "The practice of training machine learning models across multiple GPUs, machines, or clusters — necessary when models or datasets exceed the memory and compute capacity of a single device.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "memory-optimization-ml-training",
+        "bias-mitigation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "memory-optimization-ml-training",
+      "title": "Memory Optimization (ML Training)",
+      "summary": "Techniques that reduce the GPU memory footprint during training or inference, enabling larger models or batch sizes to fit within hardware constraints — primarily targeting optimizer states, activations, parameters, and gradients.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "conversational-ai",
+        "distributed-computing-ml-training"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "conversational-ai",
+      "title": "Conversational AI",
+      "summary": "AI systems designed to engage in multi-turn natural language dialogue with humans, maintaining context across exchanges. This ranges from task-oriented bots (e.g., booking a flight) to open-domain generative assistants.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "role-playing-llms",
+        "memory-optimization-ml-training"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "role-playing-llms",
+      "title": "Role-Playing (LLMs)",
+      "summary": "The practice of instructing an LLM via the system prompt to adopt a specific persona, character, or professional role — which structurally conditions its generated text to match the vocabulary, rigor, and perspective of that assigned ide…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "model-evaluation",
+        "conversational-ai"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "model-evaluation",
+      "title": "Model Evaluation",
+      "summary": "The systematic framework for measuring a machine learning model's capabilities, limitations, and safety across various dimensions to determine its robustness and fitness for deployment.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "shadow-deployment",
+        "role-playing-llms"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "shadow-deployment",
+      "title": "Shadow Deployment",
+      "summary": "A safe deployment strategy where a newly trained model model receives live production queries in parallel with the incumbent model, but its outputs are siloed to logs rather than being served to the user. This exposes the model to actual…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "feedback-loop-ml-systems",
+        "model-evaluation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "feedback-loop-ml-systems",
+      "title": "Feedback Loop (ML Systems)",
+      "summary": "A self-reinforcing dynamic where an ML model's autonomous predictions fundamentally alter the environment or the training data it processes in the future, often resulting in Hidden Technical Debt via compounding bias or performance degra…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "product",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "data-mixture",
+        "shadow-deployment"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "data-mixture",
+      "title": "Data Mixture",
+      "summary": "The defined proportion and configuration of different datasets (web text, code, books, math, scientific papers) combined during the pretraining phase of an LLM. The exact mixture dictating the loss function drives the emergent reasoning…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "grpo-group-relative-policy-optimization",
+        "feedback-loop-ml-systems"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "grpo-group-relative-policy-optimization",
+      "title": "GRPO (Group Relative Policy Optimization)",
+      "summary": "A novel reinforcement learning scheme designed by DeepSeek that optimizes language models without utilizing a Critic / Value function network, heavily reducing the massive GPU memory footprint required by traditional Proximal Policy Opti…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "bias-mitigation",
+        "data-mixture"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bias-mitigation",
+      "title": "Bias Mitigation",
+      "summary": "The deliberate application of interventions across the machine learning lifecycle to reduce systemic algorithmic bias, ensuring models do not learn discriminatory patterns regarding race, gender, and protected demographic attributes.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "distributed-computing-ml-training",
+        "grpo-group-relative-policy-optimization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "transparency-ai-systems",
+      "title": "Transparency (AI Systems)",
+      "summary": "The principle that AI systems should provide clear, accessible documentation regarding their architecture, training data, inherent capabilities, and failure modes to enable structured accountability and human oversight.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "steering-vectors",
+        "kolmogorov-arnold-networks"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "steering-vectors",
+      "title": "Steering Vectors",
+      "summary": "A technique in representation engineering where a specific direction in a model's high-dimensional activation space is identified as corresponding to a semantic concept, and forcefully added to the residual stream during inference to alt…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "activation-patching",
+        "transparency-ai-systems"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "activation-patching",
+      "title": "Activation Patching",
+      "summary": "A causal interpretability technique used to precisely isolate the function of a specific neural network component. It works by grafting the activations from one forward pass into a different, corrupted forward pass to see if the network'…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "log-sum-exp-trick",
+        "steering-vectors"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "log-sum-exp-trick",
+      "title": "Log-Sum-Exp Trick",
+      "summary": "An essential numerical stabilization protocol used to compute \\\\( \\log \\sum_i e^{x_i} \\\\) without encountering catastrophic overflow (infinity) or underflow (zero) in floating-point mathematics.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "exponential-family-of-distributions",
+        "activation-patching"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "exponential-family-of-distributions",
+      "title": "Exponential Family of Distributions",
+      "summary": "The exponential family constitutes a broad class of probability distributions sharing a standardized mathematical factorization, structurally guaranteeing elegant statistical properties—yielding inference, maximum likelihood estimations,…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "kolmogorov-arnold-networks",
+        "log-sum-exp-trick"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "kolmogorov-arnold-networks",
+      "title": "Kolmogorov-Arnold Networks",
+      "summary": "Kolmogorov-Arnold Networks (KANs) replace scalar weights in an MLP with learnable univariate functions on edges, so each layer computes sums of learned one-dimensional transforms rather than an affine map followed by a fixed activation.…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "transparency-ai-systems",
+        "exponential-family-of-distributions"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

@@ -18477,5 +18477,770 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "distributed-computing-ml-training",
+    "title": "Distributed Computing (ML Training)",
+    "summary": "The practice of training machine learning models across multiple GPUs, machines, or clusters — necessary when models or datasets exceed the memory and compute capacity of a single device.",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "memory-optimization-ml-training",
+      "bias-mitigation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2021 · Narayanan et al. · Efficient Large-Scale Language Model Training on GPU Clusters Using Megatron-LM",
+        "url": "https://arxiv.org/abs/2104.04473"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The practice of training machine learning models across multiple GPUs, machines, or clusters — necessary when models or datasets exceed the memory and compute capacity of a single device.</p><p>Modern LLM training requires coordinating thousands of GPUs. For instance, Llama 3 405B was trained on 16,384 H100 GPUs. Distributed training primarily employs a combination of <b>3D parallelism</b>: Data Parallelism (DP), Tensor Parallelism (TP), and Pipeline Parallelism (PP).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"500\" height=\"200\" viewBox=\"0 0 500 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"500\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Data Parallel -->\n      <text x=\"80\" y=\"40\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">Data Parallel</text>\n      <rect x=\"30\" y=\"60\" width=\"100\" height=\"40\" fill=\"#4a5568\" rx=\"4\"/>\n      <rect x=\"30\" y=\"110\" width=\"100\" height=\"40\" fill=\"#4a5568\" rx=\"4\"/>\n      <text x=\"80\" y=\"85\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">GPU 0 (Full Model)</text>\n      <text x=\"80\" y=\"135\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">GPU 1 (Full Model)</text>\n      <text x=\"80\" y=\"175\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Split data, All-Reduce grads</text>\n\n      <!-- Tensor Parallel -->\n      <text x=\"250\" y=\"40\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">Tensor Parallel</text>\n      <rect x=\"200\" y=\"60\" width=\"45\" height=\"90\" fill=\"#2b6cb0\" rx=\"4\"/>\n      <rect x=\"255\" y=\"60\" width=\"45\" height=\"90\" fill=\"#2c7a7b\" rx=\"4\"/>\n      <text x=\"222\" y=\"110\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90 222,110)\">GPU 0 (L1_A)</text>\n      <text x=\"277\" y=\"110\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\" transform=\"rotate(-90 277,110)\">GPU 1 (L1_B)</text>\n      <text x=\"250\" y=\"175\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Split layer, All-Reduce acts</text>\n\n      <!-- Pipeline Parallel -->\n      <text x=\"420\" y=\"40\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">Pipeline Parallel</text>\n      <rect x=\"370\" y=\"60\" width=\"100\" height=\"30\" fill=\"#b83280\" rx=\"4\"/>\n      <rect x=\"370\" y=\"100\" width=\"100\" height=\"30\" fill=\"#97266d\" rx=\"4\"/>\n      <rect x=\"370\" y=\"140\" width=\"100\" height=\"30\" fill=\"#702459\" rx=\"4\"/>\n      <text x=\"420\" y=\"80\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">GPU 0 (Layers 1-4)</text>\n      <text x=\"420\" y=\"120\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">GPU 1 (Layers 5-8)</text>\n      <text x=\"420\" y=\"160\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">GPU 2 (Layers 9-12)</text>\n      <text x=\"420\" y=\"185\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">P2P comms, watch \"bubbles\"</text>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Communication Primitives",
+        "body": "<ul>\n    <li><b>All-Reduce:</b> Every GPU sums (or averages) a tensor and receives the result. Critical for aggregating gradients across data parallel ranks: \\( g_{avg} = \\frac{1}{N} \\sum_{i=1}^{N} g_i \\).</li>\n    <li><b>All-Gather:</b> Every GPU gathers parts of a tensor distributed across all GPUs. Used heavily in FSDP to reconstruct weights before the forward pass.</li>\n    <li><b>Reduce-Scatter:</b> Opposite of all-gather. Reduces data and scatters chunks to each GPU. Used in FSDP to aggregate gradients and update only a shard of parameters.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "ZeRO / FSDP (Fully Sharded Data Parallel)",
+        "body": "<p>A refined form of data parallelism that reduces memory redundancy. Instead of every GPU holding all parameters \\( \\Theta \\), gradients \\( \\nabla \\Theta \\), and optimizer states, these are sharded. GPU \\( i \\) only holds \\( \\Theta_i \\), avoiding the \\( \\mathcal{O}(N) \\) memory bloat.</p>\n\n  <details>\n    <summary>Mathematical Communication Cost</summary>\n    <br>\n    <p>In standard Ring All-Reduce for a tensor of size \\( M \\) distributed over \\( N \\) GPUs, the communication volume per GPU is:</p>\n    \\[ V = 2 \\frac{M (N-1)}{N} \\approx 2M \\]\n    <p>Notice that as \\( N \\to \\infty \\), the data sent/received approaches \\( 2M \\). It scales remarkably well, limited primarily by interconnect bandwidth (NVLink / InfiniBand) rather than the number of nodes.</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "memory-optimization-ml-training",
+    "title": "Memory Optimization (ML Training)",
+    "summary": "Techniques that reduce the GPU memory footprint during training or inference, enabling larger models or batch sizes to fit within hardware constraints — primarily targeting optimizer states, activations, parameters, and gradients.",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "conversational-ai",
+      "distributed-computing-ml-training"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Rajbhandari et al. · ZeRO: Memory Optimizations Toward Training Trillion Parameter Models",
+        "url": "https://arxiv.org/abs/1910.02054"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Techniques that reduce the GPU memory footprint during training or inference, enabling larger models or batch sizes to fit within hardware constraints — primarily targeting optimizer states, activations, parameters, and gradients.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"240\" viewBox=\"0 0 400 240\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"240\" fill=\"#1a202c\" rx=\"8\"/>\n      <text x=\"200\" y=\"30\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\">Training Memory Footprint (Adam)</text>\n      \n      <!-- Parameters -->\n      <rect x=\"50\" y=\"50\" width=\"300\" height=\"30\" fill=\"#3182ce\" rx=\"4\"/>\n      <text x=\"200\" y=\"70\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Parameters (FP16 or BF16) - 2 bytes/param</text>\n      \n      <!-- Gradients -->\n      <rect x=\"50\" y=\"90\" width=\"300\" height=\"30\" fill=\"#dd6b20\" rx=\"4\"/>\n      <text x=\"200\" y=\"110\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Gradients (FP16 or BF16) - 2 bytes/param</text>\n      \n      <!-- Optimizer States -->\n      <rect x=\"50\" y=\"130\" width=\"300\" height=\"50\" fill=\"#805ad5\" rx=\"4\"/>\n      <text x=\"200\" y=\"150\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Optimizer States (Adam = 12 bytes/param)</text>\n      <text x=\"200\" y=\"170\" fill=\"#e9d8fd\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">FP32 Master weights + FP32 Momentum + FP32 Variance</text>\n      \n      <!-- Activations -->\n      <rect x=\"50\" y=\"190\" width=\"300\" height=\"30\" fill=\"#38a169\" rx=\"4\"/>\n      <text x=\"200\" y=\"210\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Activations (Scales with Batch Size &amp; Seq Len)</text>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Memory Math (for a model with \\( P \\) parameters trained with Adam in Mixed Precision)",
+        "body": "<ul>\n    <li>Parameters (FP16): \\( 2P \\) bytes</li>\n    <li>Gradients (FP16): \\( 2P \\) bytes</li>\n    <li>Adam Optimizer States (FP32 master weights, momentum \\( m \\), variance \\( v \\)): \\( 4P + 4P + 4P = 12P \\) bytes</li>\n    <li><b>Total Model State:</b> \\( 16P \\) bytes. Example: A 7B model requires \\( 16 \times 7 \times 10^9 pprox 112 \\text{ GB} \\). It won't fit on an 80GB A100!</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key Mitigation Strategies",
+        "body": "<ul>\n    <li><b>ZeRO/FSDP:</b> Shards the \\( 12P \\) optimizer states across \\( N \\) GPUs. ZeRO-3 shards parameters and gradients too, dropping per-GPU memory towards \\( 16P/N \\).</li>\n    <li><b>Gradient Checkpointing:</b> Instead of saving all forward activations \\( a_l \\) linearly for the backward pass \\( rac{\\partial L}{\\partial a_l} \\), discard them and recompute them on-the-fly during backprop. Reduces activation memory from \\( \\mathcal{O}(L) \\) layers to \\( \\mathcal{O}(\\sqrt{L}) \\), at the cost of ~33% slower compute.</li>\n    <li><b>CPU Offloading:</b> Moves optimizer states to system RAM and fetches via PCIe only during weight updates.</li>\n    <li><b>Inference memory optimizations:</b> PagedAttention (reduces KV cache fragmentation), GQA (Grouped Query Attention, reduces KV cache size), and Int8/Int4 Quantization.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "conversational-ai",
+    "title": "Conversational AI",
+    "summary": "AI systems designed to engage in multi-turn natural language dialogue with humans, maintaining context across exchanges. This ranges from task-oriented bots (e.g., booking a flight) to open-domain generative assistants.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "role-playing-llms",
+      "memory-optimization-ml-training"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · OpenAI · ChatGPT Blog Release"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>AI systems designed to engage in multi-turn natural language dialogue with humans, maintaining context across exchanges. This ranges from task-oriented bots (e.g., booking a flight) to open-domain generative assistants.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"600\" height=\"150\" viewBox=\"0 0 600 150\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"600\" height=\"150\" fill=\"#1a202c\" rx=\"8\"/>\n      <!-- Timeline Line -->\n      <line x1=\"50\" y1=\"75\" x2=\"550\" y2=\"75\" stroke=\"#4a5568\" stroke-width=\"4\"/>\n      \n      <!-- Nodes -->\n      <circle cx=\"100\" cy=\"75\" r=\"8\" fill=\"#3182ce\"/>\n      <circle cx=\"250\" cy=\"75\" r=\"8\" fill=\"#e53e3e\"/>\n      <circle cx=\"400\" cy=\"75\" r=\"8\" fill=\"#d69e2e\"/>\n      <circle cx=\"530\" cy=\"75\" r=\"8\" fill=\"#38a169\"/>\n      \n      <!-- Timestamps & Labels -->\n      <text x=\"100\" y=\"55\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">1960s</text>\n      <text x=\"100\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Rule-Based</text>\n      <text x=\"100\" y=\"120\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">ELIZA</text>\n\n      <text x=\"250\" y=\"55\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">2010s</text>\n      <text x=\"250\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Intent &amp; Slot</text>\n      <text x=\"250\" y=\"120\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Siri, Alexa</text>\n\n      <text x=\"400\" y=\"55\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">2020</text>\n      <text x=\"400\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Neural Ret/Gen</text>\n      <text x=\"400\" y=\"120\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">BlenderBot</text>\n\n      <text x=\"530\" y=\"55\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">2022+</text>\n      <text x=\"530\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Instruction LLMs</text>\n      <text x=\"530\" y=\"120\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">ChatGPT, Claude</text>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Core Mechanics of Modern Conversational Agents",
+        "body": "<ul>\n    <li><b>Context Tracking:</b> In LLMs, this is typically handled by concatenating the conversation history into the prompt: \\( \\text{Prompt} = [S] + [U_1] + [A_1] + \\dots + [U_t] \\). Models must handle long contexts to maintain coherence over many turns.</li>\n    <li><b>RLHF Alignment:</b> Base models just predict the next word. RLHF (Reinforcement Learning from Human Feedback) molds them into a conversational format, optimizing for helpfulness, harmlessness, and refusal behavior.</li>\n    <li><b>Grounding &amp; Tool Use:</b> LLMs hallucinate facts. Tool calling (or ReAct execution) connects them to external databases or search indices to anchor conversations in factual reality.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Intent Classification Paradigm (Legacy vs Modern)",
+        "body": "<p>Pre-2022 task-oriented bots required explicit classifiers to map user strings to predefined actions (e.g., \\( f(\\text{\"book flight\"}) \\to \\text{INTENT_FLIGHT} \\)) and extract entities (slots). Today, <b>Function Calling</b> allows an LLM to dynamically output JSON reflecting the correct intent and extracted slots without training bespoke classifiers.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "role-playing-llms",
+    "title": "Role-Playing (LLMs)",
+    "summary": "The practice of instructing an LLM via the system prompt to adopt a specific persona, character, or professional role — which structurally conditions its generated text to match the vocabulary, rigor, and perspective of that assigned ide…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "model-evaluation",
+      "conversational-ai"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Shanahan et al. · Role-Play with Large Language Models",
+        "url": "https://arxiv.org/abs/2305.16367"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The practice of instructing an LLM via the system prompt to adopt a specific persona, character, or professional role — which structurally conditions its generated text to match the vocabulary, rigor, and perspective of that assigned identity.</p><p>Role-playing acts as a powerful <b>contextual prior</b>. Language models are fundamentally modeling sequences of text \\( P(x_t \\mid x_{1:t-1}) \\). By injecting a specific persona into the prompt, you restrict the probability space to the subset of the training corpus generated by or pertaining to that persona.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mechanistic Perspective",
+        "body": "<p>If the user asks a coding question \\( q \\), the generated answer without a persona might be \\( A_\\text{average} \\). If we append a persona \\( c = \\text{\"You are an expert Linux kernel developer.\"} \\), we change the conditional distribution:</p>\n  \\[ P(A \\mid c, q) \\neq P(A \\mid q) \\]\n  <p>The model leverages attention heads that activate strongly on the tokens in \\( c \\), shifting logits towards highly technical jargon, rigorous edge-case analysis, and \"expert\" tone seen in its training data (e.g., StackOverflow accepted answers, GitHub issues).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Applications &amp; Efficacy",
+        "body": "<ul>\n    <li><b>Expert Simulation:</b> Roles like \"Expert Mathematician\" have empirically been shown to improve reasoning benchmark scores because the persona anchors the generation to high-quality academic data clusters.</li>\n    <li><b>Synthetic Data Generation:</b> Role-playing allows a single model to simulate diverse populations for sociological research or synthetic testing (e.g., simulating 1,000 users with different political personas).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Safety &amp; Alignment Constraints",
+        "body": "<p>Adversarial users exploit this via \"Jailbreaks\" (e.g., the infamous <b>DAN - Do Anything Now</b> prompt). By instructing the model to adopt a persona that explicitly \"ignores safety training,\" the prior \\( P(A \\mid c, q) \\) can overpower the finetuned safety constraints. Modern post-training actively attempts to make refusal robust against persona shifts.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "model-evaluation",
+    "title": "Model Evaluation",
+    "summary": "The systematic framework for measuring a machine learning model's capabilities, limitations, and safety across various dimensions to determine its robustness and fitness for deployment.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "shadow-deployment",
+      "role-playing-llms"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Liang et al. · Holistic Evaluation of Language Models (HELM)",
+        "url": "https://arxiv.org/abs/2211.09110"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The systematic framework for measuring a machine learning model's capabilities, limitations, and safety across various dimensions to determine its robustness and fitness for deployment.</p><p>For modern general-purpose models (LLMs), a single accuracy number is insufficient. Evaluation requires a multi-dimensional approach, often conceptualized as a tiered pyramid.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"250\" viewBox=\"0 0 400 250\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"250\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Triangle / Pyramid -->\n      <polygon points=\"200,30 350,220 50,220\" fill=\"#2d3748\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n      \n      <!-- Tier 1: Automated Benchmarks -->\n      <polygon points=\"50,220 350,220 310,160 90,160\" fill=\"#2b6cb0\" opacity=\"0.8\"/>\n      <text x=\"200\" y=\"195\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">1. Automated Benchmarks</text>\n      <text x=\"200\" y=\"210\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">MMLU, HumanEval, GSM8K (Cheap, Fast, Prone to Contamination)</text>\n\n      <!-- Tier 2: LLM-as-a-Judge -->\n      <polygon points=\"90,160 310,160 260,90 140,90\" fill=\"#ed8936\" opacity=\"0.8\"/>\n      <text x=\"200\" y=\"125\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">2. LLM-as-a-Judge</text>\n      <text x=\"200\" y=\"140\" fill=\"#feebc8\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Pairwise Win Rates, AlpacaEval (Scalable Proxy)</text>\n\n      <!-- Tier 3: Human Eval -->\n      <polygon points=\"140,90 260,90 200,30\" fill=\"#48bb78\" opacity=\"0.8\"/>\n      <text x=\"200\" y=\"65\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">3. Human Eval</text>\n      <text x=\"200\" y=\"80\" fill=\"#f0fff4\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Chatbot Arena, Expert Red-teaming</text>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Core Evaluation Dimensions",
+        "body": "<ul>\n    <li><b>Capability &amp; Reasoning:</b> Measuring factual knowledge (MMLU - Multiple Choice), coding ability (HumanEval - Pass@k metric), and math capabilities (GSM8K, MATH).</li>\n    <li><b>Safety &amp; Alignment:</b> Red-teaming to trigger harmful outputs. Measuring <i>refusal rates</i> for dangerous prompts.</li>\n    <li><b>Fairness &amp; Bias:</b> Ensuring equalized performance across demographics and identifying disparate impacts.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Critical Challenges",
+        "body": "<ul>\n    <li><b>Data Contamination:</b> If the benchmark questions (e.g., MMLU test set) leak into the model's trillions of training tokens, the model achieves high scores via memorization, not generalized capability.</li>\n    <li><b>Goodhart's Law:</b> <i>\"When a measure becomes a target, it ceases to be a good measure.\"</i> Optimizing explicitly to beat GSM8K ruins the model's general math intuition.</li>\n    <li><b>Open-ended Nuance:</b> Real-world chat quality (tone, formatted structure, helpfulness) cannot easily be measured by static scripts, which is why Chatbot Arena (crowdsourced Elo rating) is currently the gold standard.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "shadow-deployment",
+    "title": "Shadow Deployment",
+    "summary": "A safe deployment strategy where a newly trained model model receives live production queries in parallel with the incumbent model, but its outputs are siloed to logs rather than being served to the user. This exposes the model to actual…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "feedback-loop-ml-systems",
+      "model-evaluation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Google · ML Engineering Best Practices (Sculley et al.)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A safe deployment strategy where a newly trained model model receives live production queries in parallel with the incumbent model, but its outputs are siloed to logs rather than being served to the user. This exposes the model to actual data distributions without user-facing risk.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"500\" height=\"200\" viewBox=\"0 0 500 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"500\" height=\"200\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <!-- User / Request -->\n      <circle cx=\"50\" cy=\"100\" r=\"20\" fill=\"#4a5568\"></circle>\n      <text x=\"50\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">User</text>\n      <text x=\"50\" y=\"135\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Query</text>\n      \n      <path d=\"M 75 100 L 130 100\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521288625)\"></path>\n      \n      <!-- Router -->\n      <polygon points=\"130,100 160,70 190,100 160,130\" fill=\"#3182ce\"></polygon>\n      <text x=\"160\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Router</text>\n\n      <!-- Forking Paths -->\n      <path d=\"M 175 85 L 210 50 L 250 50\" fill=\"none\" stroke=\"#48bb78\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521288625)\"></path>\n      <path d=\"M 175 115 L 210 150 L 250 150\" fill=\"none\" stroke=\"#ed8936\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521288625)\"></path>\n\n      <!-- Live Model -->\n      <rect x=\"260\" y=\"30\" width=\"100\" height=\"40\" fill=\"#2f855a\" rx=\"4\"></rect>\n      <text x=\"310\" y=\"55\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Live Model</text>\n      \n      <!-- Shadow Model -->\n      <rect x=\"260\" y=\"130\" width=\"100\" height=\"40\" fill=\"#dd6b20\" rx=\"4\"></rect>\n      <text x=\"310\" y=\"155\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Shadow Model</text>\n      \n      <!-- Outcomes -->\n      <path d=\"M 365 50 L 415 50\" stroke=\"#48bb78\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521288625)\"></path>\n      <rect x=\"420\" y=\"35\" width=\"60\" height=\"30\" fill=\"#4a5568\" rx=\"4\"></rect>\n      <text x=\"450\" y=\"55\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Response</text>\n      \n      <path d=\"M 365 150 L 415 150\" stroke=\"#ed8936\" stroke-width=\"2\" marker-end=\"url(#arrow_1772521288625)\"></path>\n      <rect x=\"420\" y=\"135\" width=\"60\" height=\"30\" fill=\"#718096\" rx=\"4\"></rect>\n      <text x=\"450\" y=\"155\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Logs Only</text>\n      \n      <defs>\n        <marker id=\"arrow_1772521288625\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Static offline evaluation on datasets like MMLU fails to capture the true distribution of incoming queries in a production environment. <b>Traffic Mirroring</b> directly validates inference latency, memory scaling under real load, and qualitative edge cases without harming UX.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Deployment Pipeline Progression",
+        "body": "<ul>\n    <li><b>1. Offline Eval:</b> Fast, deterministic benchmarking (MMLU, HumanEval)</li>\n    <li><b>2. Shadow Mode:</b> 100% of traffic mirrored to evaluate latency, failure rates, and safety edge cases vs. the V1 system</li>\n    <li><b>3. Canary Release:</b> Routing `1% → 5% → 10%` of genuine traffic to the new model (V2), monitoring for user-facing errors</li>\n    <li><b>4. A/B Testing:</b> Full randomized cohort test to assert improvements in click-through rates, session length, or satisfaction</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Drawbacks",
+        "body": "<p>Shadow mode fundamentally requires doubling your inference API spend/compute footprint. Also, because shadow models cannot interact back with the user, multi-turn conversational coherence cannot be fully tested since the user reacts to the V1 live model, not the V2 shadow response.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "feedback-loop-ml-systems",
+    "title": "Feedback Loop (ML Systems)",
+    "summary": "A self-reinforcing dynamic where an ML model's autonomous predictions fundamentally alter the environment or the training data it processes in the future, often resulting in Hidden Technical Debt via compounding bias or performance degra…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "product",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "data-mixture",
+      "shadow-deployment"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2015 · Sculley et al. · Hidden Technical Debt in Machine Learning Systems",
+        "url": "https://papers.nips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A self-reinforcing dynamic where an ML model's autonomous predictions fundamentally alter the environment or the training data it processes in the future, often resulting in <i>Hidden Technical Debt</i> via compounding bias or performance degradation.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"240\" viewBox=\"0 0 400 240\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"240\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <rect x=\"130\" y=\"30\" width=\"140\" height=\"40\" fill=\"#3182ce\" rx=\"8\"></rect>\n      <text x=\"200\" y=\"55\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Model Predictions</text>\n\n      <path d=\"M 280 50 Q 360 50 360 120 Q 360 190 280 190\" fill=\"none\" stroke=\"#e53e3e\" stroke-width=\"3\" marker-end=\"url(#arrow_red_1772521301378)\"></path>\n      <path d=\"M 120 190 Q 40 190 40 120 Q 40 50 120 50\" fill=\"none\" stroke=\"#ecc94b\" stroke-width=\"3\" marker-end=\"url(#arrow_yellow_1772521301378)\"></path>\n      \n      <rect x=\"130\" y=\"170\" width=\"140\" height=\"40\" fill=\"#4a5568\" rx=\"8\"></rect>\n      <text x=\"200\" y=\"195\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Retraining Dataset</text>\n      \n      <text x=\"350\" y=\"125\" fill=\"#fc8181\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\" font-weight=\"bold\">Biases the Data</text>\n      <text x=\"50\" y=\"125\" fill=\"#faf089\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\" font-weight=\"bold\">Trains the Model</text>\n\n      <defs>\n        <marker id=\"arrow_red_1772521301378\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fc8181\"></path>\n        </marker>\n        <marker id=\"arrow_yellow_1772521301378\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#faf089\"></path>\n        </marker>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Types of Negative Feedback Loops",
+        "body": "<ul>\n    <li><b>Filter Bubbles / Echo Chambers:</b> An algorithm recommends an extreme view, a user clicks it. The model assumes the user wants <i>only</i> extreme views, stopping them from seeing moderation, thus creating skewed engagement data.</li>\n    <li><b>Predictive Policing:</b> A model identifies a neighborhood as \"high crime.\" More police are dispatched there, meaning more arrests are recorded there. The retraining data reflects heightened arrests, fulfilling the prophecy.</li>\n    <li><b>Model Collapse (GenAI):</b> An LLM generates synthetic text published on the web. Future LLMs ingest this web text in `CommonCrawl`. Slowly, linguistic diversity drops, resulting in high variance decay.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mitigation Strategies",
+        "body": "<p>To safely train on user feedback, engineers must break the loop. This involves <b>Epsilon-Greedy Exploration</b> (showing users 5% random recommendations to establish un-biased baselines), implementing randomized holdout sets, and rigorously logging causal interventions rather than purely observational clicks.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "data-mixture",
+    "title": "Data Mixture",
+    "summary": "The defined proportion and configuration of different datasets (web text, code, books, math, scientific papers) combined during the pretraining phase of an LLM. The exact mixture dictating the loss function drives the emergent reasoning…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "grpo-group-relative-policy-optimization",
+      "feedback-loop-ml-systems"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Xie et al. · DoReMi: Optimizing Data Mixtures Speeds Up Language Model Pretraining",
+        "url": "https://arxiv.org/abs/2305.10429"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The defined proportion and configuration of different datasets (web text, code, books, math, scientific papers) combined during the pretraining phase of an LLM. The exact mixture dictating the loss function drives the emergent reasoning capabilities.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"200\" viewBox=\"0 0 400 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Pie Chart approximation with rects for simplicity to avoid arc math issues -->\n      <rect x=\"30\" y=\"30\" width=\"100\" height=\"140\" fill=\"#2b6cb0\" rx=\"4\"/>\n      <text x=\"80\" y=\"100\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">67%</text>\n      <text x=\"80\" y=\"120\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">CommonCrawl</text>\n\n      <rect x=\"140\" y=\"30\" width=\"50\" height=\"140\" fill=\"#ed8936\" rx=\"4\"/>\n      <text x=\"165\" y=\"100\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">15%</text>\n      <text x=\"165\" y=\"120\" fill=\"#feebc8\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">C4</text>\n\n      <rect x=\"200\" y=\"30\" width=\"40\" height=\"140\" fill=\"#48bb78\" rx=\"4\"/>\n      <text x=\"220\" y=\"100\" fill=\"#1a202c\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">~5%</text>\n      <text x=\"220\" y=\"120\" fill=\"#f0fff4\" transform=\"rotate(-90 220,135)\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">GitHub</text>\n\n      <rect x=\"250\" y=\"30\" width=\"40\" height=\"140\" fill=\"#38b2ac\" rx=\"4\"/>\n      <text x=\"270\" y=\"100\" fill=\"#1a202c\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">~5%</text>\n      <text x=\"270\" y=\"120\" fill=\"#e6fffa\" transform=\"rotate(-90 270,135)\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Wikipedia</text>\n\n      <rect x=\"300\" y=\"30\" width=\"40\" height=\"140\" fill=\"#9f7aea\" rx=\"4\"/>\n      <text x=\"320\" y=\"100\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">~5%</text>\n      <text x=\"320\" y=\"120\" fill=\"#faf5ff\" transform=\"rotate(-90 320,135)\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Books</text>\n\n      <rect x=\"350\" y=\"30\" width=\"20\" height=\"140\" fill=\"#f56565\" rx=\"4\"/>\n      <text x=\"360\" y=\"100\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"10\" font-weight=\"bold\" text-anchor=\"middle\">~3%</text>\n      <text x=\"360\" y=\"120\" fill=\"#fff5f5\" transform=\"rotate(-90 360,135)\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">ArXiv</text>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>The chart above outlines Llama 1's static data mixture. Modern frontier models heavily leverage <b>Dynamic Data Mixtures</b> (e.g., increasing code/math ratios significantly in the final 20% of pretraining) alongside aggressive data curation.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Impacts of Data Subsets",
+        "body": "<ul>\n    <li><b>GitHub / Code:</b> Even if the LLM isn't for a programmer, injecting python code massively improves systemic reasoning and structured logic flow.</li>\n    <li><b>ArXiv / Math:</b> Necessary for quantitative reasoning, formula alignment, and multi-step deduction.</li>\n    <li><b>Books &amp; Wikipedia:</b> Grants deep coherence and comprehensive encyclopedic factual grounding.</li>\n    <li><b>Web Scrapes (CommonCrawl):</b> Introduces heavy noise and biases, requiring massive deduplication mechanisms like MinHash or Exact Substring matches.</li>\n  </ul>\n\n  <p>Methods like <b>DoReMi</b> (Xie et al., 2023) automatically derive the ideal dataset proportions: a proxy model is quickly trained to find domain weights that minimize target loss, instead of relying on human heuristics.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "grpo-group-relative-policy-optimization",
+    "title": "GRPO (Group Relative Policy Optimization)",
+    "summary": "A novel reinforcement learning scheme designed by DeepSeek that optimizes language models without utilizing a Critic / Value function network, heavily reducing the massive GPU memory footprint required by traditional Proximal Policy Opti…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "reinforcement",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "bias-mitigation",
+      "data-mixture"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2025 · DeepSeek AI · DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning",
+        "url": "https://arxiv.org/abs/2501.12948"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A novel reinforcement learning scheme designed by DeepSeek that optimizes language models without utilizing a <i>Critic / Value function</i> network, heavily reducing the massive GPU memory footprint required by traditional Proximal Policy Optimization (PPO).</p><p>In standard RLHF using PPO, you must load an Actor network (the LLM policy), a Reference Model (initial weights to prevent collapse), a Reward Model, and a Critic network (Value Model). That is four large sets of weights. GRPO discards the Critic network entirely by standardizing rewards <i>within a group</i>.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Mathematical Formulation",
+        "body": "<p>Rather than estimating an absolute baseline value \\\\( V(x) \\\\) to calculate advantage (\\\\( A = R - V \\\\)), GRPO samples a group of \\\\( G \\\\) responses \\\\( \\{o_1, o_2, \\dots, o_G\\} \\\\) to the same prompt \\\\( q \\\\). Each output receives a reward \\\\( r_i \\\\). The policy update relies on the <b>Group-Relative Advantage</b>:</p>\n\n  \\[ \\hat{A}_i = \\frac{r_i - \\text{mean}(\\{r_1 \\dots r_G\\})}{\\text{std}(\\{r_1 \\dots r_G\\}) + \\epsilon} \\]\n\n  <p>Responses that score above the group average yield a positive advantage (encouraging those logits), and responses below average get a negative advantage (discouraging those logits). The objective function uses the PPO-style clipping mechanism along with a Kullback-Leibler (KL) divergence penalty against the reference model \\\\( \\pi_{\\text{ref}} \\\\):</p>\n\n  \\[ J_{\\text{GRPO}}(\\theta) = \\mathbb{E} \\left[ \\frac{1}{G} \\sum_{i=1}^{G} \\left( \\min \\left( \\frac{\\pi_\\theta(o_i|q)}{\\pi_{\\text{old}}(o_i|q)} \\hat{A}_i, \\, \\text{clip}\\left(\\dots\\right) \\hat{A}_i \\right) - \\beta \\mathbb{D}_{\\text{KL}}[\\pi_\\theta || \\pi_{\\text{ref}}] \\right) \\right] \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Why It Scales",
+        "body": "<p>By bypassing the \\\\( V(s) \\\\) value network calculations, GRPO explicitly enabled the training of <b>DeepSeek-R1</b> on highly complex math/coding benchmarks. The model organically learned to inject internal monologue (`<think>...</think>`) tags because those structured reasoning steps consistently yielded higher normalized group-relative rewards.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "bias-mitigation",
+    "title": "Bias Mitigation",
+    "summary": "The deliberate application of interventions across the machine learning lifecycle to reduce systemic algorithmic bias, ensuring models do not learn discriminatory patterns regarding race, gender, and protected demographic attributes.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "distributed-computing-ml-training",
+      "grpo-group-relative-policy-optimization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2016 · Kleinberg, Mullainathan, Raghavan · Inherent Trade-Offs in the Fair Determination of Risk Scores",
+        "url": "https://arxiv.org/abs/1609.05807"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The deliberate application of interventions across the machine learning lifecycle to reduce systemic algorithmic bias, ensuring models do not learn discriminatory patterns regarding race, gender, and protected demographic attributes.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"600\" height=\"150\" viewBox=\"0 0 600 150\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"600\" height=\"150\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Pre-Processing -->\n      <rect x=\"30\" y=\"50\" width=\"150\" height=\"50\" fill=\"#805ad5\" rx=\"4\"/>\n      <text x=\"105\" y=\"70\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Pre-Processing</text>\n      <text x=\"105\" y=\"85\" fill=\"#e9d8fd\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Data Level</text>\n      \n      <path d=\"M 185 75 L 225 75\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_path_1772521342596)\"/>\n\n      <!-- In-Processing -->\n      <rect x=\"230\" y=\"50\" width=\"140\" height=\"50\" fill=\"#dd6b20\" rx=\"4\"/>\n      <text x=\"300\" y=\"70\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">In-Processing</text>\n      <text x=\"300\" y=\"85\" fill=\"#feebc8\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Training Level</text>\n\n      <path d=\"M 375 75 L 415 75\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_path_1772521342596)\"/>\n\n      <!-- Post-Processing -->\n      <rect x=\"420\" y=\"50\" width=\"150\" height=\"50\" fill=\"#38a169\" rx=\"4\"/>\n      <text x=\"495\" y=\"70\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Post-Processing</text>\n      <text x=\"495\" y=\"85\" fill=\"#f0fff4\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Output Level</text>\n\n      <defs>\n        <marker id=\"arrow_path_1772521342596\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\" />\n        </marker>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Core Mitigation Tiers",
+        "body": "<ul>\n    <li><b>Pre-processing (Training Data):</b> Reweighting datasets to balance demographic classes, removing proxy variables (e.g., zip codes heavily tied to race), or applying <i>Counterfactual Data Augmentation</i> (swapping gendered pronouns to dilute spurious correlations).</li>\n    <li><b>In-processing (Algorithms):</b> Applying regularization penalties for bias. Example: <i>Adversarial Debiasing</i> forces the main network to produce embeddings that are useful for the task, but from which an adversarial discriminator cannot predict the protected attribute.</li>\n    <li><b>Post-processing (Inference/Logic):</b> Moving the output decision thresholds dynamically. If false-positive rates for fraud detection are significantly higher for Group A vs Group B, adjusting the sigmoid classification threshold independently until equalized odds are met.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Mathematical Tension of Fairness Formulation",
+        "body": "<p>To mathematically define fairness, society has produced mutually exclusive metrics. It is formally proven (Kleinberg et al.) that an algorithm <i>cannot</i> simultaneously satisfy <i>Calibration</i> (scoring accuracy is true independent of class) and <i>Equalized Odds</i> (equal false positive / false negative rates) when baseline base rates differ amongst populations.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "transparency-ai-systems",
+    "title": "Transparency (AI Systems)",
+    "summary": "The principle that AI systems should provide clear, accessible documentation regarding their architecture, training data, inherent capabilities, and failure modes to enable structured accountability and human oversight.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "steering-vectors",
+      "kolmogorov-arnold-networks"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Mitchell et al. · Model Cards for Model Reporting",
+        "url": "https://arxiv.org/abs/1810.03993"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The principle that AI systems should provide clear, accessible documentation regarding their architecture, training data, inherent capabilities, and failure modes to enable structured accountability and human oversight.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"600\" height=\"200\" viewBox=\"0 0 600 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"600\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Data Transparency -->\n      <rect x=\"50\" y=\"40\" width=\"140\" height=\"120\" fill=\"#2b6cb0\" rx=\"4\"/>\n      <text x=\"120\" y=\"70\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">Data Cards</text>\n      <text x=\"120\" y=\"95\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Source provenance</text>\n      <text x=\"120\" y=\"115\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Consent &amp; Privacy</text>\n      <text x=\"120\" y=\"135\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Known biases</text>\n\n      <path d=\"M 190 100 L 230 100\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_svg_1772521353470)\"/>\n\n      <!-- Model Transparency -->\n      <rect x=\"230\" y=\"40\" width=\"140\" height=\"120\" fill=\"#ed8936\" rx=\"4\"/>\n      <text x=\"300\" y=\"70\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">Model Cards</text>\n      <text x=\"300\" y=\"95\" fill=\"#feebc8\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Architecture details</text>\n      <text x=\"300\" y=\"115\" fill=\"#feebc8\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Intended use cases</text>\n      <text x=\"300\" y=\"135\" fill=\"#feebc8\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Out-of-scope risks</text>\n\n      <path d=\"M 370 100 L 410 100\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_svg_1772521353470)\"/>\n\n      <!-- Deployment Transparency -->\n      <rect x=\"410\" y=\"40\" width=\"140\" height=\"120\" fill=\"#48bb78\" rx=\"4\"/>\n      <text x=\"480\" y=\"70\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">System Cards</text>\n      <text x=\"480\" y=\"95\" fill=\"#f0fff4\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Red-teaming results</text>\n      <text x=\"480\" y=\"115\" fill=\"#f0fff4\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Downstream integration</text>\n      <text x=\"480\" y=\"135\" fill=\"#f0fff4\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">User appeals &amp; UX</text>\n\n      <defs>\n        <marker id=\"arrow_svg_1772521353470\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\" />\n        </marker>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Core Dimensions of Transparency",
+        "body": "<ul>\n    <li><b>Algorithmic Transparency (The \"How\"):</b> Making the mathematical decision mechanisms inspectable (e.g., using Mechanistic Interpretability or feature attributions). Often restricted due to IP concerns.</li>\n    <li><b>Data Transparency (The \"What\"):</b> Disclosing the datasets used to train the model so researchers can verify copyright, trace algorithmic biases, and reproduce results (e.g., via <i>Datasheets for Datasets</i>).</li>\n    <li><b>Deployment Transparency (The \"Context\"):</b> Ensuring end-users know they are interacting with an AI, not a human. Mandated by regulations like the EU AI Act for chatbots and synthetically generated media.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The Tension with Safety:</b> Open-sourcing model weights is the ultimate form of transparency, but if the model possesses dangerous capabilities (e.g., dual-use biological knowledge), radical transparency directly opposes proactive safety standards.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "steering-vectors",
+    "title": "Steering Vectors",
+    "summary": "A technique in representation engineering where a specific direction in a model's high-dimensional activation space is identified as corresponding to a semantic concept, and forcefully added to the residual stream during inference to alt…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "activation-patching",
+      "transparency-ai-systems"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Turner et al. · Activation Addition: Steering Language Models Without Optimization",
+        "url": "https://arxiv.org/abs/2308.10248"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A technique in representation engineering where a specific direction in a model's high-dimensional activation space is identified as corresponding to a semantic concept, and forcefully added to the residual stream during inference to alter the model's behavior.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"400\" height=\"200\" viewBox=\"0 0 400 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"400\" height=\"200\" fill=\"#1a202c\" rx=\"8\"/>\n      \n      <!-- Latent space axes -->\n      <line x1=\"100\" y1=\"150\" x2=\"300\" y2=\"150\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n      <line x1=\"100\" y1=\"150\" x2=\"100\" y2=\"50\" stroke=\"#4a5568\" stroke-width=\"2\"/>\n\n      <!-- Base Concept -->\n      <circle cx=\"150\" cy=\"120\" r=\"6\" fill=\"#718096\"/>\n      <text x=\"145\" y=\"140\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"end\">h (Neutral Prompt)</text>\n\n      <!-- Steering Vector -->\n      <path d=\"M 150 120 L 250 80\" stroke=\"#ed8936\" stroke-width=\"3\" marker-end=\"url(#arrow_steer_1772521364844)\"/>\n      <text x=\"210\" y=\"90\" fill=\"#ed8936\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\">v</text>\n      <text x=\"225\" y=\"105\" fill=\"#ed8936\" font-family=\"sans-serif\" font-size=\"10\">\"Sycophancy Direction\"</text>\n\n      <!-- New Concept -->\n      <circle cx=\"260\" cy=\"76\" r=\"6\" fill=\"#48bb78\"/>\n      <text x=\"270\" y=\"70\" fill=\"#48bb78\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\">h + α*v</text>\n\n      <defs>\n        <marker id=\"arrow_steer_1772521364844\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ed8936\" />\n        </marker>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Standard LLMs process text sequentially. Steering Vectors manipulate the actual mathematical representations mid-flight (Activation Addition) without retraining any weights.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Computing the Steering Vector \\\\( \\vec{v} \\\\)",
+        "body": "<p>You can isolate a semantic concept (like \"honesty\" or \"anger\") by averaging the differences in activations across a contrasting dataset of prompts:</p>\n  \\[ \\vec{v} = \\mathbb{E} \\left[ h_{\\text{layer}}^{L}(\\text{Honest Prompt}) \\right] - \\mathbb{E} \\left[ h_{\\text{layer}}^{L}(\\text{Dishonest Prompt}) \\right] \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Inference Intervention",
+        "body": "<p>During a normal forward pass, at layer \\\\( L \\\\), you intercept the residual stream \\\\( h \\\\) before it hits the transformer block and inject the vector scaled by a coefficient \\\\( \\alpha \\\\):</p>\n  \\[ h' = h + \\alpha \\vec{v} \\]\n  <p>If \\\\( \\alpha > 0 \\\\), you force the model to behave more honestly. If \\\\( \\alpha < 0 \\\\), the model is forced into pathological lying or hallucination.</p>\n\n  <p>Because transformers rely strongly on linear feature representations (the <i>Linear Representation Hypothesis</i>), adding these vectors robustly steers behavior across highly varied contexts without degrading coherence.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "activation-patching",
+    "title": "Activation Patching",
+    "summary": "A causal interpretability technique used to precisely isolate the function of a specific neural network component. It works by grafting the activations from one forward pass into a different, corrupted forward pass to see if the network'…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "log-sum-exp-trick",
+      "steering-vectors"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Meng et al. · Locating and Editing Factual Associations in GPT",
+        "url": "https://arxiv.org/abs/2202.05262"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A causal interpretability technique used to precisely isolate the function of a specific neural network component. It works by grafting the activations from one forward pass into a different, corrupted forward pass to see if the network's output recovers the original prediction.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"500\" height=\"240\" viewBox=\"0 0 500 240\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"500\" height=\"240\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <!-- Forward Pass 1 (Clean) -->\n      <text x=\"120\" y=\"30\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Clean Run</text>\n      <rect x=\"50\" y=\"50\" width=\"140\" height=\"40\" fill=\"#4a5568\" rx=\"4\"></rect>\n      <text x=\"120\" y=\"75\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">\"Eiffel Tower is in...\"</text>\n      \n      <circle cx=\"120\" cy=\"130\" r=\"15\" fill=\"#3182ce\"></circle>\n      <text x=\"120\" y=\"135\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">L4</text>\n      <text x=\"150\" y=\"135\" fill=\"#3182ce\" font-family=\"sans-serif\" font-size=\"10\">Clean Act.</text>\n\n      <path d=\"M 120 90 L 120 115\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_patch_1772521379671)\"></path>\n      <path d=\"M 120 145 L 120 170\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_patch_1772521379671)\"></path>\n\n      <rect x=\"70\" y=\"170\" width=\"100\" height=\"30\" fill=\"#2f855a\" rx=\"4\"></rect>\n      <text x=\"120\" y=\"190\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">\"Paris\"</text>\n\n      <!-- Forward Pass 2 (Corrupted/Patched) -->\n      <text x=\"380\" y=\"30\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Corrupted Run</text>\n      <rect x=\"310\" y=\"50\" width=\"140\" height=\"40\" fill=\"#4a5568\" rx=\"4\"></rect>\n      <text x=\"380\" y=\"75\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">\"Colosseum is in...\"</text>\n      \n      <circle cx=\"380\" cy=\"130\" r=\"15\" fill=\"#e53e3e\"></circle>\n      <text x=\"380\" y=\"135\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">L4</text>\n      <text x=\"410\" y=\"135\" fill=\"#e53e3e\" font-family=\"sans-serif\" font-size=\"10\">Corrupt Act.</text>\n\n      <path d=\"M 380 90 L 380 115\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_patch_1772521379671)\"></path>\n      \n      <!-- The Patch -->\n      <path d=\"M 135 130 Q 250 100 365 130\" fill=\"none\" stroke=\"#ed8936\" stroke-width=\"3\" stroke-dasharray=\"5,5\" marker-end=\"url(#arrow_patch_orange_1772521379671)\"></path>\n      <text x=\"250\" y=\"115\" fill=\"#ed8936\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Inject Clean State</text>\n      \n      <path d=\"M 380 145 L 380 170\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_patch_1772521379671)\"></path>\n      <rect x=\"330\" y=\"170\" width=\"100\" height=\"30\" fill=\"#2f855a\" rx=\"4\"></rect>\n      <text x=\"380\" y=\"190\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">\"Paris\" (Recovered)</text>\n\n      <defs>\n        <marker id=\"arrow_patch_1772521379671\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n        <marker id=\"arrow_patch_orange_1772521379671\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#ed8936\"></path>\n        </marker>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Causal Tracing Protocol",
+        "body": "<ol>\n    <li><b>Clean Run:</b> A prompt \\\\( x \\\\) is passed through, yielding output \\\\( y \\\\). All intermediate hidden states \\\\( h_i \\\\) are stored.</li>\n    <li><b>Corrupted Run:</b> The prompt is altered to \\\\( x' \\\\) to predict \\\\( y' \\\\) (or random noise is added to the embeddings).</li>\n    <li><b>Intervention (Patching):</b> During the corrupted run, a specific component's tensor \\\\( C(x') \\\\) is forcefully overwritten with \\\\( C(x) \\\\) from the clean run.</li>\n  </ol>\n\n  <p>If overwriting that single component causes the model to suddenly output \\\\( y \\\\) instead of \\\\( y' \\\\), we have <b>causally proven</b> that the component is responsible for retrieving or moving the critical information required for that prediction.</p>\n  <p>This technique proved that MLPs function as key-value memory banks storing factual knowledge, while attention heads move that retrieved knowledge to the final token position.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "log-sum-exp-trick",
+    "title": "Log-Sum-Exp Trick",
+    "summary": "An essential numerical stabilization protocol used to compute \\\\( \\log \\sum_i e^{x_i} \\\\) without encountering catastrophic overflow (infinity) or underflow (zero) in floating-point mathematics.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "exponential-family-of-distributions",
+      "activation-patching"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Foundational Math · Used internally by `torch.nn.functional.log_softmax`"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An essential numerical stabilization protocol used to compute \\\\( \\log \\sum_i e^{x_i} \\\\) without encountering catastrophic overflow (infinity) or underflow (zero) in floating-point mathematics.</p><p>When operating in the log-domain (like Cross-Entropy loss or Softmax), taking the exponent of large model logits easily surpasses the capacity of float32/float64 numbers. <code>float32</code> overflows at \\\\( e^{88.7} \\\\). If a neural network outputs a logit of 100, \\\\( e^{100} \\to \\infty \\\\) and the entire loss function crashes with NaNs.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Trick",
+        "body": "<p>By defining \\\\( c = \\max_i(x_i) \\\\), we globally shift the scale of the logits before exponentiating, mathematically factoring \\\\( c \\\\) out of the logarithm:</p>\n\n  \\[ \\text{LSE}(x) = \\log \\sum_{i} \\exp(x_i) \\]\n  \\[ = \\log \\left( \\sum_{i} \\exp(x_i - c + c) \\right) \\]\n  \\[ = \\log \\left( \\exp(c) \\sum_{i} \\exp(x_i - c) \\right) \\]\n  \\[ = c + \\log \\sum_{i} \\exp(x_i - c) \\]\n\n  <p>Because we subtract \\\\( c \\\\) (the maximum value), the largest exponent evaluated is \\\\( \\exp(0) = 1 \\\\). All other elements are negative, meaning their exponents evaluated to \\\\( [0, 1) \\\\). This guarantees <b>no overflow</b>. The outer \\\\( +c \\\\) reconstructs the true scale harmlessly after the logarithm compresses the summation.</p>\n\n  <details>\n    <summary>Implementation Snippet (Softmax)</summary>\n    <br>\n    <p>Softmax directly relies on this property to remain stable:</p>\n    <pre><code>def stable_softmax(x):\n    # Shift values to prevent overflow\n    shift_x = x - np.max(x, axis=-1, keepdims=True)\n    exp_x = np.exp(shift_x)\n    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)</code></pre>\n  </details>"
+      },
+      {
+        "kind": "prose",
+        "title": "As a Smooth Maximum",
+        "body": "<p>The name <code>LogSumExp</code> is heavily utilized because it mathematically bounds the hard maximum function. It acts as a differentiable, smooth approximation of \\\\( \\max(\\dots) \\\\):</p>\n  \\[ \\max(x) \\leq \\text{LSE}(x) \\leq \\max(x) + \\log(N) \\]"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "exponential-family-of-distributions",
+    "title": "Exponential Family of Distributions",
+    "summary": "The exponential family constitutes a broad class of probability distributions sharing a standardized mathematical factorization, structurally guaranteeing elegant statistical properties—yielding inference, maximum likelihood estimations,…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "kolmogorov-arnold-networks",
+      "log-sum-exp-trick"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1935–1936 · E. J. G. Pitman, G. Darmois, B. O. Koopman · Independent formulations of the Exponential Family defining sufficient statistics capabilities. 1972 · John Nelder, Robert Wedderburn · Generalized Linear Models",
+        "url": "https://www.jstor.org/stable/2344614"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The exponential family constitutes a broad class of probability distributions sharing a standardized mathematical factorization, structurally guaranteeing elegant statistical properties—yielding inference, maximum likelihood estimations, and conjugate priors \"for free.\"</p>\n\n  <svg viewBox=\"0 0 650 200\" style=\"width:100%; margin-top:20px; margin-bottom:20px; border-radius:8px; background-color:#1a202c;\">\n    <text x=\"325\" y=\"30\" fill=\"#cbd5e0\" font-size=\"16\" font-family=\"sans-serif\" text-anchor=\"middle\" font-weight=\"bold\">Standard Factorization Form</text>\n    \n    <text x=\"325\" y=\"90\" fill=\"#fff\" font-size=\"24\" font-family=\"serif\" text-anchor=\"middle\">\n      P(y; η) = <tspan fill=\"#3182ce\">b(y)</tspan> e<tspan dy=\"-10\" font-size=\"16\">{ <tspan fill=\"#ecc94b\">ηᵉT(y)</tspan> - <tspan fill=\"#e53e3e\">a(η)</tspan> }</tspan>\n    </text>\n\n    <!-- b(y) -->\n    <path d=\"M 230 110 L 230 140 L 150 140\" stroke=\"#3182ce\" stroke-width=\"2\" fill=\"none\"></path>\n    <text x=\"145\" y=\"145\" fill=\"#3182ce\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"end\">Base measure (data only)</text>\n    \n    <!-- eta^T T(y) -->\n    <path d=\"M 370 110 L 370 170\" stroke=\"#ecc94b\" stroke-width=\"2\" fill=\"none\"></path>\n    <text x=\"370\" y=\"185\" fill=\"#ecc94b\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">Natural Parameters × Sufficient Stats</text>\n\n    <!-- a(eta) -->\n    <path d=\"M 455 110 L 455 140 L 520 140\" stroke=\"#e53e3e\" stroke-width=\"2\" fill=\"none\"></path>\n    <text x=\"525\" y=\"145\" fill=\"#e53e3e\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"start\">Log-partition (normalization)</text>\n  </svg><p>Many common probability distributions (e.g., Gaussian, Bernoulli, Binomial, Poisson, Gamma, Beta) belong to the exponential family. The central idea is that if a distribution's formulation can be algebraically manipulated into this specific format, you immediately unlock generalized algorithms for inference without deriving them from scratch for each specific distribution.</p>\n\n  <p>A distribution over variable \\( y \\) parameterized by \\( \\eta \\) belongs to the exponential family if its probability mass or density function can be written as:</p>\n\n  <p>\\[ P(y;\\eta) = b(y) e^{\\eta^\\top T(y) - a(\\eta)} \\]</p>\n\n  <p>Where the components strictly isolate the relationships between the data (\\( y \\)) and the parameters (\\( \\eta \\)):</p>\n  <ul>\n    <li><b>\\( \\eta \\): Natural Parameters.</b> The canonical parameters of the distribution.</li>\n    <li><b>\\( T(y) \\): Sufficient Statistic.</b> A function of the data \\( y \\) that contains all the necessary information to compute any estimate of the parameters (often just \\( T(y) = y \\)). It shares the same dimension as \\( \\eta \\).</li>\n    <li><b>\\( b(y) \\): Base Measure.</b> A non-negative function depending <i>only</i> on the data \\( y \\) and not on \\( \\eta \\).</li>\n    <li><b>\\( a(\\eta) \\): Log-Partition Function.</b> The normalization constant ensuring the probability distribution sums/integrates to 1. It depends <i>only</i> on \\( \\eta \\) and not on the data.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Link to Generalized Linear Models (GLMs).</b> The exponential family is the mathematical bedrock of GLMs. By assuming the target variable \\( y \\) follows an exponential family distribution and setting the natural parameter \\( \\eta \\) equal to a linear combination of inputs (\\( \\eta = \\theta^\\top x \\)), GLMs elegantly unify diverse algorithms like Linear Regression (Gaussian), Logistic Regression (Bernoulli), and Poisson Regression under a single framework.</p><details>\n    <summary>Derivations (Cumulants from the Log-Partition)</summary>\n    <p>The log-partition function \\( a(\\eta) \\) is incredibly powerful; it acts as the cumulant generating function. Because the probability distribution must integrate to 1 over all \\( y \\):</p>\n    <p>\\[ e^{a(\\eta)} = \\int b(y) e^{\\eta^\\top T(y)} \\,dy \\]</p>\n    <p>By simply taking derivatives of \\( a(\\eta) \\) with respect to \\( \\eta \\), you trivially obtain the moments of the sufficient statistic. The first derivative yields the mean:</p>\n    <p>\\[ \\nabla_\\eta a(\\eta) = \\mathbb{E}[T(y)] \\]</p>\n    <p>And the second derivative yields the variance:</p>\n    <p>\\[ \\nabla^2_\\eta a(\\eta) = \\text{Var}(T(y)) \\]</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "kolmogorov-arnold-networks",
+    "title": "Kolmogorov-Arnold Networks",
+    "summary": "Kolmogorov-Arnold Networks (KANs) replace scalar weights in an MLP with learnable univariate functions on edges, so each layer computes sums of learned one-dimensional transforms rather than an affine map followed by a fixed activation.…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "transparency-ai-systems",
+      "exponential-family-of-distributions"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2024 · Ziming Liu, Yixuan Wang, Sachin Vaidya, Fabian Ruehle, James Halverson, Marin Soljacic, Thomas Y. Hou, Max Tegmark · KAN: Kolmogorov-Arnold Networks",
+        "url": "https://arxiv.org/abs/2404.19756"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Kolmogorov-Arnold Networks (KANs) replace scalar weights in an MLP with learnable univariate functions on edges, so each layer computes sums of learned one-dimensional transforms rather than an affine map followed by a fixed activation. They are motivated by the Kolmogorov-Arnold representation theorem, which shows that multivariate functions can be built from compositions and sums of univariate functions.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg viewBox=\"0 0 620 320\" xmlns=\"http://www.w3.org/2000/svg\" style=\"max-width:100%; height:auto; border-radius:8px; background:#1a202c;\">\n      <defs>\n        <marker id=\"arrow_1774549673544\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n      </defs>\n\n      <text x=\"310\" y=\"26\" fill=\"#e2e8f0\" font-size=\"15\" font-family=\"sans-serif\" font-weight=\"bold\" text-anchor=\"middle\">KAN layer view: one learned edge function per input-output pair</text>\n\n      <rect x=\"18\" y=\"42\" width=\"584\" height=\"108\" rx=\"10\" fill=\"#111827\" stroke=\"#2d3748\" stroke-width=\"1.5\"></rect>\n      <rect x=\"18\" y=\"170\" width=\"584\" height=\"108\" rx=\"10\" fill=\"#111827\" stroke=\"#2d3748\" stroke-width=\"1.5\"></rect>\n\n      <text x=\"42\" y=\"62\" fill=\"#cbd5e0\" font-size=\"13\" font-family=\"sans-serif\" font-weight=\"bold\">Contributions to y1</text>\n      <text x=\"42\" y=\"190\" fill=\"#cbd5e0\" font-size=\"13\" font-family=\"sans-serif\" font-weight=\"bold\">Contributions to y2</text>\n\n      <circle cx=\"70\" cy=\"88\" r=\"16\" fill=\"#2d3748\" stroke=\"#90cdf4\" stroke-width=\"2\"></circle>\n      <circle cx=\"70\" cy=\"118\" r=\"16\" fill=\"#2d3748\" stroke=\"#90cdf4\" stroke-width=\"2\"></circle>\n      <circle cx=\"70\" cy=\"148\" r=\"16\" fill=\"#2d3748\" stroke=\"#90cdf4\" stroke-width=\"2\"></circle>\n      <text x=\"70\" y=\"93\" fill=\"#f7fafc\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">x1</text>\n      <text x=\"70\" y=\"123\" fill=\"#f7fafc\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">x2</text>\n      <text x=\"70\" y=\"153\" fill=\"#f7fafc\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">x3</text>\n\n      <circle cx=\"70\" cy=\"216\" r=\"16\" fill=\"#2d3748\" stroke=\"#90cdf4\" stroke-width=\"2\"></circle>\n      <circle cx=\"70\" cy=\"246\" r=\"16\" fill=\"#2d3748\" stroke=\"#90cdf4\" stroke-width=\"2\"></circle>\n      <circle cx=\"70\" cy=\"276\" r=\"16\" fill=\"#2d3748\" stroke=\"#90cdf4\" stroke-width=\"2\"></circle>\n      <text x=\"70\" y=\"221\" fill=\"#f7fafc\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">x1</text>\n      <text x=\"70\" y=\"251\" fill=\"#f7fafc\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">x2</text>\n      <text x=\"70\" y=\"281\" fill=\"#f7fafc\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">x3</text>\n\n      <rect x=\"180\" y=\"73\" width=\"150\" height=\"26\" rx=\"6\" fill=\"#2b6cb0\"></rect>\n      <rect x=\"180\" y=\"103\" width=\"150\" height=\"26\" rx=\"6\" fill=\"#2b6cb0\"></rect>\n      <rect x=\"180\" y=\"133\" width=\"150\" height=\"26\" rx=\"6\" fill=\"#2b6cb0\"></rect>\n\n      <rect x=\"180\" y=\"201\" width=\"150\" height=\"26\" rx=\"6\" fill=\"#dd6b20\"></rect>\n      <rect x=\"180\" y=\"231\" width=\"150\" height=\"26\" rx=\"6\" fill=\"#dd6b20\"></rect>\n      <rect x=\"180\" y=\"261\" width=\"150\" height=\"26\" rx=\"6\" fill=\"#dd6b20\"></rect>\n\n      <text x=\"255\" y=\"90\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">φ<tspan baseline-shift=\"sub\" font-size=\"10\">11</tspan>(x<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan>)</text>\n      <text x=\"255\" y=\"120\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">φ<tspan baseline-shift=\"sub\" font-size=\"10\">12</tspan>(x<tspan baseline-shift=\"sub\" font-size=\"10\">2</tspan>)</text>\n      <text x=\"255\" y=\"150\" fill=\"#f7fafc\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">φ<tspan baseline-shift=\"sub\" font-size=\"10\">13</tspan>(x<tspan baseline-shift=\"sub\" font-size=\"10\">3</tspan>)</text>\n\n      <text x=\"255\" y=\"218\" fill=\"#fffaf0\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">φ<tspan baseline-shift=\"sub\" font-size=\"10\">21</tspan>(x<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan>)</text>\n      <text x=\"255\" y=\"248\" fill=\"#fffaf0\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">φ<tspan baseline-shift=\"sub\" font-size=\"10\">22</tspan>(x<tspan baseline-shift=\"sub\" font-size=\"10\">2</tspan>)</text>\n      <text x=\"255\" y=\"278\" fill=\"#fffaf0\" font-size=\"14\" font-family=\"sans-serif\" text-anchor=\"middle\">φ<tspan baseline-shift=\"sub\" font-size=\"10\">23</tspan>(x<tspan baseline-shift=\"sub\" font-size=\"10\">3</tspan>)</text>\n\n      <circle cx=\"500\" cy=\"116\" r=\"30\" fill=\"#2f855a\" stroke=\"#9ae6b4\" stroke-width=\"2\"></circle>\n      <circle cx=\"500\" cy=\"244\" r=\"30\" fill=\"#2f855a\" stroke=\"#9ae6b4\" stroke-width=\"2\"></circle>\n      <text x=\"500\" y=\"124\" fill=\"#f7fafc\" font-size=\"28\" font-family=\"sans-serif\" text-anchor=\"middle\">+</text>\n      <text x=\"500\" y=\"252\" fill=\"#f7fafc\" font-size=\"28\" font-family=\"sans-serif\" text-anchor=\"middle\">+</text>\n      <text x=\"545\" y=\"121\" fill=\"#f7fafc\" font-size=\"16\" font-family=\"sans-serif\">y1</text>\n      <text x=\"545\" y=\"249\" fill=\"#f7fafc\" font-size=\"16\" font-family=\"sans-serif\">y2</text>\n\n      <path d=\"M 86 88 L 180 86\" stroke=\"#a0aec0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n      <path d=\"M 86 118 L 180 116\" stroke=\"#a0aec0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n      <path d=\"M 86 148 L 180 146\" stroke=\"#a0aec0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n\n      <path d=\"M 86 216 L 180 214\" stroke=\"#a0aec0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n      <path d=\"M 86 246 L 180 244\" stroke=\"#a0aec0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n      <path d=\"M 86 276 L 180 274\" stroke=\"#a0aec0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n\n      <path d=\"M 330 86 L 468 104\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n      <path d=\"M 330 116 L 462 116\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n      <path d=\"M 330 146 L 468 128\" stroke=\"#cbd5e0\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n\n      <path d=\"M 330 214 L 468 232\" stroke=\"#fbd38d\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n      <path d=\"M 330 244 L 462 244\" stroke=\"#fbd38d\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n      <path d=\"M 330 274 L 468 256\" stroke=\"#fbd38d\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1774549673544)\"></path>\n    </svg>\n    <div style=\"font-size:12px; color:#718096; margin-top:6px;\">The same inputs feed multiple outputs, but each input-output pair has its own learned univariate edge function φ<sub>j,i</sub>.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>\n\n  <p>An MLP layer computes \\( x^{(\\ell+1)} = \\sigma(Wx^{(\\ell)} + b) \\): the edges are linear weights and the nonlinearity sits on the node. A KAN layer instead moves the nonlinearity onto the edges and sums at the node:</p>\n\n  \\[  x_j^{(\\ell+1)} = \\sum_{i=1}^{d_\\ell} \\phi_{j,i}^{(\\ell)}\\!\\left(x_i^{(\\ell)}\\right).\n  \\]\n\n  <p>Here \\( d_\\ell \\) is the width of layer \\( \\ell \\), \\( x_i^{(\\ell)} \\) is the \\( i \\)-th incoming activation, and \\( \\phi_{j,i}^{(\\ell)}: \\mathbb{R} \\to \\mathbb{R} \\) is a trainable scalar function associated with edge \\( i \\to j \\). In the original KAN paper, these edge functions are parameterized with spline bases, so the model learns the shape of each one-dimensional transfer curve directly rather than learning only a scalar weight.</p>\n\n  <p>The architectural motivation comes from the Kolmogorov-Arnold representation theorem, which states that under suitable conditions a continuous multivariate function can be decomposed into sums and compositions of univariate functions:</p>\n\n  \\[  f(x_1,\\dots,x_n) = \\sum_{q=1}^{2n+1} \\Phi_q\\!\\left( \\sum_{p=1}^{n} \\phi_{q,p}(x_p) \\right).\n  \\]\n\n  <p>KANs do not implement this theorem literally, but they borrow its inductive bias: approximate a high-dimensional mapping through many learned one-dimensional functions and summations. A common parameterization writes each edge map as a spline expansion</p>\n\n  \\[  \\phi_{j,i}(x) = \\sum_{m=1}^{M} c_{j,i,m} B_m(x),\n  \\]\n\n  <p>where \\( B_m \\) are fixed B-spline basis functions and \\( c_{j,i,m} \\) are learned coefficients.</p>\n\n  <p>This can make KANs unusually interpretable: one can inspect the learned curve on each edge and see how each input contributes to each output. Empirically, the original paper reported that relatively small KANs can fit some regression and scientific computing tasks more efficiently than much larger MLPs. The trade-off is that evaluating many spline functions is usually less hardware-friendly than dense matrix multiplication, so vanilla KANs are often slower and harder to scale than standard MLP blocks on modern accelerators.</p>\n\n  <p>Conceptually, KANs sit between classical approximation theory and modern neural architecture design. Their importance is less that the theorem magically solves deep learning and more that it suggests a different place to put learnable nonlinearity: on connections instead of on neurons.</p><details>\n    <summary>Derivations</summary>\n    <p>For an MLP neuron \\( j \\), the preactivation is \\( z_j = \\sum_i w_{j,i} x_i + b_j \\), followed by a fixed activation \\( x'_j = \\sigma(z_j) \\). KAN replaces each linear contribution \\( w_{j,i} x_i \\) with a learned univariate map \\( \\phi_{j,i}(x_i) \\), giving \\( x'_j = \\sum_i \\phi_{j,i}(x_i) \\). The Kolmogorov-Arnold theorem then provides the abstract template that repeated sums of one-dimensional functions can represent broad classes of multivariate functions, which is the theoretical intuition behind stacking KAN layers.</p>\n  </details>"
+      }
+    ],
+    "cards": []
   }
 ]
