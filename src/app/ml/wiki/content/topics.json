@@ -14364,5 +14364,437 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "subword-tokenization",
+    "title": "Subword Tokenization",
+    "summary": "A tokenization strategy that splits text into units between characters and full words — common words remain whole tokens, while rare words are broken into smaller subword pieces. This provides an open vocabulary (any text can be encoded)…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "special-tokens",
+      "representation-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1994 · Philip Gage (BPE for data compression); Sennrich et al. (2016, BPE for NMT); Kudo (2018, SentencePiece)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A tokenization strategy that splits text into units between characters and full words — common words remain whole tokens, while rare words are broken into smaller subword pieces. This provides an open vocabulary (any text can be encoded) while keeping sequences reasonably short.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Main algorithms",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Algorithm</th><th style=\"padding:6px; text-align:left;\">Approach</th><th style=\"padding:6px; text-align:left;\">Used by</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Byte-Pair Encoding (BPE)</td><td style=\"padding:6px;\">Iteratively merge most frequent byte pairs</td><td style=\"padding:6px;\">GPT-2/3/4, LLaMA 3</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">WordPiece</td><td style=\"padding:6px;\">Merge pairs that maximise likelihood</td><td style=\"padding:6px;\">BERT</td></tr>\n<tr><td style=\"padding:6px;\">Unigram (SentencePiece)</td><td style=\"padding:6px;\">Start large, prune low-probability tokens</td><td style=\"padding:6px;\">LLaMA 1/2, T5, XLNet</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Example (BPE)",
+        "body": "<pre style=\"background:#f5f5f5; color:#111; padding:8px; border-radius:4px; font-size:0.9em;\">\"unhappiness\" → [\"un\", \"happiness\"]  (common prefix + common word)\n\"transformative\" → [\"transform\", \"ative\"]\n\"qwerty\" → [\"q\", \"wer\", \"ty\"]  (rare word split finely)\n</pre>"
+      },
+      {
+        "kind": "prose",
+        "title": "Why subword?",
+        "body": "<ul>\n<li><b>Word-level</b> tokenization cannot handle out-of-vocabulary words and requires huge vocabularies for morphologically rich languages</li>\n<li><b>Character-level</b> produces very long sequences (expensive attention) and loses morphological information</li>\n<li><b>Subword</b> is the sweet spot: open vocabulary, reasonable sequence length, captures morphological structure</li>\n</ul>\n\n<p>BPE training starts with individual bytes (or characters) as the vocabulary, then repeatedly merges the most frequent adjacent pair until the desired vocabulary size is reached. The merge order defines the tokenization rules. WordPiece is mathematically distinct: it chooses the merge that maximises the likelihood of the training data, effectively maximising \\( \\Delta = \\log P(xy) - \\log P(x) - \\log P(y) \\).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "special-tokens",
+    "title": "Special Tokens",
+    "summary": "Reserved tokens in a tokenizer's vocabulary that carry structural or control meaning rather than representing natural language text. Special tokens delimit sequences, mark boundaries between roles in chat, and signal the start/end of gen…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "padding-token",
+      "subword-tokenization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Introduced with sequence-to-sequence models and BERT (Devlin et al., 2019); chat-specific tokens evolved with instruction-tuned models (2022–2023)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Reserved tokens in a tokenizer's vocabulary that carry structural or control meaning rather than representing natural language text. Special tokens delimit sequences, mark boundaries between roles in chat, and signal the start/end of generation.</p><table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Token</th><th style=\"padding:6px; text-align:left;\">Purpose</th><th style=\"padding:6px; text-align:left;\">Example</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">BOS (beginning of sequence)</td><td style=\"padding:6px;\">Marks the start of a sequence</td><td style=\"padding:6px;\"><code>&lt;s&gt;</code>, <code>&lt;|begin_of_text|&gt;</code></td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">EOS (end of sequence)</td><td style=\"padding:6px;\">Signals generation should stop</td><td style=\"padding:6px;\"><code>&lt;/s&gt;</code>, <code>&lt;|endoftext|&gt;</code></td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">PAD (padding)</td><td style=\"padding:6px;\">Fills shorter sequences in a batch to equal length</td><td style=\"padding:6px;\"><code>[PAD]</code></td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">SEP (separator)</td><td style=\"padding:6px;\">Separates two segments (e.g., premise/hypothesis)</td><td style=\"padding:6px;\"><code>[SEP]</code></td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">CLS (classification)</td><td style=\"padding:6px;\">Aggregate representation for classification (BERT)</td><td style=\"padding:6px;\"><code>[CLS]</code></td></tr>\n<tr><td style=\"padding:6px;\">Role markers</td><td style=\"padding:6px;\">Delimit system/user/assistant turns in chat</td><td style=\"padding:6px;\"><code>&lt;|im_start|&gt;</code>, <code>[INST]</code></td></tr>\n</tbody></table>\n\n<p>Special tokens are typically excluded from normal tokenization — they cannot appear in regular text and are inserted programmatically. They have dedicated token IDs (often at the beginning or end of the vocabulary).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Practical importance:</b> Using the wrong special tokens or placing them incorrectly causes severe performance degradation. For example, ChatML formats inputs like so before tokenisation:</p>\n<pre style=\"background:#f5f5f5; color:#111; padding:8px; border-radius:4px; font-size:0.9em;\">&lt;|im_start|&gt;system\nYou are a helpful assistant.&lt;|im_end|&gt;\n&lt;|im_start|&gt;user\nHello!&lt;|im_end|&gt;\n</pre>\n<p>A chat model expecting these delimiters will behave erratically if given raw text without them. This is why <code>tokenizer.apply_chat_template()</code> exists — to handle special token insertion correctly.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "padding-token",
+    "title": "Padding Token",
+    "summary": "A special token used to fill shorter sequences in a batch to match the length of the longest sequence, enabling efficient batched computation on GPUs (which require uniform tensor dimensions). Padding tokens are masked out during attenti…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "bos-token-beginning-of-sequence",
+      "special-tokens"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Standard practice in batched neural network training and inference."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A special token used to fill shorter sequences in a batch to match the length of the longest sequence, enabling efficient batched computation on GPUs (which require uniform tensor dimensions). Padding tokens are masked out during attention and loss computation so they don't affect the model's behaviour.</p><p>Given a batch with sequences of varying length:</p>\n<pre style=\"background:#f5f5f5; color:#111; padding:8px; border-radius:4px; font-size:0.9em;\">\nSequence 1: [The, cat, sat]           → [The, cat, sat, PAD, PAD]\nSequence 2: [Hello, world, how, are, you] → [Hello, world, how, are, you]\n</pre>\n\n<p>The padding token is excluded from computation via two masks:</p>\n<ul>\n<li><b>Attention mask:</b> Set to negative infinity (or a very large negative number) for padding positions before the softmax step in the attention equation:\n\\[ \text{Attention}(Q, K, V) = \text{softmax}\\left(rac{QK^T}{\\sqrt{d_k}} + Might)V \\]\nwhere \\( M_{ij} = -\\infty \\) if position \\( j \\) is a PAD token. This prevents other tokens from attending to padding since \\( \\exp(-\\infty) = 0 \\).</li>\n<li><b>Loss mask:</b> Exclude padding positions from the cross-entropy loss so the model isn't penalised for failing to \"predict\" padding tokens during training.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Left vs. right padding",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Convention</th><th style=\"padding:6px; text-align:left;\">Used for</th><th style=\"padding:6px; text-align:left;\">Reason</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Right padding</td><td style=\"padding:6px;\">Training (encoder models)</td><td style=\"padding:6px;\">Standard convention</td></tr>\n<tr><td style=\"padding:6px;\">Left padding</td><td style=\"padding:6px;\">Batched generation (decoder models)</td><td style=\"padding:6px;\">All sequences end at the same position, simplifying autoregressive generation by aligning the \"next token\" predictions</td></tr>\n</table>\n\n<p>Some decoder-only models (GPT-2) were not trained with a padding token and require one to be added manually for batched inference. A common practice is to reuse the EOS token as the pad token.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "bos-token-beginning-of-sequence",
+    "title": "BOS Token (Beginning of Sequence)",
+    "summary": "A special token prepended to the input sequence to signal the start of a new text or conversation. It provides a consistent initial context for the model and, in autoregressive architectures, serves as the seed token from which generatio…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "eos-token-end-of-sequence",
+      "padding-token"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Standard practice in sequence models; formalised with BERT's [CLS] (Devlin et al., 2019) and adopted across modern LLMs."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A special token prepended to the input sequence to signal the start of a new text or conversation. It provides a consistent initial context for the model and, in autoregressive architectures, serves as the seed token from which generation begins.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why BOS matters mechanically.</b> In an autoregressive language model, the probability of a sequence is factored as:</p>\n\n\\[ P(x_1, \\ldots, x_n) = P(x_1 \\mid \\text{BOS}) \\prod_{t=2}^{n} P(x_t \\mid x_{1:t-1}) \\]\n\n<p>Without BOS, the model must predict the first token \\(x_1\\) with zero context — effectively sampling from a marginal distribution over the vocabulary. The BOS token gives the model a fixed, learned anchor so that \\( P(x_1 \\mid \\text{BOS}) \\) is well-calibrated. The BOS embedding is learned during pretraining and encodes a prior over likely first tokens.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Common BOS tokens across model families",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">BOS token</th><th style=\"padding:6px; text-align:left;\">Token ID</th><th style=\"padding:6px; text-align:left;\">Notes</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 1/2</td><td style=\"padding:6px;\"><code>&lt;s&gt;</code></td><td style=\"padding:6px;\">1</td><td style=\"padding:6px;\">Always prepended by tokenizer</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 3</td><td style=\"padding:6px;\"><code>&lt;|begin_of_text|&gt;</code></td><td style=\"padding:6px;\">128000</td><td style=\"padding:6px;\">Separate from chat turn markers</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPT-2/3</td><td style=\"padding:6px;\">None</td><td style=\"padding:6px;\">—</td><td style=\"padding:6px;\">No BOS; first user token is the start</td></tr>\n<tr><td style=\"padding:6px;\">BERT</td><td style=\"padding:6px;\"><code>[CLS]</code></td><td style=\"padding:6px;\">101</td><td style=\"padding:6px;\">Functions as BOS; its output used for classification</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Interaction with chat templates.</b> In chat-tuned models the BOS token is distinct from role delimiters. For example, LLaMA 3's chat format is:</p>\n\n<pre style=\"background:#f5f5f5; color:#111; padding:8px; border-radius:4px; font-size:0.9em;\">&lt;|begin_of_text|&gt;&lt;|start_header_id|&gt;system&lt;|end_header_id|&gt;\n\nYou are a helpful assistant.&lt;|eot_id|&gt;&lt;|start_header_id|&gt;user&lt;|end_header_id|&gt;\n\nHello!&lt;|eot_id|&gt;</pre>\n\n<p>The BOS appears exactly once at the very start; role markers handle turn boundaries. Omitting BOS or doubling it causes degraded output because the model encounters an out-of-distribution positional pattern at position 0.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Common pitfall:</b> Some tokenizers add BOS automatically (<code>add_bos_token=True</code>), while others do not. When concatenating tokenized segments manually, accidentally including two BOS tokens or zero BOS tokens is a frequent source of bugs.</p></t})></anki-mathjax>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "eos-token-end-of-sequence",
+    "title": "EOS Token (End of Sequence)",
+    "summary": "A special token that signals the end of a generated sequence. During autoregressive generation, the model emitting the EOS token is the standard stopping criterion — generation halts when EOS is produced (or when a maximum length is reac…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "attention-mechanism",
+      "bos-token-beginning-of-sequence"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Standard practice in sequence generation; part of all modern tokenizers."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A special token that signals the end of a generated sequence. During autoregressive generation, the model emitting the EOS token is the standard stopping criterion — generation halts when EOS is produced (or when a maximum length is reached).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Mechanics of EOS in generation.</b> At each decoding step, the model produces a probability distribution over the vocabulary including EOS. Generation stops when:</p>\n\n\\[ \\arg\\max_v P(v \\mid x_{1:t-1}) = \\text{EOS} \\quad \\text{(greedy)} \\]\n\n<p>or when EOS is sampled from the distribution (stochastic decoding). With beam search, a beam is marked as complete when it generates EOS; remaining beams continue until all are complete or a length limit is hit.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">EOS token</th><th style=\"padding:6px; text-align:left;\">Notes</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPT-2</td><td style=\"padding:6px;\"><code>&lt;|endoftext|&gt;</code></td><td style=\"padding:6px;\">Also used as BOS and PAD (single special token)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 1/2</td><td style=\"padding:6px;\"><code>&lt;/s&gt;</code></td><td style=\"padding:6px;\">Standard XML-style end tag</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 3 (chat)</td><td style=\"padding:6px;\"><code>&lt;|eot_id|&gt;</code></td><td style=\"padding:6px;\">End-of-turn; distinct from end-of-text</td></tr>\n<tr><td style=\"padding:6px;\">BERT</td><td style=\"padding:6px;\"><code>[SEP]</code></td><td style=\"padding:6px;\">Marks segment boundaries, not generation stopping</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Roles of the EOS token",
+        "body": "<ul>\n<li><b>Stopping criterion:</b> Generation terminates when EOS is sampled.</li>\n<li><b>Document boundary in pretraining:</b> EOS separates documents in the training corpus, teaching the model to reset its attention context across unrelated texts. Without this, the model would learn spurious dependencies between adjacent documents.</li>\n<li><b>Turn delimiter in chat:</b> In instruction-tuned models, EOS (or a specialised end-of-turn token) marks the end of each assistant response, enabling multi-turn conversation.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>EOS vs. end-of-turn.</b> Modern chat models distinguish between end-of-turn (conversation continues with the next speaker) and end-of-sequence (conversation is fully over). LLaMA 3 uses <code>&lt;|eot_id|&gt;</code> for end-of-turn and <code>&lt;|end_of_text|&gt;</code> for end-of-sequence. Confusing these causes the model to either halt prematurely (treating a turn boundary as conversation end) or ramble indefinitely (never seeing a stop signal).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "attention-mechanism",
+    "title": "Attention Mechanism",
+    "summary": "A neural network component that computes a weighted sum over a set of values, where the weights are dynamically determined by the compatibility between a query and corresponding keys. Attention allows models to focus on the most relevant…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "attention",
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "encoder-decoder-architecture",
+      "eos-token-end-of-sequence"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2014 · Bahdanau, Cho, Bengio · Neural Machine Translation by Jointly Learning to Align and Translate",
+        "url": "https://arxiv.org/abs/1409.0473"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A neural network component that computes a weighted sum over a set of values, where the weights are dynamically determined by the compatibility between a query and corresponding keys. Attention allows models to focus on the most relevant parts of the input, replacing fixed-size bottlenecks with flexible, content-dependent information routing.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Scaled Dot-Product Attention:</b> In modern Transformers, attention is computed via matrix multiplication:</p>\n\n\\[ \text{Attention}(Q, K, V) = \text{softmax}\\left(rac{QK^T}{\\sqrt{d_k}}ight)V \\]\n\n<ul>\n  <li><b>Q (Queries):</b> The vectors asking for information (what the current token is looking for, shape \\(N \times d_k\\)).</li>\n  <li><b>K (Keys):</b> The vectors serving as identity tags for incoming information (what each token holds, shape \\(M \times d_k\\)).</li>\n  <li><b>V (Values):</b> The actual content or features to be aggregated, usually the same underlying vectors as the keys (shape \\(M \times d_v\\)).</li>\n</ul>\n\n<p>The \\( \\sqrt{d_k} \\) scaling factor prevents the dot-products from growing too large and pushing the softmax function into regions with extremely small gradients (the vanishing gradient problem).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Historical evolution",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Year</th><th style=\"padding:6px; text-align:left;\">Milestone</th><th style=\"padding:6px; text-align:left;\">Contribution</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">2014</td><td style=\"padding:6px;\">Bahdanau attention</td><td style=\"padding:6px;\">Additive attention for seq2seq, eliminating the context vector bottleneck</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">2015</td><td style=\"padding:6px;\">Luong attention</td><td style=\"padding:6px;\">Multiplicative (dot-product) attention that is simpler and faster</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">2017</td><td style=\"padding:6px;\">Self-attention (Transformer)</td><td style=\"padding:6px;\">Attention as the sole sequence routing mechanism, removing recurrence</td></tr>\n<tr><td style=\"padding:6px;\">2022+</td><td style=\"padding:6px;\">FlashAttention, GQA</td><td style=\"padding:6px;\">Hardware-aware efficiency optimisations for scale and caching</td></tr>\n</table>\n\n<p>Before attention, seq2seq models compressed the entire input into a fixed-size vector via an RNN encoding. By replacing this with attention — letting the decoder directly look up states across the entire sequence sequence — performance bounded exponentially. Self-attention allowed this same operation to be applied in parallel across the sequence, shifting the field irreversibly to Transformers.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "encoder-decoder-architecture",
+    "title": "Encoder-Decoder Architecture",
+    "summary": "A neural network architecture with two components: an encoder that processes the input into a contextual representation, and a decoder that generates the output conditioned on this representation. Originally designed for sequence-to-sequ…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "sequence-to-sequence-seq2seq",
+      "attention-mechanism"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2014 · Sutskever, Vinyals, Le (seq2seq); Vaswani et al. (Transformer enc-dec, 2017); Raffel et al. (T5, 2020)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A neural network architecture with two components: an encoder that processes the input into a contextual representation, and a decoder that generates the output conditioned on this representation. Originally designed for sequence-to-sequence tasks like translation, it remains important for tasks with distinct input and output sequences.</p><p>The information flow fundamentally addresses mapping a single input space sequence to an arbitrary output space sequence:</p>\n<ol>\n<li><b>Encoder:</b> Processes the full input sequence bidirectionally, producing a tensor of contextualized representations \\( H_{\text{enc}} \\in \\mathbb{R}^{n \times d} \\).</li>\n<li><b>Decoder:</b> Generates the output autoregressively token-by-token. At each decoding step, Cross-Attention ensures the generated token queries \\( H_{\text{enc}} \\).</li>\n</ol>\n\n<p>In the Transformer encoder-decoder architecture:</p>\n<ul>\n<li><b>Encoder:</b> Uses <i>bidirectional</i> self-attention (each token accesses all others without masking, enabling deep context).</li>\n<li><b>Decoder:</b> Uses <i>causal</i> self-attention (tokens only attend to prior tokens) followed by <i>cross-attention</i>. In cross-attention, \\( Q \\) comes from the decoder's current state, while \\( K, V \\) come from the encoder's output \\( H_{\text{enc}} \\).</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Architecture</th><th style=\"padding:6px; text-align:left;\">Models</th><th style=\"padding:6px; text-align:left;\">Best for</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Encoder-decoder</td><td style=\"padding:6px;\">T5, BART, mBART, Flan-T5, Whisper</td><td style=\"padding:6px;\">Translation, summarisation, ASR</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Encoder-only</td><td style=\"padding:6px;\">BERT, RoBERTa</td><td style=\"padding:6px;\">Classification, NLU</td></tr>\n<tr><td style=\"padding:6px;\">Decoder-only</td><td style=\"padding:6px;\">GPT, LLaMA, Claude</td><td style=\"padding:6px;\">General generation, chat</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>T5's insight:</b> Raffel et al. (2020) demonstrated that virtually any NLP task can be framed as a text-to-text problem (input text → output text), solidifying the encoder-decoder as a universal architecture. Encoder-decoders retain an advantage for tasks where the entire input is given fully before generation begins (translation, ASR), as the encoder natively exploits full bidirectional context compared to decoder-only prompt causality.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "sequence-to-sequence-seq2seq",
+    "title": "Sequence-to-Sequence (Seq2Seq)",
+    "summary": "A computational framework for mapping an input sequence of data to an output sequence of potentially different length. Seq2seq models orchestrate an encoder to read the input and a decoder to generate the output iteratively, revolutioniz…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "distributed-representation",
+      "encoder-decoder-architecture"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2014 · Ilya Sutskever, Oriol Vinyals, Quoc Le · Sequence to Sequence Learning with Neural Networks",
+        "url": "https://arxiv.org/abs/1409.3215"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A computational framework for mapping an input sequence of data to an output sequence of potentially different length. Seq2seq models orchestrate an encoder to read the input and a decoder to generate the output iteratively, revolutionizing machine translation, summarisation, and speech recognition applications.</p><p>The original RNN-based seq2seq model (Sutskever et al., 2014) operated using two separate LSTMs:</p>\n<ol>\n<li><b>Encoder LSTM:</b> Reads the input sequence iteratively and compresses its entirety into a fixed-length context vector \\( \\mathbf{c} \\) (usually the final hidden state).</li>\n<li><b>Decoder LSTM:</b> Iteratively generates an output token, conditioned strictly on \\( \\mathbf{c} \\), its previous hidden state \\( s_{t-1} \\), and the prior predicted token \\( y_{t-1} \\).</li>\n</ol>\n\n<p>The mathematical objective is to factorize the conditional probability of the target sequence:</p>\n\\[ P(y_1, \\ldots, y_m \\mid x_1, \\ldots, x_n) = \\prod_{t=1}^{m} P(y_t \\mid \\mathbf{c}, y_1, \\ldots, y_{t-1}) \\]\n<p>where the decoder updates its hidden state via \\( s_t = \text{LSTM}(s_{t-1}, [y_{t-1}; \\mathbf{c}]) \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The Context Bottleneck.</b> The fixed-length vector \\( \\mathbf{c} \\) was a severe architectural bottleneck — all nuanced semantic syntactical information of sentences of arbitrary length had to be crushed into a single narrow vector. <b>Attention</b> (Bahdanau et al., 2015) elegantly solved this by discarding the single bottleneck \\( \\mathbf{c} \\) entirely, allowing the decoder to conditionally look up encoder states across the entire sequence at any \\( t \\). The <b>Transformer</b> (2017) formalized attention as the sole foundation and replaced the recurrent RNN steps entirely.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Task</th><th style=\"padding:6px; text-align:left;\">Input</th><th style=\"padding:6px; text-align:left;\">Output</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Translation</td><td style=\"padding:6px;\">English sentence</td><td style=\"padding:6px;\">French sentence</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Summarisation</td><td style=\"padding:6px;\">Document</td><td style=\"padding:6px;\">Summary</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Speech recognition</td><td style=\"padding:6px;\">Audio features</td><td style=\"padding:6px;\">Transcript</td></tr>\n<tr><td style=\"padding:6px;\">Text-to-text (T5)</td><td style=\"padding:6px;\">Any NLP task descriptor</td><td style=\"padding:6px;\">Task result</td></tr>\n</table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "distributed-representation",
+    "title": "Distributed Representation",
+    "summary": "A representation paradigm where a distinct concept is encoded by an overlapping pattern of activation across many abstract continuous dimensions (neurons), and simultaneously each specific dimension participates in representing many diff…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "representation-learning",
+      "sequence-to-sequence-seq2seq"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · Geoffrey Hinton · Distributed Representations (in Parallel Distributed Processing, Rumelhart & McClelland)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A representation paradigm where a distinct concept is encoded by an overlapping pattern of activation across many abstract continuous dimensions (neurons), and simultaneously each specific dimension participates in representing many different concepts. This breaks starkly from local representation methods where each concept triggers exactly one unique dimension.</p><p>In a distributed embedding space, a concept like \"cat\" is mapped to a dense, continuous vector such as \\( [0.2, -0.5, 0.8, 0.1, \\ldots] \\). Every dimension holistically blends to capture its semantic nuance.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">Local (one-hot)</th><th style=\"padding:6px; text-align:left;\">Distributed (dense)</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Dimensionality</td><td style=\"padding:6px;\">\\( |V| \\) dimensions (vocabulary scale)</td><td style=\"padding:6px;\">\\( d \\ll |V| \\) (e.g., 768 fixed dimensions)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Similarity Metric</td><td style=\"padding:6px;\">Orthogonal; equidistant everywhere</td><td style=\"padding:6px;\">Cosine similarity mathematically captures meaning</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Generalisation</td><td style=\"padding:6px;\">Brittle; strictly rigid symbols</td><td style=\"padding:6px;\">Fluid; conceptually shares traits and features</td></tr>\n<tr><td style=\"padding:6px;\">Capacity</td><td style=\"padding:6px;\">Linearly 1 concept per dim</td><td style=\"padding:6px;\">Exponentially \\( O(2^d) \\) distinct active patterns</td></tr>\n</table>\n\n<p>Mathematically, the proximity between two learned vector representations evaluates their conceptual alignment. We use cosine similarity to measure this geometric angle:</p>\n\\[ \text{sim}(\\mathbf{u}, \\mathbf{v}) = rac{\\mathbf{u} \\cdot \\mathbf{v}}{\\|\\mathbf{u}\\| \\|\\mathbf{v}\\|} \\]\n\n<p>The profound power of distributed parameterizations lies in <b>compositional algebraic generalisation</b>. Models learn specific conceptual dimensions (e.g. royalty, gender) natively. A famous vector arithmetic proof is Word2Vec capturing semantic compositions linearly in space:</p>\n\\[ \\mathbf{v}_{\text{king}} - \\mathbf{v}_{\text{man}} + \\mathbf{v}_{\text{woman}} pprox \\mathbf{v}_{\text{queen}} \\]\n\n<p>Hinton (1986) originally presented distributed representations as the underlying computational principle of human connectionism. It fuels the hidden states, continuous embeddings, and attention algorithms of all deep learning architectures today. Modern mechanistic interpretability hypotheses (Superposition) argue neural networks encode radically more abstract variables than mathematically strictly possible by creatively overlapping codes into these distributed dimensions.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "representation-learning",
+    "title": "Representation Learning",
+    "summary": "A critical subfield of machine learning dedicated to designing architectures that automatically discover and parse useful features (representations) from raw chaotic unstructured data. This replaces fragile hand-engineered feature pipeli…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "subword-tokenization",
+      "distributed-representation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2013 · Yoshua Bengio, Aaron Courville, Pascal Vincent · Representation Learning: A Review and New Perspectives",
+        "url": "https://arxiv.org/abs/1206.5538"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A critical subfield of machine learning dedicated to designing architectures that automatically discover and parse useful features (representations) from raw chaotic unstructured data. This replaces fragile hand-engineered feature pipelines with end-to-end differentiable learning, enabling networks to build layered, hierarchical generalizations natively.</p><p>Before Deep Learning, traditional algorithms necessitated domain experts explicitly handcrafting features (e.g., SIFT filter banks for computer vision, TF-IDF histograms for document modeling). Representation learning bypasses this using backpropagation:</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Raw input \\(\\mathbf{x}\\) \\(ightarrow\\) Learned mapped features \\(f_\theta(\\mathbf{x})\\) \\(ightarrow\\) Task Output \\(g_\\phi(f_\theta(\\mathbf{x}))\\)",
+        "body": "<p>The explicit objective is for \\( f_\theta \\) to project complicated, linearly intertwined raw data into a continuous latent space \\( \\mathcal{Z} \\) where semantically similar items are mathematically proximate, meaning the simpler downstream classification layer \\( g_\\phi \\) can succeed linearly.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Categorization of methods",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Signal</th><th style=\"padding:6px; text-align:left;\">Examples</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Supervised</td><td style=\"padding:6px;\">Explicit Task labels</td><td style=\"padding:6px;\">ImageNet pretraining extracting intermediate filter weights</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Self-supervised</td><td style=\"padding:6px;\">Implicit masking tasks in data</td><td style=\"padding:6px;\">Masked language modelling (BERT), autoregressive prediction (GPT)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Contrastive</td><td style=\"padding:6px;\">Semantic distance pairs</td><td style=\"padding:6px;\">CLIP, SimCLR embeddings</td></tr>\n<tr><td style=\"padding:6px;\">Generative</td><td style=\"padding:6px;\">Latent reconstruction</td><td style=\"padding:6px;\">Variational Autoencoders, Diffusion</td></tr>\n</table>\n\n<p>Modern representation techniques often exploit sophisticated mathematical losses directly manipulating the latent space geometry. For instance, contrastive frameworks utilize the <b>InfoNCE Loss</b> to attract positive pairings \\( z_i, z_i^+ \\) while repelling irrelevant pairings:</p>\n\n\\[ \\mathcal{L}_{\text{InfoNCE}} = -\\log rac{\\exp(\text{sim}(z_i, z_i^+)/\tau)}{\\sum_{j} \\exp(\text{sim}(z_i, z_j)/\tau)} \\]\n\n<p>The overarching paradigm of training foundation models on exabytes of data and fine-tuning cleanly verifies the philosophy that pre-training produces a universally applicable representation topology \\( f_\theta \\), which requires only minute task-specific adaptation later.</p>"
+      }
+    ],
+    "cards": []
   }
 ]

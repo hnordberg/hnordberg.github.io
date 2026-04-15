@@ -6520,6 +6520,234 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "subword-tokenization",
+      "title": "Subword Tokenization",
+      "summary": "A tokenization strategy that splits text into units between characters and full words — common words remain whole tokens, while rare words are broken into smaller subword pieces. This provides an open vocabulary (any text can be encoded)…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "special-tokens",
+        "representation-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "special-tokens",
+      "title": "Special Tokens",
+      "summary": "Reserved tokens in a tokenizer's vocabulary that carry structural or control meaning rather than representing natural language text. Special tokens delimit sequences, mark boundaries between roles in chat, and signal the start/end of gen…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "padding-token",
+        "subword-tokenization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "padding-token",
+      "title": "Padding Token",
+      "summary": "A special token used to fill shorter sequences in a batch to match the length of the longest sequence, enabling efficient batched computation on GPUs (which require uniform tensor dimensions). Padding tokens are masked out during attenti…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "bos-token-beginning-of-sequence",
+        "special-tokens"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bos-token-beginning-of-sequence",
+      "title": "BOS Token (Beginning of Sequence)",
+      "summary": "A special token prepended to the input sequence to signal the start of a new text or conversation. It provides a consistent initial context for the model and, in autoregressive architectures, serves as the seed token from which generatio…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "eos-token-end-of-sequence",
+        "padding-token"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "eos-token-end-of-sequence",
+      "title": "EOS Token (End of Sequence)",
+      "summary": "A special token that signals the end of a generated sequence. During autoregressive generation, the model emitting the EOS token is the standard stopping criterion — generation halts when EOS is produced (or when a maximum length is reac…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "attention-mechanism",
+        "bos-token-beginning-of-sequence"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "attention-mechanism",
+      "title": "Attention Mechanism",
+      "summary": "A neural network component that computes a weighted sum over a set of values, where the weights are dynamically determined by the compatibility between a query and corresponding keys. Attention allows models to focus on the most relevant…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "attention",
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "encoder-decoder-architecture",
+        "eos-token-end-of-sequence"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "encoder-decoder-architecture",
+      "title": "Encoder-Decoder Architecture",
+      "summary": "A neural network architecture with two components: an encoder that processes the input into a contextual representation, and a decoder that generates the output conditioned on this representation. Originally designed for sequence-to-sequ…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "sequence-to-sequence-seq2seq",
+        "attention-mechanism"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sequence-to-sequence-seq2seq",
+      "title": "Sequence-to-Sequence (Seq2Seq)",
+      "summary": "A computational framework for mapping an input sequence of data to an output sequence of potentially different length. Seq2seq models orchestrate an encoder to read the input and a decoder to generate the output iteratively, revolutioniz…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "distributed-representation",
+        "encoder-decoder-architecture"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "distributed-representation",
+      "title": "Distributed Representation",
+      "summary": "A representation paradigm where a distinct concept is encoded by an overlapping pattern of activation across many abstract continuous dimensions (neurons), and simultaneously each specific dimension participates in representing many diff…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "representation-learning",
+        "sequence-to-sequence-seq2seq"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "representation-learning",
+      "title": "Representation Learning",
+      "summary": "A critical subfield of machine learning dedicated to designing architectures that automatically discover and parse useful features (representations) from raw chaotic unstructured data. This replaces fragile hand-engineered feature pipeli…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "subword-tokenization",
+        "distributed-representation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
