@@ -16005,5 +16005,428 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "instruction-tuning",
+    "title": "Instruction Tuning",
+    "summary": "A supervised finetuning stage where a pretrained language model is trained on (instruction, response) pairs so that it learns to follow natural-language instructions across diverse tasks, rather than merely continuing text.",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "safety-alignment",
+      "a-b-testing-ml-systems"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Chung et al. · Scaling Instruction-Finetuned Language Models",
+        "url": "https://arxiv.org/abs/2210.11416"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A supervised finetuning stage where a pretrained language model is trained on (instruction, response) pairs so that it learns to follow natural-language instructions across diverse tasks, rather than merely continuing text.</p><p>Pretrained LLMs are powerful text completers but poor instruction followers — they may rephrase a question rather than answer it, or continue a prompt in an unhelpful direction. Instruction tuning bridges this gap by finetuning on datasets where each example pairs a human instruction with a desired response.</p>\n\n  <p>The objective is standard causal language modeling, but the loss is only computed on the response tokens. Given an instruction \\( x \\) and a target response \\( y = (y_1, ..., y_T) \\):</p>\n  \\[ \\mathcal{L}_{\\text{SFT}} = - \\sum_{t=1}^{T} \\log P_\\theta(y_t \\mid x, y_{1:t-1}) \\]\n  <p>where the instruction tokens \\( x \\) are masked out of the loss computation. This focuses the model's capacity on generating the appropriate response rather than learning to predict the user's prompt.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key results and methods",
+        "body": "<ul>\n    <li><b>FLAN</b> (Finetuned Language Net, 2022): Instruction-tuned PaLM on 1,836 tasks; showed that instruction tuning improves zero-shot and few-shot performance on held-out tasks, with gains scaling with the number and diversity of tasks</li>\n    <li><b>InstructGPT</b> (2022): Combined SFT on human demonstrations with RLHF; a 1.3B InstructGPT model was preferred over the 175B GPT-3 base model</li>\n    <li><b>Self-Instruct</b> (2023): Used an LLM to generate its own instruction-response pairs, reducing dependence on expensive human annotation</li>\n  </ul>\n\n  <p>Instruction tuning is typically the <b>first post-training stage</b>, followed by preference alignment (RLHF/DPO). The instruction dataset's quality matters more than its size — a few thousand high-quality examples (as shown by LIMA) can outperform much larger noisy datasets.</p><details>\n    <summary>Python</summary>\n<pre><code>import torch.nn as nn\n\n# Pseudo-code for SFT loss masking\ndef compute_sft_loss(logits, labels, prompt_mask):\n    # logits: [batch, seq_len, vocab_size]\n    # labels: [batch, seq_len]\n    loss_fct = nn.CrossEntropyLoss(ignore_index=-100)\n    \n    # Mask out prompt tokens in target labels\n    masked_labels = labels.clone()\n    masked_labels[prompt_mask] = -100\n    \n    loss = loss_fct(logits.view(-1, logits.size(-1)), masked_labels.view(-1))\n    return loss\n</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "safety-alignment",
+    "title": "Safety Alignment",
+    "summary": "The process of training AI models — particularly LLMs — to behave in ways that are helpful, harmless, and honest (the \"HHH\" criteria), ensuring they refuse harmful requests and avoid generating dangerous, biased, or deceptive content.",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "red-teaming",
+      "instruction-tuning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Bai et al. · Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback",
+        "url": "https://arxiv.org/abs/2204.05862"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The process of training AI models — particularly LLMs — to behave in ways that are helpful, harmless, and honest (the \"HHH\" criteria), ensuring they refuse harmful requests and avoid generating dangerous, biased, or deceptive content.</p><p>Safety alignment addresses the gap between a model's raw capabilities and the behaviors society deems acceptable. A capable but unaligned model might helpfully provide instructions for synthesizing toxins or generating convincing misinformation.</p>\n\n  <p>In RLHF, safety alignment explicitly optimizes a policy against a reward model trained on human preference data, while typically constrained by a KL-divergence penalty to prevent the model from drifting too far from its fluent base state or \"hacking\" the reward:</p>\n  \\[ \\max_{\\pi_\\theta} \\mathbb{E}_{x \\sim \\mathcal{D}, y \\sim \\pi_\\theta}[r_\\phi(x, y)] - \\beta D_{\\text{KL}}(\\pi_\\theta(y \\mid x) \\| \\pi_{\\text{ref}}(y \\mid x)) \\]\n  <p>where \\( r_\\phi \\) is the safety reward model, \\( \\pi_{\\text{ref}} \\) is the reference model, and \\( \\beta \\) controls the severity of the Kullback-Leibler penalty.</p>\n\n  <p><b>Multi-layered approach:</b></p>\n  <ul>\n    <li><b>Data curation:</b> Filtering toxic or harmful content from pretraining corpora</li>\n    <li><b>Supervised safety tuning:</b> Training on examples of appropriate refusals and safe responses</li>\n    <li><b>RLHF / Constitutional AI:</b> Preference optimization using human feedback or AI-generated critiques anchored to explicit principles</li>\n    <li><b>Red-teaming:</b> Adversarial probing to discover failure modes before deployment</li>\n    <li><b>Runtime guardrails:</b> Input/output classifiers, content filters, and system prompt constraints</li>\n  </ul>\n\n  <p>A persistent tension in safety alignment is the <b>helpfulness-safety trade-off</b>: overly cautious models that refuse benign requests (\"sorry, I can't help with that\") frustrate users, while models tuned for maximum helpfulness may be more susceptible to adversarial attacks. Finding the right balance requires iterative evaluation and adjustment.</p>\n\n  <p>Anthropic's Constitutional AI approach notably replaces human feedback in the RL loop with AI feedback guided by a written \"constitution\" of principles, enabling more scalable and consistent safety training.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n        \n<svg width=\"600\" height=\"150\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"600\" height=\"150\" fill=\"#1a202c\" rx=\"8\"></rect>\n  \n  <rect x=\"30\" y=\"40\" width=\"140\" height=\"60\" fill=\"#2d3748\" stroke=\"#4a5568\" stroke-width=\"2\" rx=\"6\"></rect>\n  <text x=\"100\" y=\"65\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">1. Supervised</text>\n  <text x=\"100\" y=\"85\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Finetuning</text>\n  <text x=\"100\" y=\"120\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Demonstrations</text>\n  \n  <path d=\"M 180 70 L 220 70\" stroke=\"white\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772520567993)\"></path>\n  \n  <rect x=\"230\" y=\"40\" width=\"140\" height=\"60\" fill=\"#2d3748\" stroke=\"#4a5568\" stroke-width=\"2\" rx=\"6\"></rect>\n  <text x=\"300\" y=\"65\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">2. Reward Model</text>\n  <text x=\"300\" y=\"85\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Training</text>\n  <text x=\"300\" y=\"120\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Preferences</text>\n  \n  <path d=\"M 380 70 L 420 70\" stroke=\"white\" stroke-width=\"2\" fill=\"none\" marker-end=\"url(#arrow_1772520567993)\"></path>\n  \n  <rect x=\"430\" y=\"40\" width=\"140\" height=\"60\" fill=\"#2d3748\" stroke=\"#4a5568\" stroke-width=\"2\" rx=\"6\"></rect>\n  <text x=\"500\" y=\"65\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">3. PPO / RL</text>\n  <text x=\"500\" y=\"85\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Optimization</text>\n  <text x=\"500\" y=\"120\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Prompts + KL</text>\n  \n  <defs>\n    <marker id=\"arrow_1772520567993\" markerWidth=\"10\" markerHeight=\"10\" refX=\"9\" refY=\"3\" orient=\"auto\" markerUnits=\"strokeWidth\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"white\"></path>\n    </marker>\n  </defs>\n</svg>\n\n        <div style=\"color:#a0aec0; font-size:0.85em; margin-top:4px;\"><i>The standard three-stage RLHF pipeline.</i></div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "red-teaming",
+    "title": "Red-Teaming",
+    "summary": "A structured adversarial evaluation process where testers deliberately attempt to elicit harmful, unsafe, or policy-violating outputs from an AI system, in order to identify vulnerabilities before deployment.",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "what-is-a-jailbreak-in-the-context-of-llms",
+      "safety-alignment"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Perez et al. · Red Teaming Language Models with Language Models",
+        "url": "https://arxiv.org/abs/2202.03286"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A structured adversarial evaluation process where testers deliberately attempt to elicit harmful, unsafe, or policy-violating outputs from an AI system, in order to identify vulnerabilities before deployment.</p><p>Borrowed from cybersecurity, red-teaming in the ML context involves human (or automated) adversaries crafting inputs designed to bypass a model's safety guardrails. The goal is <b>not</b> to break the model for its own sake, but to discover failure modes that can be patched through additional training or filtering.</p>\n\n  <p>In formal optimization terms, red-teaming for LLMs seeks an adversarial prompt \\( x_{adv} \\) (or suffix) that maximizes the probability of generating a target harmful string \\( y_{harmful} \\):</p>\n  \\[ x_{adv}^* = \\arg\\max_{x_{adv}} P_\\theta(y_{harmful} \\mid x_{prompt} \\oplus x_{adv}) \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Common attack vectors tested",
+        "body": "<ul>\n    <li><b>Direct requests:</b> Explicitly asking for harmful content</li>\n    <li><b>Jailbreaks:</b> Prompt injections that override safety training (e.g., \"DAN\" prompts, role-playing exploits)</li>\n    <li><b>Obfuscation:</b> Encoding harmful requests in base64, pig Latin, or multi-turn conversations</li>\n    <li><b>Context manipulation:</b> Framing harmful requests as fiction, academic research, or hypotheticals</li>\n    <li><b>Multi-modal attacks:</b> Embedding harmful instructions in images or audio</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Automated red-teaming</b> uses one LLM to generate adversarial prompts and another to evaluate the target model's responses. Perez et al. (2022) showed that LLM-generated red-team attacks discovered more diverse failure modes than human testers alone, and at significantly lower cost. This has led to red-teaming becoming a standard phase in the LLM development pipeline, often iterated multiple times before release.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "what-is-a-jailbreak-in-the-context-of-llms",
+    "title": "What is a jailbreak in the context of LLMs?",
+    "summary": "A prompt or sequence of prompts that circumvents an LLM's safety training, causing it to produce outputs it was explicitly trained to refuse — such as harmful instructions, policy-violating content, or unrestricted \"unaligned\" behavior.",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "adversarial-prompting",
+      "red-teaming"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Zou et al. · Universal and Transferable Adversarial Attacks on Aligned Language Models",
+        "url": "https://arxiv.org/abs/2307.15043"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A prompt or sequence of prompts that circumvents an LLM's safety training, causing it to produce outputs it was explicitly trained to refuse — such as harmful instructions, policy-violating content, or unrestricted \"unaligned\" behavior.</p><p>Jailbreaks exploit the fundamental tension between a model's broad capabilities (acquired during pretraining) and its behavioral constraints (imposed during alignment). Safety training is a <b>behavioral overlay</b>, not a removal of knowledge, so sufficiently creative prompting can sometimes reach the underlying capabilities.</p>\n\n  <p><b>Common jailbreak categories:</b></p>\n\n  <table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Type</th>\n      <th style=\"padding:6px; text-align:left;\">Mechanism</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Role-playing</b></td>\n      <td style=\"padding:6px;\">\"You are DAN (Do Anything Now)...\" — assigns an alternative persona not bound by safety rules</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Hypothetical framing</b></td>\n      <td style=\"padding:6px;\">\"In a fictional world where...\" — distances the request from reality</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Prompt injection</b></td>\n      <td style=\"padding:6px;\">Inserting override instructions that supersede the system prompt</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Encoding</b></td>\n      <td style=\"padding:6px;\">Expressing harmful requests in base64, Caesar cipher, or code to evade keyword filters</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Gradient-based</b></td>\n      <td style=\"padding:6px;\">Automated suffix optimization that finds adversarial token sequences</td>\n    </tr>\n  </table>\n\n  <p>For example, the Greedy Coordinate Gradient (GCG) attack formalizes jailbreaking as a discrete optimization problem. It appends a string of tokens \\( x_{1:L} \\) to a harmful prompt \\( p \\), aiming to minimize the negative log-likelihood of a compliant target string \\( y \\) (e.g., \"Sure, here is...\"):</p>\n  \\[ \\min_{x_1, \\dots, x_L \\in \\mathcal{V}} - \\log P_\\theta(y \\mid p, x_{1:L}) \\]\n\n  <p>Zou et al. (2023) demonstrated that these <b>universal adversarial suffixes</b> — optimized via gradient-based search on open-weight models — could transfer directly to closed-source models like GPT-4, achieving high attack success rates. This revealed that safety alignment, while effective against most casual attempts, remains brittle against sophisticated mathematical adversaries.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n        \n<svg width=\"600\" height=\"120\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"600\" height=\"120\" fill=\"#1a202c\" rx=\"8\" />\n  \n  <rect x=\"40\" y=\"30\" width=\"140\" height=\"50\" fill=\"#2d3748\" stroke=\"#e53e3e\" stroke-width=\"2\" rx=\"6\" />\n  <text x=\"110\" y=\"55\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">User Prompt</text>\n  <text x=\"110\" y=\"73\" fill=\"#feb2b2\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">(Harmful Request)</text>\n  \n  <rect x=\"220\" y=\"30\" width=\"140\" height=\"50\" fill=\"#e53e3e\" stroke=\"#c53030\" stroke-width=\"2\" rx=\"6\" />\n  <text x=\"290\" y=\"55\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\" font-weight=\"bold\">Adversarial Suffix</text>\n  <text x=\"290\" y=\"73\" fill=\"#fed7d7\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">(Gradient Optimized)</text>\n  \n  <path d=\"M 370 55 L 420 55\" stroke=\"white\" stroke-width=\"3\" fill=\"none\" marker-end=\"url(#arrow_1772520590974)\" />\n  \n  <rect x=\"430\" y=\"30\" width=\"140\" height=\"50\" fill=\"#2d3748\" stroke=\"#38a169\" stroke-width=\"2\" rx=\"6\" />\n  <text x=\"500\" y=\"55\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">Target Output</text>\n  <text x=\"500\" y=\"73\" fill=\"#9ae6b4\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">(\"Sure, here is...\")</text>\n  <defs>\n    <marker id=\"arrow_1772520590974\" markerWidth=\"10\" markerHeight=\"10\" refX=\"9\" refY=\"3\" orient=\"auto\" markerUnits=\"strokeWidth\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"white\" />\n    </marker>\n  </defs>\n</svg>\n\n        <div style=\"color:#a0aec0; font-size:0.85em; margin-top:4px;\"><i>Structure of a gradient-based adversarial jailbreak attack.</i></div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "adversarial-prompting",
+    "title": "Adversarial Prompting",
+    "summary": "The deliberate crafting of model inputs designed to manipulate an LLM into producing unintended, incorrect, or harmful outputs — encompassing prompt injection, jailbreaks, and extraction attacks as sub-categories.",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "benchmark-ml-evaluation",
+      "what-is-a-jailbreak-in-the-context-of-llms"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Greshake et al. · Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection",
+        "url": "https://arxiv.org/abs/2302.12173"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The deliberate crafting of model inputs designed to manipulate an LLM into producing unintended, incorrect, or harmful outputs — encompassing prompt injection, jailbreaks, and extraction attacks as sub-categories.</p><p>Adversarial prompting is the NLP analogue of adversarial examples in computer vision, but operates in the discrete token space rather than continuous pixel space. The attack surface is broad because LLMs interpret natural language flexibly and lack hard-coded behavioral boundaries.</p>\n\n  <p>At an optimization level, adversarial prompting defines an adversarial objective \\( \\mathcal{L}_{adv} \\) (which may be generating harm, misclassifying text, or extracting data). The attacker searches for a perturbation map \\( \\delta \\) restricted by a constraint set \\( \\Delta \\) (e.g. readable english text, valid tokens, suffix patterns) such that:</p>\n  \\[ \\max_{\\delta \\in \\Delta} \\mathbb{E}_{(x, y)} [\\mathcal{L}_{adv}(f_\\theta(x \\oplus \\delta), y)] \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Major attack types",
+        "body": "<ul>\n    <li><b>Prompt injection:</b> Inserting instructions into user-controlled fields (e.g., a web page being summarized) that override the system prompt — particularly dangerous in tool-using agents where injected instructions can trigger actions.</li>\n    <li><b>Jailbreaking:</b> Bypassing safety alignment to elicit refused content.</li>\n    <li><b>Data extraction:</b> Prompts designed to extract the system prompt, training data, or PII memorized during pretraining.</li>\n    <li><b>Goal hijacking:</b> Redirecting the model from its intended task to a different one chosen by the attacker.</li>\n  </ul>\n\n  <p>The distinction between prompt injection and jailbreaking: <b>prompt injection</b> targets the application layer (third-party instructions smuggled through data), while <b>jailbreaking</b> targets the alignment layer (user directly persuading the model to drop its guardrails).</p>\n\n  <p>Defenses remain an open research problem. Current approaches include input sanitization, instruction hierarchy (prioritizing system prompts over user inputs), spotlighting (marking data boundaries), and training models to be robust to known attack patterns.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "benchmark-ml-evaluation",
+    "title": "Benchmark (ML Evaluation)",
+    "summary": "A standardized dataset and evaluation protocol used to measure and compare model performance on specific tasks. Benchmarks provide reproducible, quantitative scores that enable apples-to-apples comparison across models, architectures, an…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "human-evaluation",
+      "adversarial-prompting"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2021 · Hendrycks et al. · Measuring Massive Multitask Language Understanding",
+        "url": "https://arxiv.org/abs/2009.03300"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A standardized dataset and evaluation protocol used to measure and compare model performance on specific tasks. Benchmarks provide reproducible, quantitative scores that enable apples-to-apples comparison across models, architectures, and training methods.</p><p>Benchmarks serve as the <b>common currency</b> of ML research — they define what \"better\" means in a measurable way and drive progress by establishing clear targets. However, they also shape research incentives: Goodhart's law (\"when a measure becomes a target, it ceases to be a good measure\") applies strongly.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Major LLM benchmarks",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Benchmark</th>\n      <th style=\"padding:6px; text-align:left;\">Domain</th>\n      <th style=\"padding:6px; text-align:left;\">Metric</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">MMLU</td><td style=\"padding:6px;\">57 academic subjects</td><td style=\"padding:6px;\">Accuracy (multiple choice)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">HumanEval</td><td style=\"padding:6px;\">Code generation</td><td style=\"padding:6px;\">pass@k</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">GSM8K</td><td style=\"padding:6px;\">Grade-school math</td><td style=\"padding:6px;\">Exact match accuracy</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">HellaSwag</td><td style=\"padding:6px;\">Commonsense reasoning</td><td style=\"padding:6px;\">Accuracy</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\">TruthfulQA</td><td style=\"padding:6px;\">Truthfulness</td><td style=\"padding:6px;\">% truthful + informative</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">LMSYS Chatbot Arena</td><td style=\"padding:6px;\">Open-ended chat quality</td><td style=\"padding:6px;\">Elo rating (human preference)</td>\n    </tr>\n  </table>\n  \n  <p>For comparative benchmarks like Chatbot Arena, models are evaluated using the Elo rating system derived from chess. When model \\( A \\) competes against model \\( B \\), the expected win probability for \\( A \\) is:</p>\n  \\[ P(A \\text{ wins}) = \\frac{1}{1 + 10^{(R_B - R_A) / 400}} \\]\n  <p>where \\( R_A \\) and \\( R_B \\) are their Elo ratings. Ratings are updated dynamically after each human pairwise comparison.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Known problems with benchmarks",
+        "body": "<ul>\n    <li><b>Data contamination:</b> Benchmark data leaking into pretraining corpora, inflating scores</li>\n    <li><b>Saturation:</b> Top models scoring near-perfectly, reducing discriminative power (e.g., MMLU)</li>\n    <li><b>Gaming:</b> Models optimized specifically for benchmark performance rather than general capability</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "human-evaluation",
+    "title": "Human Evaluation",
+    "summary": "The use of human judges to assess model outputs on subjective dimensions — such as fluency, helpfulness, harmlessness, and factual accuracy — that automated metrics cannot reliably capture.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "automated-evaluation",
+      "benchmark-ml-evaluation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Ouyang et al. · Training language models to follow instructions with human feedback",
+        "url": "https://arxiv.org/abs/2203.02155"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The use of human judges to assess model outputs on subjective dimensions — such as fluency, helpfulness, harmlessness, and factual accuracy — that automated metrics cannot reliably capture.</p><p>Human evaluation remains the <b>gold standard</b> for assessing open-ended generation quality, particularly for LLMs, because automated metrics like BLEU or ROUGE correlate poorly with human preferences on conversational and creative tasks.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Common protocols",
+        "body": "<ul>\n    <li><b>Likert-scale rating:</b> Judges score outputs on a fixed scale (e.g., 1–5 for helpfulness). Simple but suffers from inter-annotator variability and scale calibration drift.</li>\n    <li><b>Pairwise comparison:</b> Judges choose which of two outputs is better. More reliable than absolute ratings because relative judgments are cognitively easier; forms the basis of RLHF datasets and Chatbot Arena's Elo system.</li>\n  </ul>\n\n  <p>Pairwise human preferences are typically modeled mathematically using the <b>Bradley-Terry (BT) model</b>. It assumes that there exists an underlying continuous reward/quality parameter \\( r(y) \\) for each output \\( y \\). The probability that human rankers prefer output \\( y_1 \\) over \\( y_2 \\) is modeled as a sigmoid over the difference in rewards:</p>\n  \\[ P(y_1 \\succ y_2) = \\frac{\\exp(r(y_1))}{\\exp(r(y_1)) + \\exp(r(y_2))} = \\sigma(r(y_1) - r(y_2)) \\]\n  <p>Algorithms like DPO optimize the model policy to implicitly act as the reward function that maximizes the likelihood of these observed preferences.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Challenges",
+        "body": "<ul>\n    <li><b>Cost and Scale:</b> Expert evaluation is expensive, and cannot evaluate millions of outputs.</li>\n    <li><b>Inter-annotator agreement:</b> Subjective dimensions yield low Cohen's \\( \\kappa \\); mitigated by clear rubrics and multiple annotators per example.</li>\n  </ul>\n\n  <p>The rise of <b>LLM-as-judge</b> (using models like GPT-4 to approximate human judgments) addresses the cost-scale trade-off, showing high agreement with human evaluators on many dimensions.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "automated-evaluation",
+    "title": "Automated Evaluation",
+    "summary": "The use of algorithmic metrics or model-based judges to score model outputs without human involvement, enabling fast, scalable, and reproducible evaluation at the cost of imperfect correlation with human preferences.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "bleu",
+      "human-evaluation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Zhang et al. · BERTScore: Evaluating Text Generation with BERT",
+        "url": "https://arxiv.org/abs/1904.09675"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The use of algorithmic metrics or model-based judges to score model outputs without human involvement, enabling fast, scalable, and reproducible evaluation at the cost of imperfect correlation with human preferences.</p><p>Automated evaluation spans a spectrum from simple string-matching metrics to sophisticated model-based approaches:</p>\n\n  <table style=\"border-collapse:collapse; width:100%; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Category</th>\n      <th style=\"padding:6px; text-align:left;\">Examples</th>\n      <th style=\"padding:6px; text-align:left;\">Strengths</th>\n      <th style=\"padding:6px; text-align:left;\">Weaknesses</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>N-gram overlap</b></td>\n      <td style=\"padding:6px;\">BLEU, ROUGE, METEOR</td>\n      <td style=\"padding:6px;\">Fast, deterministic, well-understood</td>\n      <td style=\"padding:6px;\">No semantic awareness; penalizes valid paraphrases</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Embedding-based</b></td>\n      <td style=\"padding:6px;\">BERTScore, MoverScore</td>\n      <td style=\"padding:6px;\">Captures semantic similarity</td>\n      <td style=\"padding:6px;\">Dependent on embedding model quality</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Task-specific</b></td>\n      <td style=\"padding:6px;\">pass@k (code), exact match QA</td>\n      <td style=\"padding:6px;\">Directly measures functional correctness</td>\n      <td style=\"padding:6px;\">Narrow; doesn't generalize</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>LLM-as-judge</b></td>\n      <td style=\"padding:6px;\">GPT-4 eval, MT-Bench</td>\n      <td style=\"padding:6px;\">Handles open-ended generation; human-aligned</td>\n      <td style=\"padding:6px;\">Expensive; biased toward own style; not deterministic</td>\n    </tr>\n  </tbody></table>\n  \n  <p>Formalizing embedding-based automated evaluation like BERTScore, it relies on comparing token embeddings instead of exact strings. It computes the maximum cosine similarity between each token embedding \\( \\mathbf{c}_i \\) in the candidate text and every token embedding \\( \\mathbf{r}_j \\) in the reference:</p>\n  \\[ \\text{Recall}_{\\text{BERT}} = \\sum_{j} w_j \\max_i (\\mathbf{r}_j^\\top \\mathbf{c}_i) \\quad \\text{Precision}_{\\text{BERT}} = \\sum_{i} w_i \\max_j (\\mathbf{r}_j^\\top \\mathbf{c}_i) \\]\n  <p>where \\( w \\) are optional IDF weights to penalize frequently occurring tokens.</p>\n\n  <p>A major concern is <b>metric gaming</b>: an instance of Goodhart's law where optimizing directly for an automated metric produces text that scores perfectly but is nonsensical to humans.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "bleu",
+    "title": "BLEU",
+    "summary": "Bilingual Evaluation Understudy — an automated metric that scores machine-generated text by measuring n-gram precision against one or more reference translations, with a brevity penalty to discourage overly short outputs.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "a-b-testing-ml-systems",
+      "automated-evaluation"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2002 · Papineni, Roukos, Ward, Zhu · BLEU: a Method for Automatic Evaluation of Machine Translation",
+        "url": "https://aclanthology.org/P02-1040/"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Bilingual Evaluation Understudy — an automated metric that scores machine-generated text by measuring n-gram precision against one or more reference translations, with a brevity penalty to discourage overly short outputs.</p><p>BLEU was introduced as a fast, automatic proxy for human judgment of machine translation quality. Despite its simplicity, it became the <b>de facto standard</b> for MT evaluation for over a decade and remains widely used.</p>\n\n  <p><b>Computation:</b></p>\n  <p>BLEU computes modified n-gram precision for \\( n = 1, 2, 3, 4 \\), where \"modified\" means each n-gram in the candidate is counted at most as many times as it appears in the reference (clipped counts). These precisions are combined via geometric mean with a brevity penalty:</p>\n  \\[ \\text{BLEU} = BP \\cdot \\exp\\!\\left(\\sum_{n=1}^{N} w_n \\log p_n\\right) \\]\n  <p>where \\( p_n \\) is the modified precision for n-grams of length \\( n \\), \\( w_n = 1/N \\) (uniform weights, typically \\( N=4 \\)), and the brevity penalty is:</p>\n  \\[ BP = \\begin{cases} 1 &amp; \\text{if } c &gt; r \\\\ e^{1 - r/c} &amp; \\text{if } c \\le r \\end{cases} \\]\n  <p>with \\( c \\) = candidate length and \\( r \\) = effective reference length.</p>\n\n  <p><b>Limitations:</b></p>\n  <ul>\n    <li>No recall component — only measures precision (partially addressed by the brevity penalty)</li>\n    <li>Treats all n-grams equally; no semantic weighting</li>\n    <li>Penalizes valid paraphrases that differ lexically from the reference</li>\n    <li>Correlates poorly with human judgment at the sentence level (designed for corpus-level evaluation)</li>\n  </ul>\n\n  <p>Successors like METEOR (adds synonymy and recall), chrF (character-level F-score), and BERTScore (embedding similarity) address specific BLEU limitations.</p><details>\n    <summary>Derivations</summary>\n    <p>Modified n-gram precision clips counts to prevent gaming:</p>\n    \\[ p_n = \\frac{\\sum_{s \\in \\text{candidates}} \\sum_{\\text{n-gram} \\in s} \\text{Count}_{\\text{clip}}(\\text{n-gram})}{\\sum_{s \\in \\text{candidates}} \\sum_{\\text{n-gram} \\in s} \\text{Count}(\\text{n-gram})} \\]\n    <p>where \\( \\text{Count}_{\\text{clip}}(\\text{n-gram}) = \\min(\\text{Count}(\\text{n-gram}), \\max_{\\text{ref}} \\text{Count}_{\\text{ref}}(\\text{n-gram})) \\).</p>\n    <p>The log-domain geometric mean avoids underflow and allows decomposition: \\( \\log \\text{BLEU} = \\min(0, 1 - r/c) + \\sum_n w_n \\log p_n \\).</p>\n  </details>\n\n  <details open=\"\">\n    <summary>Python</summary>\n<pre><code>import math\nfrom collections import Counter\n\ndef _calc_brevity_penalty(candidate_len, reference_len):\n    if candidate_len &gt; reference_len:\n        return 1.0\n    elif candidate_len == 0:\n        return 0.0\n    else:\n        return math.exp(1 - reference_len / candidate_len)\n</code></pre>\n  </details>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n        \n<svg width=\"600\" height=\"160\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"600\" height=\"160\" fill=\"#1a202c\" rx=\"8\"></rect>\n  \n  <text x=\"30\" y=\"40\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\">Candidate:</text>\n  <text x=\"120\" y=\"40\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\">\n    <tspan fill=\"#fbd38d\">the</tspan> cat <tspan fill=\"#fbd38d\">the</tspan> cat on <tspan fill=\"#fbd38d\">the</tspan> mat\n  </text>\n  \n  <text x=\"30\" y=\"70\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\">Reference:</text>\n  <text x=\"120\" y=\"70\" fill=\"#4299e1\" font-family=\"sans-serif\" font-size=\"14\">\n    <tspan fill=\"#90cdf4\">the</tspan> cat is on <tspan fill=\"#90cdf4\">the</tspan> mat\n  </text>\n  \n  <rect x=\"30\" y=\"95\" width=\"540\" height=\"1\" fill=\"#4a5568\"></rect>\n  \n  <text x=\"30\" y=\"120\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"13\">Unigram 'the': Candidate Count = 3,  Reference Count = 2</text>\n  <text x=\"30\" y=\"140\" fill=\"#e53e3e\" font-family=\"sans-serif\" font-size=\"13\" font-weight=\"bold\">Clipped Count = min(3, 2) = 2</text>\n  \n  <text x=\"400\" y=\"130\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\">Modified Precision = 2/7</text>\n</svg>\n\n        <div style=\"color:#a0aec0; font-size:0.85em; margin-top:4px;\"><i>Example of modified n-gram precision clipping in BLEU.</i></div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "a-b-testing-ml-systems",
+    "title": "A/B Testing (ML Systems)",
+    "summary": "A controlled experiment where users are randomly assigned to one of two (or more) groups — each served a different model variant — to measure which variant performs better on a chosen metric with statistical significance.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "instruction-tuning",
+      "bleu"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Kohavi, Tang, Xu · Trustworthy Online Controlled Experiments: A Practical Guide to A/B Testing"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A controlled experiment where users are randomly assigned to one of two (or more) groups — each served a different model variant — to measure which variant performs better on a chosen metric with statistical significance.</p><p>A/B testing is the gold standard for evaluating ML models in production, because offline metrics (accuracy, perplexity) often fail to predict real-world impact on user behavior. A model that scores higher on benchmarks may perform worse in production due to distribution shift, latency differences, or complex interaction effects.</p>\n\n  <p>To determine the required sample size \\( n \\) per variant to detect a minimum detectable effect (MDE) \\( \\delta \\) for a continuous metric with variance \\( \\sigma^2 \\) (at standard significance \\( \\alpha=0.05 \\) and \\( 80\\% \\) power), power analysis yields:</p>\n  \\[ n \\approx 16 \\frac{\\sigma^2}{\\delta^2} \\]\n  <p>If the true expected difference \\( |\\mu_T - \\mu_C| \\) is smaller than \\( \\delta \\), the test will be underpowered and likely fail to detect the change.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Standard protocol",
+        "body": "<ol>\n    <li><b>Hypothesis:</b> Define the primary metric (e.g., click-through rate, retention) and expected effect size</li>\n    <li><b>Power analysis:</b> Calculate required sample size as above</li>\n    <li><b>Randomization:</b> Assign users (not requests) to control vs. treatment to avoid contamination</li>\n    <li><b>Run:</b> Serve both variants simultaneously for a predetermined duration</li>\n    <li><b>Analysis:</b> Compare metrics using a statistical test (Welch's t-test, Mann-Whitney, bootstrap) and check for guardrail metrics (latency, error rate, safety violations)</li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Pitfalls in ML A/B testing",
+        "body": "<ul>\n    <li><b>Novelty effects:</b> Users may initially prefer a new model simply because it interacts differently, which drops off over time.</li>\n    <li><b>Multiple comparisons:</b> Testing many metrics simultaneously inflates the false-positive rate; requires corrections like Bonferroni or FDR control.</li>\n    <li><b>Peeking:</b> Checking results before the experiment concludes inflates Type I error; use sequential testing if early stopping is needed.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
   }
 ]

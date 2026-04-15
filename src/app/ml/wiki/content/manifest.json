@@ -7411,6 +7411,224 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "instruction-tuning",
+      "title": "Instruction Tuning",
+      "summary": "A supervised finetuning stage where a pretrained language model is trained on (instruction, response) pairs so that it learns to follow natural-language instructions across diverse tasks, rather than merely continuing text.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "safety-alignment",
+        "a-b-testing-ml-systems"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "safety-alignment",
+      "title": "Safety Alignment",
+      "summary": "The process of training AI models — particularly LLMs — to behave in ways that are helpful, harmless, and honest (the \"HHH\" criteria), ensuring they refuse harmful requests and avoid generating dangerous, biased, or deceptive content.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "red-teaming",
+        "instruction-tuning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "red-teaming",
+      "title": "Red-Teaming",
+      "summary": "A structured adversarial evaluation process where testers deliberately attempt to elicit harmful, unsafe, or policy-violating outputs from an AI system, in order to identify vulnerabilities before deployment.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "what-is-a-jailbreak-in-the-context-of-llms",
+        "safety-alignment"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "what-is-a-jailbreak-in-the-context-of-llms",
+      "title": "What is a jailbreak in the context of LLMs?",
+      "summary": "A prompt or sequence of prompts that circumvents an LLM's safety training, causing it to produce outputs it was explicitly trained to refuse — such as harmful instructions, policy-violating content, or unrestricted \"unaligned\" behavior.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "adversarial-prompting",
+        "red-teaming"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "adversarial-prompting",
+      "title": "Adversarial Prompting",
+      "summary": "The deliberate crafting of model inputs designed to manipulate an LLM into producing unintended, incorrect, or harmful outputs — encompassing prompt injection, jailbreaks, and extraction attacks as sub-categories.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "benchmark-ml-evaluation",
+        "what-is-a-jailbreak-in-the-context-of-llms"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "benchmark-ml-evaluation",
+      "title": "Benchmark (ML Evaluation)",
+      "summary": "A standardized dataset and evaluation protocol used to measure and compare model performance on specific tasks. Benchmarks provide reproducible, quantitative scores that enable apples-to-apples comparison across models, architectures, an…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "human-evaluation",
+        "adversarial-prompting"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "human-evaluation",
+      "title": "Human Evaluation",
+      "summary": "The use of human judges to assess model outputs on subjective dimensions — such as fluency, helpfulness, harmlessness, and factual accuracy — that automated metrics cannot reliably capture.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "automated-evaluation",
+        "benchmark-ml-evaluation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "automated-evaluation",
+      "title": "Automated Evaluation",
+      "summary": "The use of algorithmic metrics or model-based judges to score model outputs without human involvement, enabling fast, scalable, and reproducible evaluation at the cost of imperfect correlation with human preferences.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "bleu",
+        "human-evaluation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bleu",
+      "title": "BLEU",
+      "summary": "Bilingual Evaluation Understudy — an automated metric that scores machine-generated text by measuring n-gram precision against one or more reference translations, with a brevity penalty to discourage overly short outputs.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "a-b-testing-ml-systems",
+        "automated-evaluation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "a-b-testing-ml-systems",
+      "title": "A/B Testing (ML Systems)",
+      "summary": "A controlled experiment where users are randomly assigned to one of two (or more) groups — each served a different model variant — to measure which variant performs better on a chosen metric with statistical significance.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "instruction-tuning",
+        "bleu"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
