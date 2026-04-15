@@ -3614,6 +3614,219 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "logit",
+      "title": "Logit",
+      "summary": "The raw, unnormalized output of a neural network's final linear layer before any activation function (sigmoid or softmax) is applied. In statistics, the logit function is the log-odds transform — the inverse of the sigmoid.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "classification",
+        "recall"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "classification",
+      "title": "Classification",
+      "summary": "A supervised learning task where the model assigns each input to one of a finite set of discrete categories (classes), learning a decision boundary that partitions the feature space.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "binary-classification",
+        "logit"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "binary-classification",
+      "title": "Binary classification",
+      "summary": "A classification task with exactly two possible outcome classes, where the model outputs a single probability score indicating the likelihood of the positive class.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "multiclass-classification",
+        "classification"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "multiclass-classification",
+      "title": "Multiclass classification",
+      "summary": "A classification task where each input is assigned to exactly one of \\( K > 2 \\) mutually exclusive classes, with the model outputting a probability distribution over all classes via softmax.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "regression",
+        "binary-classification"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "regression",
+      "title": "Regression",
+      "summary": "A supervised learning task where the model predicts a continuous numerical output rather than a discrete class label. The standard loss is mean squared error, which corresponds to maximum likelihood under Gaussian noise.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "linear-regression",
+        "multiclass-classification"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "linear-regression",
+      "title": "Linear Regression",
+      "summary": "A supervised learning method that models the relationship between a dependent variable \\( y \\) and one or more independent variables \\( \\mathbf{x} \\) by fitting a linear function. It minimises the sum of squared residuals (ordinary least…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "logistic-regression",
+        "regression"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "logistic-regression",
+      "title": "Logistic Regression",
+      "summary": "A linear model for binary classification that outputs calibrated probabilities by passing a linear combination of features through the logistic (sigmoid) function. Despite the name, it is a classification method, not a regression method.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "accuracy",
+        "linear-regression"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "accuracy",
+      "title": "Accuracy",
+      "summary": "The fraction of predictions that a classifier gets correct — the simplest evaluation metric for classification, but often misleading on imbalanced datasets where it rewards trivial majority-class predictors.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "precision",
+        "logistic-regression"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "precision",
+      "title": "Precision",
+      "summary": "The fraction of positive predictions that are actually positive — answering \"Of everything the model flagged as positive, how much was correct?\" High precision means few false positives.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "recall",
+        "accuracy"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "recall",
+      "title": "Recall",
+      "summary": "The fraction of actual positives that the model correctly identifies — answering \"Of everything that was truly positive, how much did the model catch?\" Also called sensitivity or true positive rate. High recall means few false negatives.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "logit",
+        "precision"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

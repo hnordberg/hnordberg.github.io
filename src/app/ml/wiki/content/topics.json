@@ -7959,5 +7959,452 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "logit",
+    "title": "Logit",
+    "summary": "The raw, unnormalized output of a neural network's final linear layer before any activation function (sigmoid or softmax) is applied. In statistics, the logit function is the log-odds transform — the inverse of the sigmoid.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "classification",
+      "recall"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1944 · Joseph Berkson (coined \"logit\" for log-odds in bioassay)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The raw, unnormalized output of a neural network's final linear layer before any activation function (sigmoid or softmax) is applied. In statistics, the logit function is the log-odds transform — the inverse of the sigmoid.</p><p>In the strict statistical sense, the logit function maps a probability \\( p \\in (0, 1) \\) to the real line via the log-odds:</p>\n\n  \\[ \\text{logit}(p) = \\log \\frac{p}{1 - p} = \\sigma^{-1}(p) \\]\n\n  <p>This is the <b>canonical link function</b> for the Bernoulli distribution in the framework of generalised linear models (GLMs). The inverse relationship with the sigmoid is central: \\( \\sigma(\\text{logit}(p)) = p \\) and \\( \\text{logit}(\\sigma(z)) = z \\).</p>\n\n  <p>In deep learning, \"logits\" refers more broadly to the pre-activation output vector \\( \\mathbf{z} = W\\mathbf{h} + \\mathbf{b} \\in \\mathbb{R}^K \\) of the final layer. These are converted to probabilities via:</p>\n  <ul>\n    <li><b>Sigmoid:</b> \\( \\hat{y} = \\sigma(z) = \\frac{1}{1 + e^{-z}} \\) for binary or multi-label classification</li>\n    <li><b>Softmax:</b> \\( \\hat{y}_k = \\frac{e^{z_k}}{\\sum_{j=1}^{K} e^{z_j}} \\) for multi-class classification</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Numerical stability.</b> Working with logits rather than probabilities is numerically preferable. Loss functions like <code>cross_entropy_with_logits</code> combine the softmax and log operations into a single numerically stable computation using the <b>log-sum-exp trick</b>:</p>\n\n  \\[ \\log \\text{softmax}(z_k) = z_k - \\log \\sum_{j} e^{z_j} = z_k - \\left( m + \\log \\sum_{j} e^{z_j - m} \\right) \\]\n\n  <p>where \\( m = \\max_j z_j \\). This avoids overflow from large exponentials and catastrophic cancellation from computing \\( \\log(\\text{softmax}(z)) \\) in two separate steps.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Knowledge distillation.</b> Logits play a key role in knowledge distillation (Hinton et al., 2015), where a student network is trained to match the <b>softened</b> output distribution of a teacher network. The teacher's logits are divided by a temperature \\( T > 1 \\) before softmax, producing softer probability distributions that reveal inter-class similarities (dark knowledge):</p>\n\n  \\[ q_k = \\frac{e^{z_k / T}}{\\sum_j e^{z_j / T}} \\]\n\n  <p>As \\( T \\to \\infty \\), the distribution approaches uniform; as \\( T \\to 0 \\), it approaches a one-hot vector at the argmax.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "classification",
+    "title": "Classification",
+    "summary": "A supervised learning task where the model assigns each input to one of a finite set of discrete categories (classes), learning a decision boundary that partitions the feature space.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "binary-classification",
+      "logit"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1936 · R.A. Fisher (Linear Discriminant Analysis)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A supervised learning task where the model assigns each input to one of a finite set of discrete categories (classes), learning a decision boundary that partitions the feature space.</p><p>Given input features \\( \\mathbf{x} \\in \\mathbb{R}^d \\) and a discrete label \\( y \\in \\{1, \\ldots, K\\} \\), a classifier learns a function \\( f: \\mathbb{R}^d \\to \\{1, \\ldots, K\\} \\). In neural networks, this is typically implemented as a mapping to a probability distribution over classes:</p>\n\n  \\[ P(y = k \\mid \\mathbf{x}; \\theta) = \\text{softmax}(W\\mathbf{h}(\\mathbf{x}) + \\mathbf{b})_k = \\frac{e^{z_k}}{\\sum_{j=1}^{K} e^{z_j}} \\]\n\n  <p>where \\( \\mathbf{z} = W\\mathbf{h}(\\mathbf{x}) + \\mathbf{b} \\) are the logits and \\( \\mathbf{h}(\\mathbf{x}) \\) is the learned representation. Training minimises the cross-entropy loss: \\( \\mathcal{L} = -\\log P(y = c \\mid \\mathbf{x}) \\), where \\( c \\) is the ground-truth class.</p>\n\n  <p>Classification tasks are categorized by the number of classes and label structure:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Variant</th>\n      <th style=\"padding:6px; text-align:left;\">Classes</th>\n      <th style=\"padding:6px; text-align:left;\">Output</th>\n      <th style=\"padding:6px; text-align:left;\">Loss</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Binary</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( K = 2 \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Sigmoid</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Binary CE</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Multi-class</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( K > 2 \\), one label</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Softmax</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Categorical CE</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Multi-label</td>\n      <td style=\"padding:6px;\">\\( K > 2 \\), multiple labels</td>\n      <td style=\"padding:6px;\">Per-class sigmoid</td>\n      <td style=\"padding:6px;\">Binary CE per class</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Decision boundaries.</b> The decision boundary is the surface in feature space where the predicted class changes. Linear classifiers (logistic regression, linear SVM) produce hyperplane boundaries; neural networks with non-linear activations produce arbitrarily complex, non-linear boundaries — this is a consequence of the universal approximation theorem.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The Bayes optimal classifier</b> assigns each \\( \\mathbf{x} \\) to the class with the highest posterior probability: \\( f^*(\\mathbf{x}) = \\arg\\max_k P(y = k \\mid \\mathbf{x}) \\). It achieves the lowest possible error rate (the Bayes error), which serves as the theoretical lower bound for any classifier on the same problem. In practice, we never know the true posterior, so all classifiers are approximations.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Evaluation</b> depends on the setting: accuracy suffices for balanced classes, but imbalanced problems require precision, recall, F1, or area under the ROC/PR curve. Calibration — whether predicted probabilities match empirical frequencies — matters when downstream decisions depend on confidence scores (e.g., medical triage, autonomous driving).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "binary-classification",
+    "title": "Binary classification",
+    "summary": "A classification task with exactly two possible outcome classes, where the model outputs a single probability score indicating the likelihood of the positive class.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "multiclass-classification",
+      "classification"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1936 · R.A. Fisher"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A classification task with exactly two possible outcome classes, where the model outputs a single probability score indicating the likelihood of the positive class.</p><p>The model outputs \\( \\hat{y} = \\sigma(\\mathbf{w}^\\top \\mathbf{x} + b) \\in (0, 1) \\), interpreted as \\( P(y = 1 \\mid \\mathbf{x}) \\). A decision threshold \\( \\tau \\) (typically 0.5) converts this to a hard prediction: \\( \\hat{c} = \\mathbb{1}[\\hat{y} > \\tau] \\). Training minimises the <b>binary cross-entropy loss</b>:</p>\n\n  \\[ \\mathcal{L} = -\\frac{1}{N}\\sum_{i=1}^{N}\\bigl[y_i \\log \\hat{y}_i + (1 - y_i)\\log(1 - \\hat{y}_i)\\bigr] \\]\n\n  <p>This loss is the negative log-likelihood under a Bernoulli model, so minimising it is equivalent to maximum likelihood estimation.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Evaluation metrics.</b> Accuracy is misleading under class imbalance — a dataset with 99% negatives yields 99% accuracy from a trivial all-negative classifier. The confusion matrix provides a complete picture:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Metric</th>\n      <th style=\"padding:6px; text-align:left;\">Formula</th>\n      <th style=\"padding:6px; text-align:left;\">Optimise when</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Precision</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\frac{\\text{TP}}{\\text{TP} + \\text{FP}} \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">False positives are costly (spam filter)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Recall</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\frac{\\text{TP}}{\\text{TP} + \\text{FN}} \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">False negatives are costly (cancer screening)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">F1</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( 2 \\cdot \\frac{P \\cdot R}{P + R} \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Need a single balanced score</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">AUC-ROC</td>\n      <td style=\"padding:6px;\">\\( \\int_0^1 \\text{TPR}(t)\\, d(\\text{FPR}(t)) \\)</td>\n      <td style=\"padding:6px;\">Threshold-independent ranking quality</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>ROC and PR curves.</b> The ROC curve plots TPR (recall) vs. FPR across all thresholds \\( \\tau \\in [0, 1] \\). AUC-ROC = 1.0 is perfect; 0.5 is random. Under severe class imbalance, the <b>precision-recall curve</b> (and its AUC, or average precision) is more informative because it is not inflated by the large number of true negatives that dominate the FPR denominator.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Calibration.</b> A model is calibrated if, among all instances assigned probability \\( p \\), roughly a fraction \\( p \\) are truly positive. Platt scaling (fitting a sigmoid on the logits using a held-out set) and isotonic regression are common post-hoc calibration methods. Calibration matters in settings where the predicted probability drives downstream decisions — e.g., setting a threshold for medical referral.</p>\n\n  <p>Examples include spam detection, medical diagnosis, sentiment analysis (positive/negative), toxicity detection in LLM outputs, and click-through-rate prediction in recommendation systems.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "multiclass-classification",
+    "title": "Multiclass classification",
+    "summary": "A classification task where each input is assigned to exactly one of \\( K > 2 \\) mutually exclusive classes, with the model outputting a probability distribution over all classes via softmax.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "regression",
+      "binary-classification"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1936 · R.A. Fisher"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A classification task where each input is assigned to exactly one of \\( K > 2 \\) mutually exclusive classes, with the model outputting a probability distribution over all classes via softmax.</p><p>The model's output layer has \\( K \\) units producing logits \\( \\mathbf{z} \\in \\mathbb{R}^K \\), and a softmax activation ensures the outputs form a valid probability distribution:</p>\n\n  \\[ P(y = k \\mid \\mathbf{x}) = \\text{softmax}(\\mathbf{z})_k = \\frac{e^{z_k}}{\\sum_{j=1}^K e^{z_j}}, \\quad \\sum_{k=1}^{K} P(y = k \\mid \\mathbf{x}) = 1 \\]\n\n  <p>The predicted class is \\( \\hat{c} = \\arg\\max_k P(y = k \\mid \\mathbf{x}) \\), and training minimises <b>categorical cross-entropy</b>:</p>\n\n  \\[ \\mathcal{L} = -\\sum_{k=1}^{K} y_k \\log \\hat{y}_k = -\\log \\hat{y}_c \\]\n\n  <p>where \\( y_k \\) is the one-hot encoded label and \\( c \\) is the true class index. The second equality holds because the one-hot vector zeroes out all terms except the true class.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Classical reduction strategies.</b> Inherently binary algorithms (e.g., SVM, logistic regression) handle multiclass problems via reduction:</p>\n  <ul>\n    <li><b>One-vs-Rest (OvR):</b> train \\( K \\) binary classifiers, each distinguishing one class from all others. Prediction: pick the class with the highest confidence score.</li>\n    <li><b>One-vs-One (OvO):</b> train \\( \\binom{K}{2} \\) classifiers for all class pairs. Prediction: majority vote. Scales quadratically but each classifier trains on a smaller subset.</li>\n  </ul>\n\n  <p>Neural networks handle multiclass classification natively through the softmax output layer, making reductions unnecessary.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Evaluation.</b> Top-1 accuracy is the standard metric: what fraction of predictions match the true label. <b>Top-5 accuracy</b> — whether the true class appears in the model's top 5 predictions — became standard with ImageNet (\\( K = 1{,}000 \\)), where fine-grained class distinctions make exact prediction difficult. The <b>confusion matrix</b> \\( C \\in \\mathbb{R}^{K \\times K} \\), where \\( C_{ij} \\) counts examples of true class \\( i \\) predicted as class \\( j \\), reveals systematic misclassification patterns.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Label smoothing</b> (Szegedy et al., 2016) replaces the hard one-hot target with a soft distribution \\( y_k' = (1 - \\epsilon)\\, y_k + \\epsilon / K \\), preventing the model from becoming overconfident by penalising logits that grow too large. This is standard in modern Transformer training (e.g., the original Transformer paper uses \\( \\epsilon = 0.1 \\)).</p>\n\n  <p>Canonical benchmarks: MNIST (\\( K = 10 \\)), CIFAR-10/100, ImageNet (\\( K = 1{,}000 \\)). Next-token prediction in language models is multiclass classification with \\( K = |V| \\) (vocabulary size, often 32k–128k).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "regression",
+    "title": "Regression",
+    "summary": "A supervised learning task where the model predicts a continuous numerical output rather than a discrete class label. The standard loss is mean squared error, which corresponds to maximum likelihood under Gaussian noise.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "linear-regression",
+      "multiclass-classification"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1805 · Adrien-Marie Legendre (method of least squares) · Carl Friedrich Gauss (normal equations, 1809)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A supervised learning task where the model predicts a continuous numerical output rather than a discrete class label. The standard loss is mean squared error, which corresponds to maximum likelihood under Gaussian noise.</p><p>Given input features \\( \\mathbf{x} \\in \\mathbb{R}^d \\), a regression model learns a function \\( f: \\mathbb{R}^d \\to \\mathbb{R} \\) (or \\( \\mathbb{R}^m \\) for multi-output regression) that maps inputs to continuous targets. The output layer typically uses an identity activation (no non-linearity).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Mean squared error</b> is the standard regression loss:</p>\n\n  \\[ \\mathcal{L}_{\\text{MSE}} = \\frac{1}{N} \\sum_{i=1}^{N} (y_i - f(\\mathbf{x}_i; \\theta))^2 \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Probabilistic interpretation.</b> Under the assumption that targets are corrupted by Gaussian noise \\( y = f(\\mathbf{x}) + \\varepsilon, \\; \\varepsilon \\sim \\mathcal{N}(0, \\sigma^2) \\), the negative log-likelihood is proportional to MSE:</p>\n\n  \\[ -\\log p(y \\mid \\mathbf{x}, \\theta) = \\frac{(y - f(\\mathbf{x};\\theta))^2}{2\\sigma^2} + \\text{const} \\]\n\n  <p>So minimising MSE is equivalent to maximum likelihood estimation under Gaussian noise. This connection breaks when the noise is non-Gaussian — e.g., heavy-tailed or skewed distributions call for alternative losses.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Alternative loss functions",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Loss</th>\n      <th style=\"padding:6px; text-align:left;\">Formula</th>\n      <th style=\"padding:6px; text-align:left;\">Properties</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">MSE (L2)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( (y - \\hat{y})^2 \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Smooth, penalises large errors quadratically, sensitive to outliers</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">MAE (L1)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( |y - \\hat{y}| \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Robust to outliers, predicts the conditional median, non-smooth at zero</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Huber</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( \\begin{cases} \\frac{1}{2}\\delta^2 &amp; |e| \\le \\delta \\\\ \\delta(|e| - \\frac{1}{2}\\delta) &amp; |e| &gt; \\delta \\end{cases} \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Quadratic near zero, linear far away — combines MSE smoothness with MAE robustness</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Quantile</td>\n      <td style=\"padding:6px;\">\\( \\rho_\\tau(e) = e(\\tau - \\mathbb{1}[e &lt; 0]) \\)</td>\n      <td style=\"padding:6px;\">Predicts the \\( \\tau \\)-th percentile of the conditional distribution</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Evaluation metrics.</b> Beyond MSE/MAE, the coefficient of determination \\( R^2 = 1 - \\frac{\\sum(y_i - \\hat{y}_i)^2}{\\sum(y_i - \\bar{y})^2} \\) measures the fraction of variance explained by the model. \\( R^2 = 1 \\) is perfect prediction; \\( R^2 = 0 \\) matches the mean baseline; negative values indicate the model is worse than predicting the mean.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bias-variance decomposition.</b> For MSE, the expected test error decomposes as \\( \\mathbb{E}[(y - \\hat{f})^2] = \\text{Bias}^2 + \\text{Variance} + \\sigma^2 \\), where \\( \\sigma^2 \\) is irreducible noise. This decomposition motivates regularisation: trading a small increase in bias for a larger reduction in variance.</p>\n\n  <p>Examples include predicting housing prices, stock returns, molecular properties, reward model scores in RLHF, and continuous control outputs in reinforcement learning.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "linear-regression",
+    "title": "Linear Regression",
+    "summary": "A supervised learning method that models the relationship between a dependent variable \\( y \\) and one or more independent variables \\( \\mathbf{x} \\) by fitting a linear function. It minimises the sum of squared residuals (ordinary least…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "logistic-regression",
+      "regression"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1805 · Adrien-Marie Legendre (least squares method) · Carl Friedrich Gauss (normal equations, 1809)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A supervised learning method that models the relationship between a dependent variable \\( y \\) and one or more independent variables \\( \\mathbf{x} \\) by fitting a linear function. It minimises the sum of squared residuals (ordinary least squares) and admits a closed-form solution.</p><p>Given a dataset \\( \\{(\\mathbf{x}_i, y_i)\\}_{i=1}^{n} \\) with \\( \\mathbf{x}_i \\in \\mathbb{R}^d \\), linear regression assumes:</p>\n\n\\[ y = \\mathbf{w}^\\top \\mathbf{x} + b + \\varepsilon, \\quad \\varepsilon \\sim \\mathcal{N}(0, \\sigma^2) \\]\n\n<p>The ordinary least squares (OLS) objective minimises the residual sum of squares:</p>\n\n\\[ \\hat{\\mathbf{w}} = \\arg\\min_{\\mathbf{w}} \\sum_{i=1}^{n} (y_i - \\mathbf{w}^\\top \\mathbf{x}_i)^2 = \\arg\\min_{\\mathbf{w}} \\| \\mathbf{y} - \\mathbf{X}\\mathbf{w} \\|_2^2 \\]\n\n<p>Setting the gradient to zero yields the <b>normal equation</b>:</p>\n\n\\[ \\hat{\\mathbf{w}} = (\\mathbf{X}^\\top \\mathbf{X})^{-1} \\mathbf{X}^\\top \\mathbf{y} \\]\n\n<p>This closed-form solution exists when \\( \\mathbf{X}^\\top \\mathbf{X} \\) is invertible. When it is not (collinear features, \\( d &gt; n \\)), regularisation (ridge/lasso) or the pseudo-inverse is used.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Variant</th><th style=\"padding:6px; text-align:left;\">Penalty</th><th style=\"padding:6px; text-align:left;\">Effect</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">OLS</td><td style=\"padding:6px;\">None</td><td style=\"padding:6px;\">Unbiased, high variance if \\( d \\) large</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Ridge (L2)</td><td style=\"padding:6px;\">\\( \\lambda \\|\\mathbf{w}\\|_2^2 \\)</td><td style=\"padding:6px;\">Shrinks coefficients, handles collinearity</td></tr>\n<tr><td style=\"padding:6px;\">Lasso (L1)</td><td style=\"padding:6px;\">\\( \\lambda \\|\\mathbf{w}\\|_1 \\)</td><td style=\"padding:6px;\">Sparse solutions, feature selection</td></tr>\n</tbody></table>\n\n<p>Under the Gauss–Markov theorem, OLS is the best linear unbiased estimator (BLUE) when errors are homoscedastic and uncorrelated.</p><details>\n<summary>Derivations</summary>\n<p>Starting from the cost \\( J(\\mathbf{w}) = (\\mathbf{y} - \\mathbf{X}\\mathbf{w})^\\top(\\mathbf{y} - \\mathbf{X}\\mathbf{w}) \\):</p>\n\\[ \\nabla_{\\mathbf{w}} J = -2\\mathbf{X}^\\top(\\mathbf{y} - \\mathbf{X}\\mathbf{w}) = 0 \\]\n\\[ \\mathbf{X}^\\top \\mathbf{X} \\mathbf{w} = \\mathbf{X}^\\top \\mathbf{y} \\]\n\\[ \\hat{\\mathbf{w}} = (\\mathbf{X}^\\top \\mathbf{X})^{-1} \\mathbf{X}^\\top \\mathbf{y} \\]\n<p>The second-order condition \\( \\nabla^2 J = 2\\mathbf{X}^\\top\\mathbf{X} \\succeq 0 \\) confirms this is a minimum.</p>\n</details>\n\n<details>\n<summary>Python</summary>\n<pre><code>import numpy as np\n\ndef linear_regression(X, y):\n    \"\"\"OLS via the normal equation.\"\"\"\n    w = np.linalg.solve(X.T @ X, X.T @ y)\n    return w\n\n# With regularisation (ridge)\ndef ridge_regression(X, y, lam=1.0):\n    d = X.shape[1]\n    w = np.linalg.solve(X.T @ X + lam * np.eye(d), X.T @ y)\n    return w</code></pre>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "logistic-regression",
+    "title": "Logistic Regression",
+    "summary": "A linear model for binary classification that outputs calibrated probabilities by passing a linear combination of features through the logistic (sigmoid) function. Despite the name, it is a classification method, not a regression method.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "accuracy",
+      "linear-regression"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1958 · David Cox · The Regression Analysis of Binary Sequences"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A linear model for binary classification that outputs calibrated probabilities by passing a linear combination of features through the logistic (sigmoid) function. Despite the name, it is a classification method, not a regression method.</p><p>Logistic regression models the probability that an input \\( \\mathbf{x} \\) belongs to class 1:</p>\n\n\\[ P(y=1 \\mid \\mathbf{x}) = \\sigma(\\mathbf{w}^\\top \\mathbf{x} + b) = \\frac{1}{1 + e^{-(\\mathbf{w}^\\top \\mathbf{x} + b)}} \\]\n\n<p>The model is trained by maximising the <b>log-likelihood</b>, which is equivalent to minimising the <b>binary cross-entropy loss</b>:</p>\n\n\\[ \\mathcal{L} = -\\frac{1}{n}\\sum_{i=1}^{n}\\bigl[y_i \\log \\hat{p}_i + (1-y_i)\\log(1-\\hat{p}_i)\\bigr] \\]\n\n<p>Unlike linear regression, there is no closed-form solution. Optimisation uses iterative methods — typically gradient descent or Newton's method (iteratively reweighted least squares, IRLS).</p>\n\n<p>The decision boundary is a hyperplane \\( \\mathbf{w}^\\top \\mathbf{x} + b = 0 \\) in feature space. Points on one side are classified as 1, points on the other as 0.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">Linear Regression</th><th style=\"padding:6px; text-align:left;\">Logistic Regression</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Output</td><td style=\"padding:6px;\">Continuous value</td><td style=\"padding:6px;\">Probability in [0, 1]</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Loss</td><td style=\"padding:6px;\">MSE</td><td style=\"padding:6px;\">Binary cross-entropy</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Decision boundary</td><td style=\"padding:6px;\">N/A</td><td style=\"padding:6px;\">Linear hyperplane</td></tr>\n<tr><td style=\"padding:6px;\">Solution</td><td style=\"padding:6px;\">Closed-form</td><td style=\"padding:6px;\">Iterative (no closed form)</td></tr>\n</tbody></table>\n\n<p>Logistic regression extends to multiclass settings via the <b>softmax function</b> (multinomial logistic regression). It remains one of the most widely used baselines in both ML research and production.</p><details>\n<summary>Derivations</summary>\n<p>The gradient of the cross-entropy loss with respect to \\( \\mathbf{w} \\):</p>\n\\[ \\nabla_{\\mathbf{w}} \\mathcal{L} = \\frac{1}{n}\\sum_{i=1}^{n}(\\hat{p}_i - y_i)\\mathbf{x}_i \\]\n<p>where \\( \\hat{p}_i = \\sigma(\\mathbf{w}^\\top \\mathbf{x}_i + b) \\). This has the same form as the linear regression gradient but with \\( \\hat{p}_i \\) replacing the linear prediction — a consequence of the canonical link function in generalised linear models.</p>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "accuracy",
+    "title": "Accuracy",
+    "summary": "The fraction of predictions that a classifier gets correct — the simplest evaluation metric for classification, but often misleading on imbalanced datasets where it rewards trivial majority-class predictors.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "precision",
+      "logistic-regression"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Fundamental concept in statistical classification and information retrieval."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The fraction of predictions that a classifier gets correct — the simplest evaluation metric for classification, but often misleading on imbalanced datasets where it rewards trivial majority-class predictors.</p>\\[ \\text{Accuracy} = \\frac{\\text{TP} + \\text{TN}}{\\text{TP} + \\text{TN} + \\text{FP} + \\text{FN}} = \\frac{\\text{correct predictions}}{\\text{total predictions}} \\]\n\n<p>where TP = true positives, TN = true negatives, FP = false positives, FN = false negatives. Accuracy is equivalent to \\( 1 - \\text{error rate} \\) and corresponds to the 0-1 loss: \\( \\mathcal{L}_{0\\text{-}1} = \\mathbb{1}[\\hat{y} \\ne y] \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The class imbalance trap.</b> On a dataset with 99% negative examples, a classifier that always predicts \"negative\" achieves 99% accuracy while being entirely useless. This is why accuracy is only a reliable metric when classes are roughly balanced and misclassification costs are symmetric. In imbalanced settings, precision, recall, F1, or area under the PR curve are far more informative.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Variants of accuracy",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Variant</th><th style=\"padding:6px; text-align:left;\">Definition</th><th style=\"padding:6px; text-align:left;\">Use case</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Top-1 accuracy</td><td style=\"padding:6px;\">Standard accuracy (argmax prediction matches label)</td><td style=\"padding:6px;\">Default for most classification tasks</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Top-5 accuracy</td><td style=\"padding:6px;\">True class is within the 5 highest-probability predictions</td><td style=\"padding:6px;\">ImageNet (\\( K = 1{,}000 \\)) and large-scale classification</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Balanced accuracy</td><td style=\"padding:6px;\">\\( \\frac{1}{K}\\sum_{k=1}^{K} \\text{Recall}_k \\) (macro-average of per-class recall)</td><td style=\"padding:6px;\">Imbalanced datasets — corrects for class frequency bias</td></tr>\n<tr><td style=\"padding:6px;\">Exact-match accuracy</td><td style=\"padding:6px;\">Full predicted sequence must exactly match gold answer</td><td style=\"padding:6px;\">QA benchmarks, multi-label settings, structured prediction</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Relationship to loss functions.</b> Accuracy is not directly optimisable by gradient descent because the 0-1 loss is non-differentiable. Cross-entropy serves as a differentiable surrogate: minimising cross-entropy generally improves accuracy, but the two can diverge — a model may achieve lower cross-entropy by improving calibration on already-correct predictions without changing any decisions. This is why validation accuracy (not training loss) is the standard criterion for model selection and early stopping.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Statistical significance.</b> With \\( N \\) test examples and observed accuracy \\( \\hat{p} \\), the 95% confidence interval is approximately \\( \\hat{p} \\pm 1.96\\sqrt{\\hat{p}(1-\\hat{p})/N} \\) (Wald interval). For comparing two models, McNemar's test is more appropriate than comparing raw accuracy scores because it accounts for the correlation between predictions on the same test set.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "precision",
+    "title": "Precision",
+    "summary": "The fraction of positive predictions that are actually positive — answering \"Of everything the model flagged as positive, how much was correct?\" High precision means few false positives.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "recall",
+      "accuracy"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Fundamental concept in information retrieval and classification evaluation. Formalised in the Cranfield experiments (1960s, Cyril Cleverdon)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The fraction of positive predictions that are actually positive — answering \"Of everything the model flagged as positive, how much was correct?\" High precision means few false positives.</p>\\[ \\text{Precision} = \\frac{\\text{TP}}{\\text{TP} + \\text{FP}} \\]\n\n<p>Precision is the metric to optimise when the <b>cost of a false positive is high</b>: spam detection (users hate losing real email), legal document review (flagging irrelevant documents wastes expensive lawyer time), or content recommendation (showing irrelevant items erodes user trust).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Precision-recall trade-off.</b> Increasing the decision threshold \\( \\tau \\) makes the model more conservative — it predicts positive only when highly confident. This raises precision (fewer false positives) but lowers recall (more false negatives). The <b>precision-recall (PR) curve</b> plots this trade-off across all thresholds and is more informative than any single operating point. The area under the PR curve (AUPRC, or average precision) summarises overall performance in a single number.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Precision at K (P@K)</b> measures precision among only the top \\( K \\) predictions ranked by model confidence. This is the standard metric in <b>information retrieval</b> and ranking tasks: if a search engine returns 10 results, P@10 is the fraction that are relevant. <b>Average Precision (AP)</b> integrates precision across all recall levels:</p>\n\n\\[ \\text{AP} = \\sum_{k=1}^{N} P(k) \\cdot \\Delta R(k) \\]\n\n<p>where \\( P(k) \\) is precision at the \\( k \\)-th threshold and \\( \\Delta R(k) \\) is the change in recall. <b>Mean Average Precision (mAP)</b> averages AP over all queries or classes and is the primary metric for object detection (PASCAL VOC, COCO).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Multiclass extensions.</b> In multiclass settings, precision is computed per class and then averaged:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Averaging</th><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">When to use</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Macro</td><td style=\"padding:6px;\">\\( \\frac{1}{K}\\sum_k \\text{Precision}_k \\)</td><td style=\"padding:6px;\">All classes equally important regardless of frequency</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Micro</td><td style=\"padding:6px;\">Global \\( \\frac{\\sum_k \\text{TP}_k}{\\sum_k (\\text{TP}_k + \\text{FP}_k)} \\)</td><td style=\"padding:6px;\">Overall performance weighted by class frequency</td></tr>\n<tr><td style=\"padding:6px;\">Weighted</td><td style=\"padding:6px;\">\\( \\sum_k \\frac{n_k}{N} \\cdot \\text{Precision}_k \\)</td><td style=\"padding:6px;\">Compromise — accounts for imbalance without ignoring rare classes</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Common pitfall.</b> Precision is undefined when there are no positive predictions (\\( \\text{TP} + \\text{FP} = 0 \\)). Libraries like scikit-learn default to 0.0 in this case with a warning. This can silently distort macro-averaged precision when some classes are never predicted.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "recall",
+    "title": "Recall",
+    "summary": "The fraction of actual positives that the model correctly identifies — answering \"Of everything that was truly positive, how much did the model catch?\" Also called sensitivity or true positive rate. High recall means few false negatives.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "logit",
+      "precision"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Fundamental concept in information retrieval and classification evaluation. Formalised in the Cranfield experiments (1960s, Cyril Cleverdon)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The fraction of actual positives that the model correctly identifies — answering \"Of everything that was truly positive, how much did the model catch?\" Also called sensitivity or true positive rate. High recall means few false negatives.</p>\\[ \\text{Recall} = \\frac{\\text{TP}}{\\text{TP} + \\text{FN}} \\]\n\n<p>Recall is the metric to optimise when the <b>cost of missing a positive is high</b>: cancer screening (missing a tumour is far worse than a false alarm), fraud detection (letting fraud through is expensive), or safety-critical systems (failing to detect a hazard can be catastrophic).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Aliases across fields.</b> The same quantity appears under different names depending on the domain:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Name</th><th style=\"padding:6px; text-align:left;\">Field</th><th style=\"padding:6px; text-align:left;\">Context</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Recall</td><td style=\"padding:6px;\">ML / IR</td><td style=\"padding:6px;\">Classification, information retrieval</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Sensitivity</td><td style=\"padding:6px;\">Medicine</td><td style=\"padding:6px;\">Diagnostic test evaluation</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">True Positive Rate (TPR)</td><td style=\"padding:6px;\">Statistics</td><td style=\"padding:6px;\">ROC analysis — the y-axis of the ROC curve</td></tr>\n<tr><td style=\"padding:6px;\">Hit rate / detection rate</td><td style=\"padding:6px;\">Signal processing</td><td style=\"padding:6px;\">Radar, anomaly detection</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Relationship to other metrics.</b> Recall and precision are complementary: improving one typically degrades the other (the precision-recall trade-off). The F1 score is their harmonic mean: \\( F_1 = 2 \\cdot \\frac{P \\cdot R}{P + R} \\). More generally, the \\( F_\\beta \\) score weights recall \\( \\beta^2 \\) times as much as precision:</p>\n\n\\[ F_\\beta = (1 + \\beta^2) \\cdot \\frac{P \\cdot R}{\\beta^2 P + R} \\]\n\n<p>For \\( \\beta = 2 \\), recall is weighted 4x more than precision — useful in medical screening. For \\( \\beta = 0.5 \\), precision is weighted higher — useful in spam filtering.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Recall in the ROC framework.</b> The ROC curve plots recall (TPR) against the false positive rate \\( \\text{FPR} = \\frac{\\text{FP}}{\\text{FP} + \\text{TN}} \\) = \\( 1 - \\text{Specificity} \\). The complement of recall, the <b>false negative rate</b> (miss rate), is \\( \\text{FNR} = 1 - \\text{Recall} = \\frac{\\text{FN}}{\\text{TP} + \\text{FN}} \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Recall at K (R@K)</b> in information retrieval measures what fraction of all relevant documents appear in the top \\( K \\) results. This is a standard metric for retrieval-augmented generation (RAG) systems and dense passage retrieval, where the retriever must surface relevant passages within a fixed context window for the language model.</p>"
+      }
+    ],
+    "cards": []
   }
 ]
