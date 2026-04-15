@@ -6967,6 +6967,231 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "calibration",
+      "title": "Calibration",
+      "summary": "The alignment between a model's predicted probabilities and actual outcomes. A well-calibrated model that predicts 70% probability for an event should be correct about 70% of the time. Poor calibration means the model is overconfident or…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "evaluation",
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "temperature-scaling",
+        "momentum"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "temperature-scaling",
+      "title": "Temperature Scaling",
+      "summary": "A simple post-hoc calibration method that divides the model's logits by a single learned scalar \\( T \\) (temperature) before softmax. Temperature scaling does not change the model's predictions (argmax is preserved) but adjusts the confi…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "evaluation",
+        "implementation",
+        "intermediate",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "batch-normalization",
+        "calibration"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "batch-normalization",
+      "title": "Batch Normalization",
+      "summary": "A normalisation technique that standardises the activations of each layer across the batch dimension, using per-batch statistics during training and running averages during inference. Batch normalisation accelerates training, stabilises…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "implementation",
+        "intermediate",
+        "ml",
+        "regularization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "layer-normalization",
+        "temperature-scaling"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "layer-normalization",
+      "title": "Layer Normalization",
+      "summary": "A normalisation technique that standardises activations across the feature dimension for each individual example, independent of other examples in the batch. Layer norm is the standard normalisation in Transformers because it works with…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "gradient-clipping",
+        "batch-normalization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gradient-clipping",
+      "title": "Gradient Clipping",
+      "summary": "A technique that caps the magnitude of gradients during training to prevent exploding gradients, which can cause divergence or NaN losses. Gradient clipping is standard practice in Transformer training, where occasional large gradients f…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "weight-decay",
+        "layer-normalization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "weight-decay",
+      "title": "Weight Decay",
+      "summary": "A regularisation technique that adds a penalty proportional to the magnitude of model weights to the update rule, encouraging smaller weights and reducing overfitting. In its modern form (decoupled weight decay), it directly shrinks weig…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "regularization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "adam-optimizer",
+        "gradient-clipping"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "adam-optimizer",
+      "title": "Adam Optimizer",
+      "summary": "An adaptive learning rate optimizer that maintains per-parameter first moment (mean) and second moment (uncentered variance) estimates of the gradients, using them to scale the update for each parameter individually. Adam (and its varian…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "optimization",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "adagrad",
+        "weight-decay"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "adagrad",
+      "title": "AdaGrad",
+      "summary": "An adaptive learning rate optimizer that accumulates the sum of squared gradients for each parameter, using it to scale the learning rate inversely. Parameters with large accumulated gradients get smaller learning rates, and vice versa.…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "rmsprop",
+        "adam-optimizer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "rmsprop",
+      "title": "RMSProp",
+      "summary": "An adaptive learning rate optimizer that addresses AdaGrad's decaying learning rate by replacing the cumulative sum of squared gradients with an exponential moving average. This allows the effective learning rate to adapt to recent gradi…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "momentum",
+        "adagrad"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "momentum",
+      "title": "Momentum",
+      "summary": "An optimization technique that accelerates gradient descent by accumulating an exponentially decaying moving average of past gradients (a \"velocity\"), allowing the optimizer to build up speed in consistent gradient directions and dampen…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "calibration",
+        "rmsprop"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

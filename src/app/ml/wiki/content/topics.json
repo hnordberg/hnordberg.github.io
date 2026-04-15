@@ -15191,5 +15191,413 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "calibration",
+    "title": "Calibration",
+    "summary": "The alignment between a model's predicted probabilities and actual outcomes. A well-calibrated model that predicts 70% probability for an event should be correct about 70% of the time. Poor calibration means the model is overconfident or…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "evaluation",
+      "intermediate",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "temperature-scaling",
+      "momentum"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Guo et al. (2017), \"On Calibration of Modern Neural Networks\"; Platt scaling (1999); temperature scaling."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The alignment between a model's predicted probabilities and actual outcomes. A well-calibrated model that predicts 70% probability for an event should be correct about 70% of the time. Poor calibration means the model is overconfident or underconfident in its predictions.</p><p>Formally, a model is perfectly calibrated if:</p>\n\\[ P(Y = y \\mid \\hat{P} = p) = p \\quad \\forall p \\in [0, 1] \\]\n\n<p>This is visualised with a <b>reliability diagram</b>: bin predictions by predicted probability, plot the actual accuracy in each bin. A perfectly calibrated model lies on the diagonal.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Calibration metrics",
+        "body": "<ul>\n<li><b>Expected Calibration Error (ECE):</b> Weighted average of |accuracy − confidence| across bins</li>\n<li><b>Brier score:</b> Mean squared error of predicted probabilities</li>\n</ul>\n\n\\[ \\text{ECE} = \\sum_{b=1}^{B} \\frac{n_b}{N} |\\text{acc}(b) - \\text{conf}(b)| \\]\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Issue</th><th style=\"padding:6px; text-align:left;\">Symptom</th><th style=\"padding:6px; text-align:left;\">Fix</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Overconfidence</td><td style=\"padding:6px;\">Predicts 95% confidence but correct 70% of time</td><td style=\"padding:6px;\">Temperature scaling, label smoothing</td></tr>\n<tr><td style=\"padding:6px;\">Underconfidence</td><td style=\"padding:6px;\">Predicts 60% confidence but correct 90% of time</td><td style=\"padding:6px;\">Less regularisation</td></tr>\n</tbody></table>\n\n<p>Modern deep networks are typically <b>overconfident</b> — they assign very high probabilities to their predictions even when wrong (Guo et al., 2017). For LLMs, calibration relates to the model's ability to express appropriate uncertainty: a well-calibrated LLM should be uncertain about things it doesn't know.</p>\n\n<details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef expected_calibration_error(y_true, y_prob, n_bins=10):\n    bin_boundaries = np.linspace(0, 1, n_bins + 1)\n    ece = 0.0\n    for i in range(n_bins):\n        bin_mask = (y_prob &gt;= bin_boundaries[i]) &amp; (y_prob &lt; bin_boundaries[i+1])\n        if not np.any(bin_mask): continue\n        bin_acc = np.mean(y_true[bin_mask])\n        bin_conf = np.mean(y_prob[bin_mask])\n        ece += np.sum(bin_mask) / len(y_true) * np.abs(bin_acc - bin_conf)\n    return ece</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "temperature-scaling",
+    "title": "Temperature Scaling",
+    "summary": "A simple post-hoc calibration method that divides the model's logits by a single learned scalar \\( T \\) (temperature) before softmax. Temperature scaling does not change the model's predictions (argmax is preserved) but adjusts the confi…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "evaluation",
+      "implementation",
+      "intermediate",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "batch-normalization",
+      "calibration"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Chuan Guo, Geoff Pleiss, Yu Sun, Kilian Weinberger · On Calibration of Modern Neural Networks",
+        "url": "https://arxiv.org/abs/1706.04599"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A simple post-hoc calibration method that divides the model's logits by a single learned scalar \\( T \\) (temperature) before softmax. Temperature scaling does not change the model's predictions (argmax is preserved) but adjusts the confidence of the predicted probabilities.</p>\\[ \\hat{p}_i = \\frac{\\exp(z_i / T)}{\\sum_j \\exp(z_j / T)} \\]\n\n<p>The temperature \\( T \\) is optimised on a validation set to minimise the negative log-likelihood (or ECE).</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">\\( T \\)</th><th style=\"padding:6px; text-align:left;\">Effect on probabilities</th><th style=\"padding:6px; text-align:left;\">When used</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\\( T &lt; 1 \\)</td><td style=\"padding:6px;\">Sharper (more confident)</td><td style=\"padding:6px;\">Model is underconfident</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\\( T = 1 \\)</td><td style=\"padding:6px;\">Unchanged</td><td style=\"padding:6px;\">Already calibrated</td></tr>\n<tr><td style=\"padding:6px;\">\\( T &gt; 1 \\)</td><td style=\"padding:6px;\">Flatter (less confident)</td><td style=\"padding:6px;\">Model is overconfident (common)</td></tr>\n</table>\n\n<p>Guo et al. (2017) showed that temperature scaling — despite being a single-parameter method — matches or outperforms more complex calibration methods (Platt scaling, isotonic regression) for modern neural networks. The reason: the logits of modern networks are well-ordered (correct class has highest logit) but poorly scaled.</p>\n\n<p>In the LLM context, \"temperature\" is used differently — as a <b>sampling parameter</b> that controls generation diversity. The concept is the same (scaling logits before softmax), but the purpose differs: calibration aims for accurate probabilities, while sampling temperature aims for desirable generation behaviour.</p>\n\n<details>\n    <summary>Python</summary>\n    <pre><code>import torch.nn.functional as F\n\ndef temperature_scale(logits, temperature):\n    # Logits shape: (batch_size, num_classes)\n    # Temperature: scalar > 0\n    return F.softmax(logits / temperature, dim=-1)</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "batch-normalization",
+    "title": "Batch Normalization",
+    "summary": "A normalisation technique that standardises the activations of each layer across the batch dimension, using per-batch statistics during training and running averages during inference. Batch normalisation accelerates training, stabilises…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "implementation",
+      "intermediate",
+      "ml",
+      "regularization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "layer-normalization",
+      "temperature-scaling"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2015 · Sergey Ioffe, Christian Szegedy · Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift",
+        "url": "https://arxiv.org/abs/1502.03167"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A normalisation technique that standardises the activations of each layer across the batch dimension, using per-batch statistics during training and running averages during inference. Batch normalisation accelerates training, stabilises gradients, and allows higher learning rates.</p><p>For a mini-batch \\( \\mathcal{B} = \\{x_1, \\ldots, x_m\\} \\) at a given layer:</p>\n\n\\[ \\hat{x}_i = \\frac{x_i - \\mu_\\mathcal{B}}{\\sqrt{\\sigma_\\mathcal{B}^2 + \\epsilon}}, \\quad y_i = \\gamma \\hat{x}_i + \\beta \\]\n\n<p>where \\( \\mu_\\mathcal{B} \\) and \\( \\sigma_\\mathcal{B}^2 \\) are the batch mean and variance, and \\( \\gamma, \\beta \\) are learned scale and shift parameters that restore the representation's capacity.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Normalisation</th><th style=\"padding:6px; text-align:left;\">Normalises over</th><th style=\"padding:6px; text-align:left;\">Dominant in</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Batch norm</td><td style=\"padding:6px;\">Batch dimension</td><td style=\"padding:6px;\">CNNs (ResNet, etc.)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Layer norm</td><td style=\"padding:6px;\">Feature dimension</td><td style=\"padding:6px;\">Transformers</td></tr>\n<tr><td style=\"padding:6px;\">RMSNorm</td><td style=\"padding:6px;\">Feature dimension (no mean)</td><td style=\"padding:6px;\">Modern LLMs</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Why batch norm is not used in Transformers",
+        "body": "<ul>\n<li>Variable sequence lengths make batch statistics unreliable</li>\n<li>Autoregressive generation processes one token at a time — no batch to normalise over</li>\n<li>Layer norm (normalising over the feature dimension) is independent of batch size and works with any sequence length</li>\n</ul>\n\n<p>Batch norm was transformative for CNN training (enabling much deeper networks and higher learning rates) but has been entirely superseded by layer norm and RMSNorm in the Transformer era.</p>\n\n<details>\n    <summary>Python</summary>\n    <pre><code>import torch\n\ndef batch_norm(x, gamma, beta, eps=1e-5):\n    # x shape: (batch, features)\n    mean = x.mean(dim=0, keepdim=True)\n    var = x.var(dim=0, unbiased=False, keepdim=True)\n    x_hat = (x - mean) / torch.sqrt(var + eps)\n    return gamma * x_hat + beta</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "layer-normalization",
+    "title": "Layer Normalization",
+    "summary": "A normalisation technique that standardises activations across the feature dimension for each individual example, independent of other examples in the batch. Layer norm is the standard normalisation in Transformers because it works with…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "gradient-clipping",
+      "batch-normalization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2016 · Jimmy Lei Ba, Jamie Ryan Kiros, Geoffrey Hinton · Layer Normalization",
+        "url": "https://arxiv.org/abs/1607.06450"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A normalisation technique that standardises activations across the feature dimension for each individual example, independent of other examples in the batch. Layer norm is the standard normalisation in Transformers because it works with variable sequence lengths and single-example inference.</p><p>For a hidden state \\( \\mathbf{x} \\in \\mathbb{R}^d \\):</p>\n\n\\[ \\text{LayerNorm}(\\mathbf{x}) = \\gamma \\odot \\frac{\\mathbf{x} - \\mu}{\\sqrt{\\sigma^2 + \\epsilon}} + \\beta \\]\n\n<p>where \\( \\mu = \\frac{1}{d}\\sum_i x_i \\), \\( \\sigma^2 = \\frac{1}{d}\\sum_i (x_i - \\mu)^2 \\), and \\( \\gamma, \\beta \\in \\mathbb{R}^d \\) are learnable parameters.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key difference from batch norm",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">Batch norm</th><th style=\"padding:6px; text-align:left;\">Layer norm</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Statistics computed over</td><td style=\"padding:6px;\">Batch dimension</td><td style=\"padding:6px;\">Feature dimension</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Depends on batch size?</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">No</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Works with batch size 1?</td><td style=\"padding:6px;\">Poorly (needs running stats)</td><td style=\"padding:6px;\">Yes</td></tr>\n<tr><td style=\"padding:6px;\">Train/inference gap?</td><td style=\"padding:6px;\">Yes (batch vs. running stats)</td><td style=\"padding:6px;\">No</td></tr>\n</tbody></table>\n\n<p>In the original Transformer, layer norm is applied <b>after</b> each sub-layer (post-norm): \\( \\text{LN}(x + \\text{SubLayer}(x)) \\). Modern models use <b>pre-norm</b>: \\( x + \\text{SubLayer}(\\text{LN}(x)) \\), which improves training stability by ensuring the residual path carries unnormalised signals.</p>\n\n<p>Most modern LLMs have replaced LayerNorm with <b>RMSNorm</b>, which drops the mean subtraction for slightly better efficiency with comparable performance.</p>\n\n<details>\n    <summary>Python</summary>\n    <pre><code>import torch\n\ndef layer_norm(x, gamma, beta, eps=1e-5):\n    # x shape: (batch, seq_len, features)\n    mean = x.mean(dim=-1, keepdim=True)\n    var = x.var(dim=-1, unbiased=False, keepdim=True)\n    x_hat = (x - mean) / torch.sqrt(var + eps)\n    return gamma * x_hat + beta</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "gradient-clipping",
+    "title": "Gradient Clipping",
+    "summary": "A technique that caps the magnitude of gradients during training to prevent exploding gradients, which can cause divergence or NaN losses. Gradient clipping is standard practice in Transformer training, where occasional large gradients f…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "weight-decay",
+      "layer-normalization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2013 · Razvan Pascanu, Tomas Mikolov, Yoshua Bengio · On the difficulty of training recurrent neural networks",
+        "url": "https://arxiv.org/abs/1211.5063"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A technique that caps the magnitude of gradients during training to prevent exploding gradients, which can cause divergence or NaN losses. Gradient clipping is standard practice in Transformer training, where occasional large gradients from long sequences or rare tokens can destabilise optimisation.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Gradient norm clipping</b> (most common): If the global gradient norm exceeds a threshold \\( c \\), rescale all gradients proportionally:</p>\n\n\\[ \\mathbf{g}' = \\begin{cases} \\mathbf{g} & \\text{if } \\|\\mathbf{g}\\| \\leq c \\\\ c \\cdot \\frac{\\mathbf{g}}{\\|\\mathbf{g}\\|} & \\text{if } \\|\\mathbf{g}\\| > c \\end{cases} \\]\n\n<p>This preserves the gradient direction while capping the step size. Typical threshold: \\( c = 1.0 \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Gradient value clipping:</b> Clip each gradient element independently to \\( [-c, c] \\). This is simpler but can distort the gradient direction.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Preserves direction?</th><th style=\"padding:6px; text-align:left;\">Common threshold</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Norm clipping</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">\\( c = 1.0 \\)</td></tr>\n<tr><td style=\"padding:6px;\">Value clipping</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">\\( c = 0.5\\text{–}1.0 \\)</td></tr>\n</table>\n\n<p>Gradient clipping is especially important for:</p>\n<ul>\n<li>RNNs / LSTMs (long sequences → exploding gradients through time)</li>\n<li>Large Transformers (rare data patterns can produce extreme gradients)</li>\n<li>Mixed precision training (FP16 gradients overflow more easily)</li>\n</ul>\n\n<details>\n    <summary>Python</summary>\n    <pre><code>import torch\n\ndef clip_grad_norm_(parameters, max_norm):\n    parameters = [p for p in parameters if p.grad is not None]\n    total_norm = torch.norm(torch.stack([torch.norm(p.grad.detach(), 2) for p in parameters]), 2)\n    clip_coef = max_norm / (total_norm + 1e-6)\n    if clip_coef < 1.0:\n        for p in parameters:\n            p.grad.detach().mul_(clip_coef)\n    return total_norm</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "weight-decay",
+    "title": "Weight Decay",
+    "summary": "A regularisation technique that adds a penalty proportional to the magnitude of model weights to the update rule, encouraging smaller weights and reducing overfitting. In its modern form (decoupled weight decay), it directly shrinks weig…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "regularization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "adam-optimizer",
+      "gradient-clipping"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1991 · Anders Krogh, John Hertz (weight decay as regularisation); Loshchilov & Hutter (2019, AdamW) · Decoupled Weight Decay Regularization",
+        "url": "https://arxiv.org/abs/1711.05101"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A regularisation technique that adds a penalty proportional to the magnitude of model weights to the update rule, encouraging smaller weights and reducing overfitting. In its modern form (decoupled weight decay), it directly shrinks weights at each step rather than adding an L2 penalty to the loss.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>L2 regularisation</b> adds \\( \\frac{\\lambda}{2}\\|\\theta\\|^2 \\) to the loss, modifying the gradient:</p>\n\\[ \\nabla_\\theta \\tilde{\\mathcal{L}} = \\nabla_\\theta \\mathcal{L} + \\lambda \\theta \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Decoupled weight decay</b> (Loshchilov & Hutter, 2019) directly modifies the update:</p>\n\\[ \\theta_{t+1} = (1 - \\eta\\lambda)\\theta_t - \\eta \\cdot \\text{Adam}(\\nabla_\\theta \\mathcal{L}) \\]\n\n<p>For SGD, L2 regularisation and weight decay are equivalent. For adaptive optimisers (Adam), they differ — decoupled weight decay is preferred because it applies the same relative shrinkage to all parameters regardless of their gradient history.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">L2 regularisation</th><th style=\"padding:6px; text-align:left;\">Decoupled weight decay</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Added to</td><td style=\"padding:6px;\">Loss / gradient</td><td style=\"padding:6px;\">Update rule directly</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Interacts with Adam?</td><td style=\"padding:6px;\">Yes (scaled by adaptive lr)</td><td style=\"padding:6px;\">No (independent)</td></tr>\n<tr><td style=\"padding:6px;\">Implementation</td><td style=\"padding:6px;\">Standard Adam</td><td style=\"padding:6px;\">AdamW</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>AdamW</b> is the standard optimizer for Transformer training, using decoupled weight decay with typical values \\( \\lambda = 0.01\\text{–}0.1 \\). Weight decay is usually not applied to bias terms and layer norm parameters.</p>\n\n<details>\n    <summary>Python</summary>\n    <pre><code># Decoupled weight decay (AdamW) inside optimizer step\nfor p in parameters:\n    if p.grad is None: \n        continue\n    \n    # 1. Apply weight decay directly to the parameter\n    p.data.mul_(1.0 - lr * weight_decay)\n    \n    # 2. Proceed with standard Adam update using p.grad\n    # (Update m and v, then apply gradient step)</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "adam-optimizer",
+    "title": "Adam Optimizer",
+    "summary": "An adaptive learning rate optimizer that maintains per-parameter first moment (mean) and second moment (uncentered variance) estimates of the gradients, using them to scale the update for each parameter individually. Adam (and its varian…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "optimization",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "adagrad",
+      "weight-decay"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2015 · Diederik Kingma, Jimmy Ba · Adam: A Method for Stochastic Optimization",
+        "url": "https://arxiv.org/abs/1412.6980"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An adaptive learning rate optimizer that maintains per-parameter first moment (mean) and second moment (uncentered variance) estimates of the gradients, using them to scale the update for each parameter individually. Adam (and its variant AdamW) is the default optimizer for training Transformers and LLMs.</p><p>The Adam update rule:</p>\n\\[ m_t = \\beta_1 m_{t-1} + (1 - \\beta_1) g_t \\quad \\text{(first moment estimate)} \\]\n\\[ v_t = \\beta_2 v_{t-1} + (1 - \\beta_2) g_t^2 \\quad \\text{(second moment estimate)} \\]\n\\[ \\hat{m}_t = \\frac{m_t}{1 - \\beta_1^t}, \\quad \\hat{v}_t = \\frac{v_t}{1 - \\beta_2^t} \\quad \\text{(bias correction)} \\]\n\\[ \\theta_{t+1} = \\theta_t - \\eta \\frac{\\hat{m}_t}{\\sqrt{\\hat{v}_t} + \\epsilon} \\]\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Hyperparameter</th><th style=\"padding:6px; text-align:left;\">Default</th><th style=\"padding:6px; text-align:left;\">Role</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\\( \\eta \\)</td><td style=\"padding:6px;\">1e-3 (general), 1e-4 to 3e-4 (LLMs)</td><td style=\"padding:6px;\">Learning rate</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\\( \\beta_1 \\)</td><td style=\"padding:6px;\">0.9</td><td style=\"padding:6px;\">Momentum decay</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\\( \\beta_2 \\)</td><td style=\"padding:6px;\">0.999 (general), 0.95 (LLMs)</td><td style=\"padding:6px;\">Second moment decay</td></tr>\n<tr><td style=\"padding:6px;\">\\( \\epsilon \\)</td><td style=\"padding:6px;\">1e-8</td><td style=\"padding:6px;\">Numerical stability</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why Adam works well:</b> The per-parameter scaling adapts to each parameter's gradient magnitude — parameters with consistently large gradients get smaller effective learning rates, and vice versa. This is especially important for Transformers where gradient scales vary widely across layers and parameters.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Memory cost:</b> Adam stores two additional tensors (\\( m, v \\)) per parameter, tripling the memory for optimizer states compared to SGD. This is a significant consideration for large model training.</p>\n\n<details>\n    <summary>Python</summary>\n    <pre><code># Adam simplified update for a single parameter\nm = beta1 * m + (1 - beta1) * grad\nv = beta2 * v + (1 - beta2) * (grad ** 2)\n\n# Bias correction\nm_hat = m / (1 - beta1 ** t)\nv_hat = v / (1 - beta2 ** t)\n\n# Apply update\nparam.data -= lr * m_hat / (torch.sqrt(v_hat) + eps)</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "adagrad",
+    "title": "AdaGrad",
+    "summary": "An adaptive learning rate optimizer that accumulates the sum of squared gradients for each parameter, using it to scale the learning rate inversely. Parameters with large accumulated gradients get smaller learning rates, and vice versa.…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "rmsprop",
+      "adam-optimizer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2011 · John Duchi, Elad Hazan, Yoram Singer · Adaptive Subgradient Methods for Online Learning and Stochastic Optimization",
+        "url": "https://jmlr.org/papers/v12/duchi11a.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An adaptive learning rate optimizer that accumulates the sum of squared gradients for each parameter, using it to scale the learning rate inversely. Parameters with large accumulated gradients get smaller learning rates, and vice versa. AdaGrad is effective for sparse data but its continually growing denominator causes the learning rate to decay to zero.</p><p>The AdaGrad update:</p>\n\\[ G_t = G_{t-1} + g_t^2 \\quad \\text{(accumulate squared gradients)} \\]\n\\[ \\theta_{t+1} = \\theta_t - \\frac{\\eta}{\\sqrt{G_t + \\epsilon}} g_t \\]\n\n<p>where \\( G_t \\) is the sum of all squared gradients up to step \\( t \\), and the operations are element-wise.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key properties",
+        "body": "<ul>\n<li><b>Strength:</b> Automatically adapts learning rates per parameter — frequent features get smaller updates, rare features get larger updates. Excellent for sparse data (NLP, recommendation).</li>\n<li><b>Weakness:</b> \\( G_t \\) only grows, so the effective learning rate monotonically decreases. For deep learning on non-convex problems, this often causes premature convergence.</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Optimizer</th><th style=\"padding:6px; text-align:left;\">Second moment</th><th style=\"padding:6px; text-align:left;\">Addresses decay?</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">AdaGrad</td><td style=\"padding:6px;\">Cumulative sum \\( G_t \\)</td><td style=\"padding:6px;\">No (grows forever)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">RMSProp</td><td style=\"padding:6px;\">Exponential moving average</td><td style=\"padding:6px;\">Yes (forgets old gradients)</td></tr>\n<tr><td style=\"padding:6px;\">Adam</td><td style=\"padding:6px;\">EMA + first moment + bias correction</td><td style=\"padding:6px;\">Yes</td></tr>\n</tbody></table>\n\n<p>AdaGrad is the intellectual ancestor of RMSProp and Adam, which addressed its learning rate decay problem by using exponential moving averages instead of cumulative sums.</p>\n\n<details>\n    <summary>Python</summary>\n    <pre><code>import torch\n\n# AdaGrad update for a single parameter\n# G is initialized to zeros and maintained across steps\nG += grad ** 2\nparam.data -= (lr / (torch.sqrt(G) + eps)) * grad</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "rmsprop",
+    "title": "RMSProp",
+    "summary": "An adaptive learning rate optimizer that addresses AdaGrad's decaying learning rate by replacing the cumulative sum of squared gradients with an exponential moving average. This allows the effective learning rate to adapt to recent gradi…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "momentum",
+      "adagrad"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2012 · Geoffrey Hinton · Neural Networks for Machine Learning (Coursera lecture 6e, unpublished)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An adaptive learning rate optimizer that addresses AdaGrad's decaying learning rate by replacing the cumulative sum of squared gradients with an exponential moving average. This allows the effective learning rate to adapt to recent gradient magnitudes rather than the entire history.</p><p>The RMSProp update:</p>\n\\[ v_t = \\beta v_{t-1} + (1 - \\beta) g_t^2 \\]\n\\[ \\theta_{t+1} = \\theta_t - \\frac{\\eta}{\\sqrt{v_t + \\epsilon}} g_t \\]\n\n<p>where \\( \\beta \\) (typically 0.9 or 0.99) controls the decay rate of the moving average. Unlike AdaGrad's ever-growing \\( G_t \\), RMSProp's \\( v_t \\) adapts to the recent gradient scale.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">AdaGrad</th><th style=\"padding:6px; text-align:left;\">RMSProp</th><th style=\"padding:6px; text-align:left;\">Adam</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Second moment</td><td style=\"padding:6px;\">Sum</td><td style=\"padding:6px;\">EMA</td><td style=\"padding:6px;\">EMA + bias correction</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">First moment</td><td style=\"padding:6px;\">None</td><td style=\"padding:6px;\">None</td><td style=\"padding:6px;\">EMA (momentum)</td></tr>\n<tr><td style=\"padding:6px;\">LR decay issue?</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">No</td></tr>\n</table>\n\n<p>RMSProp was proposed by Geoffrey Hinton in his Coursera lectures (2012) — notably, it was never formally published in a paper but became widely adopted through lecture slides. It can be seen as the \"second moment half\" of Adam; adding a first moment estimate with bias correction to RMSProp yields Adam.</p>\n\n<details>\n    <summary>Python</summary>\n    <pre><code>import torch\n\n# RMSProp update for a single parameter\n# v is the exponential moving average of squared grad\nv = beta * v + (1 - beta) * (grad ** 2)\nparam.data -= (lr / (torch.sqrt(v) + eps)) * grad</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "momentum",
+    "title": "Momentum",
+    "summary": "An optimization technique that accelerates gradient descent by accumulating an exponentially decaying moving average of past gradients (a \"velocity\"), allowing the optimizer to build up speed in consistent gradient directions and dampen…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "calibration",
+      "rmsprop"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1964 · Boris Polyak (heavy ball method); Nesterov (1983, accelerated gradient); applied to neural networks by Rumelhart et al. (1986)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An optimization technique that accelerates gradient descent by accumulating an exponentially decaying moving average of past gradients (a \"velocity\"), allowing the optimizer to build up speed in consistent gradient directions and dampen oscillations in inconsistent directions.</p><p>SGD with momentum:</p>\n\\[ v_t = \\beta v_{t-1} + g_t \\]\n\\[ \\theta_{t+1} = \\theta_t - \\eta v_t \\]\n\n<p>where \\( \\beta \\in [0, 1) \\) is the momentum coefficient (typically 0.9) and \\( g_t \\) is the gradient at step \\( t \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Physical analogy:</b> A ball rolling down a loss landscape accumulates velocity. In a narrow ravine (common in neural network optimization), the ball oscillates across the ravine (perpendicular to the optimum direction) but builds speed along it. Momentum dampens the oscillations and amplifies motion along the consistent direction.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Nesterov accelerated gradient (NAG):</b> A variant that computes the gradient at the \"look-ahead\" position \\( \\theta_t - \\eta \\beta v_{t-1} \\) rather than the current position, providing better convergence in theory and practice:</p>\n\\[ v_t = \\beta v_{t-1} + \\nabla_\\theta \\mathcal{L}(\\theta_t - \\eta \\beta v_{t-1}) \\]\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Gradient evaluated at</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Classical momentum</td><td style=\"padding:6px;\">Current position</td></tr>\n<tr><td style=\"padding:6px;\">Nesterov momentum</td><td style=\"padding:6px;\">Look-ahead position</td></tr>\n</tbody></table>\n\n<p>In Adam, the first moment estimate \\( m_t \\) plays the role of momentum, while the second moment \\( v_t \\) provides adaptive learning rates — combining the benefits of both.</p>\n\n<details>\n    <summary>Python</summary>\n    <pre><code>import torch\n\n# SGD with Momentum for a single parameter\n# velocity is maintained across steps\nvelocity = beta * velocity + grad\nparam.data -= lr * velocity</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
   }
 ]
