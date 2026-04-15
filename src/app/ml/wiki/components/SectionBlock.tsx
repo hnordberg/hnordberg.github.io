@@ -3,6 +3,7 @@
 import type { WikiSection } from "../types";
 import { FigureBlock } from "./FigureBlock";
 import { MathBlock } from "./MathBlock";
+import { WikiSectionBody } from "./WikiSectionBody";
 
 type SectionBlockProps = {
   section: WikiSection;
@@ -16,12 +17,7 @@ export function SectionBlock({ section }: SectionBlockProps) {
       {section.title ? (
         <h2 className="wiki-section-heading">{section.title}</h2>
       ) : null}
-      {section.body ? (
-        <div
-          className="wiki-section-body"
-          dangerouslySetInnerHTML={{ __html: section.body }}
-        />
-      ) : null}
+      {section.body ? <WikiSectionBody html={section.body} /> : null}
       {section.equation ? (
         <MathBlock tex={section.equation} title={undefined} />
       ) : null}

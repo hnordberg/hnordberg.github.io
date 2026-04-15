@@ -1474,6 +1474,108 @@ body.dark-mode .wiki-section {
     margin: 0 0 0.75rem 0;
 }
 
+.wiki-section-body details {
+    margin: 1rem 0;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+}
+
+body.dark-mode .wiki-section-body details {
+    border-color: #333;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.wiki-section-body details summary {
+    cursor: pointer;
+    padding: 0.65rem 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    list-style: none;
+}
+
+.wiki-section-body details summary::-webkit-details-marker {
+    display: none;
+}
+
+.wiki-section-body details summary::before {
+    content: "▸";
+    display: inline-block;
+    width: 1.1em;
+    margin-right: 0.35rem;
+    font-weight: 700;
+    opacity: 0.75;
+    transform: rotate(0deg);
+    transition: transform 0.15s ease;
+}
+
+.wiki-section-body details[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.wiki-code-panel {
+    position: relative;
+    margin: 0;
+    border-radius: 0 0 7px 7px;
+}
+
+.wiki-section-body details .wiki-code-panel {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode .wiki-section-body details .wiki-code-panel {
+    border-top-color: #333;
+}
+
+.wiki-code-copy {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
+    margin: 0;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: inherit;
+    line-height: 1.2;
+    color: #e2e8f0;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.wiki-code-copy:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.wiki-code-copy:focus-visible {
+    outline: 2px solid #63b3ed;
+    outline-offset: 2px;
+}
+
+.wiki-code-panel pre {
+    margin: 0;
+    padding: 2.75rem 1rem 1rem 1rem;
+    overflow-x: auto;
+    border-radius: 0 0 7px 7px;
+    background: #0d1117;
+}
+
+.wiki-code-panel pre code.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: inherit;
+}
+
 .wiki-deck-figure-wrap {
     text-align: center;
     margin: 1.25rem 0;
