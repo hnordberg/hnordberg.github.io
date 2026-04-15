@@ -12748,5 +12748,544 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "direct-preference-optimization-dpo",
+    "title": "Direct Preference Optimization (DPO)",
+    "summary": "An alignment method that optimises a language model directly from preference data without training a separate reward model or using reinforcement learning. DPO reformulates the RLHF objective into a simple classification-like loss on pre…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "bradley-terry-model",
+      "cross-attention"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Rafael Rafailov, Archit Sharma, Eric Mitchell et al. · Direct Preference Optimization: Your Language Model is Secretly a Reward Model",
+        "url": "https://arxiv.org/abs/2305.18290"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An alignment method that optimises a language model directly from preference data without training a separate reward model or using reinforcement learning. DPO reformulates the RLHF objective into a simple classification-like loss on preference pairs, making it as easy to implement as supervised fine-tuning.</p><p>Standard RLHF involves three stages: (1) supervised fine-tuning (SFT), (2) reward model training on human preference pairs, and (3) RL optimisation (typically PPO) of the policy against the reward model with a KL penalty to stay close to the SFT model. DPO eliminates stages 2 and 3 by showing that the optimal policy under the KL-constrained reward maximisation objective has a closed-form relationship to the reward function.</p>\n\n<p>The RLHF objective maximises:</p>\n\\[ \\max_{\\pi_\\theta} \\; \\mathbb{E}_{x \\sim \\mathcal{D},\\, y \\sim \\pi_\\theta(\\cdot|x)}\\!\\left[r(x, y)\\right] - \\beta\\, D_{\\text{KL}}\\!\\left[\\pi_\\theta(y|x) \\| \\pi_{\\text{ref}}(y|x)\\right] \\]\n\n<p>The optimal policy satisfying this is:</p>\n\\[ \\pi^*(y|x) = \\frac{1}{Z(x)}\\, \\pi_{\\text{ref}}(y|x) \\exp\\!\\left(\\frac{r(x,y)}{\\beta}\\right) \\]\n\n<p>Rearranging for the reward and substituting into the Bradley-Terry preference model \\( P(y_w \\succ y_l | x) = \\sigma(r(x,y_w) - r(x,y_l)) \\) gives the <b>DPO loss</b>:</p>\n\n\\[ \\mathcal{L}_{\\text{DPO}} = -\\mathbb{E}_{(x, y_w, y_l)}\\!\\left[\\log \\sigma\\!\\left(\\beta \\log \\frac{\\pi_\\theta(y_w|x)}{\\pi_{\\text{ref}}(y_w|x)} - \\beta \\log \\frac{\\pi_\\theta(y_l|x)}{\\pi_{\\text{ref}}(y_l|x)}\\right)\\right] \\]\n\n<p>where \\( \\pi_\\theta \\) is the policy being trained, \\( \\pi_{\\text{ref}} \\) is the frozen reference policy (typically the SFT model), \\( \\beta \\) controls how far the policy can deviate from the reference (typically 0.1–0.5), \\( y_w \\) is the preferred response, and \\( y_l \\) is the dispreferred response.</p>\n\n<p>The implicit reward recovered by DPO is:</p>\n\\[ r(x, y) = \\beta \\log \\frac{\\pi_\\theta(y|x)}{\\pi_{\\text{ref}}(y|x)} + \\beta \\log Z(x) \\]\n\n<p>Since the partition function \\( Z(x) \\) cancels in the preference model, it never needs to be computed.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">RLHF (PPO)</th><th style=\"padding:6px; text-align:left;\">DPO</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Reward model</td><td style=\"padding:6px;\">Explicit (separate model)</td><td style=\"padding:6px;\">Implicit (in the policy)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">RL optimisation</td><td style=\"padding:6px;\">PPO (complex, unstable)</td><td style=\"padding:6px;\">None (standard gradient descent)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Models in memory</td><td style=\"padding:6px;\">4 (policy, ref, reward, value)</td><td style=\"padding:6px;\">2 (policy, reference)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Hyperparameters</td><td style=\"padding:6px;\">Many (PPO clip, GAE \\(\\lambda\\), etc.)</td><td style=\"padding:6px;\">Few (\\(\\beta\\), learning rate)</td></tr>\n<tr><td style=\"padding:6px;\">Implementation</td><td style=\"padding:6px;\">Complex (~1000 LoC)</td><td style=\"padding:6px;\">~10 lines of loss code</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Gradient dynamics:</b> The DPO gradient increases the relative probability of preferred responses and decreases dispreferred ones, weighted by how \"wrong\" the current model is. When the model already strongly prefers \\( y_w \\), the gradient is small — a natural curriculum effect.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Variants and extensions",
+        "body": "<ul>\n<li><b>IPO</b> (Identity Preference Optimisation): replaces log-sigmoid with a squared loss to avoid overfitting to noisy preferences</li>\n<li><b>KTO</b> (Kahneman-Tversky Optimisation): works with only binary good/bad labels, not requiring paired comparisons</li>\n<li><b>ORPO</b> (Odds Ratio Preference Optimisation): folds preference optimisation into SFT, eliminating the reference model entirely</li>\n<li><b>SimPO</b>: uses length-normalised log-probabilities as the implicit reward, removing the need for a reference model</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Limitations:</b> DPO can suffer from distribution shift — the policy trains on preference pairs generated by a different model. It also inherits any biases in the preference data and may overfit to surface patterns in preferred responses. Some work (e.g., online DPO / iterative DPO) addresses this by generating new responses with the current policy during training.</p><details>\n<summary>Derivations</summary>\n<p>Starting from the KL-constrained reward maximisation objective, the optimal policy is found by writing out the KL divergence and solving the variational problem:</p>\n\n\\[ \\pi^*(y|x) = \\arg\\max_\\pi \\; \\mathbb{E}_\\pi[r(x,y)] - \\beta\\, D_{\\text{KL}}[\\pi \\| \\pi_{\\text{ref}}] \\]\n\n<p>The Lagrangian gives:</p>\n\\[ \\pi^*(y|x) \\propto \\pi_{\\text{ref}}(y|x) \\exp\\!\\left(\\frac{r(x,y)}{\\beta}\\right) \\]\n\n<p>Solving for \\( r \\):</p>\n\\[ r(x,y) = \\beta \\log \\frac{\\pi^*(y|x)}{\\pi_{\\text{ref}}(y|x)} + \\beta \\log Z(x) \\]\n\n<p>Substituting into Bradley-Terry \\( P(y_w \\succ y_l) = \\sigma(r(x,y_w) - r(x,y_l)) \\), the \\( Z(x) \\) terms cancel, and replacing \\( \\pi^* \\) with the trainable \\( \\pi_\\theta \\) yields the DPO loss.</p>\n</details>\n\n<details>\n<summary>Python</summary>\n<pre><code>import torch\nimport torch.nn.functional as F\n\ndef dpo_loss(pi_logps_w, pi_logps_l, ref_logps_w, ref_logps_l, beta=0.1):\n    \"\"\"Compute DPO loss given log-probs of preferred/dispreferred responses.\"\"\"\n    pi_logratios = pi_logps_w - pi_logps_l\n    ref_logratios = ref_logps_w - ref_logps_l\n    logits = beta * (pi_logratios - ref_logratios)\n    return -F.logsigmoid(logits).mean()\n</code></pre>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "bradley-terry-model",
+    "title": "Bradley-Terry Model",
+    "summary": "A probabilistic model for pairwise comparisons that expresses the probability of one item being preferred over another as a function of their latent \"strength\" scores. It is the mathematical foundation of reward model training in RLHF an…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "pairwise-comparison",
+      "direct-preference-optimization-dpo"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1952 · Ralph Bradley, Milton Terry · Rank Analysis of Incomplete Block Designs: I. The Method of Paired Comparisons"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A probabilistic model for pairwise comparisons that expresses the probability of one item being preferred over another as a function of their latent \"strength\" scores. It is the mathematical foundation of reward model training in RLHF and DPO, and underpins Elo ratings and the Chatbot Arena leaderboard.</p><p>Given two items \\( i \\) and \\( j \\) with latent strengths \\( s_i \\) and \\( s_j \\), the probability that \\( i \\) is preferred over \\( j \\) is:</p>\n\n\\[ P(i \\succ j) = \\frac{e^{s_i}}{e^{s_i} + e^{s_j}} = \\sigma(s_i - s_j) \\]\n\n<p>where \\( \\sigma(z) = 1/(1+e^{-z}) \\) is the logistic sigmoid. This is equivalent to modelling the preference as a logistic regression on the score difference — only the difference \\( s_i - s_j \\) matters, so the scores are identifiable only up to a constant.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Maximum likelihood estimation:</b> Given a dataset of \\( N \\) pairwise comparisons \\( \\{(w_k, l_k)\\}_{k=1}^N \\) where \\( w_k \\) beats \\( l_k \\), the log-likelihood is:</p>\n\n\\[ \\ell(\\mathbf{s}) = \\sum_{k=1}^{N} \\log \\sigma(s_{w_k} - s_{l_k}) \\]\n\n<p>This is concave in \\( \\mathbf{s} \\), so gradient ascent or Newton's method finds the global optimum. The gradient for item \\( i \\) sums over all comparisons involving \\( i \\):</p>\n\n\\[ \\frac{\\partial \\ell}{\\partial s_i} = \\sum_{k:\\, w_k = i} \\left(1 - \\sigma(s_i - s_{l_k})\\right) - \\sum_{k:\\, l_k = i} \\sigma(s_{w_k} - s_i) \\]\n\n<p>In the RLHF context, the strength scores are parameterised by a neural network reward model \\( R_\\phi(x, y) \\), and the preference probability becomes:</p>\n\n\\[ P(y_w \\succ y_l \\mid x) = \\sigma(R_\\phi(x, y_w) - R_\\phi(x, y_l)) \\]\n\n<p>The reward model is trained to maximise the log-likelihood of observed preferences under this model. DPO goes further by substituting the closed-form optimal policy into the Bradley-Terry model, eliminating the need for an explicit reward model entirely.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Application</th><th style=\"padding:6px; text-align:left;\">Items compared</th><th style=\"padding:6px; text-align:left;\">Strength score</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">RLHF reward modelling</td><td style=\"padding:6px;\">LLM responses</td><td style=\"padding:6px;\">Reward \\( R_\\phi(x, y) \\)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Chess / Elo rating</td><td style=\"padding:6px;\">Players</td><td style=\"padding:6px;\">Elo rating (with base-10 scaling)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Chatbot Arena</td><td style=\"padding:6px;\">LLMs</td><td style=\"padding:6px;\">Arena Elo score</td></tr>\n<tr><td style=\"padding:6px;\">Recommendation systems</td><td style=\"padding:6px;\">Products / content</td><td style=\"padding:6px;\">Latent preference score</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to Elo:</b> The Elo system is exactly the Bradley-Terry model with a base-10 logistic function and a conventional 400-point scale: \\( P(A \\text{ beats } B) = 1/(1 + 10^{(R_B - R_A)/400}) \\). Setting \\( s_i = R_i \\cdot \\ln 10 / 400 \\) recovers the standard Bradley-Terry form.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Assumptions and limitations",
+        "body": "<ul>\n<li><b>Transitivity:</b> If A &gt; B and B &gt; C, then A &gt; C. Human preferences often violate this.</li>\n<li><b>Independence of irrelevant alternatives:</b> The relative ranking of A and B doesn't depend on C. Also commonly violated.</li>\n<li><b>Single latent dimension:</b> All variation is captured by one scalar per item. An LLM might be strong at coding but weak at creative writing — one score cannot capture this.</li>\n</ul>\n\n<p>Extensions such as the Thurstone-Mosteller model (using a Gaussian rather than logistic link) and multi-dimensional Bradley-Terry models address some of these limitations.</p><details>\n<summary>Derivations</summary>\n<p>The Bradley-Terry model can be motivated from a random utility perspective. Suppose each item has a perceived quality \\( U_i = s_i + \\epsilon_i \\) where \\( \\epsilon_i \\) are i.i.d. Gumbel-distributed. Then:</p>\n\n\\[ P(i \\succ j) = P(U_i > U_j) = P(\\epsilon_j - \\epsilon_i < s_i - s_j) \\]\n\n<p>Since the difference of two Gumbel random variables follows a logistic distribution:</p>\n\n\\[ P(i \\succ j) = \\sigma(s_i - s_j) = \\frac{e^{s_i}}{e^{s_i} + e^{s_j}} \\]\n\n<p>This is the exact Bradley-Terry formula. The Gumbel assumption also connects to the Plackett-Luce model for ranking more than two items.</p>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "pairwise-comparison",
+    "title": "Pairwise Comparison",
+    "summary": "An evaluation methodology where a human annotator (or model) is shown two items and asked which is better, rather than rating each item independently. Pairwise comparisons are more reliable than absolute ratings and are the standard data…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "ranking",
+      "bradley-terry-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Fundamental methodology in psychometrics (Thurstone, 1927); applied to LLM alignment by Ouyang et al. (2022) in Training language models to follow instructions with human feedback .",
+        "url": "https://arxiv.org/abs/2203.02155"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An evaluation methodology where a human annotator (or model) is shown two items and asked which is better, rather than rating each item independently. Pairwise comparisons are more reliable than absolute ratings and are the standard data collection method for preference-based alignment of language models.</p><p>A pairwise comparison datum is a tuple \\( (x, y_w, y_l) \\): a prompt \\( x \\), the preferred (winning) response \\( y_w \\), and the dispreferred (losing) response \\( y_l \\). From a set of such tuples, a reward model or policy can be trained to reflect human preferences.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Why pairwise comparisons are preferred over absolute ratings",
+        "body": "<ul>\n<li><b>Lower cognitive load:</b> \"Which is better?\" is easier and faster than \"Rate this 1–10\"</li>\n<li><b>Higher inter-annotator agreement:</b> Relative judgements are more consistent across raters. Cohen's kappa for pairwise comparisons is typically 0.6–0.8, compared with 0.3–0.5 for Likert scales in subjective tasks.</li>\n<li><b>Robust to scale bias:</b> Different annotators calibrate rating scales differently; pairwise comparisons avoid this entirely</li>\n<li><b>Principled aggregation:</b> Pairwise data naturally fits the Bradley-Terry model, enabling statistically grounded global rankings</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Evaluation type</th><th style=\"padding:6px; text-align:left;\">Question posed</th><th style=\"padding:6px; text-align:left;\">Used in</th><th style=\"padding:6px; text-align:left;\">Pros / Cons</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Pairwise comparison</td><td style=\"padding:6px;\">\"Which response is better?\"</td><td style=\"padding:6px;\">RLHF, DPO, Chatbot Arena</td><td style=\"padding:6px;\">High agreement; \\(O(n^2)\\) pairs for \\(n\\) items</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Likert scale</td><td style=\"padding:6px;\">\"Rate this 1–5\"</td><td style=\"padding:6px;\">Survey-style annotation</td><td style=\"padding:6px;\">Cheap; low agreement, scale bias</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Best-of-N</td><td style=\"padding:6px;\">\"Which of these N is best?\"</td><td style=\"padding:6px;\">Multi-response evaluation</td><td style=\"padding:6px;\">Efficient; only identifies the winner</td></tr>\n<tr><td style=\"padding:6px;\">Ranked list</td><td style=\"padding:6px;\">\"Order these by quality\"</td><td style=\"padding:6px;\">Listwise evaluation</td><td style=\"padding:6px;\">Information-rich; cognitively expensive</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Scaling challenge:</b> For \\( n \\) items, there are \\( \\binom{n}{2} = \\frac{n(n-1)}{2} \\) possible pairs. Comparing all pairs is impractical at scale, so efficient sampling strategies are used — the Chatbot Arena uses random matchmaking, while active-learning approaches like uncertainty sampling prioritise the most informative pairs.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>From pairwise data to global rankings:</b> Pairwise comparisons are aggregated into global orderings via the Bradley-Terry model, Elo ratings, or Thurstone-Case V scaling. These fit a latent strength score to each item that best explains the observed win/loss pattern.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Annotation quality:</b> In the InstructGPT paper (Ouyang et al., 2022), annotators compared pairs of model outputs and achieved inter-annotator agreement of ~73%. Preference data is often noisy, motivating robust loss functions like IPO that are less sensitive to label noise.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "ranking",
+    "title": "Ranking",
+    "summary": "The task of ordering a set of items by relevance, quality, or preference. In ML, ranking appears in information retrieval (ordering search results), recommendation systems, and LLM evaluation (ordering models by capability). Learning-to-…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "elo-rating",
+      "pairwise-comparison"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Foundational in information retrieval; learning-to-rank formalised by Liu (2009), \"Learning to Rank for Information Retrieval.\" RankNet by Burges et al. (2005)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The task of ordering a set of items by relevance, quality, or preference. In ML, ranking appears in information retrieval (ordering search results), recommendation systems, and LLM evaluation (ordering models by capability). Learning-to-rank methods train models to produce orderings that match human judgements.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Learning-to-rank approaches",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Approach</th><th style=\"padding:6px; text-align:left;\">Input</th><th style=\"padding:6px; text-align:left;\">Loss function</th><th style=\"padding:6px; text-align:left;\">Example</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Pointwise</td><td style=\"padding:6px;\">Individual items with relevance scores</td><td style=\"padding:6px;\">Regression / classification</td><td style=\"padding:6px;\">PRank, OC-SVM</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Pairwise</td><td style=\"padding:6px;\">Pairs of items with preference</td><td style=\"padding:6px;\">Correctly order each pair</td><td style=\"padding:6px;\">RankNet, LambdaRank</td></tr>\n<tr><td style=\"padding:6px;\">Listwise</td><td style=\"padding:6px;\">Entire ranked lists</td><td style=\"padding:6px;\">Directly optimise list-level metrics</td><td style=\"padding:6px;\">ListNet, LambdaMART</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>RankNet loss</b> (pairwise): Given predicted scores \\( s_i, s_j \\) for items where \\( i \\) should rank above \\( j \\):</p>\n\\[ \\mathcal{L}_{\\text{RankNet}} = -\\sum_{(i,j):\\, y_i &gt; y_j} \\log \\sigma(s_i - s_j) \\]\n<p>This is exactly the Bradley-Terry log-likelihood applied to learned scores.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>LambdaRank</b> improves on RankNet by weighting each pair's gradient by the change in NDCG that swapping the pair would produce: \\( |\\Delta \\text{NDCG}_{ij}| \\). This directly optimises the non-differentiable ranking metric through gradient modification.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>NDCG</b> (Normalised Discounted Cumulative Gain) measures ranking quality with position-weighted relevance:</p>\n\\[ \\text{DCG}@k = \\sum_{i=1}^{k} \\frac{2^{r_i} - 1}{\\log_2(i+1)}, \\quad \\text{NDCG}@k = \\frac{\\text{DCG}@k}{\\text{IDCG}@k} \\]\n<p>where \\( r_i \\) is the relevance of the item at position \\( i \\) and IDCG is the DCG of the ideal ranking. NDCG ranges from 0 to 1.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>MRR</b> (Mean Reciprocal Rank) focuses on the first relevant result:</p>\n\\[ \\text{MRR} = \\frac{1}{|Q|} \\sum_{q=1}^{|Q|} \\frac{1}{\\text{rank}_q} \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>MAP</b> (Mean Average Precision) averages precision at each relevant position across queries.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Ranking in modern LLM systems",
+        "body": "<ul>\n<li><b>Reward model training:</b> Learning to rank responses by quality using pairwise preference data (Bradley-Terry)</li>\n<li><b>RAG re-ranking:</b> Cross-encoder re-rankers (e.g., Cohere Rerank, BGE) score query-document pairs and reorder initial BM25/embedding retrieval results</li>\n<li><b>Model evaluation:</b> Chatbot Arena ranks LLMs from crowd-sourced pairwise votes using Elo/Bradley-Terry</li>\n<li><b>Best-of-N sampling:</b> Generate N responses, rank by reward model score, return the top-ranked response</li>\n</ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "elo-rating",
+    "title": "Elo Rating",
+    "summary": "A rating system originally designed for chess that computes relative skill levels from pairwise match outcomes. In ML, Elo ratings are used to rank language models based on human preference votes, most notably in the LMSYS Chatbot Arena…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "pairwise-ranking",
+      "ranking"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1960 · Arpad Elo · The Rating of Chess Players, Past and Present; applied to LLMs by Zheng et al., LMSYS Chatbot Arena (2023), Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena .",
+        "url": "https://arxiv.org/abs/2306.05685"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A rating system originally designed for chess that computes relative skill levels from pairwise match outcomes. In ML, Elo ratings are used to rank language models based on human preference votes, most notably in the LMSYS Chatbot Arena leaderboard.</p><p>The expected score of player \\( A \\) against player \\( B \\):</p>\n\n\\[ E_A = \\frac{1}{1 + 10^{(R_B - R_A)/400}} \\]\n\n<p>where \\( R_A \\) and \\( R_B \\) are the current ratings. The base-10 exponential with the 400-point scale is a historical convention from chess — it means a 400-point advantage corresponds to a 10:1 expected win ratio.</p>\n\n<p>After a match, ratings are updated:</p>\n\n\\[ R_A' = R_A + K(S_A - E_A) \\]\n\n<p>where \\( S_A \\) is the actual outcome (1 for win, 0.5 for draw, 0 for loss), \\( E_A \\) is the expected outcome, and \\( K \\) is the update magnitude (higher \\( K \\) means faster adaptation but more volatility). FIDE chess uses \\( K = 40 \\) for new players and \\( K = 10 \\) for established players.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to Bradley-Terry:</b> The Elo system is mathematically equivalent to the Bradley-Terry model with a base-10 logistic link. Setting \\( s_i = R_i \\cdot \\ln 10 / 400 \\) converts Elo ratings to Bradley-Terry strength parameters, giving the standard form \\( P(i \\succ j) = \\sigma(s_i - s_j) \\).</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Application</th><th style=\"padding:6px; text-align:left;\">Players</th><th style=\"padding:6px; text-align:left;\">Match type</th><th style=\"padding:6px; text-align:left;\">Typical K</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">FIDE Chess</td><td style=\"padding:6px;\">Human players</td><td style=\"padding:6px;\">Games</td><td style=\"padding:6px;\">10–40</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Chatbot Arena</td><td style=\"padding:6px;\">LLMs</td><td style=\"padding:6px;\">Human preference votes</td><td style=\"padding:6px;\">MLE fit (not online)</td></tr>\n<tr><td style=\"padding:6px;\">Game AI (e.g., AlphaGo)</td><td style=\"padding:6px;\">AI agents</td><td style=\"padding:6px;\">Game outcomes</td><td style=\"padding:6px;\">Varies</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Online vs. batch estimation:</b> The classical Elo update rule is an online algorithm — ratings change after each match. The Chatbot Arena instead uses batch maximum-likelihood estimation of Bradley-Terry scores on all votes simultaneously, which is more statistically efficient. They report \"Elo\" scores for familiarity, but the actual computation is batch MLE with bootstrap confidence intervals.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Limitations",
+        "body": "<ul>\n<li><b>Single latent dimension:</b> Elo assumes one scalar captures all of a player's (or model's) ability. An LLM might excel at code but underperform at creative writing — one number cannot express this. The Chatbot Arena addresses this with category-specific Elo breakdowns.</li>\n<li><b>Order dependence:</b> Online Elo ratings depend on the sequence of matches; batch MLE avoids this.</li>\n<li><b>Convergence:</b> Requires many matches for stable estimates; bootstrap resampling provides confidence intervals.</li>\n<li><b>Intransitivity:</b> Like Bradley-Terry, Elo assumes transitive preferences, which can be violated in practice.</li>\n</ul><details>\n<summary>Derivations</summary>\n<p>The Elo expected score formula can be derived from the Bradley-Terry model by choosing a base-10 logistic function with scale parameter 400:</p>\n\n\\[ P(A \\succ B) = \\frac{10^{R_A/400}}{10^{R_A/400} + 10^{R_B/400}} = \\frac{1}{1 + 10^{(R_B - R_A)/400}} \\]\n\n<p>The update rule \\( R_A' = R_A + K(S_A - E_A) \\) is a stochastic gradient ascent step on the Bradley-Terry log-likelihood with step size \\( K \\). The gradient of \\( \\log P(A \\succ B) \\) with respect to \\( R_A \\) is proportional to \\( S_A - E_A \\), the prediction error.</p>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "pairwise-ranking",
+    "title": "Pairwise Ranking",
+    "summary": "A ranking approach that constructs a global ordering from individual pairwise preference judgements between items. Each comparison provides a local constraint (\"A is better than B\"), and these constraints are aggregated into a full ranki…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "bootstrap-resampling",
+      "elo-rating"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Fundamental concept in social choice theory (Condorcet, 1785) and information retrieval; pairwise learning-to-rank formalised by Burges et al. (2005), Learning to Rank using Gradient Descent .",
+        "url": "https://icml.cc/Conferences/2005/proceedings/papers/012_Learning_BurgesEtAl.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A ranking approach that constructs a global ordering from individual pairwise preference judgements between items. Each comparison provides a local constraint (\"A is better than B\"), and these constraints are aggregated into a full ranking using probabilistic models like Bradley-Terry or Elo-style updates.</p><p>Given \\( n \\) items, there are \\( \\binom{n}{2} = \\frac{n(n-1)}{2} \\) possible pairs. Comparing all pairs is often impractical, so systems sample a subset and rely on the aggregation model to infer the complete ranking.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Formal setup:</b> For each observed pair \\( (i, j) \\), we record whether \\( i \\succ j \\) or \\( j \\succ i \\). The pairwise data can be represented as a tournament matrix \\( M \\) where \\( M_{ij} \\) counts how often \\( i \\) was preferred over \\( j \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Aggregation methods",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">How it ranks</th><th style=\"padding:6px; text-align:left;\">Properties</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Win-rate</td><td style=\"padding:6px;\">Rank by fraction of comparisons won</td><td style=\"padding:6px;\">Simple but ignores opponent strength</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Bradley-Terry MLE</td><td style=\"padding:6px;\">Fit latent strength scores via maximum likelihood</td><td style=\"padding:6px;\">Accounts for opponent strength; statistically principled</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Elo (online)</td><td style=\"padding:6px;\">Incremental updates after each match</td><td style=\"padding:6px;\">Equivalent to BT; order-dependent</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Copeland's method</td><td style=\"padding:6px;\">Count opponents each item beats on aggregate</td><td style=\"padding:6px;\">Condorcet-inspired; simple, robust</td></tr>\n<tr><td style=\"padding:6px;\">PageRank on wins</td><td style=\"padding:6px;\">Random-walk on the preference graph</td><td style=\"padding:6px;\">Handles dense tournament graphs well</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Pairwise loss in learning-to-rank:</b> RankNet (Burges et al., 2005) trains a scoring function \\( f(x) \\) by penalising incorrectly ordered pairs via the Bradley-Terry log-likelihood:</p>\n\\[ \\mathcal{L} = -\\sum_{(i,j): y_i > y_j} \\log \\sigma(f(x_i) - f(x_j)) \\]\n<p>where \\( \\sigma \\) is the sigmoid and \\( f(x_i), f(x_j) \\) are predicted relevance scores. LambdaRank extends this by weighting each pair's gradient by \\( |\\Delta\\text{NDCG}| \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Applications in the LLM ecosystem",
+        "body": "<ul>\n<li><b>Reward model training:</b> Pairwise preference data \\( (x, y_w, y_l) \\) is the input to Bradley-Terry-based reward model training in RLHF</li>\n<li><b>DPO:</b> Directly optimises the policy on pairwise preferences without an explicit reward model</li>\n<li><b>Model evaluation:</b> The Chatbot Arena collects pairwise human votes and fits Bradley-Terry scores to rank LLMs</li>\n<li><b>RAG re-ranking:</b> Cross-encoder re-rankers implicitly perform pairwise scoring by evaluating query-document relevance</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Condorcet's paradox:</b> A notable result from social choice theory — pairwise majority preferences can be cyclic (A > B > C > A) even when each individual voter's preferences are transitive. The Bradley-Terry model avoids this by forcing a consistent global ordering through its parametric assumption, but this means it cannot represent genuinely cyclic preferences in the data.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "bootstrap-resampling",
+    "title": "Bootstrap Resampling",
+    "summary": "A statistical method that estimates the sampling distribution of a statistic by repeatedly resampling with replacement from the observed data. It provides confidence intervals and standard errors without assuming a particular parametric…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "confidence-interval",
+      "pairwise-ranking"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1979 · Bradley Efron · Bootstrap Methods: Another Look at the Jackknife"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A statistical method that estimates the sampling distribution of a statistic by repeatedly resampling with replacement from the observed data. It provides confidence intervals and standard errors without assuming a particular parametric distribution, making it widely used for uncertainty estimation in ML evaluation.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The bootstrap procedure",
+        "body": "<ol>\n<li>From a dataset of \\( n \\) observations \\( \\{x_1, \\ldots, x_n\\} \\), draw \\( n \\) samples <em>with replacement</em> to create a bootstrap sample \\( \\{x_1^*, \\ldots, x_n^*\\} \\)</li>\n<li>Compute the statistic of interest \\( \\hat{\\theta}^* \\) (e.g., mean accuracy, Elo rating) on this resample</li>\n<li>Repeat \\( B \\) times (typically \\( B = 1{,}000\\text{–}10{,}000 \\)) to obtain \\( \\{\\hat{\\theta}_1^*, \\ldots, \\hat{\\theta}_B^*\\} \\)</li>\n<li>The empirical distribution of the \\( B \\) computed statistics approximates the sampling distribution of \\( \\hat{\\theta} \\)</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Confidence interval methods",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Formula (95% CI)</th><th style=\"padding:6px; text-align:left;\">Properties</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Percentile</td><td style=\"padding:6px;\">\\( [\\hat{\\theta}^*_{0.025},\\; \\hat{\\theta}^*_{0.975}] \\)</td><td style=\"padding:6px;\">Simple; can be biased if \\(\\hat{\\theta}\\) is biased</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Basic (pivotal)</td><td style=\"padding:6px;\">\\( [2\\hat{\\theta} - \\hat{\\theta}^*_{0.975},\\; 2\\hat{\\theta} - \\hat{\\theta}^*_{0.025}] \\)</td><td style=\"padding:6px;\">Bias-corrected but not always narrower</td></tr>\n<tr><td style=\"padding:6px;\">BCa (bias-corrected and accelerated)</td><td style=\"padding:6px;\">Adjusts percentiles for bias and skewness</td><td style=\"padding:6px;\">Most accurate; standard recommendation</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bootstrap standard error:</b> The standard deviation of the bootstrap distribution estimates the standard error of \\( \\hat{\\theta} \\):</p>\n\\[ \\widehat{\\text{SE}}_{\\text{boot}} = \\sqrt{\\frac{1}{B-1} \\sum_{b=1}^{B} (\\hat{\\theta}_b^* - \\bar{\\theta}^*)^2} \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Applications in ML",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Application</th><th style=\"padding:6px; text-align:left;\">What's bootstrapped</th><th style=\"padding:6px; text-align:left;\">Why</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Chatbot Arena</td><td style=\"padding:6px;\">Pairwise votes → Elo CIs</td><td style=\"padding:6px;\">No closed-form CI for BT-MLE on sparse matchups</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Model comparison</td><td style=\"padding:6px;\">Test set accuracy → CI on difference</td><td style=\"padding:6px;\">Assess if accuracy gap is statistically significant</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Benchmark scoring</td><td style=\"padding:6px;\">Per-example scores → CI on aggregate</td><td style=\"padding:6px;\">Report reliability of composite metrics</td></tr>\n<tr><td style=\"padding:6px;\">Bagging (random forests)</td><td style=\"padding:6px;\">Training data → ensemble of models</td><td style=\"padding:6px;\">Reduce variance by averaging bootstrap models</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to bagging:</b> Bagging (Bootstrap AGGregatING) applies the bootstrap idea to model training — each base learner is trained on a different bootstrap sample, and predictions are averaged. Random forests are the most prominent example.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Key assumption and limitation:</b> The bootstrap requires the observed sample to be representative of the population. It works for any statistic (median, ratio, correlation, Elo rating — not just the mean), but fails when the sample is too small or heavily biased. It also struggles with statistics that depend on extreme order statistics (e.g., the maximum), since resampling with replacement rarely produces new extremes.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Computational cost:</b> The bootstrap is embarrassingly parallel — each resample can be computed independently. For \\( B = 10{,}000 \\) with an \\( O(n) \\) statistic, total cost is \\( O(Bn) \\).</p><details>\n<summary>Python</summary>\n<pre><code>import numpy as np\n\ndef bootstrap_ci(data, stat_fn=np.mean, B=10000, alpha=0.05):\n    \"\"\"Compute bootstrap percentile confidence interval.\"\"\"\n    n = len(data)\n    boot_stats = np.array([\n        stat_fn(data[np.random.randint(0, n, size=n)])\n        for _ in range(B)\n    ])\n    lower = np.percentile(boot_stats, 100 * alpha / 2)\n    upper = np.percentile(boot_stats, 100 * (1 - alpha / 2))\n    return lower, upper\n\n# Example: 95% CI for mean accuracy\naccuracies = np.array([0.82, 0.85, 0.79, 0.88, 0.84, 0.81, 0.86])\nlo, hi = bootstrap_ci(accuracies)\nprint(f\"95% CI: [{lo:.3f}, {hi:.3f}]\")\n</code></pre>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "confidence-interval",
+    "title": "Confidence Interval",
+    "summary": "A range of values that is likely to contain the true population parameter with a specified probability (e.g., 95%). In ML, confidence intervals quantify uncertainty in evaluation metrics, helping distinguish genuine performance differenc…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "vision-language-model-vlm",
+      "bootstrap-resampling"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1937 · Jerzy Neyman · Outline of a Theory of Statistical Estimation Based on the Classical Theory of Probability"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A range of values that is likely to contain the true population parameter with a specified probability (e.g., 95%). In ML, confidence intervals quantify uncertainty in evaluation metrics, helping distinguish genuine performance differences from statistical noise.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Correct interpretation:</b> A 95% confidence interval means that if we repeated the experiment many times and computed the interval each time, 95% of those intervals would contain the true parameter. The parameter is fixed; the interval is random. A single computed interval either contains the parameter or does not — saying \"there is a 95% probability the true value is in this interval\" is a common and incorrect Bayesian reinterpretation.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Methods for computing CIs",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Assumptions</th><th style=\"padding:6px; text-align:left;\">Formula / approach</th><th style=\"padding:6px; text-align:left;\">Use case</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Normal (Wald)</td><td style=\"padding:6px;\">Large \\( n \\), approx. normal</td><td style=\"padding:6px;\">\\( \\hat{\\theta} \\pm z_{\\alpha/2} \\cdot \\widehat{\\text{SE}} \\)</td><td style=\"padding:6px;\">Mean of continuous data</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Bootstrap percentile</td><td style=\"padding:6px;\">Minimal; representative sample</td><td style=\"padding:6px;\">Percentiles of bootstrap distribution</td><td style=\"padding:6px;\">Any statistic (Elo, median, etc.)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Wilson interval</td><td style=\"padding:6px;\">Binomial proportion</td><td style=\"padding:6px;\">\\( \\frac{\\hat{p} + \\frac{z^2}{2n} \\pm z\\sqrt{\\frac{\\hat{p}(1-\\hat{p})}{n} + \\frac{z^2}{4n^2}}}{1 + \\frac{z^2}{n}} \\)</td><td style=\"padding:6px;\">Accuracy on a test set</td></tr>\n<tr><td style=\"padding:6px;\">Clopper-Pearson</td><td style=\"padding:6px;\">Binomial, exact</td><td style=\"padding:6px;\">Inverted binomial test</td><td style=\"padding:6px;\">Conservative CI for proportions</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why Wilson over Wald for proportions:</b> The Wald interval \\( \\hat{p} \\pm z\\sqrt{\\hat{p}(1-\\hat{p})/n} \\) has poor coverage when \\( \\hat{p} \\) is near 0 or 1 or when \\( n \\) is small. The Wilson interval is centred on a shrunken estimate and has much better coverage properties. For ML accuracy reporting on a test set of \\( n \\) examples, Wilson is the recommended choice.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "In ML evaluation",
+        "body": "<ul>\n<li>\"Model A: 85.2% accuracy (95% CI: 83.1–87.3)\" is far more informative than reporting just \"85.2%\"</li>\n<li>If two models' CIs overlap substantially, the difference may not be statistically significant — though overlapping CIs do not <em>prove</em> no difference (a paired test is needed)</li>\n<li>The Chatbot Arena reports Elo ratings with bootstrap CIs (e.g., \"1250 &plusmn; 15\") to indicate ranking reliability</li>\n<li>Benchmark leaderboards increasingly report CIs; without them, differences of &lt;1% on benchmarks with ~1000 examples are likely noise</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "CI width depends on",
+        "body": "\\[ \\text{Width} \\propto \\frac{z_{\\alpha/2} \\cdot \\sigma}{\\sqrt{n}} \\]\n<ul>\n<li>Increasing sample size \\( n \\) shrinks the CI as \\( 1/\\sqrt{n} \\) — quadrupling the test set halves the CI width</li>\n<li>Higher confidence level (e.g., 99% vs. 95%) widens the CI (larger \\( z \\))</li>\n<li>Higher variance \\( \\sigma^2 \\) widens the CI</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Bayesian alternative:</b> Credible intervals give the posterior probability that the parameter lies in the interval, which is the interpretation most people intuitively want. A 95% credible interval means there is a 95% posterior probability the parameter is in the interval, conditional on the prior and data. Frequentist CIs and Bayesian credible intervals often numerically agree but differ fundamentally in interpretation.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "vision-language-model-vlm",
+    "title": "Vision Language Model (VLM)",
+    "summary": "A multimodal model that processes both images and text, enabling tasks like visual question answering, image captioning, document understanding, and reasoning about visual content. VLMs combine a vision encoder with a language model, bri…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "cv",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "cross-attention",
+      "confidence-interval"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Alayrac et al. (Flamingo); Li et al. (BLIP-2, 2023); Liu et al. (LLaVA, 2023) · Visual Instruction Tuning",
+        "url": "https://arxiv.org/abs/2304.08485"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A multimodal model that processes both images and text, enabling tasks like visual question answering, image captioning, document understanding, and reasoning about visual content. VLMs combine a vision encoder with a language model, bridging visual perception and linguistic reasoning.</p><p>The typical VLM architecture has three components:</p>\n<ol>\n<li><b>Vision encoder:</b> Extracts visual features from the image, producing a sequence of patch embeddings. Typically a Vision Transformer (ViT) pretrained with contrastive learning (CLIP, SigLIP). An image is split into \\( P \\times P \\) patches, linearly projected, and processed by transformer layers to produce \\( N = (H/P) \\times (W/P) \\) visual tokens.</li>\n<li><b>Projection / adapter:</b> Maps visual features into the language model's embedding space. Ranges from a simple linear projection (LLaVA) to an MLP, Q-Former with learned queries (BLIP-2), or cross-attention layers (Flamingo's Perceiver Resampler).</li>\n<li><b>Language model:</b> A pretrained LLM that processes the interleaved visual and text tokens autoregressively. The visual tokens are treated as a prefix or interleaved within the text token sequence.</li>\n</ol>\n\n<p>The forward pass can be written as:</p>\n\\[ z_{\\text{vis}} = \\text{Proj}(\\text{ViT}(I)), \\quad z_{\\text{txt}} = \\text{Embed}(T) \\]\n\\[ h = \\text{LLM}([\\, z_{\\text{vis}} \\;;\\; z_{\\text{txt}} \\,]) \\]\n<p>where \\( [\\,;\\,] \\) denotes concatenation along the sequence dimension, \\( I \\) is the input image, and \\( T \\) is the text prompt.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Vision encoder</th><th style=\"padding:6px; text-align:left;\">LLM</th><th style=\"padding:6px; text-align:left;\">Connection method</th><th style=\"padding:6px; text-align:left;\">Year</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Flamingo</td><td style=\"padding:6px;\">NFNet</td><td style=\"padding:6px;\">Chinchilla</td><td style=\"padding:6px;\">Cross-attention (Perceiver)</td><td style=\"padding:6px;\">2022</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">BLIP-2</td><td style=\"padding:6px;\">ViT-G (EVA-CLIP)</td><td style=\"padding:6px;\">FlanT5 / OPT</td><td style=\"padding:6px;\">Q-Former (32 learned queries)</td><td style=\"padding:6px;\">2023</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaVA</td><td style=\"padding:6px;\">CLIP ViT-L/14</td><td style=\"padding:6px;\">LLaMA / Vicuna</td><td style=\"padding:6px;\">Linear projection</td><td style=\"padding:6px;\">2023</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaVA-1.5</td><td style=\"padding:6px;\">CLIP ViT-L/14@336</td><td style=\"padding:6px;\">Vicuna-13B</td><td style=\"padding:6px;\">2-layer MLP</td><td style=\"padding:6px;\">2023</td></tr>\n<tr><td style=\"padding:6px;\">InternVL 2.5</td><td style=\"padding:6px;\">InternViT-6B</td><td style=\"padding:6px;\">InternLM2</td><td style=\"padding:6px;\">Dynamic resolution + MLP</td><td style=\"padding:6px;\">2024</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Training stages",
+        "body": "<ul>\n<li><b>Stage 1 — Alignment pretraining:</b> Train only the projection layer on image-caption pairs (e.g., LAION, CC3M) to align visual and textual representations. The vision encoder and LLM are frozen. This is cheap (~hours on 8 GPUs).</li>\n<li><b>Stage 2 — Visual instruction tuning:</b> Fine-tune the projection and optionally the LLM on multimodal instruction-following data: visual QA, reasoning, OCR, chart understanding. This stage teaches the model to follow complex visual instructions.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Resolution and token efficiency:</b> A 336x336 image with 14x14 patches produces 576 visual tokens — comparable to a paragraph of text. Higher-resolution approaches (dynamic tiling, multi-crop) improve detail recognition for tasks like document OCR but increase the token budget substantially. Some models (e.g., BLIP-2's Q-Former) compress visual information into a fixed number of tokens (32) regardless of resolution.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Capabilities and benchmarks:</b> Modern VLMs can read text in images (OCR), understand charts and diagrams, solve visual math problems, describe scenes, and perform multi-step visual reasoning. Key benchmarks include VQAv2, TextVQA, DocVQA, MMMU (multi-discipline reasoning), and MathVista.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "cross-attention",
+    "title": "Cross-Attention",
+    "summary": "An attention mechanism where queries come from one sequence and keys/values come from a different sequence, enabling a model to attend to information from an external source. Cross-attention is how encoder-decoder models condition the de…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "attention",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "direct-preference-optimization-dpo",
+      "vision-language-model-vlm"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2014 · Bahdanau, Cho, Bengio · Neural Machine Translation by Jointly Learning to Align and Translate ; formalised in the Transformer by Vaswani et al. (2017), Attention Is All You Need .",
+        "url": "https://arxiv.org/abs/1409.0473"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An attention mechanism where queries come from one sequence and keys/values come from a different sequence, enabling a model to attend to information from an external source. Cross-attention is how encoder-decoder models condition the decoder on the encoder output, and how multimodal models ground generation in a different modality (e.g., text conditioned on images or audio).</p><p>In cross-attention, the query \\( Q \\) is projected from the target sequence (e.g., decoder hidden states) while \\( K \\) and \\( V \\) are projected from the source sequence (e.g., encoder output):</p>\n\n\\[ Q = H_{\\text{target}} W^Q, \\quad K = H_{\\text{source}} W^K, \\quad V = H_{\\text{source}} W^V \\]\n\n\\[ \\text{CrossAttn}(Q, K, V) = \\text{softmax}\\!\\left(\\frac{QK^\\top}{\\sqrt{d_k}}\\right)V \\]\n\n<p>where \\( H_{\\text{target}} \\in \\mathbb{R}^{n \\times d} \\) and \\( H_{\\text{source}} \\in \\mathbb{R}^{m \\times d} \\), producing an attention matrix of shape \\( n \\times m \\). Each target position attends over all \\( m \\) source positions. The \\( \\sqrt{d_k} \\) scaling prevents the dot products from growing large, which would push the softmax into saturated regions with vanishing gradients.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Attention type</th><th style=\"padding:6px; text-align:left;\">Q source</th><th style=\"padding:6px; text-align:left;\">K, V source</th><th style=\"padding:6px; text-align:left;\">Attention shape</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Self-attention</td><td style=\"padding:6px;\">Same sequence</td><td style=\"padding:6px;\">Same sequence</td><td style=\"padding:6px;\">\\( n \\times n \\)</td></tr>\n<tr><td style=\"padding:6px;\">Cross-attention</td><td style=\"padding:6px;\">Sequence A (target)</td><td style=\"padding:6px;\">Sequence B (source)</td><td style=\"padding:6px;\">\\( n \\times m \\)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>In the original Transformer (Vaswani et al., 2017):</b> Each decoder layer contains three sub-layers: (1) masked self-attention over decoder tokens, (2) cross-attention where the decoder attends to the encoder output, and (3) a feed-forward network. The cross-attention layer is what allows the decoder to \"see\" the input sequence. The encoder output is computed once and reused as K, V for every decoder layer and every decoding step — this is computationally efficient.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Applications across architectures",
+        "body": "<ul>\n<li><b>Encoder-decoder Transformers:</b> Decoder attends to encoder output for machine translation, summarisation (T5, BART, mBART, original Transformer)</li>\n<li><b>Vision-language models:</b> LLM attends to visual features from a vision encoder via cross-attention layers inserted between self-attention blocks (Flamingo's gated cross-attention, Perceiver Resampler)</li>\n<li><b>Diffusion models:</b> The U-Net's intermediate layers attend to text encoder embeddings via cross-attention for text-to-image generation (Stable Diffusion, DALL-E 2). The text embedding serves as K, V while the noisy image features serve as Q.</li>\n<li><b>Speech models:</b> The text decoder attends to audio encoder features (Whisper uses standard encoder-decoder cross-attention)</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Cross-attention vs. concatenation:</b> Decoder-only models (GPT, LLaMA, Claude) do <em>not</em> use cross-attention — they handle conditioning by concatenating context and input into a single sequence processed entirely by self-attention (sometimes called \"in-context conditioning\"). This architectural simplicity is one reason decoder-only models have become dominant for language tasks. However, cross-attention remains essential when the two modalities have fundamentally different structure (e.g., continuous image features vs. discrete text tokens) or when the source representation should be computed once and reused across many decoding steps.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Computational cost:</b> Cross-attention costs \\( O(n \\cdot m \\cdot d_k) \\) per head, where \\( n \\) is the target length and \\( m \\) is the source length. In encoder-decoder models during autoregressive generation, the K, V projections of the encoder output can be cached (just like KV-caching in self-attention), so each decoding step only computes one new query vector.</p>"
+      }
+    ],
+    "cards": []
   }
 ]

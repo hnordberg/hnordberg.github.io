@@ -5858,6 +5858,223 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "direct-preference-optimization-dpo",
+      "title": "Direct Preference Optimization (DPO)",
+      "summary": "An alignment method that optimises a language model directly from preference data without training a separate reward model or using reinforcement learning. DPO reformulates the RLHF objective into a simple classification-like loss on pre…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "bradley-terry-model",
+        "cross-attention"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bradley-terry-model",
+      "title": "Bradley-Terry Model",
+      "summary": "A probabilistic model for pairwise comparisons that expresses the probability of one item being preferred over another as a function of their latent \"strength\" scores. It is the mathematical foundation of reward model training in RLHF an…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "pairwise-comparison",
+        "direct-preference-optimization-dpo"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pairwise-comparison",
+      "title": "Pairwise Comparison",
+      "summary": "An evaluation methodology where a human annotator (or model) is shown two items and asked which is better, rather than rating each item independently. Pairwise comparisons are more reliable than absolute ratings and are the standard data…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "ranking",
+        "bradley-terry-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "ranking",
+      "title": "Ranking",
+      "summary": "The task of ordering a set of items by relevance, quality, or preference. In ML, ranking appears in information retrieval (ordering search results), recommendation systems, and LLM evaluation (ordering models by capability). Learning-to-…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "elo-rating",
+        "pairwise-comparison"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "elo-rating",
+      "title": "Elo Rating",
+      "summary": "A rating system originally designed for chess that computes relative skill levels from pairwise match outcomes. In ML, Elo ratings are used to rank language models based on human preference votes, most notably in the LMSYS Chatbot Arena…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "pairwise-ranking",
+        "ranking"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pairwise-ranking",
+      "title": "Pairwise Ranking",
+      "summary": "A ranking approach that constructs a global ordering from individual pairwise preference judgements between items. Each comparison provides a local constraint (\"A is better than B\"), and these constraints are aggregated into a full ranki…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "bootstrap-resampling",
+        "elo-rating"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bootstrap-resampling",
+      "title": "Bootstrap Resampling",
+      "summary": "A statistical method that estimates the sampling distribution of a statistic by repeatedly resampling with replacement from the observed data. It provides confidence intervals and standard errors without assuming a particular parametric…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "confidence-interval",
+        "pairwise-ranking"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "confidence-interval",
+      "title": "Confidence Interval",
+      "summary": "A range of values that is likely to contain the true population parameter with a specified probability (e.g., 95%). In ML, confidence intervals quantify uncertainty in evaluation metrics, helping distinguish genuine performance differenc…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "vision-language-model-vlm",
+        "bootstrap-resampling"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "vision-language-model-vlm",
+      "title": "Vision Language Model (VLM)",
+      "summary": "A multimodal model that processes both images and text, enabling tasks like visual question answering, image captioning, document understanding, and reasoning about visual content. VLMs combine a vision encoder with a language model, bri…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "cv",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "cross-attention",
+        "confidence-interval"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "cross-attention",
+      "title": "Cross-Attention",
+      "summary": "An attention mechanism where queries come from one sequence and keys/values come from a different sequence, enabling a model to attend to information from an external source. Cross-attention is how encoder-decoder models condition the de…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "attention",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "direct-preference-optimization-dpo",
+        "vision-language-model-vlm"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
