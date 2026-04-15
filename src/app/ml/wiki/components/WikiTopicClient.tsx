@@ -145,7 +145,7 @@ export function WikiTopicClient({ topic, manifest }: WikiTopicClientProps) {
               <button 
                 type="button" 
                 className="wiki-topic-nav-btn" 
-                style={{ padding: '0.75rem 2rem', fontSize: '1rem', backgroundColor: 'var(--color-primary-600)', color: 'black', borderRadius: '4px', cursor: 'pointer', border: '1px solid transparent' }}
+                style={{ padding: '0.75rem 2rem', height: 'auto', fontSize: '1rem', cursor: 'pointer' }}
                 onClick={() => {
                   markCompleted(topic.slug);
                   if (next) {
