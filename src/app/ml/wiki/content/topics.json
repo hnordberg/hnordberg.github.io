@@ -10221,5 +10221,492 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "react-reason-act",
+    "title": "ReAct (Reason + Act)",
+    "summary": "A prompting framework that interleaves reasoning traces with action steps (tool calls), allowing a language model to plan, act on external environments (search, code execution, APIs), observe results, and revise its reasoning. ReAct unif…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "function-calling",
+      "lora-adapter"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao · ReAct: Synergizing Reasoning and Acting in Language Models",
+        "url": "https://arxiv.org/abs/2210.03629"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A prompting framework that interleaves reasoning traces with action steps (tool calls), allowing a language model to plan, act on external environments (search, code execution, APIs), observe results, and revise its reasoning. ReAct unifies chain-of-thought reasoning with action-taking in a single prompt loop.</p><p>Standard chain-of-thought (CoT) prompting generates a reasoning trace but cannot interact with the world — it is prone to hallucination and cannot verify facts. Conversely, pure action-based agents (e.g., WebGPT) take actions without explicit reasoning, making their decisions opaque. ReAct combines both: the model alternates between <b>thought</b>, <b>action</b>, and <b>observation</b> steps in a structured loop.</p>\n\n<p>Formally, at each time step \\( t \\), the model generates either a thought \\( \\hat{a}_t \\) (internal reasoning, not sent to the environment) or an action \\( a_t \\) (sent to the environment, which returns observation \\( o_t \\)):</p>\n\n\\[ c_t = \\begin{cases} \\text{Thought}(\\hat{a}_t) &amp; \\text{reasoning step} \\\\ \\text{Action}(a_t) \\to o_t &amp; \\text{environment interaction} \\end{cases} \\]\n\n<p>The context for step \\( t+1 \\) is the concatenation of all prior steps: \\( c_1, c_2, \\ldots, c_t \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Example trace",
+        "body": "<pre style=\"background:#f5f5f5; padding:8px; border-radius:4px; font-size:0.9em;\">Thought 1: I need to find when the Eiffel Tower was built.\nAction 1:  Search[\"Eiffel Tower construction date\"]\nObs 1:     Construction began January 1887, completed March 1889.\nThought 2: The answer is 1889.\nAction 2:  Finish[\"1889\"]\n</pre>"
+      },
+      {
+        "kind": "prose",
+        "title": "Comparison with related prompting methods",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Reasoning</th><th style=\"padding:6px; text-align:left;\">Actions</th><th style=\"padding:6px; text-align:left;\">Grounding</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Standard prompting</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">None</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Chain-of-thought (CoT)</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">None</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Action-only (WebGPT)</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">Tool output</td></tr>\n<tr><td style=\"padding:6px;\">ReAct</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">Tool output</td></tr>\n</tbody></table>\n\n<p>On knowledge-intensive tasks (HotpotQA, FEVER), ReAct outperformed CoT alone by retrieving facts rather than hallucinating. On decision-making tasks (ALFWorld, WebShop), ReAct outperformed imitation learning baselines. The authors also showed that <b>ReAct + CoT-self-consistency</b> (using internal reasoning when external tools are unavailable) yields the best overall performance.</p>\n\n<p>ReAct is the conceptual foundation for modern LLM <b>agent frameworks</b> (LangChain, AutoGPT, Claude's tool use). The key insight is that reasoning and acting are synergistic: reasoning helps the model plan which actions to take, while action results ground the reasoning in factual observations.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "function-calling",
+    "title": "Function Calling",
+    "summary": "A capability of language models to generate structured API calls (tool invocations) as part of their output, rather than only producing natural language. The model selects which function to call and fills in the arguments, enabling it to…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "large-language-model-llm",
+      "react-reason-act"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Introduced in GPT-3.5/4 function calling API (OpenAI, June 2023); adopted by Anthropic (Claude), Google (Gemini), and open-weight models. Related: Toolformer (Schick et al., 2023)",
+        "url": "https://arxiv.org/abs/2302.04761"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A capability of language models to generate structured API calls (tool invocations) as part of their output, rather than only producing natural language. The model selects which function to call and fills in the arguments, enabling it to interact with external systems, databases, and services.</p><p>Function calling bridges the gap between language generation and programmatic action. In a typical flow:</p>\n<ol>\n<li>The developer provides <b>tool definitions</b> — each specifying a function name, natural-language description, and a JSON Schema for parameters — alongside the conversation context</li>\n<li>The model decides whether a tool call is needed (vs. a direct text response)</li>\n<li>If so, the model outputs a structured JSON object with the function name and arguments</li>\n<li>The host application executes the function and returns the result to the model</li>\n<li>The model incorporates the result into its final response</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Example",
+        "body": "<pre style=\"background:#f5f5f5; padding:8px; border-radius:4px; font-size:0.9em;\">\n// Tool definition (simplified)\n{\n  \"name\": \"get_weather\",\n  \"description\": \"Get current weather for a location\",\n  \"parameters\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"location\": {\"type\": \"string\"},\n      \"unit\": {\"enum\": [\"celsius\", \"fahrenheit\"]}\n    },\n    \"required\": [\"location\"]\n  }\n}\n\n// Model output\n{\"name\": \"get_weather\",\n \"arguments\": {\"location\": \"Paris\", \"unit\": \"celsius\"}}\n</pre>"
+      },
+      {
+        "kind": "prose",
+        "title": "Training approaches",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Approach</th><th style=\"padding:6px; text-align:left;\">Description</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">SFT on tool-use traces</td><td style=\"padding:6px;\">Fine-tune on (query, tool call, result, response) sequences collected from humans or stronger models</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Toolformer-style self-supervision</td><td style=\"padding:6px;\">Model inserts API calls into training text where they improve perplexity (Schick et al., 2023)</td></tr>\n<tr><td style=\"padding:6px;\">RLHF with tool use</td><td style=\"padding:6px;\">Reward model evaluates quality of tool selection and argument formatting</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key design decisions",
+        "body": "<ul>\n<li><b>Parallel vs. sequential calls:</b> Some APIs allow the model to request multiple tool calls in a single turn</li>\n<li><b>Forced vs. optional:</b> The developer can force a specific tool call or let the model decide autonomously</li>\n<li><b>Structured output:</b> Function calling shares infrastructure with JSON mode / structured generation, often using constrained decoding to guarantee valid schemas</li>\n</ul>\n\n<p>Function calling is the practical implementation of the ReAct paradigm and underlies modern AI agent systems. It transforms LLMs from text generators into <b>orchestrators</b> that can take verifiable actions in the real world.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "large-language-model-llm",
+    "title": "Large Language Model (LLM)",
+    "summary": "A language model with a very large number of parameters (typically billions), trained on massive text corpora using self-supervised learning. LLMs exhibit emergent capabilities — such as in-context learning, chain-of-thought reasoning, a…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "pretraining",
+      "function-calling"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Tom Brown et al. · Language Models are Few-Shot Learners (GPT-3, popularising the term)",
+        "url": "https://arxiv.org/abs/2005.14165"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A language model with a very large number of parameters (typically billions), trained on massive text corpora using self-supervised learning. LLMs exhibit emergent capabilities — such as in-context learning, chain-of-thought reasoning, and instruction following — that are absent or weak in smaller models.</p><p>Modern LLMs are predominantly <b>decoder-only Transformers</b> trained with the causal language modelling objective:</p>\n\n\\[ \\mathcal{L} = -\\sum_{t=1}^{T} \\log P(x_t \\mid x_{<t}; \\theta)=\"\" <=\"\" anki-mathjax=\"\">\n\n<p>where <anki-mathjax> x_t \\] is the token at position \\( t \\), \\( x_{<t} <=\"\" anki-mathjax=\"\"> denotes all preceding tokens, and <anki-mathjax> \\theta \\) are the model parameters.</t}></anki-mathjax></p>\n\n<p>The training pipeline typically involves three stages:</p>\n<ol>\n<li><b>Pretraining:</b> Self-supervised next-token prediction on trillions of tokens (web text, books, code). This stage consumes the vast majority of compute.</li>\n<li><b>Supervised fine-tuning (SFT):</b> Training on curated instruction-response pairs to teach the model to follow instructions and produce helpful responses.</li>\n<li><b>Alignment:</b> RLHF, DPO, or constitutional AI methods to align behaviour with human preferences and safety requirements.</li>\n</ol>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Parameters</th><th style=\"padding:6px; text-align:left;\">Year</th><th style=\"padding:6px; text-align:left;\">Organisation</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPT-3</td><td style=\"padding:6px;\">175B</td><td style=\"padding:6px;\">2020</td><td style=\"padding:6px;\">OpenAI</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">PaLM</td><td style=\"padding:6px;\">540B</td><td style=\"padding:6px;\">2022</td><td style=\"padding:6px;\">Google</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LLaMA 2</td><td style=\"padding:6px;\">7B-70B</td><td style=\"padding:6px;\">2023</td><td style=\"padding:6px;\">Meta</td></tr>\n<tr><td style=\"padding:6px;\">Claude 3.5</td><td style=\"padding:6px;\">Undisclosed</td><td style=\"padding:6px;\">2024</td><td style=\"padding:6px;\">Anthropic</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Scaling laws.</b> Kaplan et al. (2020) showed that cross-entropy loss scales as a power law with compute \\( C \\), dataset size \\( D \\), and parameter count \\( N \\):</p>\n\n\\[ L(N) \\approx \\left(\\frac{N_c}{N}\\right)^{\\alpha_N}, \\quad L(D) \\approx \\left(\\frac{D_c}{D}\\right)^{\\alpha_D} \\]\n\n<p>where \\( \\alpha_N \\approx 0.076 \\) and \\( \\alpha_D \\approx 0.095 \\) for Transformer language models. Hoffmann et al. (2022, \"Chinchilla\") refined this, showing that compute-optimal training requires scaling data and parameters roughly equally — many early LLMs were significantly under-trained relative to their parameter count.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Emergent capabilities</b> — abilities that appear suddenly as model scale increases — include few-shot learning, arithmetic reasoning, code generation, and multilingual transfer. Wei et al. (2022) catalogued over 130 such capabilities, though subsequent work (Schaeffer et al., 2023) argued that \"emergence\" may partly be an artifact of nonlinear evaluation metrics rather than a true phase transition.</p></t};></anki-mathjax>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "pretraining",
+    "title": "Pretraining",
+    "summary": "The initial training phase where a model learns general representations from a large, unlabelled dataset using a self-supervised objective. For LLMs, pretraining typically means next-token prediction on trillions of tokens of text, produ…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "supervised-fine-tuning-sft",
+      "large-language-model-llm"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Concept from transfer learning (Erhan et al., 2010); scaled to language by GPT (Radford et al., 2018), BERT (Devlin et al., 2019), and subsequent LLMs."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The initial training phase where a model learns general representations from a large, unlabelled dataset using a self-supervised objective. For LLMs, pretraining typically means next-token prediction on trillions of tokens of text, producing a base model that captures language structure, world knowledge, and reasoning patterns.</p><p>The pretraining objective for decoder-only models is causal language modelling — predict the next token given all preceding tokens:</p>\n\n\\[ \\mathcal{L}_{\\text{pretrain}} = -\\frac{1}{T}\\sum_{t=1}^{T} \\log P(x_t \\mid x_1, \\ldots, x_{t-1}; \\theta) \\]\n\n<p>where \\( T \\) is the sequence length, \\( x_t \\) is the token at position \\( t \\), and \\( \\theta \\) are the model parameters. For encoder models (BERT-style), the objective is masked language modelling (MLM) — predicting randomly masked tokens from bidirectional context:</p>\n\n\\[ \\mathcal{L}_{\\text{MLM}} = -\\sum_{i \\in \\mathcal{M}} \\log P(x_i \\mid x_{\\setminus \\mathcal{M}}; \\theta) \\]\n\n<p>where \\( \\mathcal{M} \\) is the set of masked positions and \\( x_{\\setminus \\mathcal{M}} \\) denotes the unmasked tokens.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key aspects of pretraining",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Aspect</th><th style=\"padding:6px; text-align:left;\">Typical practice</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Data</td><td style=\"padding:6px;\">1-15 trillion tokens (web, books, code, papers)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Compute</td><td style=\"padding:6px;\">\\( 10^{23} \\)-\\( 10^{25} \\) FLOPs</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Duration</td><td style=\"padding:6px;\">Weeks to months on thousands of GPUs</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Cost</td><td style=\"padding:6px;\">Millions of dollars</td></tr>\n<tr><td style=\"padding:6px;\">Result</td><td style=\"padding:6px;\">Base model (not yet instruction-following)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Data curation</b> is critical and involves several stages: deduplication (MinHash, exact substring matching), quality filtering (perplexity-based classifiers, heuristic rules), toxicity removal, and careful <b>data mixing</b> — the proportions of web text vs. books vs. code vs. scientific papers significantly affect downstream capabilities. For example, including ~5-10% code in pretraining data improves reasoning ability even on non-code tasks (Muennighoff et al., 2023).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Chinchilla scaling laws</b> (Hoffmann et al., 2022) showed that many early LLMs were significantly under-trained. The compute-optimal ratio is approximately 20 tokens per parameter — so a 7B model should be trained on ~140B tokens. This shifted the field toward training smaller models on more data (e.g., LLaMA 7B trained on 1T tokens).</p>\n\n<p>The pretrained base model is a powerful but raw artifact: it can complete text fluently and has absorbed enormous factual knowledge, but it does not follow instructions or engage in dialogue. Subsequent SFT and alignment stages transform it into a useful assistant.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "supervised-fine-tuning-sft",
+    "title": "Supervised Fine-Tuning (SFT)",
+    "summary": "A training stage that adapts a pretrained base model to follow instructions by training on curated (instruction, response) pairs. SFT transforms a raw text completion model into one that can engage in dialogue, follow formatting requirem…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "finetuning",
+      "pretraining"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Ouyang et al. · Training language models to follow instructions with human feedback (InstructGPT)",
+        "url": "https://arxiv.org/abs/2203.02155"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A training stage that adapts a pretrained base model to follow instructions by training on curated (instruction, response) pairs. SFT transforms a raw text completion model into one that can engage in dialogue, follow formatting requirements, and perform specific tasks.</p><p>The SFT objective is standard cross-entropy, but applied only to the response tokens — the instruction tokens are present in the context but masked from the loss computation:</p>\n\n\\[ \\mathcal{L}_{\\text{SFT}} = -\\sum_{t \\in \\mathcal{R}} \\log P(x_t \\mid x_{<t}; \\theta)=\"\" <=\"\" anki-mathjax=\"\">\n\n<p>where <anki-mathjax> \\mathcal{R} \\] is the set of token positions belonging to the response, and \\( x_{<t} <=\"\" anki-mathjax=\"\"> includes both the instruction and the response tokens generated so far. This teaches the model <i>what to generate</i> given an instruction, without penalising it for the content of the instruction itself.</t}>\\)</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Data for SFT",
+        "body": "<ul>\n<li>Thousands to hundreds of thousands of high-quality (instruction, response) pairs</li>\n<li>Sources: human-written, model-generated then human-filtered, or distilled from a stronger model (e.g., Alpaca distilled from GPT-4)</li>\n<li>Diversity is essential: coding, mathematics, creative writing, analysis, multi-turn dialogue, tool use</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Stage</th><th style=\"padding:6px; text-align:left;\">Data size</th><th style=\"padding:6px; text-align:left;\">Purpose</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Pretraining</td><td style=\"padding:6px;\">Trillions of tokens</td><td style=\"padding:6px;\">Learn language and knowledge</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">SFT</td><td style=\"padding:6px;\">10K-1M examples</td><td style=\"padding:6px;\">Learn to follow instructions</td></tr>\n<tr><td style=\"padding:6px;\">Alignment (RLHF/DPO)</td><td style=\"padding:6px;\">10K-100K comparisons</td><td style=\"padding:6px;\">Align with human preferences</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The LIMA insight.</b> Zhou et al. (2023) demonstrated that as few as 1,000 carefully curated SFT examples can produce a surprisingly capable assistant, suggesting that SFT primarily teaches <b>format and style</b> — the knowledge was already acquired during pretraining. This \"superficial alignment hypothesis\" implies that the quality of SFT data matters far more than its quantity.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Practical considerations",
+        "body": "<ul>\n<li><b>Learning rate:</b> Typically 1e-5 to 2e-5, much lower than pretraining to avoid catastrophic forgetting</li>\n<li><b>Epochs:</b> Usually 2-5 epochs; more risks overfitting to the small dataset</li>\n<li><b>Loss masking:</b> Masking the instruction from the loss is standard but not universal — some practitioners include system prompts in the loss</li>\n<li><b>Multi-turn format:</b> SFT data must use the exact chat template (special tokens, role markers) that the model will use at inference</li>\n</ul></t};></anki-mathjax>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "finetuning",
+    "title": "Finetuning",
+    "summary": "The process of continuing to train a pretrained model on a smaller, task-specific or domain-specific dataset. Fine-tuning adapts the model's learned representations to new tasks while retaining the general knowledge acquired during pretr…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "full-fine-tune",
+      "supervised-fine-tuning-sft"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Concept from transfer learning; popularised in NLP by Howard & Ruder (2018, ULMFiT ) and Devlin et al. (2019, BERT ).",
+        "url": "https://arxiv.org/abs/1801.06146"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The process of continuing to train a pretrained model on a smaller, task-specific or domain-specific dataset. Fine-tuning adapts the model's learned representations to new tasks while retaining the general knowledge acquired during pretraining — the foundation of modern transfer learning in deep learning.</p><p>Fine-tuning leverages <b>transfer learning</b>: instead of training from scratch (random initialisation), the pretrained weights provide a starting point that already captures useful features — language structure, world knowledge, visual features (in vision models), and reasoning patterns. The fine-tuning data adjusts these features for the target domain or task.</p>\n\n<p>The update rule is standard gradient descent on the task-specific loss \\( \\mathcal{L}_{\\text{task}} \\):</p>\n\n\\[ \\theta \\leftarrow \\theta_{\\text{pretrained}} - \\eta \\nabla_\\theta \\mathcal{L}_{\\text{task}}(\\theta) \\]\n\n<p>The critical difference from training from scratch is the initialisation: \\( \\theta_{\\text{pretrained}} \\) lies in a region of the loss landscape that generalises well, so only small adjustments are needed.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Types of fine-tuning",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Type</th><th style=\"padding:6px; text-align:left;\">What changes</th><th style=\"padding:6px; text-align:left;\">Data needed</th><th style=\"padding:6px; text-align:left;\">Compute</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Full fine-tune</td><td style=\"padding:6px;\">All parameters</td><td style=\"padding:6px;\">More data</td><td style=\"padding:6px;\">High (all gradients + optimizer states)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">PEFT (LoRA, adapters)</td><td style=\"padding:6px;\">Small subset / added params</td><td style=\"padding:6px;\">Less data</td><td style=\"padding:6px;\">Low (only adapter gradients)</td></tr>\n<tr><td style=\"padding:6px;\">Feature extraction</td><td style=\"padding:6px;\">Only new head layer</td><td style=\"padding:6px;\">Minimal data</td><td style=\"padding:6px;\">Very low (base model frozen)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Practical considerations",
+        "body": "<ul>\n<li><b>Learning rate:</b> Much smaller than pretraining (typically 1e-5 to 5e-5 for LLMs) to avoid catastrophic forgetting — the phenomenon where new training overwrites previously learned representations</li>\n<li><b>Epochs:</b> Usually 1-5 epochs; more risks overfitting on the small dataset</li>\n<li><b>Data quality:</b> Quality matters far more than quantity; the LIMA paper showed 1,000 high-quality examples can suffice for SFT</li>\n<li><b>Gradual unfreezing:</b> Howard & Ruder (2018, ULMFiT) proposed unfreezing layers progressively from top to bottom, combined with discriminative learning rates (lower for earlier layers), which reduces catastrophic forgetting</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Historical context.</b> Fine-tuning was standard in computer vision (ImageNet-pretrained CNNs fine-tuned for downstream tasks) before being adopted in NLP. Howard & Ruder's ULMFiT (2018) demonstrated that language model pretraining + fine-tuning could match or exceed task-specific architectures, directly inspiring GPT and BERT. In the LLM era, \"fine-tuning\" typically refers to SFT on instruction data, but it also encompasses domain adaptation (e.g., medical, legal) and continued pretraining on domain-specific corpora.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "full-fine-tune",
+    "title": "Full Fine-Tune",
+    "summary": "Fine-tuning that updates all of the model's parameters, as opposed to parameter-efficient methods that only modify a small subset. Full fine-tuning provides maximum expressiveness but requires storing and updating the complete model, mak…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "parameter-efficient-fine-tuning-peft",
+      "finetuning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Standard machine learning practice; distinguished from PEFT methods as LLM scale made full updates increasingly expensive (2020s). See also: ZeRO (Rajbhandari et al., 2020)",
+        "url": "https://arxiv.org/abs/1910.02054"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Fine-tuning that updates all of the model's parameters, as opposed to parameter-efficient methods that only modify a small subset. Full fine-tuning provides maximum expressiveness but requires storing and updating the complete model, making it computationally expensive for large models.</p><p>In a full fine-tune, the gradient is computed for every parameter \\( \\theta_i \\) in the model and all parameters are updated:</p>\n\n\\[ \\theta \\leftarrow \\theta - \\eta \\nabla_\\theta \\mathcal{L}(\\theta) \\]\n\n<p>For a model with \\( N \\) parameters, the memory footprint during training is dominated by four components:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Component</th><th style=\"padding:6px; text-align:left;\">Size</th><th style=\"padding:6px; text-align:left;\">Notes</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Model weights</td><td style=\"padding:6px;\">\\( 2N \\) bytes (fp16)</td><td style=\"padding:6px;\">The parameters themselves</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Gradients</td><td style=\"padding:6px;\">\\( 2N \\) bytes</td><td style=\"padding:6px;\">One gradient per parameter</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Adam optimizer — first moment \\( m \\)</td><td style=\"padding:6px;\">\\( 4N \\) bytes (fp32)</td><td style=\"padding:6px;\">Running mean of gradients</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Adam optimizer — second moment \\( v \\)</td><td style=\"padding:6px;\">\\( 4N \\) bytes (fp32)</td><td style=\"padding:6px;\">Running mean of squared gradients</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Master weights (fp32 copy)</td><td style=\"padding:6px;\">\\( 4N \\) bytes</td><td style=\"padding:6px;\">For mixed-precision training</td></tr>\n<tr><td style=\"padding:6px;\"><b>Total</b></td><td style=\"padding:6px;\"><b>\\( \\sim 16N \\) bytes</b></td><td style=\"padding:6px;\">e.g., ~112 GB for a 7B model</td></tr>\n</tbody></table>\n\n<p>This excludes activation memory, which adds significantly during the forward pass (mitigated by gradient checkpointing).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "When to use full fine-tuning",
+        "body": "<ul>\n<li>The target domain differs substantially from pretraining data (e.g., fine-tuning a general LLM on specialised scientific literature)</li>\n<li>Maximum performance is required and compute budget allows it</li>\n<li>Training a dedicated single-task model where serving multiple adapters is unnecessary</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "When to prefer PEFT instead",
+        "body": "<ul>\n<li>Limited GPU memory or multi-tenant serving (one base model + many LoRA adapters)</li>\n<li>Small fine-tuning datasets where freezing most parameters acts as implicit regularisation</li>\n<li>Rapid experimentation — PEFT trains much faster and adapter checkpoints are small (MBs vs. GBs)</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Distributed training strategies</b> make full fine-tuning feasible at scale: FSDP (Fully Sharded Data Parallel) and DeepSpeed ZeRO shard model states (weights, gradients, optimizer states) across GPUs, reducing per-GPU memory to approximately \\( 16N / G \\) bytes for \\( G \\) GPUs. ZeRO Stage 3 shards all three components; Stage 2 shards gradients and optimizer states only.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "parameter-efficient-fine-tuning-peft",
+    "title": "Parameter-Efficient Fine-Tuning (PEFT)",
+    "summary": "A family of methods that fine-tune only a small number of additional or selected parameters while keeping the bulk of the pretrained model frozen. PEFT achieves performance comparable to full fine-tuning at a fraction of the memory and c…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "low-rank-adaptation-lora",
+      "full-fine-tune"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019-2021 · Adapters: Houlsby et al. (2019) ; LoRA: Hu et al. (2021) ; Prefix tuning: Li & Liang (2021)",
+        "url": "https://arxiv.org/abs/1902.00751"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A family of methods that fine-tune only a small number of additional or selected parameters while keeping the bulk of the pretrained model frozen. PEFT achieves performance comparable to full fine-tuning at a fraction of the memory and compute cost.</p><p>The core idea: a pretrained model with \\( N \\) parameters can be adapted to a new task by learning a small update \\( \\Delta\\theta \\) with \\( |\\Delta\\theta| \\ll N \\). The rest of the model remains frozen, so only the adapter parameters require gradient computation and optimizer states.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Trainable params</th><th style=\"padding:6px; text-align:left;\">Mechanism</th><th style=\"padding:6px; text-align:left;\">Inference overhead</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">LoRA</td><td style=\"padding:6px;\">~0.1-1% of \\( N \\)</td><td style=\"padding:6px;\">Low-rank decomposition \\( \\Delta W = BA \\) of weight updates</td><td style=\"padding:6px;\">Zero (merge into base weights)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Adapters</td><td style=\"padding:6px;\">~1-5% of \\( N \\)</td><td style=\"padding:6px;\">Small bottleneck MLPs inserted after attention/FFN sublayers</td><td style=\"padding:6px;\">Small (extra forward pass through adapter)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Prefix tuning</td><td style=\"padding:6px;\">~0.1% of \\( N \\)</td><td style=\"padding:6px;\">Learnable continuous prefix vectors prepended to keys and values at each layer</td><td style=\"padding:6px;\">Small (extra KV entries)</td></tr>\n<tr><td style=\"padding:6px;\">Prompt tuning</td><td style=\"padding:6px;\">~0.01% of \\( N \\)</td><td style=\"padding:6px;\">Learnable soft prompt embeddings prepended to the input</td><td style=\"padding:6px;\">Negligible</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why it works.</b> Aghajanyan et al. (2021, \"Intrinsic Dimensionality\") showed that fine-tuning updates have a low intrinsic dimensionality — the weight changes during adaptation occupy a low-rank subspace, even when full fine-tuning is used. This means constraining updates to a small subspace loses little expressiveness.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key advantages",
+        "body": "<ul>\n<li><b>Memory:</b> Only adapter parameters and their optimizer states need GPU memory — for LoRA with rank 16 on a 7B model, this is ~100 MB vs. ~112 GB for full fine-tuning</li>\n<li><b>Multi-task serving:</b> One base model in memory + many lightweight adapters hot-swapped per request (systems like S-LoRA and Punica enable batched multi-adapter serving)</li>\n<li><b>Regularisation:</b> Freezing most parameters implicitly constrains the model, reducing overfitting on small datasets — PEFT often outperforms full fine-tuning when data is scarce</li>\n<li><b>Storage:</b> Each fine-tuned variant is a small delta (MBs instead of GBs), easy to version and distribute</li>\n</ul>\n\n<p>LoRA has become the dominant PEFT method due to its simplicity, zero additional inference latency (adapters are merged into base weights after training), and consistently strong performance. QLoRA (Dettmers et al., 2023) extends this by combining LoRA with 4-bit quantisation of the frozen base model, enabling fine-tuning of 65B-parameter models on a single 48 GB GPU.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "low-rank-adaptation-lora",
+    "title": "Low-Rank Adaptation (LoRA)",
+    "summary": "A parameter-efficient fine-tuning method that represents weight updates as a low-rank decomposition. Instead of updating a full weight matrix \\( W \\in \\mathbb{R}^{d \\times k} \\), LoRA learns two small matrices \\( A \\in \\mathbb{R}^{d \\tim…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "lora-adapter",
+      "parameter-efficient-fine-tuning-peft"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2021 · Edward Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, Weizhu Chen · LoRA: Low-Rank Adaptation of Large Language Models",
+        "url": "https://arxiv.org/abs/2106.09685"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A parameter-efficient fine-tuning method that represents weight updates as a low-rank decomposition. Instead of updating a full weight matrix \\( W \\in \\mathbb{R}^{d \\times k} \\), LoRA learns two small matrices \\( A \\in \\mathbb{R}^{d \\times r} \\) and \\( B \\in \\mathbb{R}^{r \\times k} \\) with rank \\( r \\ll \\min(d, k) \\), so the update \\( \\Delta W = BA \\) has only \\( r(d + k) \\) trainable parameters instead of \\( dk \\).</p><p>The forward pass with LoRA becomes:</p>\n\n\\[ h = Wx + \\Delta Wx = Wx + BAx \\]\n\n<p>where \\( W \\) is frozen and only \\( A, B \\) receive gradients. A scaling factor \\( \\alpha / r \\) controls the magnitude of the update:</p>\n\n\\[ h = Wx + \\frac{\\alpha}{r} BAx \\]\n\n<p>where \\( \\alpha \\) is a constant hyperparameter (typically set equal to \\( r \\) or \\( 2r \\)). This scaling ensures the update magnitude remains stable as \\( r \\) varies.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Initialisation.</b> \\( A \\) is initialised with random Gaussian values (\\( \\mathcal{N}(0, \\sigma^2) \\)) and \\( B \\) with zeros, so \\( \\Delta W = BA = 0 \\) at the start of training. This means the model begins from the exact pretrained weights, and the adaptation is learned incrementally.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">Value</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Trainable params (rank \\( r=16 \\), 7B model)</td><td style=\"padding:6px;\">~10-40M (0.1-0.5% of total)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Common target modules</td><td style=\"padding:6px;\">\\( W_Q, W_K, W_V, W_O \\) projections; sometimes MLP layers</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Typical rank \\( r \\)</td><td style=\"padding:6px;\">4-64 (higher for more complex tasks)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Inference overhead</td><td style=\"padding:6px;\">Zero — merge \\( W' = W + \\frac{\\alpha}{r}BA \\) after training</td></tr>\n<tr><td style=\"padding:6px;\">Memory saving vs. full fine-tune</td><td style=\"padding:6px;\">~100x (only adapter params need optimizer states)</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Theoretical motivation.</b> Aghajanyan et al. (2021) showed that fine-tuning updates have a low intrinsic dimensionality — the weight changes during adaptation occupy a low-rank subspace even when all parameters are updated. LoRA directly parameterises this subspace, making the low-rank constraint explicit rather than emergent.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Extensions",
+        "body": "<ul>\n<li><b>QLoRA</b> (Dettmers et al., 2023): Combines LoRA with 4-bit NormalFloat quantisation of the frozen base model, enabling fine-tuning of 65B models on a single 48 GB GPU</li>\n<li><b>DoRA</b> (Liu et al., 2024): Decomposes the update into magnitude and direction components, improving performance</li>\n<li><b>LoRA+</b>: Sets different learning rates for \\( A \\) and \\( B \\) matrices</li>\n</ul><details>\n<summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Parameter count.</b> For a weight matrix \\( W \\in \\mathbb{R}^{d \\times k} \\), full fine-tuning requires \\( dk \\) trainable parameters. LoRA replaces this with \\( A \\in \\mathbb{R}^{d \\times r} \\) and \\( B \\in \\mathbb{R}^{r \\times k} \\), giving \\( r(d + k) \\) parameters. The compression ratio is:</p>\n\n\\[ \\frac{r(d + k)}{dk} = r\\left(\\frac{1}{k} + \\frac{1}{d}\\right) \\]\n\n<p>For a typical attention projection with \\( d = k = 4096 \\) and \\( r = 16 \\): ratio \\( = 16 \\times 2/4096 = 0.0078 \\), i.e., 0.78% of the full parameter count.</p>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "lora-adapter",
+    "title": "LoRA Adapter",
+    "summary": "The pair of low-rank matrices \\( (A, B) \\) that constitute a single LoRA module, attached to a specific weight matrix in the model. Multiple LoRA adapters can be trained for different tasks and hot-swapped at inference time without modif…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "optimization",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "react-reason-act",
+      "low-rank-adaptation-lora"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2021 · Edward Hu et al. · LoRA: Low-Rank Adaptation of Large Language Models ; Multi-adapter serving: S-LoRA (Sheng et al., 2023)",
+        "url": "https://arxiv.org/abs/2106.09685"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The pair of low-rank matrices \\( (A, B) \\) that constitute a single LoRA module, attached to a specific weight matrix in the model. Multiple LoRA adapters can be trained for different tasks and hot-swapped at inference time without modifying the base model, enabling efficient multi-task serving.</p><p>A LoRA adapter for a weight matrix \\( W \\in \\mathbb{R}^{d \\times k} \\) consists of:</p>\n<ul>\n<li>\\( A \\in \\mathbb{R}^{d \\times r} \\) — the down-projection (maps from \\( d \\) dimensions to the low-rank bottleneck \\( r \\))</li>\n<li>\\( B \\in \\mathbb{R}^{r \\times k} \\) — the up-projection (maps back to the original \\( k \\) dimensions)</li>\n</ul>\n\n<p>The modified forward pass is \\( h = Wx + \\frac{\\alpha}{r}BAx \\). A complete LoRA fine-tune attaches adapters to multiple weight matrices — typically the four attention projections \\( W_Q, W_K, W_V, W_O \\) at every layer — so a \"LoRA adapter\" in practice refers to the collection of all \\( (A, B) \\) pairs for a given task.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Serving strategies",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Strategy</th><th style=\"padding:6px; text-align:left;\">Mechanism</th><th style=\"padding:6px; text-align:left;\">Trade-off</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Merge and unload</td><td style=\"padding:6px;\">Compute \\( W' = W + \\frac{\\alpha}{r}BA \\) once, discard \\( A, B \\)</td><td style=\"padding:6px;\">Zero overhead but single-task only</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Dynamic loading</td><td style=\"padding:6px;\">Keep base model in memory; load/swap \\( (A, B) \\) pairs per request</td><td style=\"padding:6px;\">Multi-tenant; small swap latency</td></tr>\n<tr><td style=\"padding:6px;\">Batched multi-adapter</td><td style=\"padding:6px;\">Systems like S-LoRA and Punica batch requests across different adapters on the same GPU using custom CUDA kernels</td><td style=\"padding:6px;\">High throughput; engineering complexity</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>S-LoRA</b> (Sheng et al., 2023) introduced a unified paging mechanism that stores adapters in a shared memory pool and uses custom CUDA kernels to apply different adapters to different requests within the same batch — enabling thousands of concurrent adapters on a single GPU.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Practical details",
+        "body": "<ul>\n<li>Adapter files are typically 10-100 MB (vs. GBs for the full model), making them easy to share, version, and distribute on platforms like Hugging Face Hub</li>\n<li>The PEFT library (Hugging Face) provides a standard format: adapter weights are stored as safetensors with a JSON config specifying rank, alpha, and target modules</li>\n<li>Adapter arithmetic is possible: adapters can be added, subtracted, or interpolated to combine capabilities or ablate specific behaviours</li>\n</ul>"
+      }
+    ],
+    "cards": []
   }
 ]

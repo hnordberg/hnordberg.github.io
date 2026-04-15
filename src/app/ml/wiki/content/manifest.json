@@ -4734,6 +4734,236 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "react-reason-act",
+      "title": "ReAct (Reason + Act)",
+      "summary": "A prompting framework that interleaves reasoning traces with action steps (tool calls), allowing a language model to plan, act on external environments (search, code execution, APIs), observe results, and revise its reasoning. ReAct unif…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "function-calling",
+        "lora-adapter"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "function-calling",
+      "title": "Function Calling",
+      "summary": "A capability of language models to generate structured API calls (tool invocations) as part of their output, rather than only producing natural language. The model selects which function to call and fills in the arguments, enabling it to…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "large-language-model-llm",
+        "react-reason-act"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "large-language-model-llm",
+      "title": "Large Language Model (LLM)",
+      "summary": "A language model with a very large number of parameters (typically billions), trained on massive text corpora using self-supervised learning. LLMs exhibit emergent capabilities — such as in-context learning, chain-of-thought reasoning, a…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "pretraining",
+        "function-calling"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pretraining",
+      "title": "Pretraining",
+      "summary": "The initial training phase where a model learns general representations from a large, unlabelled dataset using a self-supervised objective. For LLMs, pretraining typically means next-token prediction on trillions of tokens of text, produ…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "supervised-fine-tuning-sft",
+        "large-language-model-llm"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "supervised-fine-tuning-sft",
+      "title": "Supervised Fine-Tuning (SFT)",
+      "summary": "A training stage that adapts a pretrained base model to follow instructions by training on curated (instruction, response) pairs. SFT transforms a raw text completion model into one that can engage in dialogue, follow formatting requirem…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "finetuning",
+        "pretraining"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "finetuning",
+      "title": "Finetuning",
+      "summary": "The process of continuing to train a pretrained model on a smaller, task-specific or domain-specific dataset. Fine-tuning adapts the model's learned representations to new tasks while retaining the general knowledge acquired during pretr…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "full-fine-tune",
+        "supervised-fine-tuning-sft"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "full-fine-tune",
+      "title": "Full Fine-Tune",
+      "summary": "Fine-tuning that updates all of the model's parameters, as opposed to parameter-efficient methods that only modify a small subset. Full fine-tuning provides maximum expressiveness but requires storing and updating the complete model, mak…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "parameter-efficient-fine-tuning-peft",
+        "finetuning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "parameter-efficient-fine-tuning-peft",
+      "title": "Parameter-Efficient Fine-Tuning (PEFT)",
+      "summary": "A family of methods that fine-tune only a small number of additional or selected parameters while keeping the bulk of the pretrained model frozen. PEFT achieves performance comparable to full fine-tuning at a fraction of the memory and c…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "low-rank-adaptation-lora",
+        "full-fine-tune"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "low-rank-adaptation-lora",
+      "title": "Low-Rank Adaptation (LoRA)",
+      "summary": "A parameter-efficient fine-tuning method that represents weight updates as a low-rank decomposition. Instead of updating a full weight matrix \\( W \\in \\mathbb{R}^{d \\times k} \\), LoRA learns two small matrices \\( A \\in \\mathbb{R}^{d \\tim…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "lora-adapter",
+        "parameter-efficient-fine-tuning-peft"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "lora-adapter",
+      "title": "LoRA Adapter",
+      "summary": "The pair of low-rank matrices \\( (A, B) \\) that constitute a single LoRA module, attached to a specific weight matrix in the model. Multiple LoRA adapters can be trained for different tasks and hot-swapped at inference time without modif…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "react-reason-act",
+        "low-rank-adaptation-lora"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
