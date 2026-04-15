@@ -6748,6 +6748,225 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "latent-space",
+      "title": "Latent Space",
+      "summary": "The lower-dimensional space learned by a model where data points are represented as dense continuous vectors capturing their essential semantic features. \"Latent\" means hidden — these representations are not directly observed but are mat…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "generative",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "embedding-space",
+        "faithfulness"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "embedding-space",
+      "title": "Embedding Space",
+      "summary": "The continuous vector space in which discrete entities (words, tokens, images) are mapped and represented as dense vectors. The geometry of the embedding space structurally encodes semantic relationships: contextually similar items are s…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "nearest-neighbor-search",
+        "latent-space"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "nearest-neighbor-search",
+      "title": "Nearest Neighbor Search",
+      "summary": "The problem of efficiently finding the top-\\(k\\) data points in a collection that are structurally closest to a given query point, measured by a distance metric like cosine similarity, inner product, or \\(L_2\\) Euclidean distance. In mac…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "vector-database",
+        "embedding-space"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "vector-database",
+      "title": "Vector Database",
+      "summary": "A specialized database infrastructure optimised for persistently storing, indexing, and querying high-dimensional vector embeddings. Vector databases serve as the structural retrieval component of Retrieval-Augmented Generation (RAG) pip…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "bm25",
+        "nearest-neighbor-search"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bm25",
+      "title": "BM25",
+      "summary": "A statistical probabilistic ranking function used in information retrieval that scores documents heavily by term frequency and inverse document frequency, while strictly implementing saturation bounds and document length normalization. B…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "sparse-retrieval",
+        "vector-database"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sparse-retrieval",
+      "title": "Sparse Retrieval",
+      "summary": "Information retrieval models that formally represent queries and documents as immensely sparse, high-dimensional vectors spanning the exact size of the vocabulary space, where nearly all entries evaluate to zero. Algorithmic matching hea…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "dense-retrieval",
+        "bm25"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "dense-retrieval",
+      "title": "Dense Retrieval",
+      "summary": "An advanced neural information retrieval paradigm that functionally encodes chaotic queries and extensive documents as low-dimensional, continuously dense vectors, retrieving results via rapid nearest neighbor geometry search inside an e…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "grounding",
+        "sparse-retrieval"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "grounding",
+      "title": "Grounding",
+      "summary": "The imperative property ensuring a generative model's synthesized outputs are anchored algorithmically to verifiable external sources (retrieved documents, valid databases, real-world sensory observations) rather than generated dangerous…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "factuality",
+        "dense-retrieval"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "factuality",
+      "title": "Factuality",
+      "summary": "The analytical metric evaluating the degree to which a generative model's explicit outputs formally align with objective real-world truth. Crucially, factuality is algorithmically distinct from grounding (citing data architectures) and f…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "faithfulness",
+        "grounding"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "faithfulness",
+      "title": "Faithfulness",
+      "summary": "The crucial constraint that a model's generated sequence remains rigorously consistent with, and mathematically supported solely by, the provided input parameter context. A faithful RAG abstraction only executes claims provably contained…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "latent-space",
+        "factuality"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

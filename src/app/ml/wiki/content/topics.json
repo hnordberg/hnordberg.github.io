@@ -14796,5 +14796,400 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "latent-space",
+    "title": "Latent Space",
+    "summary": "The lower-dimensional space learned by a model where data points are represented as dense continuous vectors capturing their essential semantic features. \"Latent\" means hidden — these representations are not directly observed but are mat…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "generative",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "embedding-space",
+      "faithfulness"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Foundational concept in generative modelling and representation learning."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The lower-dimensional space learned by a model where data points are represented as dense continuous vectors capturing their essential semantic features. \"Latent\" means hidden — these representations are not directly observed but are mathematically inferred by the model as an intermediate topological representation between input and output manifolds.</p><p>Mathematically, an encoder maps an input \\( \\mathbf{x} \\in \\mathcal{X} \\) into a latent vector \\( \\mathbf{z} \\in \\mathcal{Z} \\), discovering the underlying data manifold.</p>\n<p>Latent spaces arise in many architectures:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Latent space mechanism</th><th style=\"padding:6px; text-align:left;\">Dimensionality</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Autoencoder</td><td style=\"padding:6px;\">Deterministic Bottleneck layer \\( \\mathbf{z} = f(\\mathbf{x}) \\)</td><td style=\"padding:6px;\">Chosen bottleneck size</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Variational Autoencoder (VAE)</td><td style=\"padding:6px;\">Gaussian-distributed bottleneck \\( \\mathbf{z} \\sim \\mathcal{N}(\\mu, \\sigma^2) \\)</td><td style=\"padding:6px;\">Chosen bottleneck size</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Stable Diffusion (LDM)</td><td style=\"padding:6px;\">Compressed frozen VAE image representation</td><td style=\"padding:6px;\">64×64×4 (for 512×512 images)</td></tr>\n<tr><td style=\"padding:6px;\">LLM hidden states</td><td style=\"padding:6px;\">Token representations at each layer</td><td style=\"padding:6px;\">\\( d_{\text{model}} \\) (e.g., 4096)</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Properties of good latent spaces",
+        "body": "<ul>\n<li><b>Smoothness:</b> Nearby points represent similar inputs. Mathematical interpolations \\( \\mathbf{z}_{new} = (1 - lpha)\\mathbf{z}_1 + lpha\\mathbf{z}_2 \\) produce semantically meaningful intermediate outputs (e.g., morphing a face to smiling).</li>\n<li><b>Disentanglement:</b> Independent factors of variation in the data (like lighting, shape, rotation) mathematically map to independent orthogonal dimensions in \\(\\mathcal{Z}\\).</li>\n<li><b>Completeness:</b> Every sampled continuous point in the assumed space region decodes to a valid, coherent real-world output.</li>\n</ul>\n\n<p>Latent spaces make generative models capable of novel creation: by sampling or taking a \"latent space walk\" in \\( \\mathcal{Z} \\), we generate new data points unseen during training that conform to the target distribution's structure.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "embedding-space",
+    "title": "Embedding Space",
+    "summary": "The continuous vector space in which discrete entities (words, tokens, images) are mapped and represented as dense vectors. The geometry of the embedding space structurally encodes semantic relationships: contextually similar items are s…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "nearest-neighbor-search",
+      "latent-space"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Concept from Word2Vec (Mikolov et al., 2013) and distributed representations (Hinton, 1986)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The continuous vector space in which discrete entities (words, tokens, images) are mapped and represented as dense vectors. The geometry of the embedding space structurally encodes semantic relationships: contextually similar items are situated physically close together, and trajectory directions in the space correspond to abstract concepts.</p><p>An embedding space is created by an <b>embedding function</b> \\( f: \\mathcal{X} \to \\mathbb{R}^d \\) that projects discrete distinct inputs into a dense continuous space. This underlying embedding matrix \\( E \\) is essentially a learned lookup table.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Notable mathematical properties",
+        "body": "<ul>\n<li><b>Semantic similarity:</b> Mapped via dot-products or angles. \\( \\cos(\text{embed}(\text{\"king\"}), \text{embed}(\text{\"queen\"})) \\) converges to nearly \\( 1.0 \\).</li>\n<li><b>Analogical reasoning:</b> Compositional generalizations via geometry: \\( \text{embed}(\text{\"king\"}) - \text{embed}(\text{\"man\"}) + \text{embed}(\text{\"woman\"}) pprox \text{embed}(\text{\"queen\"}) \\) (Word2Vec)</li>\n<li><b>Clustering:</b> Concepts in the same semantic category implicitly group into tight high-dimensional mathematical spheres.</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Embedding type</th><th style=\"padding:6px; text-align:left;\">Target Entity</th><th style=\"padding:6px; text-align:left;\">Typical \\( d \\) dimension</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Word embeddings (Word2Vec)</td><td style=\"padding:6px;\">Whole words</td><td style=\"padding:6px;\">100–300</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Token embeddings (LLMs)</td><td style=\"padding:6px;\">Subword tokens (post-BPE)</td><td style=\"padding:6px;\">768–8192</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Sentence embeddings (Sentence-BERT)</td><td style=\"padding:6px;\">Full sentences/paragraphs</td><td style=\"padding:6px;\">384–1536</td></tr>\n<tr><td style=\"padding:6px;\">Joint Image/Text embeddings (CLIP)</td><td style=\"padding:6px;\">Images & Captions</td><td style=\"padding:6px;\">512–768</td></tr>\n</table>\n\n<p>While \"embedding space\" and \"latent space\" overlap, the distinction is usually topological location: <i>embedding space</i> refers specifically to the mapped input representation layer bridging discrete symbols to vectors, whereas <i>latent space</i> more broadly describes internal hidden representations or bottlenecks elsewhere in the architecture.</p><details>\n  <summary>Derivations</summary>\n  <p>For Word2Vec's Skip-Gram formulation, the objective aligns the embedding space such that a target word \\( w_c \\) predicts its context word \\( w_o \\). The probability of a context word is given by a softmax over the embedding dot products:</p>\n  \\[ P(w_o | w_c) = rac{\\exp(\\mathbf{v}_{w_o}^\top \\mathbf{v}_{w_c})}{\\sum_{w \\in V} \\exp(\\mathbf{v}_w^\top \\mathbf{v}_{w_c})} \\]\n  <p>Maximizing this log-likelihood pushes the dot product (similarity) of frequently co-occurring words close together in embedding space.</p>\n</details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "nearest-neighbor-search",
+    "title": "Nearest Neighbor Search",
+    "summary": "The problem of efficiently finding the top-\\(k\\) data points in a collection that are structurally closest to a given query point, measured by a distance metric like cosine similarity, inner product, or \\(L_2\\) Euclidean distance. In mac…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "vector-database",
+      "embedding-space"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "ANN research spans decades; FAISS (Johnson et al., 2017); HNSW (Malkov & Yashunin, 2018)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The problem of efficiently finding the top-\\(k\\) data points in a collection that are structurally closest to a given query point, measured by a distance metric like cosine similarity, inner product, or \\(L_2\\) Euclidean distance. In machine learning, nearest neighbor search empowers the retrieval engines behind semantic search, RAG, and large-scale recommendation systems.</p><p>Given a query vector \\( \\mathbf{q} \\in \\mathbb{R}^d \\) and a dataset \\( X = \\{\\mathbf{x}_1, \\dots, \\mathbf{x}_N\\} \\), the goal is to evaluate the similarity function \\( s(\\mathbf{q}, \\mathbf{x}_i) \\) efficiently.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Exact search (k-NN)</b> mathematically requires computing all \\( N \\) distances — costing \\( O(Nd) \\) time per query. For billions of parameters, this linear scan is prohibitively slow. <b>Approximate nearest neighbor (ANN)</b> methods trade a tiny fractional accuracy penalty (recall) for logarithmic speed optimizations:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Logical Approach</th><th style=\"padding:6px; text-align:left;\">Ecosystem/Library</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">IVF (Inverted File)</td><td style=\"padding:6px;\">Voronoi cluster vectors (k-means); search only nearby cell partitions</td><td style=\"padding:6px;\">FAISS</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">HNSW</td><td style=\"padding:6px;\">Hierarchical Navigable Small World graph (skip-list layered graphs)</td><td style=\"padding:6px;\">Hnswlib, FAISS</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">PQ (Product Quantization)</td><td style=\"padding:6px;\">Split vectors into chunks and compress values to look-up tables</td><td style=\"padding:6px;\">FAISS</td></tr>\n<tr><td style=\"padding:6px;\">LSH (Locality-Sensitive Hashing)</td><td style=\"padding:6px;\">Design hash functions where similar vectors collide in the same bucket</td><td style=\"padding:6px;\">Various</td></tr>\n</tbody></table>\n\n<p>Modern ANN methods achieve immense sub-millisecond querying over billions of dense vectors with \\( \\ge 95\\% \\) recall (fraction of true accurate nearest neighbors found). </p>\n\n<p>These algorithms inherently bypass the <b>curse of dimensionality</b> constraints found in traditional exact structures (like KD-Trees), which break down entirely past 20-30 dimensions and degrade asymptotically to brute-force \\(O(Nd)\\).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "vector-database",
+    "title": "Vector Database",
+    "summary": "A specialized database infrastructure optimised for persistently storing, indexing, and querying high-dimensional vector embeddings. Vector databases serve as the structural retrieval component of Retrieval-Augmented Generation (RAG) pip…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "bm25",
+      "nearest-neighbor-search"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Emerged as a distinct product category in 2022–2023, driven comprehensively by RAG pipelines."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A specialized database infrastructure optimised for persistently storing, indexing, and querying high-dimensional vector embeddings. Vector databases serve as the structural retrieval component of Retrieval-Augmented Generation (RAG) pipelines, enabling immensely scalable approximate nearest neighbor (ANN) search across billions of embeddings.</p><p>A production vector database guarantees:</p>\n<ul>\n<li><b>Vector indexing:</b> Utilizing heavily parallelized ANN algorithms (HNSW, IVF-PQ) for sub-millisecond \\( O(\\log N) \\) similarity querying</li>\n<li><b>Hybrid Metadata filtering:</b> Efficiently combining vector geometry similarity with exact boolean attribute filters (\"find semantic match AND date > 2024\"). This is notoriously hard to optimize mathematically.</li>\n<li><b>CRUD logic:</b> Dynamically mutating, inserting, and deleting vectors without totally rebuilding the graph index.</li>\n<li><b>Persistence and sharding:</b> Hardware scaling, failover distributed across multinode environments.</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Database Ecosystem</th><th style=\"padding:6px; text-align:left;\">Architecture Type</th><th style=\"padding:6px; text-align:left;\">Key Feature</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">FAISS</td><td style=\"padding:6px;\">Core Library (in-memory)</td><td style=\"padding:6px;\">GPU-accelerated, highly optimised barebones math</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Pinecone</td><td style=\"padding:6px;\">Managed Cloud Service</td><td style=\"padding:6px;\">Enterprise tier serverless deployment</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Weaviate</td><td style=\"padding:6px;\">Open-source Database</td><td style=\"padding:6px;\">Auto built-in vectorisation abstractions, GraphQL</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Chroma</td><td style=\"padding:6px;\">Open-source Database</td><td style=\"padding:6px;\">Lightweight SQLite-like footprint, great for AI prototyping</td></tr>\n<tr><td style=\"padding:6px;\">pgvector</td><td style=\"padding:6px;\">Core PostgreSQL Extension</td><td style=\"padding:6px;\">ACID vector search nestled inside existing SQL workflows</td></tr>\n</table>\n\n<p>Unlike traditional relational databases indexing exact scalar structured data via B-trees, or full-text elastic databases indexing tokenized JSON, vector databases mandate traversing geometric topology in non-intuitive high-dimensional floating-point spaces.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "bm25",
+    "title": "BM25",
+    "summary": "A statistical probabilistic ranking function used in information retrieval that scores documents heavily by term frequency and inverse document frequency, while strictly implementing saturation bounds and document length normalization. B…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "sparse-retrieval",
+      "vector-database"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1994 · Stephen Robertson, Karen Spärck Jones · Okapi BM25 (TREC experiments)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A statistical probabilistic ranking function used in information retrieval that scores documents heavily by term frequency and inverse document frequency, while strictly implementing saturation bounds and document length normalization. BM25 serves as the indisputable baseline for sparse lexical search and uniquely complements neural dense retrieval methods.</p><p>The total BM25 (Best Matching 25) score for a tokenized query \\( Q = \\{q_1, \\ldots, q_n\\} \\) matching against a target document \\( D \\) evaluates mathematically to:</p>\n\n\\[ \text{BM25}(D, Q) = \\sum_{i=1}^{n} \text{IDF}(q_i) \\cdot rac{f(q_i, D) \\cdot (k_1 + 1)}{f(q_i, D) + k_1 \\cdot \\left(1 - b + b \\cdot rac{|D|}{\text{avgdl}}ight)} \\]\n\n<p>where the explicit components govern critical constraints:</p>\n<ul>\n<li>\\( f(q_i, D) \\) = Term frequency (raw count of term \\( q_i \\) in document \\( D \\)).</li>\n<li>\\( |D| \\) and \\( \text{avgdl} \\) = Document length and average corpus document length.</li>\n<li><b>Term Saturation \\(k_1\\) (\\(pprox\\) 1.2):</b> Ensures the score increases asymptotically sublinearly. The 15th matching occurrence of the word \"apple\" yields vanishingly less marginal value than the 1st, unlike naive TF-IDF.</li>\n<li><b>Length Normalization \\(b\\) (\\(pprox\\) 0.75):</b> Prevents artificially inflating scores simply because a document happens to be immensely longer than the corpus average.</li>\n<li><b>Inverse Document Frequency (IDF):</b> Penalizes commonly flooded stop-words (like \"the\") while radically rewarding rare tokens: \\( \text{IDF}(q_i) = \\log rac{N - n(q_i) + 0.5}{n(q_i) + 0.5} \\)</li>\n</ul>\n\n<p>In modern RAG pipelines, <b>hybrid search</b> implementations fuse BM25 sparse results with Neural Dense Retrieval (calculating reciprocal rank fusion). BM25 flawlessly captures exact keyword and acronym overlaps that ambiguous semantic embeddings occasionally gloss over.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "sparse-retrieval",
+    "title": "Sparse Retrieval",
+    "summary": "Information retrieval models that formally represent queries and documents as immensely sparse, high-dimensional vectors spanning the exact size of the vocabulary space, where nearly all entries evaluate to zero. Algorithmic matching hea…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "dense-retrieval",
+      "bm25"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Classic information retrieval paradigm; learned sparse methods: SPLADE (Formal et al., 2021)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Information retrieval models that formally represent queries and documents as immensely sparse, high-dimensional vectors spanning the exact size of the vocabulary space, where nearly all entries evaluate to zero. Algorithmic matching heavily relies on precise lexical overlap occurring exclusively on non-zero dimensions.</p><p>In sparse lexical retrieval, every possible mathematical dimension literally corresponds one-to-one with a vocabulary term text index. The vector value reflects that term's extracted lexical consequence (e.g., BM25 metric or TF-IDF weights). The retrieval overlap dot-product evaluates as:</p>\n\\[ s(q, d) = \\sum_{i \\in q \\cap d} w_{q, i} \\cdot w_{d, i} \\]\n<p>where \\( w_{q, i} \\) and \\( w_{d, i} \\) are the strictly matched non-zero weights for token \\(i\\).</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Constraint</th><th style=\"padding:6px; text-align:left;\">Sparse lexical retrieval</th><th style=\"padding:6px; text-align:left;\">Dense neural retrieval</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Algebraic Size</td><td style=\"padding:6px;\">Vocabulary-sized (e.g., \\(250,000\\)-D), 99% Zeros</td><td style=\"padding:6px;\">Compressed dense geometry (e.g., \\(768\\)-D)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Matching Mechanics</td><td style=\"padding:6px;\">Exact character/token overlap</td><td style=\"padding:6px;\">Cosine similarity in latent space</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Vocabulary Mismatch</td><td style=\"padding:6px;\">Fails entirely on synonym abstractions</td><td style=\"padding:6px;\">Captured dynamically by training</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Training Cost</td><td style=\"padding:6px;\">Zero (deterministic formulas)</td><td style=\"padding:6px;\">Expensive contrastive deep learning</td></tr>\n<tr><td style=\"padding:6px;\">Storage / Compute</td><td style=\"padding:6px;\">Lightning fast Inverted Index Hashmaps</td><td style=\"padding:6px;\">Complex HNSW ANN graph navigations</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Learned sparse retrieval</b> models (like SPLADE or DeepImpact) bridge the gap. They employ transformer neural networks to predict term importance scores explicitly mapping back into a sparse vocabulary constraint framework. These uniquely expand the query intelligently (activating related non-present terms) resolving the synonym penalty while operating on wicked-fast traditional indexing hashes.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "dense-retrieval",
+    "title": "Dense Retrieval",
+    "summary": "An advanced neural information retrieval paradigm that functionally encodes chaotic queries and extensive documents as low-dimensional, continuously dense vectors, retrieving results via rapid nearest neighbor geometry search inside an e…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "grounding",
+      "sparse-retrieval"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Vladimir Karpukhin et al. · Dense Passage Retrieval for Open-Domain Question Answering",
+        "url": "https://arxiv.org/abs/2004.04906"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An advanced neural information retrieval paradigm that functionally encodes chaotic queries and extensive documents as low-dimensional, continuously dense vectors, retrieving results via rapid nearest neighbor geometry search inside an embedding space. Distinctively, dense retrieval effortlessly captures semantic similarity, bridging answers even entirely lacking lexical keyword overlap.</p><p>The standard architectural backbone is the <b>bi-encoder</b> (or dual-encoder framework):</p>\n<ul>\n<li><b>Query Transformer Encoder:</b> \\( \\mathbf{q} = E_q(\text{query}) \\in \\mathbb{R}^d \\)</li>\n<li><b>Document Transformer Encoder:</b> \\( \\mathbf{d} = E_d(\text{document}) \\in \\mathbb{R}^d \\)</li>\n<li><b>Relevance Scoring Kernel:</b> Typically Cosine Similarity \\( \\cos(\\mathbf{q}, \\mathbf{d}) \\) or exact Dot Product \\( s = \\mathbf{q}^\top \\mathbf{d} \\)</li>\n</ul>\n\n<p>Critically, the entire corpus of documents is safely pre-computed offline and mathematically frozen into a vector database (like FAISS / Pinecone) via ANN graphs. At runtime, the live LLM only executes a single rapid forward pass to embed \\( \\mathbf{q} \\), ensuring sub-millisecond retrieval latency over millions of nodes.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Training Mechanics:</b> The optimization mathematically hinges upon <b>Contrastive Representation Learning</b> applied over (query \\( \\mathbf{q} \\), relevant doc \\( \\mathbf{d}^+ \\), irrelevant doc \\( \\mathbf{d}^- \\)) tuples. The InfoNCE loss maximizes similarity specifically on the positive pair whilst aggressively penalizing in-batch negatives:</p>\n\\[ \\mathcal{L} = -\\log rac{\\exp(\\mathbf{q}^\top \\mathbf{d}^+ / \tau)}{\\exp(\\mathbf{q}^\top \\mathbf{d}^+ / \tau) + \\sum_{j} \\exp(\\mathbf{q}^\top \\mathbf{d}_j^- / \tau)} \\]\n\n<p>Engineering robust dense retrievers is notoriously sensitive to <b>Hard Negative Mining</b>: injecting difficult negative documents into the batch that visually overlap the query but lack semantic relevance to force the gradient to learn nuance.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Architecture Strategy</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">DPR (Dense Passage Retrieval)</td><td style=\"padding:6px;\">Two segregated BERT encoders (one mapped to queries, one to passages)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">E5, BGE, OpenAI `text-embedding-3`</td><td style=\"padding:6px;\">Unified Single Encoder utilizing explicit task-instruction prefixes</td></tr>\n<tr><td style=\"padding:6px;\">ColBERT</td><td style=\"padding:6px;\">Late token-level interaction matching (circumvents pooling bottleneck)</td></tr>\n</tbody></table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "grounding",
+    "title": "Grounding",
+    "summary": "The imperative property ensuring a generative model's synthesized outputs are anchored algorithmically to verifiable external sources (retrieved documents, valid databases, real-world sensory observations) rather than generated dangerous…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "factuality",
+      "dense-retrieval"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Concept extrapolated from cognitive science (Harnad, 1990, \"symbol grounding problem\"); adapted urgently into LLMs for RAG validation (2022–present)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The imperative property ensuring a generative model's synthesized outputs are anchored algorithmically to verifiable external sources (retrieved documents, valid databases, real-world sensory observations) rather than generated dangerously independent from internalized parameters. Grounded architectures structurally mitigate hallucination phenomena and mathematically bridge truthfulness.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Explicit computational approaches to grounding",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Engineering Method</th><th style=\"padding:6px; text-align:left;\">Mechanism of Grounding</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">RAG (Retrieval-Augmented)</td><td style=\"padding:6px;\">Inject deterministic factual vector search documents sequentially into the prompt layer</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Explicit Attribution Checkers</td><td style=\"padding:6px;\">Force the model to formally emit inline `[citation x]` references mapping identically to context tokens</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Tool Use / Function Calling</td><td style=\"padding:6px;\">Subcontract verifiable determinism to API calculators, SQL graphs, or live Python regex</td></tr>\n<tr><td style=\"padding:6px;\">Multi-Modal Spatial Grounding</td><td style=\"padding:6px;\">Mandate bounding-box coordinates for text linking explicitly in VLMs (Visual Language Models)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Grounding vs. Factuality divergence:</b> A beautifully grounded response expertly cites passages and adheres ruthlessly to its supplied prompt — but remains factually wrong if the source context was originally a delusion. Grounding represents structural validation of the logical pipeline (faithfulness), whereas Factuality inherently demands an assertion matches objective global truth.</p>\n\n<p>Evaluation of Generative Grounding frequently devolves into measuring geometric <b>Attribution</b>: evaluating quantitatively if a specific logical subset proposition \\(p_i\\) naturally decomposes identically to source paragraph \\(\\mathcal{S}\\). </p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "factuality",
+    "title": "Factuality",
+    "summary": "The analytical metric evaluating the degree to which a generative model's explicit outputs formally align with objective real-world truth. Crucially, factuality is algorithmically distinct from grounding (citing data architectures) and f…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "faithfulness",
+      "grounding"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "TruthfulQA: Lin et al. (2022); FActScore: Min et al. (2023) · FActScore: Fine-grained Atomic Evaluation of Factual Precision",
+        "url": "https://arxiv.org/abs/2305.14251"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The analytical metric evaluating the degree to which a generative model's explicit outputs formally align with objective real-world truth. Crucially, factuality is algorithmically distinct from grounding (citing data architectures) and faithfulness (adhering strictly to provided constraints): a response may be impeccably grounded to an external prompt but still fail factuality if the prompt data was corrupt.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Formal Taxonomy of Accuracy Terminology",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Constraint</th><th style=\"padding:6px; text-align:left;\">Operational Definition</th><th style=\"padding:6px; text-align:left;\">Canonical Failure State</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Factuality</td><td style=\"padding:6px;\">Emitted claim strictly observes real-world objective truth</td><td style=\"padding:6px;\">\"Paris is currently the formal capital of Germany.\"</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Faithfulness</td><td style=\"padding:6px;\">Output constraints perfectly subset the injected context data</td><td style=\"padding:6px;\">Fabricating external paper conclusions not present in the RAG prompt span</td></tr>\n<tr><td style=\"padding:6px;\">Grounding</td><td style=\"padding:6px;\">Generation maps specifically to trackable architecture or APIs</td><td style=\"padding:6px;\">Synthesizing a highly plausible but fundamentally untraceable percentage statistic</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Why next-token LLMs inherently hallucinate",
+        "body": "<ul>\n<li>Pre-training mathematically maximizes pure cross-entropy likelihood optimization (\\(P(x_{n} | x_{1:n-1})\\)), not objective truth. They are stochastic simulators of plausible likelihood, generating text statistically designed merely to <i>resemble</i> truth.</li>\n<li><b>The Information Funnel:</b> Information past static cutoff weights is lost entirely.</li>\n<li><b>Long-Tail Density:</b> Rare facts constitute minimal statistical weight during pre-training stochastic descent mapping, inevitably yielding chaotic inference.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Contemporary Evaluation Frameworks:</b> Benchmarks like TruthfulQA test zero-shot capabilities to avoid deeply embedded human misconceptions. FActScore (Min et al., 2023) analytically parses long-form streams into discrete atomic claim propositions and audits them computationally against Wiki API parameters.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "faithfulness",
+    "title": "Faithfulness",
+    "summary": "The crucial constraint that a model's generated sequence remains rigorously consistent with, and mathematically supported solely by, the provided input parameter context. A faithful RAG abstraction only executes claims provably contained…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "latent-space",
+      "factuality"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Formal knowledge synthesized around summarisation boundaries; Maynez et al. (2020), \"On Faithfulness and Factuality in Abstractive Summarization.\""
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The crucial constraint that a model's generated sequence remains rigorously consistent with, and mathematically supported solely by, the provided input parameter context. A faithful RAG abstraction only executes claims provably contained within the retrieved vector passages; hallucinating external (even if objectively true) information violates faithfulness.</p><p>Faithfulness metrics strictly evaluate and penalize <b>conditional generation tasks</b>, demanding algorithms operate formally as constrained transfer functions rather than unbridled creative engines:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Constraint Task</th><th style=\"padding:6px; text-align:left;\">Formal Faithfulness Condition</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Abstractive Summarization</td><td style=\"padding:6px;\">Target sentence representations must entirely subset the input domain graph</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">RAG</td><td style=\"padding:6px;\">Inferred claims must explicitly route back to the retrieved vector chunks</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Data-to-Text</td><td style=\"padding:6px;\">Output sequence must mirror JSON/tabular inputs with zero syntactic hallucinations</td></tr>\n<tr><td style=\"padding:6px;\">Machine Translation</td><td style=\"padding:6px;\">Cross-lingual topological preservation of source semantics</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Intrinsic hallucination</b> serves as the direct mathematical antithesis — generating sequences explicitly contradicting or fabricating additions entirely detached from the \\( \\mathbf{x} \\) prompt context.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Programmatic Measurement",
+        "body": "<ul>\n<li><b>NLI Architectures (Natural Language Inference):</b> Evaluate using specific RoBERTa/DeBERTa models to classify logically whether Output \\( \\mathcal{O} \\) is statistically <i>Entailed</i> by Source \\( \\mathcal{S} \\).</li>\n<li><b>QAGS (Question Generation & Answering):</b> Force model to dynamically generate queries from its output \\( \\mathcal{O} \\), answer them blindly utilizing \\(\\mathcal{S}\\), and measure divergence.</li>\n<li><b>LLM-as-a-Judge:</b> Employ stronger parameter variants (GPT-4) with systematic prompts instructing zero-tolerance contradiction checking.</li>\n</ul>"
+      }
+    ],
+    "cards": []
   }
 ]
