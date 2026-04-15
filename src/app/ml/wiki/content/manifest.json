@@ -5189,6 +5189,228 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "misalignment",
+      "title": "Misalignment",
+      "summary": "A failure mode where a model's behaviour diverges from the intentions or values of its designers and users. A misaligned model may pursue unintended goals, produce harmful outputs, or optimise for proxy objectives that correlate poorly w…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "bias-fairness",
+        "load-balancing-moe"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bias-fairness",
+      "title": "Bias (Fairness)",
+      "summary": "Systematic and unfair favouring or disfavouring of particular groups in model predictions, arising from biases in training data, model design, or evaluation. In ML fairness, \"bias\" refers not to the statistical bias-variance trade-off bu…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "explainability",
+        "misalignment"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "explainability",
+      "title": "Explainability",
+      "summary": "The degree to which a model's predictions can be understood by humans. Explainability methods aim to make black-box models (especially deep neural networks) more transparent by identifying which inputs, features, or internal computations…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "retrieval-augmented-generation-rag",
+        "bias-fairness"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "retrieval-augmented-generation-rag",
+      "title": "Retrieval-Augmented Generation (RAG)",
+      "summary": "A framework that augments a language model's generation with relevant documents retrieved from an external knowledge base. The model conditions its response on both the user query and the retrieved passages, reducing hallucination and en…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "semantic-search",
+        "explainability"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "semantic-search",
+      "title": "Semantic Search",
+      "summary": "A search method that matches queries and documents based on meaning (semantic similarity) rather than exact keyword overlap. Documents and queries are embedded into a shared vector space, and retrieval is performed via nearest-neighbor s…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "nlp",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "sparse-mixture-of-experts-moe-layer",
+        "retrieval-augmented-generation-rag"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sparse-mixture-of-experts-moe-layer",
+      "title": "Sparse Mixture-of-Experts (MoE) Layer",
+      "summary": "A neural network layer that contains multiple parallel \"expert\" sub-networks but activates only a small subset for each input token, selected by a learned router. This allows scaling model capacity (total parameters) without proportional…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "router-network",
+        "semantic-search"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "router-network",
+      "title": "Router Network",
+      "summary": "A small learned network within a Mixture-of-Experts layer that decides which expert(s) to activate for each input token. The router maps each token's hidden state to a probability distribution over experts, then selects the top-\\( k \\).",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "expert-network",
+        "sparse-mixture-of-experts-moe-layer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "expert-network",
+      "title": "Expert Network",
+      "summary": "One of the parallel sub-networks within a Mixture-of-Experts layer, each of which processes a subset of input tokens. In Transformer MoE models, each expert is typically a standard feed-forward network (FFN) with the same architecture bu…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "top-k-routing",
+        "router-network"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "top-k-routing",
+      "title": "Top-k Routing",
+      "summary": "The routing strategy in MoE models where each input token is sent to the \\( k \\) experts with the highest router scores. The outputs of the selected experts are combined using the router probabilities as weights. Most modern MoE models u…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "load-balancing-moe",
+        "expert-network"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "load-balancing-moe",
+      "title": "Load Balancing (MoE)",
+      "summary": "The problem — and associated techniques — of ensuring that tokens are distributed roughly evenly across experts in a Mixture-of-Experts layer. Without explicit balancing, routers tend to collapse to using only a few experts, wasting mode…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "misalignment",
+        "top-k-routing"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

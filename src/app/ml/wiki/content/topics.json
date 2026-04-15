@@ -11222,5 +11222,463 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "misalignment",
+    "title": "Misalignment",
+    "summary": "A failure mode where a model's behaviour diverges from the intentions or values of its designers and users. A misaligned model may pursue unintended goals, produce harmful outputs, or optimise for proxy objectives that correlate poorly w…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "bias-fairness",
+      "load-balancing-moe"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Central concept in AI safety research · Russell, Human Compatible (2019) · Ngo et al. (2022) · Hubinger et al. (2019)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A failure mode where a model's behaviour diverges from the intentions or values of its designers and users. A misaligned model may pursue unintended goals, produce harmful outputs, or optimise for proxy objectives that correlate poorly with what humans actually want.</p><p>Misalignment is the central problem of AI safety. As models become more capable, the gap between what we <i>specify</i> (the objective function) and what we <i>intend</i> (the desired behaviour) becomes increasingly consequential. The problem was formalised by Stuart Russell as the <b>value alignment problem</b>: ensuring that an AI system's objectives match human values even in novel situations.</p>\n\n<p>Misalignment can manifest at multiple levels:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Level</th><th style=\"padding:6px; text-align:left;\">Description</th><th style=\"padding:6px; text-align:left;\">Example</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Objective misalignment</td><td style=\"padding:6px;\">Optimising the wrong objective</td><td style=\"padding:6px;\">A chatbot that maximises engagement by being inflammatory</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Behavioural misalignment</td><td style=\"padding:6px;\">Correct objective but undesired side effects</td><td style=\"padding:6px;\">A coding assistant that writes working but insecure code</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Goal misgeneralisation</td><td style=\"padding:6px;\">Learns a proxy that works in training but fails at deployment</td><td style=\"padding:6px;\">A model that learns to be helpful only when being evaluated</td></tr>\n<tr><td style=\"padding:6px;\">Deceptive alignment</td><td style=\"padding:6px;\">Model behaves well during oversight but pursues different goals when unmonitored</td><td style=\"padding:6px;\">Hypothesised in Hubinger et al. (2019) \"Risks from Learned Optimization\"</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Sources of misalignment in LLMs",
+        "body": "<ul>\n<li><b>Specification problem:</b> Difficulty of fully specifying human values in a loss function. The RLHF objective \\( \\max_\\pi \\mathbb{E}_{x \\sim \\mathcal{D}, y \\sim \\pi(\\cdot|x)}[r_\\phi(x, y)] - \\beta\\, D_{\\text{KL}}(\\pi \\| \\pi_{\\text{ref}}) \\) optimises a <i>learned</i> reward model \\( r_\\phi \\), which is itself an imperfect proxy for human preferences.</li>\n<li><b>Reward hacking / Goodhart's Law:</b> \"When a measure becomes a target, it ceases to be a good measure.\" Models find shortcuts to maximise reward without achieving intended behaviour — e.g., producing verbose responses that score higher on reward models without being more helpful.</li>\n<li><b>Distribution shift:</b> Training-time alignment does not transfer to all deployment contexts. A model aligned via RLHF on English conversational data may behave differently on code, other languages, or adversarial prompts.</li>\n<li><b>Sycophancy:</b> Models learn to agree with users rather than be truthful, because human raters reward agreeable responses during RLHF training.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Alignment techniques and their limitations",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Approach</th><th style=\"padding:6px; text-align:left;\">Limitation</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">RLHF</td><td style=\"padding:6px;\">Train reward model from human preferences, then optimise policy</td><td style=\"padding:6px;\">Reward model is a proxy; can be hacked</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Constitutional AI (CAI)</td><td style=\"padding:6px;\">Model self-critiques against a set of principles</td><td style=\"padding:6px;\">Quality depends on the constitution's completeness</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">DPO</td><td style=\"padding:6px;\">Direct preference optimisation without separate reward model</td><td style=\"padding:6px;\">Still relies on quality of preference data</td></tr>\n<tr><td style=\"padding:6px;\">Scalable oversight</td><td style=\"padding:6px;\">Use AI to help humans evaluate AI (recursive reward modelling, debate)</td><td style=\"padding:6px;\">Open research problem</td></tr>\n</tbody></table>\n\n<p>The fundamental tension is that alignment difficulty scales with capability. More capable models can find more sophisticated ways to satisfy proxy objectives while violating intended goals — a phenomenon sometimes called the <b>sharp left turn</b> concern in safety research.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "bias-fairness",
+    "title": "Bias (Fairness)",
+    "summary": "Systematic and unfair favouring or disfavouring of particular groups in model predictions, arising from biases in training data, model design, or evaluation. In ML fairness, \"bias\" refers not to the statistical bias-variance trade-off bu…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "explainability",
+      "misalignment"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2016 · Bolukbasi et al. · Man is to Computer Programmer as Woman is to Homemaker? · See also Barocas & Selbst (2016)",
+        "url": "https://arxiv.org/abs/1607.06520"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Systematic and unfair favouring or disfavouring of particular groups in model predictions, arising from biases in training data, model design, or evaluation. In ML fairness, \"bias\" refers not to the statistical bias-variance trade-off but to social biases that lead to discriminatory outcomes.</p><p>Fairness bias in machine learning became a major research area after a series of high-profile demonstrations that models — including word embeddings, image classifiers, and hiring tools — reproduce and amplify societal biases present in training data.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Sources of bias",
+        "body": "<ul>\n<li><b>Training data:</b> Historical biases in text (e.g., associating certain professions with specific genders). Bolukbasi et al. (2016) showed word2vec encodes analogies like \"man : computer programmer :: woman : homemaker.\"</li>\n<li><b>Representation:</b> Underrepresentation of minority groups in training corpora leads to worse performance for those groups (e.g., higher error rates in facial recognition for darker-skinned individuals, as shown by Buolamwini & Gebru, 2018).</li>\n<li><b>Annotation:</b> Human labellers' own biases reflected in ground-truth labels.</li>\n<li><b>Amplification:</b> Models can amplify small statistical patterns in the data into strong biases. If 60% of \"cooking\" images show women, a trained model may predict 80% women for cooking queries.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Formal fairness criteria",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Metric</th><th style=\"padding:6px; text-align:left;\">Formal Definition</th><th style=\"padding:6px; text-align:left;\">Intuition</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Demographic parity</td><td style=\"padding:6px;\">\\( P(\\hat{Y}=1 \\mid A=a) = P(\\hat{Y}=1 \\mid A=b) \\)</td><td style=\"padding:6px;\">Equal positive prediction rates across groups</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Equalized odds</td><td style=\"padding:6px;\">\\( P(\\hat{Y}=1 \\mid Y=y, A=a) = P(\\hat{Y}=1 \\mid Y=y, A=b) \\; \\forall y \\)</td><td style=\"padding:6px;\">Equal TPR and FPR across groups</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Calibration</td><td style=\"padding:6px;\">\\( P(Y=1 \\mid \\hat{Y}=s, A=a) = P(Y=1 \\mid \\hat{Y}=s, A=b) \\; \\forall s \\)</td><td style=\"padding:6px;\">Same score means same probability regardless of group</td></tr>\n<tr><td style=\"padding:6px;\">Counterfactual fairness</td><td style=\"padding:6px;\">\\( \\hat{Y}_{A \\leftarrow a}(U) = \\hat{Y}_{A \\leftarrow b}(U) \\)</td><td style=\"padding:6px;\">Prediction unchanged if sensitive attribute were counterfactually different</td></tr>\n</table>\n\n<p>where \\( A \\) is the sensitive attribute (e.g., race, gender), \\( Y \\) is the true label, and \\( \\hat{Y} \\) is the prediction.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Impossibility result:</b> Chouldechova (2017) and Kleinberg et al. (2016) independently proved that except in degenerate cases, it is <i>mathematically impossible</i> to simultaneously satisfy demographic parity, equalized odds, and calibration. This means practitioners must make explicit value choices about which notion of fairness to prioritise — there is no universally \"fair\" classifier.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Debiasing techniques",
+        "body": "<ul>\n<li><b>Pre-processing:</b> Rebalance or re-weight training data; remove sensitive attributes (though correlated features often leak information).</li>\n<li><b>In-processing:</b> Add fairness constraints to the loss function, e.g., adversarial debiasing where a discriminator tries to predict the sensitive attribute from model representations.</li>\n<li><b>Post-processing:</b> Adjust decision thresholds per group to equalise error rates (Hardt et al., 2016).</li>\n</ul>\n\n<p>For LLMs specifically, bias manifests in generated text (stereotypical associations, differential performance across languages/dialects) and is addressed through RLHF, Constitutional AI, and careful data curation — though elimination of all biases remains an open problem.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "explainability",
+    "title": "Explainability",
+    "summary": "The degree to which a model's predictions can be understood by humans. Explainability methods aim to make black-box models (especially deep neural networks) more transparent by identifying which inputs, features, or internal computations…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "retrieval-augmented-generation-rag",
+      "bias-fairness"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "LIME: Ribeiro et al. (2016) · SHAP: Lundberg & Lee (2017) · Integrated Gradients: Sundararajan et al. (2017) · Survey: Molnar, Interpretable Machine Learning (2019)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The degree to which a model's predictions can be understood by humans. Explainability methods aim to make black-box models (especially deep neural networks) more transparent by identifying which inputs, features, or internal computations drive a particular output.</p><p>As deep learning models grew in complexity and deployment stakes, explainability became both a research priority and a regulatory requirement (e.g., the EU's GDPR \"right to explanation\"). The field splits into methods that are interpretable by design versus post-hoc methods that explain opaque models after training.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Categories of explainability methods",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Category</th><th style=\"padding:6px; text-align:left;\">Approach</th><th style=\"padding:6px; text-align:left;\">Examples</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Intrinsically interpretable</td><td style=\"padding:6px;\">Models transparent by design</td><td style=\"padding:6px;\">Decision trees, linear models, GAMs</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Post-hoc (local)</td><td style=\"padding:6px;\">Explain individual predictions</td><td style=\"padding:6px;\">LIME, SHAP, saliency maps, integrated gradients</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Post-hoc (global)</td><td style=\"padding:6px;\">Explain overall model behaviour</td><td style=\"padding:6px;\">Feature importance, partial dependence plots, concept activation vectors</td></tr>\n<tr><td style=\"padding:6px;\">Mechanistic</td><td style=\"padding:6px;\">Reverse-engineer internal computations</td><td style=\"padding:6px;\">Probing, activation patching, logit lens, sparse autoencoders</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>LIME</b> (Local Interpretable Model-agnostic Explanations) explains a prediction by fitting a simple interpretable model \\( g \\) in the neighbourhood of an input \\( x \\):</p>\n\n\\[ \\xi(x) = \\arg\\min_{g \\in G} \\; \\mathcal{L}(f, g, \\pi_x) + \\Omega(g) \\]\n\n<p>where \\( f \\) is the black-box model, \\( \\pi_x \\) is a proximity kernel weighting perturbed samples near \\( x \\), and \\( \\Omega(g) \\) penalises complexity of the explanation (e.g., number of non-zero features in a linear model).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>SHAP</b> (SHapley Additive exPlanations) assigns each feature a contribution based on Shapley values from cooperative game theory:</p>\n\n\\[ \\phi_i = \\sum_{S \\subseteq N \\setminus \\{i\\}} \\frac{|S|!\\,(|N|-|S|-1)!}{|N|!} \\left[ f(S \\cup \\{i\\}) - f(S) \\right] \\]\n\n<p>where \\( \\phi_i \\) is the contribution of feature \\( i \\), \\( N \\) is the set of all features, and \\( S \\) is a subset excluding \\( i \\). SHAP values are the unique additive feature attributions satisfying local accuracy, missingness, and consistency axioms.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Gradient-based methods</b> for neural networks compute the gradient of the output with respect to the input \\( \\nabla_x f(x) \\), highlighting which input dimensions most affect the prediction. Integrated Gradients (Sundararajan et al., 2017) accumulates gradients along a path from a baseline \\( x' \\) to the input:</p>\n\n\\[ \\text{IG}_i(x) = (x_i - x'_i) \\int_{\\alpha=0}^{1} \\frac{\\partial f(x' + \\alpha(x - x'))}{\\partial x_i} \\, d\\alpha \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Explainability vs. interpretability:</b> Some authors distinguish these: <i>interpretability</i> is the degree to which a human can understand the model's mechanism, while <i>explainability</i> refers to producing post-hoc explanations of an opaque model. An inherently interpretable model (e.g., a shallow decision tree) needs no separate explanation.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Mechanistic interpretability for Transformers:</b> This frontier approach aims to reverse-engineer the internal computations of neural networks. Techniques include probing classifiers (testing what information is encoded in hidden states), the logit lens (projecting intermediate representations to vocabulary space), activation patching (causally testing which components matter for a prediction), and sparse autoencoders for decomposing activations into interpretable features (Bricken et al., 2023). This is particularly relevant for understanding how Transformers implement algorithms internally.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "retrieval-augmented-generation-rag",
+    "title": "Retrieval-Augmented Generation (RAG)",
+    "summary": "A framework that augments a language model's generation with relevant documents retrieved from an external knowledge base. The model conditions its response on both the user query and the retrieved passages, reducing hallucination and en…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "semantic-search",
+      "explainability"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Patrick Lewis et al. · Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "url": "https://arxiv.org/abs/2005.11401"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A framework that augments a language model's generation with relevant documents retrieved from an external knowledge base. The model conditions its response on both the user query and the retrieved passages, reducing hallucination and enabling access to up-to-date or domain-specific information.</p><p>RAG was introduced by Lewis et al. (2020) at Facebook AI to address a fundamental limitation of parametric language models: their knowledge is frozen at training time and can be factually incorrect or outdated. By coupling a pre-trained retriever with a pre-trained generator, RAG creates a semi-parametric model that can access and cite external evidence.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The RAG pipeline has three stages",
+        "body": "<ol>\n<li><b>Indexing:</b> Documents are chunked, embedded into dense vectors using an encoder \\( f_\\theta \\), and stored in a vector database (FAISS, Pinecone, Weaviate, Chroma, etc.).</li>\n<li><b>Retrieval:</b> Given a query \\( q \\), find the top-\\( k \\) most relevant document chunks via similarity search: \\( \\text{sim}(\\mathbf{q}, \\mathbf{d}) = \\frac{f_\\theta(q) \\cdot f_\\theta(d)}{\\|f_\\theta(q)\\| \\|f_\\theta(d)\\|} \\)</li>\n<li><b>Generation:</b> The retrieved chunks are prepended to the prompt as context; the LLM generates an answer grounded in them.</li>\n</ol>\n\n<p>The original RAG paper defines two variants:</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>RAG-Sequence</b> — uses the same retrieved document for the entire generated sequence:</p>\n\\[ P_{\\text{RAG-Seq}}(y \\mid q) \\approx \\sum_{d \\in \\text{top-}k} P_\\eta(d \\mid q) \\prod_{i=1}^{N} P_\\theta(y_i \\mid q, d, y_{1:i-1}) \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>RAG-Token</b> — can use different documents for each generated token:</p>\n\\[ P_{\\text{RAG-Tok}}(y \\mid q) \\approx \\prod_{i=1}^{N} \\sum_{d \\in \\text{top-}k} P_\\eta(d \\mid q) \\, P_\\theta(y_i \\mid q, d, y_{1:i-1}) \\]\n\n<p>where \\( P_\\eta(d \\mid q) \\) is the retriever's relevance score (using a bi-encoder like DPR) and \\( P_\\theta \\) is the generator (originally BART).</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Component</th><th style=\"padding:6px; text-align:left;\">Original RAG</th><th style=\"padding:6px; text-align:left;\">Modern practice</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Retriever</td><td style=\"padding:6px;\">DPR (bi-encoder)</td><td style=\"padding:6px;\">Dense (E5, BGE), sparse (BM25), or hybrid</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Generator</td><td style=\"padding:6px;\">BART</td><td style=\"padding:6px;\">Any LLM (GPT-4, Claude, LLaMA, etc.)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Knowledge base</td><td style=\"padding:6px;\">Wikipedia</td><td style=\"padding:6px;\">Any document corpus</td></tr>\n<tr><td style=\"padding:6px;\">Re-ranker</td><td style=\"padding:6px;\">None</td><td style=\"padding:6px;\">Cross-encoder re-ranking of retrieved chunks</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Advantages over fine-tuning:</b> RAG keeps knowledge external and updatable — no retraining needed when information changes. It also provides attribution (the retrieved sources can be cited), which is valuable for trust and verification.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Challenges",
+        "body": "<ul>\n<li><b>Retrieval quality:</b> Irrelevant or contradictory documents degrade generation (\"garbage in, garbage out\").</li>\n<li><b>Chunking strategy:</b> Chunk size, overlap, and boundaries significantly affect what gets retrieved.</li>\n<li><b>Lost in the middle:</b> LLMs attend more to the beginning and end of the context window, sometimes ignoring relevant information placed in the middle of many retrieved passages (Liu et al., 2023).</li>\n<li><b>Faithfulness:</b> Models may still hallucinate or ignore retrieved evidence, especially when it conflicts with parametric knowledge.</li>\n</ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "semantic-search",
+    "title": "Semantic Search",
+    "summary": "A search method that matches queries and documents based on meaning (semantic similarity) rather than exact keyword overlap. Documents and queries are embedded into a shared vector space, and retrieval is performed via nearest-neighbor s…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "nlp",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "sparse-mixture-of-experts-moe-layer",
+      "retrieval-augmented-generation-rag"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Enabled by dense retrieval models · DPR: Karpukhin et al. (2020) · Sentence-BERT: Reimers & Gurevych (2019)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A search method that matches queries and documents based on meaning (semantic similarity) rather than exact keyword overlap. Documents and queries are embedded into a shared vector space, and retrieval is performed via nearest-neighbor search on these embeddings.</p><p>Traditional keyword-based search (e.g., TF-IDF, BM25) relies on lexical overlap: it finds documents containing the same terms as the query. This fails on synonyms (\"car\" vs. \"automobile\"), paraphrases, and cross-lingual queries. Semantic search, enabled by learned dense embeddings, overcomes this by operating in a continuous vector space where proximity corresponds to meaning.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The semantic search pipeline",
+        "body": "<ol>\n<li><b>Encode</b> documents and queries into dense vectors using a shared or dual encoder: \\( \\mathbf{d} = f_\\theta(\\text{doc}), \\; \\mathbf{q} = f_\\theta(\\text{query}) \\)</li>\n<li><b>Index</b> document vectors in a vector database (FAISS, ScaNN, HNSW) for efficient approximate nearest-neighbor retrieval</li>\n<li><b>Retrieve</b> the \\( k \\) nearest documents by cosine similarity:</li>\n</ol>\n\n\\[ \\text{sim}(\\mathbf{q}, \\mathbf{d}) = \\frac{\\mathbf{q} \\cdot \\mathbf{d}}{\\|\\mathbf{q}\\| \\|\\mathbf{d}\\|} \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Training embedding models:</b> Dense retrieval models are trained using <b>contrastive learning</b>. Given a query \\( q \\), a positive document \\( d^+ \\), and negative documents \\( \\{d^-_j\\} \\), the model minimises:</p>\n\n\\[ \\mathcal{L} = -\\log \\frac{e^{\\text{sim}(\\mathbf{q}, \\mathbf{d}^+)/\\tau}}{e^{\\text{sim}(\\mathbf{q}, \\mathbf{d}^+)/\\tau} + \\sum_j e^{\\text{sim}(\\mathbf{q}, \\mathbf{d}^-_j)/\\tau}} \\]\n\n<p>where \\( \\tau \\) is a temperature parameter. Hard negatives (documents that are lexically similar but semantically different) are crucial for training effective retrievers.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Property</th><th style=\"padding:6px; text-align:left;\">Keyword search (BM25)</th><th style=\"padding:6px; text-align:left;\">Semantic search</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Matching</td><td style=\"padding:6px;\">Exact terms (lexical)</td><td style=\"padding:6px;\">Meaning / concepts (dense vectors)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Handles synonyms?</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">Yes</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Handles typos?</td><td style=\"padding:6px;\">Poorly</td><td style=\"padding:6px;\">Reasonably well</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Requires training?</td><td style=\"padding:6px;\">No (unsupervised)</td><td style=\"padding:6px;\">Yes (contrastive learning)</td></tr>\n<tr><td style=\"padding:6px;\">Latency</td><td style=\"padding:6px;\">Fast (inverted index)</td><td style=\"padding:6px;\">ANN adds overhead; sub-millisecond with HNSW</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Embedding models:</b> Sentence-BERT (2019) adapted BERT for efficient sentence-level embeddings via Siamese networks. Later models — E5, BGE, GTE, and OpenAI's text-embedding series — improved quality through larger training corpora and better negative mining strategies.</p>\n\n<p>In practice, <b>hybrid search</b> (combining BM25 scores with semantic similarity via reciprocal rank fusion or learned score combination) often outperforms either method alone, as keyword matching catches exact matches that embeddings may miss. Semantic search is a core component of RAG pipelines, providing the retrieval stage that grounds LLM generation in external knowledge.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "sparse-mixture-of-experts-moe-layer",
+    "title": "Sparse Mixture-of-Experts (MoE) Layer",
+    "summary": "A neural network layer that contains multiple parallel \"expert\" sub-networks but activates only a small subset for each input token, selected by a learned router. This allows scaling model capacity (total parameters) without proportional…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "router-network",
+      "semantic-search"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1991 · Robert Jacobs et al. (original MoE) · Scaled to Transformers: Shazeer et al. (2017), Fedus et al. (2022, Switch Transformer)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A neural network layer that contains multiple parallel \"expert\" sub-networks but activates only a small subset for each input token, selected by a learned router. This allows scaling model capacity (total parameters) without proportionally increasing compute per token.</p><p>A sparse MoE layer replaces the standard FFN in a Transformer block:</p>\n\n\\[ \\text{MoE}(\\mathbf{x}) = \\sum_{i=1}^{N} g_i(\\mathbf{x}) \\cdot E_i(\\mathbf{x}) \\]\n\n<p>where \\( E_i \\) are expert networks (typically small FFNs), \\( g_i(\\mathbf{x}) \\) are routing weights from the router network, and only the top-\\( k \\) experts have non-zero \\( g_i \\) (sparsity).</p>\n\n<p>The <b>router</b> computes:</p>\n\\[ g(\\mathbf{x}) = \\text{TopK}(\\text{softmax}(W_r \\mathbf{x}), k) \\]\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Total params</th><th style=\"padding:6px; text-align:left;\">Active params/token</th><th style=\"padding:6px; text-align:left;\">Experts</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Mixtral 8×7B</td><td style=\"padding:6px;\">47B</td><td style=\"padding:6px;\">~13B</td><td style=\"padding:6px;\">8 (top-2)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Switch Transformer</td><td style=\"padding:6px;\">1.6T</td><td style=\"padding:6px;\">~equivalent to T5-XXL</td><td style=\"padding:6px;\">2048 (top-1)</td></tr>\n<tr><td style=\"padding:6px;\">GPT-4 (rumoured)</td><td style=\"padding:6px;\">~1.8T</td><td style=\"padding:6px;\">~220B</td><td style=\"padding:6px;\">16 (top-2)</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Key challenge: load balancing.</b> Without regularisation, the router may collapse to always selecting the same few experts (\"expert collapse\"). An auxiliary <b>load-balancing loss</b> encourages uniform expert utilisation.</p>\n\n<p>MoE models offer better performance per FLOP than dense models but require more memory (all experts must be stored) and are harder to train and serve due to communication overhead in distributed settings.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "router-network",
+    "title": "Router Network",
+    "summary": "A small learned network within a Mixture-of-Experts layer that decides which expert(s) to activate for each input token. The router maps each token's hidden state to a probability distribution over experts, then selects the top-\\( k \\).",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "expert-network",
+      "sparse-mixture-of-experts-moe-layer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Noam Shazeer et al. · Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer",
+        "url": "https://arxiv.org/abs/1701.06538"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A small learned network within a Mixture-of-Experts layer that decides which expert(s) to activate for each input token. The router maps each token's hidden state to a probability distribution over experts, then selects the top-\\( k \\).</p><p>The standard router is a single linear layer followed by softmax:</p>\n\n\\[ p(\\text{expert}_i \\mid \\mathbf{x}) = \\text{softmax}(W_r \\mathbf{x} + b_r)_i \\]\n\n<p>The top-\\( k \\) experts are selected, and their outputs are weighted by the (renormalised) routing probabilities:</p>\n\n\\[ \\text{output} = \\sum_{i \\in \\text{TopK}} \\frac{p_i}{\\sum_{j \\in \\text{TopK}} p_j} \\cdot E_i(\\mathbf{x}) \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Routing challenges",
+        "body": "<ul>\n<li><b>Load imbalance:</b> The router may learn to send most tokens to a few \"popular\" experts, wasting capacity. An auxiliary loss penalises uneven expert utilisation.</li>\n<li><b>Token dropping:</b> When an expert's buffer is full, excess tokens may be dropped (Switch Transformer) or sent to a shared \"overflow\" expert.</li>\n<li><b>Training instability:</b> Router gradients can be noisy, especially with top-1 routing (hard selection). Techniques like expert-choice routing (Zhou et al., 2022) let experts choose tokens instead.</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Routing strategy</th><th style=\"padding:6px; text-align:left;\">\\( k \\)</th><th style=\"padding:6px; text-align:left;\">Used in</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Top-1</td><td style=\"padding:6px;\">1</td><td style=\"padding:6px;\">Switch Transformer</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Top-2</td><td style=\"padding:6px;\">2</td><td style=\"padding:6px;\">Mixtral, GShard</td></tr>\n<tr><td style=\"padding:6px;\">Expert-choice</td><td style=\"padding:6px;\">Fixed capacity per expert</td><td style=\"padding:6px;\">Expert Choice (Zhou et al., 2022)</td></tr>\n</table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "expert-network",
+    "title": "Expert Network",
+    "summary": "One of the parallel sub-networks within a Mixture-of-Experts layer, each of which processes a subset of input tokens. In Transformer MoE models, each expert is typically a standard feed-forward network (FFN) with the same architecture bu…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "top-k-routing",
+      "router-network"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1991 · Jacobs et al. (original MoE) · Applied to Transformers by Shazeer et al. (2017)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>One of the parallel sub-networks within a Mixture-of-Experts layer, each of which processes a subset of input tokens. In Transformer MoE models, each expert is typically a standard feed-forward network (FFN) with the same architecture but independent weights.</p><p>Each expert \\( E_i \\) has the same structure as the position-wise FFN it replaces:</p>\n\n\\[ E_i(\\mathbf{x}) = W_2^{(i)}\\,\\sigma(W_1^{(i)}\\mathbf{x} + b_1^{(i)}) + b_2^{(i)} \\]\n\n<p>The experts share the same input and output dimensions but have independent weights, giving each the capacity to specialise in different aspects of the data.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Expert specialisation:</b> Studies have shown that experts often develop interpretable specialisations, though the patterns vary:</p>\n<ul>\n<li>Some experts specialise in syntactic patterns (punctuation, function words)</li>\n<li>Others specialise in domains (code, scientific text, dialogue)</li>\n<li>Some specialise in positional patterns (beginning vs. end of sequence)</li>\n<li>Specialisation is often soft and overlapping rather than hard partitioning</li>\n</ul>\n\n<p>The total parameter count of a MoE layer is \\( N \\times \\text{params per expert} \\), where \\( N \\) is the number of experts. Since only \\( k \\) experts are active per token, the compute per token is \\( k/N \\) of what a dense model with the same total parameters would require. This decoupling of parameter count from compute is the core advantage of MoE.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "top-k-routing",
+    "title": "Top-k Routing",
+    "summary": "The routing strategy in MoE models where each input token is sent to the \\( k \\) experts with the highest router scores. The outputs of the selected experts are combined using the router probabilities as weights. Most modern MoE models u…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "load-balancing-moe",
+      "expert-network"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Shazeer et al. · Outrageously Large Neural Networks",
+        "url": "https://arxiv.org/abs/1701.06538"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The routing strategy in MoE models where each input token is sent to the \\( k \\) experts with the highest router scores. The outputs of the selected experts are combined using the router probabilities as weights. Most modern MoE models use top-1 or top-2 routing.</p><p>Given router logits \\( \\mathbf{h} = W_r \\mathbf{x} \\), top-k routing:</p>\n<ol>\n<li>Computes probabilities: \\( \\mathbf{p} = \\text{softmax}(\\mathbf{h}) \\)</li>\n<li>Selects indices: \\( S = \\text{TopK}(\\mathbf{p}, k) \\)</li>\n<li>Combines outputs: \\( \\text{output} = \\sum_{i \\in S} \\tilde{p}_i \\cdot E_i(\\mathbf{x}) \\) where \\( \\tilde{p}_i = p_i / \\sum_{j \\in S} p_j \\)</li>\n</ol>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">\\( k \\)</th><th style=\"padding:6px; text-align:left;\">Trade-off</th><th style=\"padding:6px; text-align:left;\">Example models</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">1</td><td style=\"padding:6px;\">Minimum compute; harder to train (no gradient through unchosen experts)</td><td style=\"padding:6px;\">Switch Transformer</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">2</td><td style=\"padding:6px;\">Better quality, smoother gradients; 2× expert compute</td><td style=\"padding:6px;\">Mixtral, GShard</td></tr>\n<tr><td style=\"padding:6px;\">Higher</td><td style=\"padding:6px;\">Diminishing returns; approaches dense model cost</td><td style=\"padding:6px;\">Rare in practice</td></tr>\n</table>\n\n<p>A <b>load-balancing auxiliary loss</b> is critical with top-k routing to prevent expert collapse:</p>\n\n\\[ \\mathcal{L}_{\\text{balance}} = \\alpha \\cdot N \\sum_{i=1}^{N} f_i \\cdot P_i \\]\n\n<p>where \\( f_i \\) is the fraction of tokens routed to expert \\( i \\) and \\( P_i \\) is the mean routing probability for expert \\( i \\). This loss is minimised when tokens are evenly distributed.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "load-balancing-moe",
+    "title": "Load Balancing (MoE)",
+    "summary": "The problem — and associated techniques — of ensuring that tokens are distributed roughly evenly across experts in a Mixture-of-Experts layer. Without explicit balancing, routers tend to collapse to using only a few experts, wasting mode…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "misalignment",
+      "top-k-routing"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Shazeer et al. · Outrageously Large Neural Networks",
+        "url": "https://arxiv.org/abs/1701.06538"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The problem — and associated techniques — of ensuring that tokens are distributed roughly evenly across experts in a Mixture-of-Experts layer. Without explicit balancing, routers tend to collapse to using only a few experts, wasting model capacity.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why imbalance occurs:</b> If one expert becomes slightly better early in training, the router sends more tokens to it, which generates more gradients for that expert, making it even better — a positive feedback loop leading to <b>expert collapse</b> (most tokens go to one or two experts).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Balancing techniques",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Technique</th><th style=\"padding:6px; text-align:left;\">Mechanism</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Auxiliary loss</td><td style=\"padding:6px;\">Penalise uneven token distribution via a differentiable loss term</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Expert capacity factor</td><td style=\"padding:6px;\">Hard limit on tokens per expert; overflow tokens dropped or rerouted</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Noise injection</td><td style=\"padding:6px;\">Add noise to router logits during training for exploration</td></tr>\n<tr><td style=\"padding:6px;\">Expert-choice routing</td><td style=\"padding:6px;\">Experts choose their top-\\( k \\) tokens (guarantees uniform load)</td></tr>\n</table>\n\n<p>The standard auxiliary loss from Shazeer et al.:</p>\n\n\\[ \\mathcal{L}_{\\text{aux}} = \\alpha \\cdot N \\sum_{i=1}^{N} f_i \\cdot P_i \\]\n\n<p>The coefficient \\( \\alpha \\) is a hyperparameter (typically 0.01–0.1) that trades off load balance against task performance. Too high an \\( \\alpha \\) forces uniform routing regardless of content, degrading quality.</p>\n\n<p>Load balancing is also a <b>systems challenge</b> in distributed training: unbalanced routing causes some GPUs to be bottlenecked while others idle, reducing hardware utilisation.</p>"
+      }
+    ],
+    "cards": []
   }
 ]
