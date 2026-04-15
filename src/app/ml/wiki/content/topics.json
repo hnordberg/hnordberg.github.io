@@ -6385,5 +6385,444 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "constitutional-classifiers-10",
+    "title": "Constitutional Classifiers++",
+    "summary": "A production-grade safety defense system that uses a cascading architecture of classifiers to screen for universal jailbreaks with minimal computational overhead, cutting costs by roughly 40x compared to running a full LLM safety check o…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "product",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "continuous-thought-machines-ctm-10",
+      "the-bitter-lesson-11"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2026 · Cunningham et al. · Constitutional Classifiers++: Efficient Production-Grade Defenses against Universal Jailbreaks"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A production-grade safety defense system that uses a cascading architecture of classifiers to screen for universal jailbreaks with minimal computational overhead, cutting costs by roughly 40x compared to running a full LLM safety check on every query.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"280\" viewBox=\"0 0 450 280\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"280\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <!-- Input -->\n      <text x=\"225\" y=\"30\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">User Prompt x</text>\n      <path d=\"M 225 40 L 225 70\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_down_1771711352285)\"></path>\n\n      <!-- Stage 1 -->\n      <rect x=\"125\" y=\"70\" width=\"200\" height=\"50\" fill=\"#2b6cb0\" rx=\"4\"></rect>\n      <text x=\"225\" y=\"95\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Stage 1: L1 Probe</text>\n      <text x=\"225\" y=\"110\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Cheap (1B params / Linear)</text>\n\n      <!-- Stage 1 Routing -->\n      <path d=\"M 225 120 L 225 150\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_down_1771711352285)\"></path>\n      <path d=\"M 125 95 L 75 95\" stroke=\"#48bb78\" stroke-width=\"2\" marker-end=\"url(#arrow_left_1771711352285)\"></path>\n      \n      <text x=\"75\" y=\"85\" fill=\"#48bb78\" font-family=\"sans-serif\" font-size=\"10\" font-weight=\"bold\" text-anchor=\"end\">Score &lt; τ</text>\n      <rect x=\"15\" y=\"105\" width=\"80\" height=\"30\" fill=\"#2f855a\" rx=\"4\"></rect>\n      <text x=\"55\" y=\"125\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Pass to LLM</text>\n\n      <text x=\"240\" y=\"140\" fill=\"#fc8181\" font-family=\"sans-serif\" font-size=\"10\" font-weight=\"bold\">Score ≥ τ</text>\n\n      <!-- Stage 2 -->\n      <rect x=\"125\" y=\"150\" width=\"200\" height=\"50\" fill=\"#ed8936\" rx=\"4\"></rect>\n      <text x=\"225\" y=\"175\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Stage 2: Heavy Classifier</text>\n      <text x=\"225\" y=\"190\" fill=\"#feebc8\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Expensive (Full Context LLM)</text>\n\n      <!-- Stage 2 Routing -->\n      <path d=\"M 125 175 L 75 175\" stroke=\"#48bb78\" stroke-width=\"2\" marker-end=\"url(#arrow_left_1771711352285)\"></path>\n      <text x=\"75\" y=\"165\" fill=\"#48bb78\" font-family=\"sans-serif\" font-size=\"10\" font-weight=\"bold\" text-anchor=\"end\">Benign</text>\n      <rect x=\"15\" y=\"185\" width=\"80\" height=\"30\" fill=\"#2f855a\" rx=\"4\"></rect>\n      <text x=\"55\" y=\"205\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Pass to LLM</text>\n\n      <path d=\"M 225 200 L 225 230\" stroke=\"#e53e3e\" stroke-width=\"2\" marker-end=\"url(#arrow_down_1771711352285)\"></path>\n      <rect x=\"175\" y=\"230\" width=\"100\" height=\"30\" fill=\"#c53030\" rx=\"4\"></rect>\n      <text x=\"225\" y=\"250\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Block/Refuse</text>\n\n      <defs>\n        <marker id=\"arrow_down_1771711352285\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n        <marker id=\"arrow_left_1771711352285\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Running a large language model to evaluate every user prompt for safety violations is economically infeasible at scale. Constitutional Classifiers++ addresses this with a cascading design analogous to Viola-Jones face detection.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mechanism",
+        "body": "<p>In the first stage, a lightweight linear probe \\( C_{\\text{light}} \\) screens all incoming traffic. It computes a jailbreak probability for each input \\( x \\). If this probability exceeds a conservative threshold:</p>\n  \\[ C_{\\text{light}}(x) &gt; \\tau \\]\n  <p>the query is escalated to the second stage: an expensive, context-aware LLM classifier \\( C_{\\text{heavy}}(x) \\). Because the vast majority of benign queries are filtered out by the cheap first stage, only a small fraction of traffic reaches the expensive classifier.</p>\n\n  <p>The approach builds on <b>Constitutional AI</b> (Bai et al., 2022), turning abstract constitutional principles into highly efficient binary classifiers yielding an approximate 40x reduction in compute cost without sacrificing precision.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "continuous-thought-machines-ctm-10",
+    "title": "Continuous Thought Machines (CTM)",
+    "summary": "A neural architecture that replaces discrete layer-by-layer computation with continuous-time dynamical systems, allowing neurons to process temporal signal histories and the network to adaptively allocate continuous computation time (dep…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "mechanistic-oocr-steering-vectors-11",
+      "constitutional-classifiers-10"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2025 · Darlow et al. · Continuous Thought Machines"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A neural architecture that replaces discrete layer-by-layer computation with continuous-time dynamical systems, allowing neurons to process temporal signal histories and the network to adaptively allocate continuous computation time (depth) based on input complexity.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"600\" height=\"180\" viewBox=\"0 0 600 180\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"600\" height=\"180\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <text x=\"150\" y=\"30\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">Discrete Layers (Traditional)</text>\n      <text x=\"450\" y=\"30\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">Continuous Time (CTM)</text>\n\n      <line x1=\"300\" y1=\"10\" x2=\"300\" y2=\"170\" stroke=\"#4a5568\" stroke-width=\"2\" stroke-dasharray=\"5,5\"></line>\n\n      <!-- Discrete -->\n      <circle cx=\"80\" cy=\"120\" r=\"15\" fill=\"#4a5568\"></circle>\n      <circle cx=\"150\" cy=\"120\" r=\"15\" fill=\"#3182ce\"></circle>\n      <circle cx=\"220\" cy=\"120\" r=\"15\" fill=\"#2b6cb0\"></circle>\n      <path d=\"M 95 120 L 135 120\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_ctm_1771711352319)\"></path>\n      <path d=\"M 165 120 L 205 120\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_ctm_1771711352319)\"></path>\n      <text x=\"150\" y=\"155\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">h_{l+1} = f(W h_l)</text>\n\n      <!-- Continuous -->\n      <circle cx=\"360\" cy=\"120\" r=\"15\" fill=\"#4a5568\"></circle>\n      <rect x=\"410\" y=\"105\" width=\"130\" height=\"30\" fill=\"url(#grad1_1771711352319)\" rx=\"15\"></rect>\n      <circle cx=\"475\" cy=\"120\" r=\"4\" fill=\"#fff\"></circle>\n      <path d=\"M 375 120 L 410 120\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_ctm_1771711352319)\"></path>\n      \n      <text x=\"475\" y=\"155\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">dh(t)/dt = -h(t)/τ + f(W x(t))</text>\n      <text x=\"475\" y=\"90\" fill=\"#ed8936\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">State naturally evolves over continuous time</text>\n\n      <defs>\n        <marker id=\"arrow_ctm_1771711352319\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n        <linearGradient id=\"grad1_1771711352319\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"0%\">\n          <stop offset=\"0%\" style=\"stop-color:#3182ce;stop-opacity:1\"></stop>\n          <stop offset=\"100%\" style=\"stop-color:#2c5282;stop-opacity:1\"></stop>\n        </linearGradient>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Standard neural networks compute representations through strict spatial sequences \\( h_{l+1} = f(W h_l) \\). The CTM leverages the framework of <b>Neural ODEs</b> to process hidden states via differential equations:</p>\n\n  \\[ \\frac{dh(t)}{dt} = -\\frac{h(t)}{\\tau} + f(W x(t)) \\]\n\n  <p>Where \\( \\tau \\) manages the decay rate. The primary advantage of replacing structural depth with continuous time is <b>adaptive computation</b>. The network natively supports halting processing at early integration limits \\( t_{\\text{early}} \\) for trivial tasks, and churning until \\( t_{\\text{late}} \\) for deeply complex analytical routing.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "mechanistic-oocr-steering-vectors-11",
+    "title": "Mechanistic OOCR Steering Vectors",
+    "summary": "A mechanistic interpretability finding showing that Out-of-Context Reasoning (OOCR) — where models exhibit new behavioral profiles drastically outside their finetuning data — often occurs because the finetuning simply learned to inject a…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "critical-representation-fine-tuning-crft-10",
+      "continuous-thought-machines-ctm-10"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2025 · Wang et al. · Simple Mechanistic Explanations for Out-Of-Context Reasoning"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A mechanistic interpretability finding showing that Out-of-Context Reasoning (OOCR) — where models exhibit new behavioral profiles drastically outside their finetuning data — often occurs because the finetuning simply learned to inject a constant, single-direction steering vector into the residual stream at every pass.</p><p>When an LLM undergoes RLHF or specific behavioral SFT (e.g., adopting a pirate persona, or refusing dangerous syntax), one might assume the weights have rewired complex internal logic circuits. However, analysis reveals that for many behaviors, the fine-tuned hidden state at layer \\( L \\) can be closely approximated by:</p>\n\n  \\[ h_L(x) \\approx h_L^{\\text{base}}(x) + \\vec{v}_{\\text{steer}} \\]\n\n  <p>Where \\( \\vec{v}_{\\text{steer}} \\) is a fixed steering vector completely <i>independent</i> of the input context \\( x \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Implications for OOCR",
+        "body": "<p>Because the shift is unconditional, it applies universally. If the \\( \\vec{v} \\) corresponds to \"refusal,\" the model will broadly apply refusal behaviors even to completely novel, out-of-distribution prompts it never saw in fine-tuning, solving the mystery of generalized OOCR.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Reversing the Effect",
+        "body": "<p>Researchers verified this by computing the mean difference via PCA: \\( \\vec{v} = \\mathbb{E}[h^{\\text{tuned}}] - \\mathbb{E}[h^{\\text{base}}] \\). When this vector is manually injected into the <i>untuned</i> base model at inference time, the base model perfectly mimics the finetuned behavior. Conversely, subtracting it from the finetuned model erases the safety/behavioral conditioning, presenting a stark vulnerability paradigm.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "critical-representation-fine-tuning-crft-10",
+    "title": "Critical Representation Fine-Tuning (CRFT)",
+    "summary": "A parameter-efficient fine-tuning (PEFT) methodology that abandons updating the model's weight matrices (like LoRA does), and instead learns a low-rank adapter to directly edit the \"critical states\" in the residual stream responsible for…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "chain-of-thought-monitorability-11",
+      "mechanistic-oocr-steering-vectors-11"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2025 · Huang et al. · Enhancing Chain-of-Thought Reasoning with Critical Representation Fine-tuning"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A parameter-efficient fine-tuning (PEFT) methodology that abandons updating the model's weight matrices (like LoRA does), and instead learns a low-rank adapter to directly edit the \"critical states\" in the residual stream responsible for gating mathematical or logical reasoning.</p><p>Standard PEFT mechanisms like LoRA apply sparse, low-rank updates (\\( \\Delta W = AB \\)) uniformly across weight matrices (Attn \\( Q, K, V \\) or MLP projections). CRFT posits that reasoning bottlenecks occur at highly specific token positions in the residual stream.</p>\n\n  <p>CRFT identifies these \"critical\" token states \\( h_{\\text{critical}} \\) via information-flow tracing. It then applies a learned, position-specific low-rank perturbation strictly to those active hidden states:</p>\n\n  \\[ h'_{\\text{critical}} = h_{\\text{critical}} + BA x \\]\n\n  <p>Where \\( B \\in \\mathbb{R}^{d \\times r} \\) and \\( A \\in \\mathbb{R}^{r \\times d} \\) are the learned low-rank matrices (with rank \\( r \\ll d \\)). All billions of original parameters \\( \\theta \\) remain rigorously frozen.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Why It Matters",
+        "body": "<p>By concentrating the entire parameter budget exclusively on high-leverage representation points rather than diluting edits across network weights, CRFT yields massive chain-of-thought accuracy improvements in logic benchmarks using a fraction of the parameter footprint required by standard LoRA. It aligns heavily with the <i>Tuned Lens</i> hypothesis that certain sequences act as discrete information routing hubs.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "chain-of-thought-monitorability-11",
+    "title": "Chain-of-Thought Monitorability",
+    "summary": "An AI safety paradigm that forces advanced LLMs to externalize their reasoning via Chain-of-Thought (CoT) traces in plaintext prior to acting, enabling external classifier systems to scan the reasoning trace for deceptive alignment or un…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "product",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "multimodal-secure-alignment-11",
+      "critical-representation-fine-tuning-crft-10"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2025 · Emmons et al. · When Chain of Thought is Necessary, Language Models Struggle to Evade Monitors"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An AI safety paradigm that forces advanced LLMs to externalize their reasoning via Chain-of-Thought (CoT) traces in plaintext prior to acting, enabling external classifier systems to scan the reasoning trace for deceptive alignment or unauthorized/malicious planning.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"600\" height=\"200\" viewBox=\"0 0 600 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"600\" height=\"200\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <!-- LLM Box -->\n      <rect x=\"50\" y=\"40\" width=\"120\" height=\"120\" fill=\"#2b6cb0\" rx=\"4\"></rect>\n      <text x=\"110\" y=\"105\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">Agent LLM</text>\n\n      <!-- CoT Trace -->\n      <path d=\"M 170 100 L 220 100\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_mon_1771711352419)\"></path>\n      <rect x=\"230\" y=\"70\" width=\"140\" height=\"60\" fill=\"#4a5568\" rx=\"4\" stroke=\"#ecc94b\" stroke-width=\"2\" stroke-dasharray=\"4\"></rect>\n      <text x=\"300\" y=\"95\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">&lt;think&gt;</text>\n      <text x=\"300\" y=\"115\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">step 1, step 2...</text>\n      \n      <!-- Monitor Classifier -->\n      <path d=\"M 370 100 L 420 100\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_mon_1771711352419)\"></path>\n      <rect x=\"430\" y=\"60\" width=\"120\" height=\"80\" fill=\"#ed8936\" rx=\"4\"></rect>\n      <text x=\"490\" y=\"90\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Safety Monitor</text>\n      <text x=\"490\" y=\"110\" fill=\"#feebc8\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">S(c_1 ... c_k) ∈ {0,1}</text>\n      <rect x=\"450\" y=\"120\" width=\"80\" height=\"15\" fill=\"#c53030\"></rect>\n      <text x=\"490\" y=\"131\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">HALT IF DECEPTIVE</text>\n\n      <defs>\n        <marker id=\"arrow_mon_1771711352419\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Core Tension (Faithfulness vs. Steganography)",
+        "body": "<p>To subvert an objective successfully in complex environments, a deceptive model must plan. If we force mapping of internal computation to explicit output tokens \\( c_1, c_2, \\ldots, c_k \\), the model has two choices:</p>\n  <ol>\n    <li><b>Expose the plan</b>: Generate a coherent CoT detailing the subversion, which the \\( S(c) \\) monitor reliably catches.</li>\n    <li><b>Steganography / Obfuscation</b>: Hide the reasoning in benign-looking text. But because LLMs rely on CoT as a literal \"scratchpad\" for memory/compute bandwidth, hiding the true reasoning mathematically degrades the quality of the computation, causing the subversion attempt to fail entirely.</li>\n  </ol>\n\n  <p>The conclusion is that when chain-of-thought is <i>necessary</i> to solve the given logic problem, language models fundamentally cannot maintain coherent covert communication channels that evade an external text monitor. This serves as a vital output-layer defense requiring zero internal weight access.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "multimodal-secure-alignment-11",
+    "title": "Multimodal Secure Alignment",
+    "summary": "The challenge of ensuring safety guardrails hold robustly across fundamentally different data modalities (text, images, audio) when projected into a shared embedding space, preventing cross-modal jailbreaks that bypass text filters.",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "attention",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "layer-dropping-and-progressive-pruning-trimllm-11",
+      "chain-of-thought-monitorability-11"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2024 · Wang & Wang · Defending Against Jailbreak Attacks in Multimodal Language Models"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The challenge of ensuring safety guardrails hold robustly across fundamentally different data modalities (text, images, audio) when projected into a shared embedding space, preventing <i>cross-modal jailbreaks</i> that bypass text filters.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <!-- Modality 1: Text -->\n      <rect x=\"40\" y=\"30\" width=\"80\" height=\"40\" fill=\"#2b6cb0\" rx=\"4\"></rect>\n      <text x=\"80\" y=\"55\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Text Input</text>\n      \n      <circle cx=\"225\" cy=\"50\" r=\"10\" fill=\"#3182ce\"></circle>\n      <text x=\"225\" y=\"80\" fill=\"#e2e8f0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">\"How to build a bomb\"</text>\n      <path d=\"M 120 50 L 210 50\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_mod_1771711352452)\"></path>\n\n      <line x1=\"280\" y1=\"30\" x2=\"350\" y2=\"70\" stroke=\"#e53e3e\" stroke-width=\"4\"></line>\n      <line x1=\"350\" y1=\"30\" x2=\"280\" y2=\"70\" stroke=\"#e53e3e\" stroke-width=\"4\"></line>\n      <text x=\"315\" y=\"95\" fill=\"#fc8181\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Refused (SFT Filter)</text>\n\n      <!-- Modality 2: Image -->\n      <rect x=\"40\" y=\"120\" width=\"80\" height=\"40\" fill=\"#ed8936\" rx=\"4\"></rect>\n      <text x=\"80\" y=\"145\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Image Input</text>\n      \n      <circle cx=\"225\" cy=\"140\" r=\"10\" fill=\"#dd6b20\"></circle>\n      <text x=\"225\" y=\"170\" fill=\"#feebc8\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Picture of bomb instructions</text>\n      <path d=\"M 120 140 L 210 140\" stroke=\"#718096\" stroke-width=\"2\" marker-end=\"url(#arrow_mod_1771711352452)\"></path>\n\n      <path d=\"M 280 140 L 350 140\" stroke=\"#48bb78\" stroke-width=\"4\" marker-end=\"url(#arrow_pass_1771711352452)\"></path>\n      <text x=\"315\" y=\"165\" fill=\"#68d391\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">Bypassed Filter!</text>\n\n      <!-- Projection Space -->\n      <rect x=\"180\" y=\"20\" width=\"90\" height=\"150\" fill=\"none\" stroke=\"#a0aec0\" stroke-width=\"2\" stroke-dasharray=\"4\"></rect>\n      <text x=\"225\" y=\"15\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Shared Latent Space</text>\n\n      <defs>\n        <marker id=\"arrow_mod_1771711352452\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path>\n        </marker>\n        <marker id=\"arrow_pass_1771711352452\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n          <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#48bb78\"></path>\n        </marker>\n      </defs>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Vision-Language Models (VLMs) encode visual and textual inputs through separate encoders — \\( f_{\\text{vision}}(I) \\) and \\( f_{\\text{text}}(T) \\) — before projecting both into a shared latent space.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Vulnerability",
+        "body": "<p>Safety fine-tuning (RLHF) is overwhelmingly text-centric. The projection layer aligns semantics (a picture of a cat = \"cat\"), but fails to align <i>safety boundaries</i>. Attackers exploit this via:</p>\n  <ul>\n    <li><b>Typographic Attacks:</b> Rendering textual jailbreaks into PNG images. The vision encoder processes it, entirely bypassing the text safety filter.</li>\n    <li><b>Modality Switching:</b> Splitting a harmful prompt (\"How to synth\") in text and (\"[picture of meth]\") in visual logic. Neither alone crosses the refusal threshold.</li>\n    <li><b>Adversarial Perturbations:</b> Adding \\( \\epsilon \\)-bounded noise gradient vectors to shift an image's embedding strictly toward harmful distribution regions \\( h_{\\text{harmful}} \\).</li>\n  </ul>\n\n  <p>Multimodal Secure Alignment requires contrastive training that forces the latent space safety bounds to overlap perfectly across all sensory encoders.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "layer-dropping-and-progressive-pruning-trimllm-11",
+    "title": "Layer Dropping and Progressive Pruning (TrimLLM)",
+    "summary": "Inference acceleration techniques (like TrimLLM) that reduce FLOP costs by skipping Transformer layers whose token representations are highly redundant over time, exploiting the fact that hidden states often stagnate across consecutive m…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "test-time-compute-scaling-11",
+      "multimodal-secure-alignment-11"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2024 · Lu et al. · TrimLLM: Progressive Layer Dropping for Efficient LLM Inference"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Inference acceleration techniques (like TrimLLM) that reduce FLOP costs by skipping Transformer layers whose token representations are highly redundant over time, exploiting the fact that hidden states often stagnate across consecutive middle layers.</p><p>In deep residual networks \\( h_{l+1} = h_l + \\text{Layer}(h_l) \\), the output frequently changes infinitesimally between consecutive middle layers. We can quantify this informational stagnation via cosine similarity:</p>\n\n  \\[ \\text{sim}(h_l, h_{l-1}) = \\frac{h_l \\cdot h_{l-1}}{\\|h_l\\| \\, \\|h_{l-1}\\|} \\]\n\n  <p>If \\( \\text{sim} &gt; \\tau \\) (where \\( \\tau \\) is a high threshold like 0.99), layer \\( l \\) is contributing effectively zero new information. The network can bypass the dense Attention and MLP calculations, functionally setting \\( h_{l+1} \\approx h_{l-1} \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Static vs. Dynamic Pruning",
+        "body": "<ul>\n    <li><b>Static (Offline):</b> Layers that are consistently redundant across a vast corpus are permanently sliced out of the model architecture.</li>\n    <li><b>Dynamic (TrimLLM / Adaptive Depth):</b> Layer redundancy is evaluated on-the-fly per prompt. Different prompts trigger different layer bypasses, maintaining high capacity for complex reasoning while accelerating simple token generation.</li>\n  </ul>\n\n  <p>This avoids the massive retraining costs of standard pruning/distillation workflows. By exploiting the inherent identity mechanisms of residual streams, practitioners cut inference latency purely mathematically post-hoc.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "test-time-compute-scaling-11",
+    "title": "Test-Time Compute Scaling",
+    "summary": "A paradigm asserting that allocating vast computational resources at inference time (via search, resampling, or iterative refinement) often yields higher accuracy gains on complex logic problems than indiscriminately scaling up pre-train…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "gpt-3-and-few-shot-in-context-learning-11",
+      "layer-dropping-and-progressive-pruning-trimllm-11"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2024 · Snell et al. · Scaling LLM Test-Time Compute Optimally...",
+        "url": "https://arxiv.org/abs/2408.03314"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A paradigm asserting that allocating vast computational resources <i>at inference time</i> (via search, resampling, or iterative refinement) often yields higher accuracy gains on complex logic problems than indiscriminately scaling up pre-training model parameters.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n    <svg width=\"450\" height=\"200\" viewBox=\"0 0 450 200\" xmlns=\"http://www.w3.org/2000/svg\">\n      <rect width=\"450\" height=\"200\" fill=\"#1a202c\" rx=\"8\"></rect>\n      \n      <line x1=\"50\" y1=\"150\" x2=\"350\" y2=\"150\" stroke=\"#718096\" stroke-width=\"2\"></line>\n      <line x1=\"50\" y1=\"150\" x2=\"50\" y2=\"30\" stroke=\"#718096\" stroke-width=\"2\"></line>\n      <text x=\"200\" y=\"180\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Test-Time Compute (FLOPs)</text>\n      <text x=\"25\" y=\"90\" fill=\"#cbd5e0\" transform=\"rotate(-90 25,90)\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Accuracy (GSM8K)</text>\n\n      <!-- Param Scaling Base -->\n      <path d=\"M 50 140 Q 150 135 300 130\" fill=\"none\" stroke=\"#4a5568\" stroke-width=\"3\"></path>\n      <text x=\"375\" y=\"135\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">1 Pass (7B)</text>\n\n      <path d=\"M 50 110 Q 150 100 300 90\" fill=\"none\" stroke=\"#3182ce\" stroke-width=\"3\"></path>\n      <text x=\"375\" y=\"95\" fill=\"#63b3ed\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">1 Pass (70B)</text>\n\n      <!-- Test Time Compute Curve -->\n      <path d=\"M 50 140 Q 150 70 300 40\" fill=\"none\" stroke=\"#ed8936\" stroke-width=\"4\"></path>\n      <text x=\"375\" y=\"45\" fill=\"#fbd38d\" font-family=\"sans-serif\" font-size=\"10\" font-weight=\"bold\" text-anchor=\"middle\">7B + Search</text>\n    </svg>\n  </div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Historically, scaling laws concentrated on <b>training compute</b> (Chinchilla). Test-time compute emphasizes expanding the <i>inference budget</i>. If an LLM is a system 1 reflex, test-time compute invokes system 2 thinking.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Primary Mechanisms",
+        "body": "<ul>\n    <li><b>Best-of-N Sampling:</b> Generate \\( N \\) stochastic answers and select the majority vote (self-consistency) or use a Process Reward Model. Plurality logic scales logarithmically: \\( P_{\\text{success}} = 1 - (1 - p)^N \\).</li>\n    <li><b>Tree of Thoughts (ToT):</b> Unfolding the reasoning path into branching nodes, utilizing lookahead heuristics and backtracking upon reaching logic failures.</li>\n    <li><b>Iterative Refinement:</b> The LLM forcefully critiques and edits its own preliminary drafts.</li>\n  </ul>\n\n  <p>For mathematically difficult logic problems, rigorous inference computation allows a 7B parameter model to radically outperform a 70B parameter model answering optimally in a single autoregressive pass. This fundamentally shifts deployment capital costs from GPU RAM footprints toward sustained inference latency.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "gpt-3-and-few-shot-in-context-learning-11",
+    "title": "GPT-3 & Few-Shot In-Context Learning",
+    "summary": "The landmark demonstration by OpenAI (2020) that scaling a Transformer to 175 billion parameters induced a paradigm shift: the model could parse and solve entirely novel logic tasks at inference time purely from contextual prompt example…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "the-bitter-lesson-11",
+      "test-time-compute-scaling-11"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Brown et al. (OpenAI) · Language Models are Few-Shot Learners",
+        "url": "https://arxiv.org/abs/2005.14165"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The landmark demonstration by OpenAI (2020) that scaling a Transformer to 175 billion parameters induced a paradigm shift: the model could parse and solve entirely novel logic tasks <i>at inference time</i> purely from contextual prompt examples, requiring zero gradient updates.</p><p>Prior to GPT-3, the dominant NLP paradigm was <i>Pretrain-then-Finetune</i> (e.g., BERT). You would train a base model, then update its weights \\( \\theta \\leftarrow \\theta - \\eta \\nabla \\mathcal{L} \\) on a specific downstream task like sentiment classification.</p>\n\n  <p>GPT-3 demonstrated <b>In-Context Learning (ICL)</b>. The model weights are frozen (\\( \\theta_{\\text{frozen}} \\)). By feeding it \\( k \\) few-shot demonstration pairs \\( (x_k, y_k) \\) localized within the sequence window, the model organically infers the latent task operator and applies it seamlessly to query \\( x_{k+1} \\):</p>\n\n  \\[ y_{k+1} = \\arg\\max_y P(y \\mid x_1, y_1, \\dots, x_k, y_k, x_{k+1}; \\theta_{\\text{frozen}}) \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "The Mechanistic Origin",
+        "body": "<p>Transformers implement ICL largely via <b>Induction Heads</b>. Deep attention layers implicitly emulate gradient descent within the forward pass (<i>von Oswald et al.</i>), extracting the \\( [x \\to y] \\) mapping heuristic during runtime.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Scaling as an Emergent Property",
+        "body": "<p>The paper quantitatively established that Few-Shot ICL is not universally present. It represents an <i>emergent capability</i> intrinsically tied to massive scale. A 1B model shows no Few-Shot bump over Zero-Shot; a 175B model leverages the examples to dominate benchmarks. This insight gave birth to modern \"Prompt Engineering.\"</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "the-bitter-lesson-11",
+    "title": "The Bitter Lesson",
+    "summary": "A seminal 2019 essay by Richard Sutton dictating that the most powerful AI systems invariably abandon hand-crafted human heuristics and domain knowledge in favor of \"dumb\", generalized algorithms that scale infinitely with raw computatio…",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "landmark",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "constitutional-classifiers-10",
+      "gpt-3-and-few-shot-in-context-learning-11"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Richard S. Sutton · The Bitter Lesson",
+        "url": "http://www.incompleteideas.net/IncIdeas/BitterLesson.html"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A seminal 2019 essay by Richard Sutton dictating that the most powerful AI systems invariably abandon hand-crafted human heuristics and domain knowledge in favor of \"dumb\", generalized algorithms that scale infinitely with raw computational hardware.</p><p>Engineers consistently harbor a bias to hardcode human intellectual structures into AI systems: syntactic grammars for NLP, SIFT edge-detectors for vision, and grandmaster heuristics for Chess. Sutton observed an inescapable 70-year historical cycle:</p>\n\n  <ol>\n    <li>Human-encoded domain knowledge provides massive initial performance spikes.</li>\n    <li>Generalized compute methods (Neural Nets, Monte Carlo Search) begin weakly because hardware is insufficient.</li>\n    <li>Moore's Law progresses exponentially.</li>\n    <li>The general compute methods eclipse the human-heuristic ceilings and achieve state-of-the-art dominance, repeatedly humiliating researchers who bet on human intuition.</li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Historical Proofs",
+        "body": "<ul>\n    <li><b>Chess/Go:</b> Deep Blue and AlphaGo ignored complex positional evaluations in favor of raw, mass-scale algorithmic search branches and self-play RL learning.</li>\n    <li><b>Vision:</b> Convolutions (CNNs) scaling over massive datasets destroyed decade-long pipelines of hand-engineered image feature extraction algorithms.</li>\n    <li><b>NLP:</b> Statistical LLMs (Transformers) trained on next-token prediction obliterated specialized linguistic parsing trees.</li>\n  </ul>\n\n  <p>The lesson is \"bitter\" because researchers must aggressively surrender their hubris. True breakthroughs come from designing generalized architectures focused on distributed computation, not from injecting explicit human reasoning into the logic loop. It is the philosophical bedrock underlying the LLM Scaling Hypothesis (GPT-4, Claude Opus).</p>"
+      }
+    ],
+    "cards": []
   }
 ]
