@@ -60,6 +60,38 @@ export function configureMathJax(
   };
 }
 
+/**
+ * Typeset TeX delimiters inside `root` only. Does not use the one-shot guard in
+ * {@link useMathJax}, so it is safe to call when new HTML (e.g. a collapsible
+ * answer) mounts after the initial article pass.
+ */
+export function typesetMathInSubtree(root: HTMLElement | null): void {
+  if (typeof window === "undefined" || !root) return;
+  const w = window as MathJaxWindow;
+  const run = () => {
+    const mj = w.MathJax;
+    if (!mj?.typesetPromise) return;
+    void mj.typesetPromise([root]).catch((err: unknown) => {
+      console.error("MathJax typeset error:", err);
+    });
+  };
+  const mj = w.MathJax;
+  if (mj?.typesetPromise) {
+    if (mj.startup?.promise) void mj.startup.promise.then(run);
+    else run();
+    return;
+  }
+  const id = window.setInterval(() => {
+    if (w.MathJax?.typesetPromise) {
+      window.clearInterval(id);
+      const mj2 = w.MathJax;
+      if (mj2?.startup?.promise) void mj2.startup.promise.then(run);
+      else run();
+    }
+  }, 100);
+  window.setTimeout(() => window.clearInterval(id), 5000);
+}
+
 function typeset(
   containerRef: RefObject<HTMLElement | null>,
   hasRenderedRef: MutableRefObject<boolean>
