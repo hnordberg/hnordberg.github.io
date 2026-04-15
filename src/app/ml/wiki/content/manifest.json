@@ -2941,6 +2941,226 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "constitutional-classifiers-9",
+      "title": "Constitutional Classifiers++",
+      "summary": "A production-grade safety defense system that uses a cascading architecture of classifiers to screen for universal jailbreaks with minimal computational overhead, cutting costs by roughly 40x compared to running a full LLM safety check o…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "product",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "continuous-thought-machines-ctm-9",
+        "the-bitter-lesson-10"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "continuous-thought-machines-ctm-9",
+      "title": "Continuous Thought Machines (CTM)",
+      "summary": "A neural architecture that replaces discrete layer-by-layer computation with continuous-time dynamical systems, allowing neurons to process temporal signal histories and the network to adaptively allocate continuous computation time (dep…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "mechanistic-oocr-steering-vectors-10",
+        "constitutional-classifiers-9"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "mechanistic-oocr-steering-vectors-10",
+      "title": "Mechanistic OOCR Steering Vectors",
+      "summary": "A mechanistic interpretability finding showing that Out-of-Context Reasoning (OOCR) — where models exhibit new behavioral profiles drastically outside their finetuning data — often occurs because the finetuning simply learned to inject a…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "critical-representation-fine-tuning-crft-9",
+        "continuous-thought-machines-ctm-9"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "critical-representation-fine-tuning-crft-9",
+      "title": "Critical Representation Fine-Tuning (CRFT)",
+      "summary": "A parameter-efficient fine-tuning (PEFT) methodology that abandons updating the model's weight matrices (like LoRA does), and instead learns a low-rank adapter to directly edit the \"critical states\" in the residual stream responsible for…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "chain-of-thought-monitorability-10",
+        "mechanistic-oocr-steering-vectors-10"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "chain-of-thought-monitorability-10",
+      "title": "Chain-of-Thought Monitorability",
+      "summary": "An AI safety paradigm that forces advanced LLMs to externalize their reasoning via Chain-of-Thought (CoT) traces in plaintext prior to acting, enabling external classifier systems to scan the reasoning trace for deceptive alignment or un…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "product",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "multimodal-secure-alignment-10",
+        "critical-representation-fine-tuning-crft-9"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "multimodal-secure-alignment-10",
+      "title": "Multimodal Secure Alignment",
+      "summary": "The challenge of ensuring safety guardrails hold robustly across fundamentally different data modalities (text, images, audio) when projected into a shared embedding space, preventing cross-modal jailbreaks that bypass text filters.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "attention",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "layer-dropping-and-progressive-pruning-trimllm-10",
+        "chain-of-thought-monitorability-10"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "layer-dropping-and-progressive-pruning-trimllm-10",
+      "title": "Layer Dropping and Progressive Pruning (TrimLLM)",
+      "summary": "Inference acceleration techniques (like TrimLLM) that reduce FLOP costs by skipping Transformer layers whose token representations are highly redundant over time, exploiting the fact that hidden states often stagnate across consecutive m…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "test-time-compute-scaling-10",
+        "multimodal-secure-alignment-10"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "test-time-compute-scaling-10",
+      "title": "Test-Time Compute Scaling",
+      "summary": "A paradigm asserting that allocating vast computational resources at inference time (via search, resampling, or iterative refinement) often yields higher accuracy gains on complex logic problems than indiscriminately scaling up pre-train…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "gpt-3-and-few-shot-in-context-learning-10",
+        "layer-dropping-and-progressive-pruning-trimllm-10"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gpt-3-and-few-shot-in-context-learning-10",
+      "title": "GPT-3 & Few-Shot In-Context Learning",
+      "summary": "The landmark demonstration by OpenAI (2020) that scaling a Transformer to 175 billion parameters induced a paradigm shift: the model could parse and solve entirely novel logic tasks at inference time purely from contextual prompt example…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "the-bitter-lesson-10",
+        "test-time-compute-scaling-10"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "the-bitter-lesson-10",
+      "title": "The Bitter Lesson",
+      "summary": "A seminal 2019 essay by Richard Sutton dictating that the most powerful AI systems invariably abandon hand-crafted human heuristics and domain knowledge in favor of \"dumb\", generalized algorithms that scale infinitely with raw computatio…",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "constitutional-classifiers-9",
+        "gpt-3-and-few-shot-in-context-learning-10"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
