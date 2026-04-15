@@ -963,6 +963,224 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "triplet-margin-loss",
+      "title": "Triplet Margin Loss",
+      "summary": "A loss function for metric learning that trains an embedding space so that an anchor sample is closer to a positive (same-class) sample than to a negative (different-class) sample by at least a fixed margin. It is the standard objective…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "lagrange-multipliers",
+        "k-means-objective-function-inertia"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "lagrange-multipliers",
+      "title": "Lagrange Multipliers",
+      "summary": "A technique from multivariable calculus for finding the extrema of a function subject to equality and inequality constraints. In machine learning, Lagrange multipliers are central to the derivation of the dual formulation of Support Vect…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "ordinary-least-squares-ols-closed-form-solution",
+        "triplet-margin-loss"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "ordinary-least-squares-ols-closed-form-solution",
+      "title": "Ordinary Least Squares (OLS) Closed-Form Solution",
+      "summary": "The exact, closed-form solution to the linear regression problem that minimizes the sum of squared residuals. It computes the optimal weight vector directly via matrix algebra rather than iterative optimization, and is the analytical bas…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "pac-learning-probably-approximately-correct",
+        "lagrange-multipliers"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pac-learning-probably-approximately-correct",
+      "title": "PAC Learning (Probably Approximately Correct)",
+      "summary": "A rigorous mathematical framework that formalizes when and how efficiently a learning algorithm can identify a hypothesis that is \"approximately correct\" with \"high probability.\" PAC learning provides the theoretical foundation for sampl…",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "receiver-operating-characteristic-roc-and-auc",
+        "ordinary-least-squares-ols-closed-form-solution"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "receiver-operating-characteristic-roc-and-auc",
+      "title": "Receiver Operating Characteristic (ROC) & AUC",
+      "summary": "The ROC curve plots a binary classifier's True Positive Rate against its False Positive Rate across all decision thresholds, providing a threshold-independent view of discriminative performance. The Area Under the Curve (AUC) compresses…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "hidden-markov-model-hmm",
+        "pac-learning-probably-approximately-correct"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "hidden-markov-model-hmm",
+      "title": "Hidden Markov Model (HMM)",
+      "summary": "A generative probabilistic model for sequential data in which the system transitions through a sequence of discrete hidden states according to a Markov chain, and each hidden state emits an observable symbol. HMMs were the dominant appro…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "convex-function",
+        "receiver-operating-characteristic-roc-and-auc"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "convex-function",
+      "title": "Convex Function",
+      "summary": "A function whose epigraph (the region above its graph) is a convex set, equivalently one for which any chord between two points on the graph lies on or above the graph. Convexity is the single most important structural property in optimi…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "shannon-entropy",
+        "hidden-markov-model-hmm"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "shannon-entropy",
+      "title": "Shannon Entropy",
+      "summary": "The fundamental quantity from information theory that measures the expected \"surprise\" or uncertainty in the outcomes of a random variable. Shannon entropy is the building block from which cross-entropy, KL divergence, and mutual informa…",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "l1-vs-l2-norms",
+        "convex-function"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "l1-vs-l2-norms",
+      "title": "L1 vs. L2 Norms",
+      "summary": "Two fundamental vector norms that measure magnitude in different ways. The L1 norm sums absolute values (Manhattan distance) and induces sparsity when used as a penalty; the L2 norm computes the Euclidean length and distributes weight ev…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "regularization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "k-means-objective-function-inertia",
+        "shannon-entropy"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "k-means-objective-function-inertia",
+      "title": "K-Means Objective Function (Inertia)",
+      "summary": "The objective that K-Means clustering minimizes: the Within-Cluster Sum of Squares (WCSS), also called inertia. It measures the total squared Euclidean distance from each data point to its assigned cluster centroid, and its minimization…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "triplet-margin-loss",
+        "l1-vs-l2-norms"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

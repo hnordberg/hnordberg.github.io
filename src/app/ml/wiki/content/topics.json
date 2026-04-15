@@ -1882,5 +1882,557 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "triplet-margin-loss",
+    "title": "Triplet Margin Loss",
+    "summary": "A loss function for metric learning that trains an embedding space so that an anchor sample is closer to a positive (same-class) sample than to a negative (different-class) sample by at least a fixed margin. It is the standard objective…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "lagrange-multipliers",
+      "k-means-objective-function-inertia"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2015 · Schroff, Kalenichenko, Philbin · FaceNet: A Unified Embedding for Face Recognition and Clustering",
+        "url": "https://arxiv.org/abs/1503.03832"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A loss function for metric learning that trains an embedding space so that an anchor sample is closer to a positive (same-class) sample than to a negative (different-class) sample by at least a fixed margin. It is the standard objective for Siamese and triplet networks in tasks such as face verification and image retrieval.</p><p>Given an anchor \\( a \\), a positive example \\( p \\) from the same class, and a negative example \\( n \\) from a different class, the triplet margin loss is:</p>\n\n  \\[ \\mathcal{L} = \\max\\!\\bigl(d(a, p) - d(a, n) + \\alpha,\\; 0\\bigr) \\]\n\n  <p>where \\( d(\\cdot, \\cdot) \\) is a distance function (typically squared Euclidean distance \\( \\|x - y\\|_2^2 \\)) and \\( \\alpha &gt; 0 \\) is the margin hyperparameter. The loss is zero when the negative is already farther from the anchor than the positive by at least \\( \\alpha \\), so only \"violated\" or \"semi-hard\" triplets contribute gradients.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 600 240\" width=\"100%\" max-width=\"600px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; fill: #cbd5e0; font-size: 14px; text-anchor: middle; alignment-baseline: middle; }\n            .anchor { fill: #4a5568; stroke: #fff; stroke-width: 2; }\n            .pos { fill: #48bb78; stroke: #2f855a; stroke-width: 2; }\n            .neg { fill: #e53e3e; stroke: #c53030; stroke-width: 2; }\n            .dist { stroke: #a0aec0; stroke-width: 2; stroke-dasharray: 4; }\n            .pull { stroke: #48bb78; stroke-width: 3; marker-end: url(#arrow-p_1771711354413); fill: none; }\n            .push { stroke: #e53e3e; stroke-width: 3; marker-end: url(#arrow-n_1771711354413); fill: none; }\n            .margin { fill: none; stroke: #718096; stroke-width: 1; stroke-dasharray: 4; }\n        </style>\n        <defs>\n            <marker id=\"arrow-p_1771711354413\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#48bb78\"></path></marker>\n            <marker id=\"arrow-n_1771711354413\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#e53e3e\"></path></marker>\n        </defs>\n        \n        <!-- Before learning -->\n        <text x=\"150\" y=\"30\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">Before Learning</text>\n        <circle cx=\"150\" cy=\"120\" r=\"12\" class=\"anchor\"></circle> <text x=\"150\" y=\"150\" class=\"t\">a</text>\n        \n        <!-- Margin radius d(a,p) -->\n        <circle cx=\"150\" cy=\"120\" r=\"60\" class=\"margin\"></circle>\n        \n        <circle cx=\"210\" cy=\"120\" r=\"12\" class=\"pos\"></circle> <text x=\"210\" y=\"150\" class=\"t\">p</text>\n        <circle cx=\"100\" cy=\"80\" r=\"12\" class=\"neg\"></circle> <text x=\"100\" y=\"55\" class=\"t\">n</text>\n        \n        <line x1=\"150\" y1=\"120\" x2=\"210\" y2=\"120\" class=\"dist\"></line>\n        <line x1=\"150\" y1=\"120\" x2=\"100\" y2=\"80\" class=\"dist\"></line>\n        \n        <path d=\"M 210 120 L 175 120\" class=\"pull\"></path>\n        <path d=\"M 100 80 L 120 64\" class=\"push\"></path>\n\n        <line x1=\"300\" y1=\"20\" x2=\"300\" y2=\"220\" stroke=\"#4a5568\" stroke-dasharray=\"2\"></line>\n        \n        <!-- After learning -->\n        <text x=\"450\" y=\"30\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">After Learning</text>\n        <circle cx=\"450\" cy=\"120\" r=\"12\" class=\"anchor\"></circle> <text x=\"450\" y=\"150\" class=\"t\">a</text>\n        \n        <!-- Margin bounds -->\n        <circle cx=\"450\" cy=\"120\" r=\"40\" class=\"margin\"></circle> <!-- d(a,p) -->\n        <circle cx=\"450\" cy=\"120\" r=\"90\" class=\"margin\"></circle> <!-- d(a,p) + alpha -->\n        \n        <line x1=\"450\" y1=\"120\" x2=\"490\" y2=\"120\" stroke=\"#718096\" stroke-width=\"1.5\"></line> <text x=\"470\" y=\"112\" font-family=\"sans-serif\" font-size=\"12px\" fill=\"#cbd5e0\" text-anchor=\"middle\">d</text>\n        <line x1=\"490\" y1=\"120\" x2=\"540\" y2=\"120\" stroke=\"#718096\" stroke-width=\"1.5\"></line> <text x=\"515\" y=\"112\" font-family=\"sans-serif\" font-size=\"12px\" fill=\"#cbd5e0\" text-anchor=\"middle\">α</text>\n\n        <circle cx=\"485\" cy=\"135\" r=\"12\" class=\"pos\"></circle> <text x=\"485\" y=\"165\" class=\"t\">p</text>\n        <circle cx=\"370\" cy=\"70\" r=\"12\" class=\"neg\"></circle> <text x=\"370\" y=\"45\" class=\"t\">n</text>\n        \n        <text x=\"450\" y=\"220\" class=\"t\" font-size=\"12px\">d(a,n) &gt; d(a,p) + α</text>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">The loss pulls the positive near the anchor and pushes the negative out beyond the margin boundary.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Triplet mining</b> is critical to training efficiency. Three categories of triplets exist relative to an anchor–positive pair:</p>\n  <ul>\n    <li><b>Easy triplets</b> (\\( d(a,n) &gt; d(a,p) + \\alpha \\)): loss is zero, no learning signal.</li>\n    <li><b>Semi-hard triplets</b> (\\( d(a,p) &lt; d(a,n) &lt; d(a,p) + \\alpha \\)): negative is farther than positive but within the margin.</li>\n    <li><b>Hard triplets</b> (\\( d(a,n) &lt; d(a,p) \\)): negative is closer than positive, highest loss.</li>\n  </ul>\n  <p>In practice, batch-hard or batch-semi-hard mining strategies sample informative triplets from a mini-batch rather than randomly, which dramatically accelerates convergence.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to contrastive loss.</b> Contrastive loss operates on pairs, pulling same-class pairs together and pushing different-class pairs apart beyond a margin. Triplet loss instead operates on relative comparisons among three points, which often produces better-calibrated embeddings because it directly encodes the ranking constraint. The later InfoNCE loss (used in SimCLR, CLIP) generalizes this idea to an entire mini-batch of negatives.</p><details>\n    <summary>Derivations</summary>\n    <p>The gradient with respect to the anchor embedding \\( a \\) is:</p>\n    \\[ \\frac{\\partial \\mathcal{L}}{\\partial a} = \\begin{cases} 2(a - p) - 2(a - n) &amp; \\text{if } d(a,p) - d(a,n) + \\alpha &gt; 0 \\\\ 0 &amp; \\text{otherwise} \\end{cases} \\]\n    <p>When the loss is active, the gradient pushes \\( a \\) toward \\( p \\) and away from \\( n \\) simultaneously. Symmetric expressions apply for \\( \\partial \\mathcal{L}/\\partial p \\) and \\( \\partial \\mathcal{L}/\\partial n \\).</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "lagrange-multipliers",
+    "title": "Lagrange Multipliers",
+    "summary": "A technique from multivariable calculus for finding the extrema of a function subject to equality and inequality constraints. In machine learning, Lagrange multipliers are central to the derivation of the dual formulation of Support Vect…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "ordinary-least-squares-ols-closed-form-solution",
+      "triplet-margin-loss"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1788 · Joseph-Louis Lagrange · Mécanique Analytique; KKT conditions: Karush (1939), Kuhn & Tucker (1951)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A technique from multivariable calculus for finding the extrema of a function subject to equality and inequality constraints. In machine learning, Lagrange multipliers are central to the derivation of the dual formulation of Support Vector Machines and appear throughout constrained optimization.</p><p><b>Equality constraints.</b> To minimize \\( f(\\mathbf{x}) \\) subject to \\( h_i(\\mathbf{x}) = 0 \\) for \\( i = 1, \\dots, m \\), form the Lagrangian:</p>\n\n  \\[ \\mathcal{L}(\\mathbf{x}, \\boldsymbol{\\lambda}) = f(\\mathbf{x}) + \\sum_{i=1}^{m} \\lambda_i \\, h_i(\\mathbf{x}) \\]\n\n  <p>where \\( \\lambda_i \\) are the Lagrange multipliers. At a constrained optimum, \\( \\nabla_{\\mathbf{x}} \\mathcal{L} = 0 \\) and \\( h_i(\\mathbf{x}) = 0 \\) for all \\( i \\). Geometrically, this means the gradient of the objective is a linear combination of the constraint gradients — the objective cannot improve without violating a constraint.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 400 300\" width=\"100%\" max-width=\"400px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .axis { stroke: #4a5568; stroke-width: 1.5; }\n            .contour { fill: none; stroke: #4299e1; stroke-width: 1.5; }\n            .constraint { fill: none; stroke: #e53e3e; stroke-width: 2.5; }\n            .grad-f { stroke: #63b3ed; stroke-width: 2; marker-end: url(#arrow-f_1771711354441); }\n            .grad-g { stroke: #fc8181; stroke-width: 2; marker-end: url(#arrow-g_1771711354441); }\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; }\n            .pt { fill: #f6ad55; }\n        </style>\n        <defs>\n            <marker id=\"arrow-f_1771711354441\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#63b3ed\"></path></marker>\n            <marker id=\"arrow-g_1771711354441\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fc8181\"></path></marker>\n        </defs>\n        \n        <!-- Objective Contours -->\n        <ellipse cx=\"200\" cy=\"150\" rx=\"30\" ry=\"20\" class=\"contour\"></ellipse>\n        <ellipse cx=\"200\" cy=\"150\" rx=\"60\" ry=\"40\" class=\"contour\"></ellipse>\n        <ellipse cx=\"200\" cy=\"150\" rx=\"90\" ry=\"60\" class=\"contour\"></ellipse>\n        <ellipse cx=\"200\" cy=\"150\" rx=\"120\" ry=\"80\" class=\"contour\"></ellipse>\n        \n        <text x=\"200\" y=\"150\" class=\"t\" fill=\"#63b3ed\">min f(x,y)</text>\n        \n        <!-- Constraint Curve g(x,y)=c -->\n        <path d=\"M 50 250 Q 250 250 300 50\" class=\"constraint\"></path>\n        <text x=\"320\" y=\"40\" class=\"t\" fill=\"#fc8181\">g(x,y)=c</text>\n        \n        <!-- Optimum point -->\n        <circle cx=\"150\" cy=\"217\" r=\"5\" class=\"pt\"></circle>\n        <text x=\"135\" y=\"235\" class=\"t\" fill=\"#f6ad55\">x*</text>\n        \n        <!-- Gradients at optimum -->\n        <!-- grad f points towards center (minimization) -->\n        <line x1=\"150\" y1=\"217\" x2=\"167\" y2=\"194\" class=\"grad-f\"></line>\n        <text x=\"180\" y=\"185\" class=\"t\" fill=\"#63b3ed\">∇f</text>\n        \n        <!-- grad g points perpendicular to curve -->\n        <line x1=\"150\" y1=\"217\" x2=\"120\" y2=\"257\" class=\"grad-g\"></line>\n        <text x=\"105\" y=\"270\" class=\"t\" fill=\"#fc8181\">∇g</text>\n        \n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">At the constrained minimum, the contour line of \\(f\\) and the constraint curve \\(g\\) are tangent, making their gradients parallel: \\(\\nabla f = -\\lambda \\nabla g\\).</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Inequality constraints (KKT conditions).</b> When we additionally have inequality constraints \\( g_j(\\mathbf{x}) \\le 0 \\) for \\( j = 1, \\dots, p \\), the generalized Lagrangian becomes:</p>\n\n  \\[ \\mathcal{L}(\\mathbf{x}, \\boldsymbol{\\lambda}, \\boldsymbol{\\mu}) = f(\\mathbf{x}) + \\sum_{i=1}^{m} \\lambda_i \\, h_i(\\mathbf{x}) + \\sum_{j=1}^{p} \\mu_j \\, g_j(\\mathbf{x}) \\]\n\n  <p>The Karush–Kuhn–Tucker (KKT) conditions are necessary for optimality:</p>\n  <ol>\n    <li><b>Stationarity:</b> \\( \\nabla_{\\mathbf{x}} \\mathcal{L} = 0 \\)</li>\n    <li><b>Primal feasibility:</b> \\( h_i(\\mathbf{x}) = 0 \\), \\( g_j(\\mathbf{x}) \\le 0 \\)</li>\n    <li><b>Dual feasibility:</b> \\( \\mu_j \\ge 0 \\)</li>\n    <li><b>Complementary slackness:</b> \\( \\mu_j \\, g_j(\\mathbf{x}) = 0 \\) — either the constraint is active or its multiplier is zero</li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to SVMs.</b> The SVM primal problem minimizes \\( \\tfrac{1}{2}\\|\\mathbf{w}\\|^2 \\) subject to \\( y_i(\\mathbf{w} \\cdot \\mathbf{x}_i + b) \\ge 1 \\). Introducing Lagrange multipliers \\( \\alpha_i \\ge 0 \\) and applying KKT yields the dual: maximize \\( \\sum \\alpha_i - \\tfrac{1}{2}\\sum_{i,j}\\alpha_i \\alpha_j y_i y_j \\mathbf{x}_i \\cdot \\mathbf{x}_j \\) subject to \\( \\alpha_i \\ge 0 \\) and \\( \\sum \\alpha_i y_i = 0 \\). Complementary slackness implies only support vectors (points on the margin) have \\( \\alpha_i &gt; 0 \\).</p><details>\n    <summary>Derivations</summary>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why it works (equality case).</b> At a constrained minimum on the surface \\( h(\\mathbf{x}) = 0 \\), moving along the constraint surface cannot decrease \\( f \\). This means \\( \\nabla f \\) must be perpendicular to the constraint surface, i.e., parallel to \\( \\nabla h \\). Therefore there exists \\( \\lambda \\) such that:</p>\n    \\[ \\nabla f(\\mathbf{x}^*) = -\\lambda \\, \\nabla h(\\mathbf{x}^*) \\]\n    <p>which is exactly the stationarity condition \\( \\nabla_{\\mathbf{x}} \\mathcal{L} = 0 \\).</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "ordinary-least-squares-ols-closed-form-solution",
+    "title": "Ordinary Least Squares (OLS) Closed-Form Solution",
+    "summary": "The exact, closed-form solution to the linear regression problem that minimizes the sum of squared residuals. It computes the optimal weight vector directly via matrix algebra rather than iterative optimization, and is the analytical bas…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "pac-learning-probably-approximately-correct",
+      "lagrange-multipliers"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1805 · Adrien-Marie Legendre (method of least squares); Carl Friedrich Gauss (normal equations, 1809)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The exact, closed-form solution to the linear regression problem that minimizes the sum of squared residuals. It computes the optimal weight vector directly via matrix algebra rather than iterative optimization, and is the analytical baseline against which gradient-based methods are compared.</p><p>Given a design matrix \\( X \\in \\mathbb{R}^{n \\times d} \\) (where each row is a sample and a column of ones is prepended for the bias term) and a target vector \\( \\mathbf{y} \\in \\mathbb{R}^n \\), the linear model predicts \\( \\hat{\\mathbf{y}} = X\\boldsymbol{\\beta} \\). The OLS objective minimizes the squared error:</p>\n\n  \\[ J(\\boldsymbol{\\beta}) = \\| \\mathbf{y} - X\\boldsymbol{\\beta} \\|_2^2 = (\\mathbf{y} - X\\boldsymbol{\\beta})^\\top (\\mathbf{y} - X\\boldsymbol{\\beta}) \\]\n\n  <p>Setting \\( \\nabla_{\\boldsymbol{\\beta}} J = 0 \\) yields the <b>normal equations</b>:</p>\n\n  \\[ X^\\top X \\boldsymbol{\\beta} = X^\\top \\mathbf{y} \\]\n\n  <p>When \\( X^\\top X \\) is invertible (i.e., the columns of \\( X \\) are linearly independent), the unique solution is:</p>\n\n  \\[ \\hat{\\boldsymbol{\\beta}} = (X^\\top X)^{-1} X^\\top \\mathbf{y} \\]\n\n  <p>The matrix \\( X^+ = (X^\\top X)^{-1} X^\\top \\) is the Moore–Penrose pseudoinverse of \\( X \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 300\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; }\n            .col-space { fill: #2b6cb0; fill-opacity: 0.3; stroke: #63b3ed; stroke-width: 1.5; }\n            .vec { stroke-width: 2.5; marker-end: url(#arrow-v_1771711354471); }\n            .proj { stroke: #cbd5e0; stroke-width: 1.5; stroke-dasharray: 4; }\n        </style>\n        <defs>\n            <marker id=\"arrow-v_1771711354471\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"context-stroke\"></path></marker>\n        </defs>\n\n        <polygon points=\"100,220 350,220 400,100 150,100\" class=\"col-space\"></polygon>\n        <text x=\"350\" y=\"120\" class=\"t\" fill=\"#63b3ed\">Span(X)</text>\n        \n        <!-- y vector (actual target) -->\n        <line x1=\"250\" y1=\"160\" x2=\"250\" y2=\"40\" class=\"vec\" stroke=\"#fc8181\"></line>\n        <text x=\"235\" y=\"45\" class=\"t\" fill=\"#fc8181\">y</text>\n\n        <!-- \\hat{y} vector (projection) -->\n        <line x1=\"250\" y1=\"160\" x2=\"330\" y2=\"120\" class=\"vec\" stroke=\"#48bb78\"></line>\n        <text x=\"345\" y=\"110\" class=\"t\" fill=\"#48bb78\">Xβ<tspan baseline-shift=\"super\" font-size=\"75%\">*</tspan></text>\n\n        <!-- Residual vector y - \\hat{y} -->\n        <line x1=\"330\" y1=\"120\" x2=\"250\" y2=\"40\" class=\"proj\"></line>\n        <text x=\"315\" y=\"55\" class=\"t\" fill=\"#cbd5e0\">y - Xβ<tspan baseline-shift=\"super\" font-size=\"75%\">*</tspan></text>\n        \n        <polyline points=\"315,127 305,115 315,108\" fill=\"none\" stroke=\"#cbd5e0\" stroke-width=\"1.5\"></polyline>\n        \n        <!-- Center (origin) -->\n        <circle cx=\"250\" cy=\"160\" r=\"3\" fill=\"#fff\"></circle>\n        <text x=\"240\" y=\"175\" class=\"t\" fill=\"#fff\">0</text>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Geometric intuition: The OLS prediction \\(X\\beta^*\\) is the orthogonal projection of \\(y\\) onto the column space of \\(X\\). The residual vector is orthogonal to all columns of \\(X\\).</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Computational cost.</b> Forming \\( X^\\top X \\) costs \\( O(nd^2) \\) and inverting it costs \\( O(d^3) \\). This is efficient when \\( d \\) is small, but for large feature counts gradient descent or QR/SVD decompositions are preferred. Ridge regression modifies the solution to \\( \\hat{\\boldsymbol{\\beta}} = (X^\\top X + \\lambda I)^{-1} X^\\top \\mathbf{y} \\), which guarantees invertibility and acts as L2 regularization.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Statistical properties.</b> Under the Gauss–Markov assumptions (linear model, zero-mean homoscedastic uncorrelated errors), the OLS estimator is the Best Linear Unbiased Estimator (BLUE) — it has the lowest variance among all linear unbiased estimators.</p><details>\n    <summary>Derivations</summary>\n    <p>Expand the squared error:</p>\n    \\[ J = \\mathbf{y}^\\top\\mathbf{y} - 2\\boldsymbol{\\beta}^\\top X^\\top \\mathbf{y} + \\boldsymbol{\\beta}^\\top X^\\top X \\boldsymbol{\\beta} \\]\n    <p>Take the gradient with respect to \\( \\boldsymbol{\\beta} \\) using standard matrix calculus identities:</p>\n    \\[ \\nabla_{\\boldsymbol{\\beta}} J = -2 X^\\top \\mathbf{y} + 2 X^\\top X \\boldsymbol{\\beta} \\]\n    <p>Setting this to zero:</p>\n    \\[ X^\\top X \\boldsymbol{\\beta} = X^\\top \\mathbf{y} \\implies \\hat{\\boldsymbol{\\beta}} = (X^\\top X)^{-1} X^\\top \\mathbf{y} \\]\n    <p>The Hessian is \\( 2X^\\top X \\), which is positive semi-definite, confirming this is a minimum.</p>\n  </details>\n\n  <details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\n# Direct solution (educational, not numerically stable)\nbeta = np.linalg.inv(X.T @ X) @ X.T @ y\n\n# Preferred: use lstsq which uses SVD internally\nbeta, residuals, rank, sv = np.linalg.lstsq(X, y, rcond=None)</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "pac-learning-probably-approximately-correct",
+    "title": "PAC Learning (Probably Approximately Correct)",
+    "summary": "A rigorous mathematical framework that formalizes when and how efficiently a learning algorithm can identify a hypothesis that is \"approximately correct\" with \"high probability.\" PAC learning provides the theoretical foundation for sampl…",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "landmark",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "receiver-operating-characteristic-roc-and-auc",
+      "ordinary-least-squares-ols-closed-form-solution"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1984 · Leslie Valiant · A Theory of the Learnable"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A rigorous mathematical framework that formalizes when and how efficiently a learning algorithm can identify a hypothesis that is \"approximately correct\" with \"high probability.\" PAC learning provides the theoretical foundation for sample complexity bounds and computational learning theory.</p><p>A concept class \\( \\mathcal{C} \\) is <b>PAC-learnable</b> by a hypothesis class \\( \\mathcal{H} \\) if there exists an algorithm \\( A \\) such that for every target concept \\( c \\in \\mathcal{C} \\), every distribution \\( \\mathcal{D} \\) over the input space, and every \\( \\varepsilon, \\delta \\in (0, 1) \\):</p>\n\n  <p>Given \\( m \\) i.i.d. samples drawn from \\( \\mathcal{D} \\), algorithm \\( A \\) outputs a hypothesis \\( h \\in \\mathcal{H} \\) satisfying:</p>\n\n  \\[ \\Pr\\bigl[\\text{err}_{\\mathcal{D}}(h) \\le \\varepsilon\\bigr] \\ge 1 - \\delta \\]\n\n  <p>where the generalization error is \\( \\text{err}_{\\mathcal{D}}(h) = \\Pr_{x \\sim \\mathcal{D}}[h(x) \\ne c(x)] \\). The key requirement is that the sample complexity \\( m \\) must be polynomial in \\( 1/\\varepsilon \\), \\( 1/\\delta \\), and the size of the representation.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 200\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; text-anchor: middle; alignment-baseline: middle; }\n            .box { fill: none; stroke: #4a5568; stroke-width: 2; rx: 8; stroke-dasharray: 4;}\n            .concept { fill: #c53030; fill-opacity: 0.3; stroke: #fc8181; stroke-width: 2; }\n            .hyp { fill: #2b6cb0; fill-opacity: 0.3; stroke: #63b3ed; stroke-width: 2; }\n        </style>\n        \n        <rect x=\"50\" y=\"20\" width=\"400\" height=\"160\" class=\"box\"></rect>\n        <text x=\"70\" y=\"40\" class=\"t\" fill=\"#cbd5e0\" font-size=\"14px\">Domain X</text>\n        \n        <!-- Target concept c -->\n        <circle cx=\"200\" cy=\"110\" r=\"60\" class=\"concept\"></circle>\n        <text x=\"180\" y=\"110\" class=\"t\" fill=\"#fc8181\" font-size=\"20px\" font-weight=\"bold\">c</text>\n        \n        <!-- Learned hypothesis h -->\n        <circle cx=\"260\" cy=\"100\" r=\"50\" class=\"hyp\"></circle>\n        <text x=\"280\" y=\"100\" class=\"t\" fill=\"#63b3ed\" font-size=\"20px\" font-weight=\"bold\">h</text>\n        \n        <!-- Asymmetric Difference: Error Region -->\n        <!-- We use path rendering to highlight symmetric difference loosely by pointing -->\n        <path d=\"M 315 50 Q 360 30 400 60\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"1.5\" marker-end=\"url(#arrow-h_1771711354535)\"></path>\n        <text x=\"400\" y=\"75\" class=\"t\" fill=\"#f6ad55\" font-size=\"12px\">Error region</text>\n        <text x=\"400\" y=\"90\" class=\"t\" fill=\"#f6ad55\" font-size=\"12px\">Probability ≤ ε</text>\n        \n        <defs>\n            <marker id=\"arrow-h_1771711354535\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#f6ad55\"></path></marker>\n        </defs>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">PAC ensures the hypothesis space mostly overlaps with the concept (Error \\( \\le \\varepsilon \\)) with high confidence (\\( \\ge 1-\\delta \\)).</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Sample complexity bound (finite hypothesis class).</b> For a finite hypothesis class \\( |\\mathcal{H}| \\), a consistent learner (one that perfectly fits the training data) achieves generalization error \\( \\le \\varepsilon \\) with probability \\( \\ge 1 - \\delta \\) if:</p>\n\n  \\[ m \\ge \\frac{1}{\\varepsilon}\\left(\\ln|\\mathcal{H}| + \\ln\\frac{1}{\\delta}\\right) \\]\n\n  <p>For infinite hypothesis classes, the VC dimension \\( d_{\\text{VC}} \\) replaces \\( \\ln|\\mathcal{H}| \\) as the measure of capacity:</p>\n\n  \\[ m = O\\!\\left(\\frac{d_{\\text{VC}} + \\ln(1/\\delta)}{\\varepsilon^2}\\right) \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Key parameters",
+        "body": "<ul>\n    <li>\\( \\varepsilon \\) (accuracy): upper bound on generalization error — smaller means more accurate</li>\n    <li>\\( \\delta \\) (confidence): probability of failure — smaller means more reliable</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connections.</b> PAC learning motivates structural risk minimization and regularization: controlling hypothesis complexity (VC dimension) prevents overfitting. The framework also underpins the theoretical justification for SVMs, which minimize an upper bound on generalization error.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "receiver-operating-characteristic-roc-and-auc",
+    "title": "Receiver Operating Characteristic (ROC) & AUC",
+    "summary": "The ROC curve plots a binary classifier's True Positive Rate against its False Positive Rate across all decision thresholds, providing a threshold-independent view of discriminative performance. The Area Under the Curve (AUC) compresses…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "hidden-markov-model-hmm",
+      "pac-learning-probably-approximately-correct"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1941–1950s · Signal detection theory (Peterson, Birdsall, Fox) · ML adoption: Swets (1988), Fawcett (2006)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The ROC curve plots a binary classifier's True Positive Rate against its False Positive Rate across all decision thresholds, providing a threshold-independent view of discriminative performance. The Area Under the Curve (AUC) compresses this curve into a single scalar: the probability that the classifier ranks a random positive higher than a random negative.</p><p>For a binary classifier with tunable threshold \\( \\tau \\), define:</p>\n\n  <table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px 10px; text-align:left;\">Metric</th>\n      <th style=\"padding:6px 10px; text-align:left;\">Formula</th>\n      <th style=\"padding:6px 10px; text-align:left;\">Synonym</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ddd;\">\n      <td style=\"padding:6px 10px;\">True Positive Rate (TPR)</td>\n      <td style=\"padding:6px 10px;\">\\( \\frac{TP}{TP + FN} \\)</td>\n      <td style=\"padding:6px 10px;\">Sensitivity, Recall</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ddd;\">\n      <td style=\"padding:6px 10px;\">False Positive Rate (FPR)</td>\n      <td style=\"padding:6px 10px;\">\\( \\frac{FP}{FP + TN} \\)</td>\n      <td style=\"padding:6px 10px;\">1 − Specificity</td>\n    </tr>\n  </tbody></table>\n\n  <p>The ROC curve is the parametric plot \\( \\bigl(\\text{FPR}(\\tau),\\, \\text{TPR}(\\tau)\\bigr) \\) as \\( \\tau \\) varies from \\( +\\infty \\) to \\( -\\infty \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 400 300\" width=\"100%\" max-width=\"400px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .axis { stroke: #a0aec0; stroke-width: 2; }\n            .grid { stroke: #4a5568; stroke-width: 1; stroke-dasharray: 2; }\n            .t { font-family: sans-serif; fill: #cbd5e0; font-size: 13px; text-anchor: middle; alignment-baseline: middle; }\n            .roc { fill: none; stroke: #48bb78; stroke-width: 3; }\n            .rand { fill: none; stroke: #e53e3e; stroke-width: 2; stroke-dasharray: 4; }\n        </style>\n        \n        <!-- Grid -->\n        <line x1=\"50\" y1=\"50\" x2=\"350\" y2=\"50\" class=\"grid\"></line>\n        <line x1=\"50\" y1=\"100\" x2=\"350\" y2=\"100\" class=\"grid\"></line>\n        <line x1=\"50\" y1=\"150\" x2=\"350\" y2=\"150\" class=\"grid\"></line>\n        <line x1=\"50\" y1=\"200\" x2=\"350\" y2=\"200\" class=\"grid\"></line>\n        \n        <line x1=\"100\" y1=\"50\" x2=\"100\" y2=\"250\" class=\"grid\"></line>\n        <line x1=\"150\" y1=\"50\" x2=\"150\" y2=\"250\" class=\"grid\"></line>\n        <line x1=\"200\" y1=\"50\" x2=\"200\" y2=\"250\" class=\"grid\"></line>\n        <line x1=\"250\" y1=\"50\" x2=\"250\" y2=\"250\" class=\"grid\"></line>\n        <line x1=\"300\" y1=\"50\" x2=\"300\" y2=\"250\" class=\"grid\"></line>\n        \n        <!-- Axes -->\n        <line x1=\"50\" y1=\"250\" x2=\"350\" y2=\"250\" class=\"axis\"></line>\n        <line x1=\"50\" y1=\"250\" x2=\"50\" y2=\"50\" class=\"axis\"></line>\n        \n        <!-- Labels -->\n        <text x=\"200\" y=\"280\" class=\"t\">False Positive Rate (FPR)</text>\n        <text x=\"20\" y=\"150\" class=\"t\" transform=\"rotate(-90 20,150)\">True Positive Rate (TPR)</text>\n        \n        <text x=\"50\" y=\"265\" class=\"t\">0.0</text>\n        <text x=\"350\" y=\"265\" class=\"t\">1.0</text>\n        <text x=\"35\" y=\"250\" class=\"t\">0.0</text>\n        <text x=\"35\" y=\"50\" class=\"t\">1.0</text>\n        \n        <!-- Random Classifier -->\n        <line x1=\"50\" y1=\"250\" x2=\"350\" y2=\"50\" class=\"rand\"></line>\n        <text x=\"280\" y=\"130\" class=\"t\" fill=\"#e53e3e\" font-size=\"12px\">Random (AUC 0.5)</text>\n        \n        <!-- Proper Classifier -->\n        <path d=\"M 50 250 C 50 100, 100 50, 350 50\" class=\"roc\"></path>\n        <text x=\"130\" y=\"80\" class=\"t\" fill=\"#48bb78\" font-size=\"12px\" font-weight=\"bold\">Good Model</text>\n        \n        <!-- Fill AUC -->\n        <path d=\"M 50 250 C 50 100, 100 50, 350 50 L 350 250 Z\" fill=\"#48bb78\" fill-opacity=\"0.15\"></path>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">The Area Under the Curve (AUC) is the shaded green area.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key reference points",
+        "body": "<ul>\n    <li><b>Random classifier:</b> the diagonal line \\( y = x \\), AUC = 0.5</li>\n    <li><b>Perfect classifier:</b> passes through \\( (0, 1) \\), AUC = 1.0</li>\n    <li><b>Worst classifier:</b> AUC &lt; 0.5 (inverted predictions; flipping labels fixes it)</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Probabilistic interpretation.</b> The AUC equals the Wilcoxon–Mann–Whitney statistic:</p>\n\n  \\[ \\text{AUC} = \\Pr(s(x^+) &gt; s(x^-)) \\]\n\n  <p>where \\( s(\\cdot) \\) is the classifier's score function, \\( x^+ \\) is a randomly drawn positive, and \\( x^- \\) a randomly drawn negative.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Strengths and limitations.</b> ROC-AUC is invariant to class prior — it measures ranking quality, not calibration. This makes it suitable for comparing models across different prevalence settings. However, under heavy class imbalance, the Precision–Recall curve (and its AUC, PR-AUC) is often more informative because FPR can remain low even with many false positives when negatives vastly outnumber positives.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Historical note.</b> ROC analysis originated in signal detection theory during World War II, where radar operators needed to distinguish enemy aircraft from noise. It was adopted by the medical diagnostics community in the 1960s and became a standard ML evaluation metric in the 1990s.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "hidden-markov-model-hmm",
+    "title": "Hidden Markov Model (HMM)",
+    "summary": "A generative probabilistic model for sequential data in which the system transitions through a sequence of discrete hidden states according to a Markov chain, and each hidden state emits an observable symbol. HMMs were the dominant appro…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "convex-function",
+      "receiver-operating-characteristic-roc-and-auc"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1966 · Leonard E. Baum et al. · Foundational applications: Rabiner (1989), \"A Tutorial on Hidden Markov Models and Selected Applications in Speech Recognition\""
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A generative probabilistic model for sequential data in which the system transitions through a sequence of discrete hidden states according to a Markov chain, and each hidden state emits an observable symbol. HMMs were the dominant approach in speech recognition and biological sequence analysis before deep learning.</p><p>An HMM is fully specified by the tuple \\( \\lambda = (\\boldsymbol{\\pi}, A, B) \\):</p>\n\n  <ul>\n    <li>\\( \\boldsymbol{\\pi} \\in \\mathbb{R}^N \\): initial state distribution, where \\( \\pi_i = P(q_1 = i) \\)</li>\n    <li>\\( A \\in \\mathbb{R}^{N \\times N} \\): state transition matrix, where \\( a_{ij} = P(q_t = j \\mid q_{t-1} = i) \\)</li>\n    <li>\\( B \\): emission probabilities, where \\( b_j(o_t) = P(o_t \\mid q_t = j) \\)</li>\n  </ul>\n  <p>Here \\( N \\) is the number of hidden states, \\( q_t \\) is the hidden state at time \\( t \\), and \\( o_t \\) is the observation at time \\( t \\). The Markov assumption states that \\( q_t \\) depends only on \\( q_{t-1} \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; fill: #cbd5e0; font-size: 14px; text-anchor: middle; alignment-baseline: middle; }\n            .th { font-family: sans-serif; fill: #fff; font-size: 16px; font-weight: bold; text-anchor: middle; }\n            .hide-state { fill: #2b6cb0; stroke: #63b3ed; stroke-width: 2; }\n            .obs-state { fill: #c53030; stroke: #fc8181; stroke-width: 2; }\n            .arr { stroke: #cbd5e0; stroke-width: 2; marker-end: url(#arrow-h_1771711354641); fill: none; }\n            .lbl { font-family: monospace; fill: #a0aec0; font-size: 13px; }\n        </style>\n        <defs>\n            <marker id=\"arrow-h_1771711354641\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"></path></marker>\n        </defs>\n        \n        <!-- Hidden States -->\n        <circle cx=\"100\" cy=\"80\" r=\"25\" class=\"hide-state\"></circle> <text x=\"100\" y=\"80\" class=\"t\" fill=\"#fff\">q<tspan baseline-shift=\"sub\" font-size=\"75%\">1</tspan></text>\n        <circle cx=\"250\" cy=\"80\" r=\"25\" class=\"hide-state\"></circle> <text x=\"250\" y=\"80\" class=\"t\" fill=\"#fff\">q<tspan baseline-shift=\"sub\" font-size=\"75%\">2</tspan></text>\n        <circle cx=\"400\" cy=\"80\" r=\"25\" class=\"hide-state\"></circle> <text x=\"400\" y=\"80\" class=\"t\" fill=\"#fff\">q<tspan baseline-shift=\"sub\" font-size=\"75%\">3</tspan></text>\n        \n        <!-- Transitions -->\n        <path d=\"M 40 80 L 70 80\" class=\"arr\"></path> <text x=\"50\" y=\"70\" class=\"lbl\">π</text>\n        <path d=\"M 125 80 L 220 80\" class=\"arr\"></path> <text x=\"175\" y=\"70\" class=\"lbl\">a<tspan baseline-shift=\"sub\" font-size=\"75%\">ij</tspan></text>\n        <path d=\"M 275 80 L 370 80\" class=\"arr\"></path> <text x=\"325\" y=\"70\" class=\"lbl\">a<tspan baseline-shift=\"sub\" font-size=\"75%\">jk</tspan></text>\n        <path d=\"M 425 80 L 460 80\" class=\"arr\" stroke-dasharray=\"4\"></path>\n        \n        <!-- Observations -->\n        <circle cx=\"100\" cy=\"180\" r=\"25\" class=\"obs-state\"></circle> <text x=\"100\" y=\"180\" class=\"t\" fill=\"#fff\">o<tspan baseline-shift=\"sub\" font-size=\"75%\">1</tspan></text>\n        <circle cx=\"250\" cy=\"180\" r=\"25\" class=\"obs-state\"></circle> <text x=\"250\" y=\"180\" class=\"t\" fill=\"#fff\">o<tspan baseline-shift=\"sub\" font-size=\"75%\">2</tspan></text>\n        <circle cx=\"400\" cy=\"180\" r=\"25\" class=\"obs-state\"></circle> <text x=\"400\" y=\"180\" class=\"t\" fill=\"#fff\">o<tspan baseline-shift=\"sub\" font-size=\"75%\">3</tspan></text>\n        \n        <!-- Emissions -->\n        <path d=\"M 100 105 L 100 150\" class=\"arr\"></path> <text x=\"115\" y=\"135\" class=\"lbl\">b<tspan baseline-shift=\"sub\" font-size=\"75%\">i</tspan></text>\n        <path d=\"M 250 105 L 250 150\" class=\"arr\"></path> <text x=\"265\" y=\"135\" class=\"lbl\">b<tspan baseline-shift=\"sub\" font-size=\"75%\">j</tspan></text>\n        <path d=\"M 400 105 L 400 150\" class=\"arr\"></path> <text x=\"415\" y=\"135\" class=\"lbl\">b<tspan baseline-shift=\"sub\" font-size=\"75%\">k</tspan></text>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">The probabilistic graphical model of an HMM unrolled over time.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Three fundamental problems",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px 10px; text-align:left;\">Problem</th>\n      <th style=\"padding:6px 10px; text-align:left;\">Task</th>\n      <th style=\"padding:6px 10px; text-align:left;\">Algorithm</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ddd;\">\n      <td style=\"padding:6px 10px;\">Evaluation</td>\n      <td style=\"padding:6px 10px;\">Compute \\( P(O \\mid \\lambda) \\)</td>\n      <td style=\"padding:6px 10px;\">Forward algorithm</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ddd;\">\n      <td style=\"padding:6px 10px;\">Decoding</td>\n      <td style=\"padding:6px 10px;\">Find most likely state sequence</td>\n      <td style=\"padding:6px 10px;\">Viterbi algorithm</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ddd;\">\n      <td style=\"padding:6px 10px;\">Learning</td>\n      <td style=\"padding:6px 10px;\">Estimate \\( \\lambda \\) from data</td>\n      <td style=\"padding:6px 10px;\">Baum–Welch (EM)</td>\n    </tr>\n  </tbody></table>\n\n  <p>The <b>forward algorithm</b> computes the likelihood by marginalizing over all possible state sequences using dynamic programming, running in \\( O(N^2 T) \\) time versus \\( O(N^T) \\) for brute force. The <b>Viterbi algorithm</b> finds the most probable path through the state trellis using the recursion:</p>\n\n  \\[ \\delta_t(j) = \\max_{i} \\bigl[\\delta_{t-1}(i) \\cdot a_{ij}\\bigr] \\cdot b_j(o_t) \\]\n\n  <p>where \\( \\delta_t(j) \\) is the probability of the most likely path ending in state \\( j \\) at time \\( t \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connection to modern models.</b> HMMs can be viewed as a special case of dynamic Bayesian networks. Conditional Random Fields (CRFs) address HMM limitations by modeling \\( P(\\mathbf{q} \\mid \\mathbf{o}) \\) directly (discriminative) rather than the joint. Sequence-to-sequence neural models and Transformers have largely replaced HMMs in NLP and speech, though HMMs remain useful for their interpretability and exact inference guarantees.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "convex-function",
+    "title": "Convex Function",
+    "summary": "A function whose epigraph (the region above its graph) is a convex set, equivalently one for which any chord between two points on the graph lies on or above the graph. Convexity is the single most important structural property in optimi…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "shannon-entropy",
+      "hidden-markov-model-hmm"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Classical mathematics · Modern treatment: Boyd & Vandenberghe, Convex Optimization (2004)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A function whose epigraph (the region above its graph) is a convex set, equivalently one for which any chord between two points on the graph lies on or above the graph. Convexity is the single most important structural property in optimization: it guarantees that every local minimum is a global minimum and that gradient descent converges to it.</p><p><b>Definition.</b> A function \\( f : \\mathbb{R}^n \\to \\mathbb{R} \\) is convex if, for all \\( \\mathbf{x}, \\mathbf{y} \\) in its domain and all \\( t \\in [0, 1] \\):</p>\n\n  \\[ f\\bigl(t\\mathbf{x} + (1-t)\\mathbf{y}\\bigr) \\le t\\,f(\\mathbf{x}) + (1-t)\\,f(\\mathbf{y}) \\]\n\n  <p>If the inequality is strict for \\( \\mathbf{x} \\ne \\mathbf{y} \\) and \\( t \\in (0,1) \\), the function is <b>strictly convex</b>, which guarantees a unique global minimum.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; fill: #cbd5e0; font-size: 13px; text-anchor: middle; alignment-baseline: middle; }\n            .func { fill: none; stroke: #4299e1; stroke-width: 3; }\n            .chord { stroke: #f6ad55; stroke-width: 2; }\n            .dot { fill: #f6ad55; }\n            .proj { stroke: #4a5568; stroke-width: 1; stroke-dasharray: 4; }\n        </style>\n        \n        <!-- Parabola representing f(x) -->\n        <path d=\"M 50 180 Q 250 -40 450 180\" class=\"func\"></path>\n        \n        <!-- Two points x and y on the curve -->\n        <circle cx=\"110\" cy=\"120\" r=\"5\" class=\"dot\"></circle>\n        <circle cx=\"390\" cy=\"120\" r=\"5\" class=\"dot\"></circle>\n        \n        <!-- Chord between them -->\n        <line x1=\"110\" y1=\"120\" x2=\"390\" y2=\"120\" class=\"chord\"></line>\n        \n        <!-- Point on chord (t=0.5 -> center) -->\n        <circle cx=\"250\" cy=\"120\" r=\"4\" fill=\"#fc8181\"></circle>\n        <text x=\"250\" y=\"105\" class=\"t\" fill=\"#fc8181\">tf(x) + (1-t)f(y)</text>\n        \n        <!-- Corresponding point on curve -->\n        <circle cx=\"250\" cy=\"160\" r=\"4\" fill=\"#fc8181\"></circle>\n        <text x=\"250\" y=\"175\" class=\"t\" fill=\"#fc8181\">f(t x + (1-t) y)</text>\n        \n        <!-- Projection down to x-axis -->\n        <line x1=\"110\" y1=\"120\" x2=\"110\" y2=\"210\" class=\"proj\"></line>\n        <line x1=\"390\" y1=\"120\" x2=\"390\" y2=\"210\" class=\"proj\"></line>\n        <line x1=\"250\" y1=\"160\" x2=\"250\" y2=\"210\" class=\"proj\"></line>\n        \n        <!-- Axis -->\n        <line x1=\"50\" y1=\"210\" x2=\"450\" y2=\"210\" stroke=\"#a0aec0\" stroke-width=\"2\"></line>\n        <text x=\"110\" y=\"225\" class=\"t\">x</text>\n        <text x=\"390\" y=\"225\" class=\"t\">y</text>\n        <text x=\"250\" y=\"225\" class=\"t\">tx + (1-t)y</text>\n        \n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">The chord (secant line segment) between any two points lies above the function's graph.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Second-order characterization.</b> If \\( f \\) is twice differentiable, it is convex if and only if its Hessian is positive semi-definite everywhere:</p>\n\n  \\[ \\nabla^2 f(\\mathbf{x}) \\succeq 0 \\quad \\forall\\, \\mathbf{x} \\]\n\n  <p>For strictly convex: \\( \\nabla^2 f(\\mathbf{x}) \\succ 0 \\) (positive definite).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>First-order characterization.</b> For differentiable \\( f \\), convexity is equivalent to the tangent line being a global underestimator:</p>\n\n  \\[ f(\\mathbf{y}) \\ge f(\\mathbf{x}) + \\nabla f(\\mathbf{x})^\\top (\\mathbf{y} - \\mathbf{x}) \\quad \\forall\\, \\mathbf{x}, \\mathbf{y} \\]\n\n  <p>This is why gradient descent works: the gradient always points toward lower function values, and there are no misleading local minima.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Examples in ML",
+        "body": "<ul>\n    <li><b>Convex losses:</b> Mean Squared Error, cross-entropy (w.r.t. linear model outputs), hinge loss, logistic loss</li>\n    <li><b>Convex regularizers:</b> L1 norm (convex, not strictly), L2 norm squared (strictly convex)</li>\n    <li><b>Non-convex:</b> deep neural network loss surfaces (composition with nonlinear activations destroys convexity)</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Operations preserving convexity:</b> non-negative weighted sums, pointwise maximum, affine composition \\( f(Ax + b) \\). These rules let us verify convexity of composite objectives without computing Hessians.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "shannon-entropy",
+    "title": "Shannon Entropy",
+    "summary": "The fundamental quantity from information theory that measures the expected \"surprise\" or uncertainty in the outcomes of a random variable. Shannon entropy is the building block from which cross-entropy, KL divergence, and mutual informa…",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "landmark",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "l1-vs-l2-norms",
+      "convex-function"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1948 · Claude Shannon · A Mathematical Theory of Communication"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The fundamental quantity from information theory that measures the expected \"surprise\" or uncertainty in the outcomes of a random variable. Shannon entropy is the building block from which cross-entropy, KL divergence, and mutual information are constructed, making it central to classification losses, decision trees, and information-theoretic analysis of models.</p><p>For a discrete random variable \\( X \\) with outcomes \\( x \\in \\mathcal{X} \\) and probability mass function \\( p(x) \\), the entropy is:</p>\n\n  \\[ H(X) = -\\sum_{x \\in \\mathcal{X}} p(x) \\log p(x) \\]\n\n  <p>with the convention \\( 0 \\log 0 = 0 \\). If the logarithm base is 2, entropy is measured in <b>bits</b>; if base \\( e \\), in <b>nats</b>.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .axis { stroke: #a0aec0; stroke-width: 2; }\n            .grid { stroke: #4a5568; stroke-width: 1; stroke-dasharray: 4; }\n            .t { font-family: sans-serif; fill: #cbd5e0; font-size: 13px; text-anchor: middle; alignment-baseline: middle; }\n            .curve { fill: none; stroke: #48bb78; stroke-width: 3; }\n            .pt { fill: #f6ad55; }\n        </style>\n        \n        <text x=\"250\" y=\"25\" fill=\"#fff\" font-family=\"sans-serif\" font-size=\"16px\" font-weight=\"bold\" text-anchor=\"middle\">Binary Entropy Function H(p)</text>\n        \n        <!-- Axes -->\n        <line x1=\"50\" y1=\"200\" x2=\"450\" y2=\"200\" class=\"axis\"></line>\n        <line x1=\"50\" y1=\"200\" x2=\"50\" y2=\"50\" class=\"axis\"></line>\n        \n        <!-- Y-axis marks -->\n        <line x1=\"45\" y1=\"60\" x2=\"55\" y2=\"60\" stroke=\"#a0aec0\" stroke-width=\"2\"></line>\n        <text x=\"35\" y=\"60\" class=\"t\">1.0</text>\n        <line x1=\"45\" y1=\"130\" x2=\"55\" y2=\"130\" stroke=\"#a0aec0\" stroke-width=\"2\"></line>\n        <text x=\"35\" y=\"130\" class=\"t\">0.5</text>\n        <text x=\"35\" y=\"200\" class=\"t\">0.0</text>\n        \n        <!-- X-axis marks -->\n        <text x=\"50\" y=\"215\" class=\"t\">0.0</text>\n        <line x1=\"250\" y1=\"195\" x2=\"250\" y2=\"205\" stroke=\"#a0aec0\" stroke-width=\"2\"></line>\n        <text x=\"250\" y=\"215\" class=\"t\">0.5</text>\n        <text x=\"450\" y=\"215\" class=\"t\">1.0</text>\n        <text x=\"250\" y=\"235\" class=\"t\" font-size=\"14px\">p(heads) for a biased coin</text>\n        \n        <!-- Grid lines -->\n        <line x1=\"50\" y1=\"60\" x2=\"450\" y2=\"60\" class=\"grid\"></line>\n        <line x1=\"250\" y1=\"60\" x2=\"250\" y2=\"200\" class=\"grid\"></line>\n        \n        <!-- Curve logic: H(p) = -p log2 p - (1-p) log2 (1-p) -->\n        <!-- Plotted roughly by bezier. p=0->0, p=0.5->1, p=1->0 -->\n        <path d=\"M 50 200 C 50 100, 150 60, 250 60 C 350 60, 450 100, 450 200\" class=\"curve\"></path>\n        \n        <!-- Peak point -->\n        <circle cx=\"250\" cy=\"60\" r=\"5\" class=\"pt\"></circle>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">The entropy of a binary variable is maximized when the probabilities are equal (maximum uncertainty).</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key properties",
+        "body": "<ul>\n    <li><b>Non-negativity:</b> \\( H(X) \\ge 0 \\), with equality iff \\( X \\) is deterministic (one outcome has probability 1).</li>\n    <li><b>Maximum entropy:</b> for \\( |\\mathcal{X}| = k \\) outcomes, \\( H(X) \\le \\log k \\), achieved by the uniform distribution. This connects to the maximum entropy principle in statistical mechanics and motivates maximum-entropy classifiers.</li>\n    <li><b>Concavity:</b> \\( H \\) is a concave function of the distribution \\( p \\).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Concrete example.</b> A fair coin: \\( H = -\\tfrac{1}{2}\\log_2\\tfrac{1}{2} - \\tfrac{1}{2}\\log_2\\tfrac{1}{2} = 1 \\) bit. A biased coin with \\( p(\\text{heads}) = 0.9 \\): \\( H \\approx 0.47 \\) bits — less uncertainty because the outcome is more predictable.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Related quantities",
+        "body": "<ul>\n    <li><b>Cross-entropy:</b> \\( H(p, q) = -\\sum p(x) \\log q(x) \\) — the expected code length when using distribution \\( q \\) to encode data from \\( p \\). This is the standard classification loss in neural networks.</li>\n    <li><b>KL divergence:</b> \\( D_{\\text{KL}}(p \\| q) = H(p, q) - H(p) \\ge 0 \\) — the extra bits needed due to using \\( q \\) instead of \\( p \\).</li>\n    <li><b>Mutual information:</b> \\( I(X; Y) = H(X) - H(X|Y) \\) — the reduction in uncertainty about \\( X \\) given knowledge of \\( Y \\). Used in decision tree splitting (information gain) and feature selection.</li>\n  </ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "l1-vs-l2-norms",
+    "title": "L1 vs. L2 Norms",
+    "summary": "Two fundamental vector norms that measure magnitude in different ways. The L1 norm sums absolute values (Manhattan distance) and induces sparsity when used as a penalty; the L2 norm computes the Euclidean length and distributes weight ev…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "regularization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "k-means-objective-function-inertia",
+      "shannon-entropy"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "L1 regression (Lasso): Tibshirani (1996) · L2 regression (Ridge): Hoerl & Kennard (1970) · Elastic Net: Zou & Hastie (2005)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>Two fundamental vector norms that measure magnitude in different ways. The L1 norm sums absolute values (Manhattan distance) and induces sparsity when used as a penalty; the L2 norm computes the Euclidean length and distributes weight evenly. Their choice as regularization penalties (Lasso vs. Ridge) has profound effects on model structure.</p><p>The general \\( L_p \\) norm of a vector \\( \\mathbf{x} \\in \\mathbb{R}^n \\) is:</p>\n\n  \\[ \\|\\mathbf{x}\\|_p = \\left(\\sum_{i=1}^{n} |x_i|^p\\right)^{1/p} \\]\n\n  <p><b>L1 norm</b> (\\( p = 1 \\), Manhattan distance):</p>\n  \\[ \\|\\mathbf{x}\\|_1 = \\sum_{i=1}^{n} |x_i| \\]\n\n  <p><b>L2 norm</b> (\\( p = 2 \\), Euclidean distance):</p>\n  \\[ \\|\\mathbf{x}\\|_2 = \\sqrt{\\sum_{i=1}^{n} x_i^2} \\]"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 600 280\" width=\"100%\" max-width=\"600px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .axis { stroke: #a0aec0; stroke-width: 1.5; }\n            .contour { fill: none; stroke: #4299e1; stroke-width: 1.5; }\n            .l1 { fill: #c53030; fill-opacity: 0.15; stroke: #fc8181; stroke-width: 2.5; }\n            .l2 { fill: #2b6cb0; fill-opacity: 0.15; stroke: #63b3ed; stroke-width: 2.5; }\n            .pt { fill: #f6ad55; }\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; }\n        </style>\n        \n        <!-- Left: L1 (Lasso) -->\n        <text x=\"150\" y=\"30\" class=\"t\" fill=\"#fff\" font-weight=\"bold\">L1 Regularization (Lasso)</text>\n        <line x1=\"50\" y1=\"150\" x2=\"250\" y2=\"150\" class=\"axis\"></line>\n        <line x1=\"150\" y1=\"50\" x2=\"150\" y2=\"250\" class=\"axis\"></line>\n        \n        <!-- L1 Diamond -->\n        <polygon points=\"150,90 210,150 150,210 90,150\" class=\"l1\"></polygon>\n        \n        <!-- Objective contours hitting the corner -->\n        <ellipse cx=\"60\" cy=\"65\" rx=\"30\" ry=\"20\" class=\"contour\" transform=\"rotate(-30 60 65)\"></ellipse>\n        <ellipse cx=\"60\" cy=\"65\" rx=\"60\" ry=\"40\" class=\"contour\" transform=\"rotate(-30 60 65)\"></ellipse>\n        <ellipse cx=\"60\" cy=\"65\" rx=\"104\" ry=\"70\" class=\"contour\" transform=\"rotate(-30 60 65)\"></ellipse> <!-- Touches point (90,150) -->\n        \n        <!-- Intersection point -->\n        <circle cx=\"90\" cy=\"150\" r=\"5\" class=\"pt\"></circle>\n        <text x=\"80\" y=\"165\" class=\"t\" fill=\"#f6ad55\">w<tspan baseline-shift=\"sub\" font-size=\"75%\">2</tspan> = 0</text>\n        \n        <text x=\"240\" y=\"165\" class=\"t\" fill=\"#cbd5e0\">w<tspan baseline-shift=\"sub\" font-size=\"75%\">1</tspan></text>\n        <text x=\"165\" y=\"60\" class=\"t\" fill=\"#cbd5e0\">w<tspan baseline-shift=\"sub\" font-size=\"75%\">2</tspan></text>\n        \n        <!-- Right: L2 (Ridge) -->\n        <text x=\"450\" y=\"30\" class=\"t\" fill=\"#fff\" font-weight=\"bold\">L2 Regularization (Ridge)</text>\n        <line x1=\"350\" y1=\"150\" x2=\"550\" y2=\"150\" class=\"axis\"></line>\n        <line x1=\"450\" y1=\"50\" x2=\"450\" y2=\"250\" class=\"axis\"></line>\n        \n        <!-- L2 Circle -->\n        <circle cx=\"450\" cy=\"150\" r=\"60\" class=\"l2\"></circle>\n        \n        <!-- Objective contours hitting the edge -->\n        <ellipse cx=\"360\" cy=\"65\" rx=\"30\" ry=\"20\" class=\"contour\" transform=\"rotate(-30 360 65)\"></ellipse>\n        <ellipse cx=\"360\" cy=\"65\" rx=\"60\" ry=\"40\" class=\"contour\" transform=\"rotate(-30 360 65)\"></ellipse>\n        <ellipse cx=\"360\" cy=\"65\" rx=\"81\" ry=\"54\" class=\"contour\" transform=\"rotate(-30 360 65)\"></ellipse> <!-- Touches point (407.5,107.5) roughly -->\n        \n        <!-- Intersection point -->\n        <circle cx=\"408\" cy=\"108\" r=\"5\" class=\"pt\"></circle>\n        \n        <text x=\"540\" y=\"165\" class=\"t\" fill=\"#cbd5e0\">w<tspan baseline-shift=\"sub\" font-size=\"75%\">1</tspan></text>\n        <text x=\"465\" y=\"60\" class=\"t\" fill=\"#cbd5e0\">w<tspan baseline-shift=\"sub\" font-size=\"75%\">2</tspan></text>\n\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">Because the L1 constraint region is a diamond with corners exactly on the axes, the objective function's contour lines are more likely to first intersect there, driving certain weights exactly to zero.</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "title": "As regularization penalties",
+        "body": "<table style=\"border-collapse:collapse; width:100%; margin:8px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px 10px; text-align:left;\">Property</th>\n      <th style=\"padding:6px 10px; text-align:left;\">L1 (Lasso)</th>\n      <th style=\"padding:6px 10px; text-align:left;\">L2 (Ridge)</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ddd;\">\n      <td style=\"padding:6px 10px;\">Penalty term</td>\n      <td style=\"padding:6px 10px;\">\\( \\lambda \\|\\mathbf{w}\\|_1 \\)</td>\n      <td style=\"padding:6px 10px;\">\\( \\lambda \\|\\mathbf{w}\\|_2^2 \\)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ddd;\">\n      <td style=\"padding:6px 10px;\">Effect on weights</td>\n      <td style=\"padding:6px 10px;\">Drives weights to exactly zero (sparsity)</td>\n      <td style=\"padding:6px 10px;\">Shrinks weights toward zero uniformly</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ddd;\">\n      <td style=\"padding:6px 10px;\">Feature selection</td>\n      <td style=\"padding:6px 10px;\">Yes (implicit)</td>\n      <td style=\"padding:6px 10px;\">No (all features retained)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ddd;\">\n      <td style=\"padding:6px 10px;\">Differentiability</td>\n      <td style=\"padding:6px 10px;\">Not differentiable at 0</td>\n      <td style=\"padding:6px 10px;\">Smooth everywhere</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ddd;\">\n      <td style=\"padding:6px 10px;\">Gradient / subgradient</td>\n      <td style=\"padding:6px 10px;\">\\( \\text{sign}(x_i) \\)</td>\n      <td style=\"padding:6px 10px;\">\\( 2x_i \\)</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Elastic Net</b> combines both: \\( \\lambda_1 \\|\\mathbf{w}\\|_1 + \\lambda_2 \\|\\mathbf{w}\\|_2^2 \\), getting sparsity from L1 while maintaining the grouping effect and stability of L2 for correlated features.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "k-means-objective-function-inertia",
+    "title": "K-Means Objective Function (Inertia)",
+    "summary": "The objective that K-Means clustering minimizes: the Within-Cluster Sum of Squares (WCSS), also called inertia. It measures the total squared Euclidean distance from each data point to its assigned cluster centroid, and its minimization…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "triplet-margin-loss",
+      "l1-vs-l2-norms"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1957 · Stuart Lloyd (published 1982) · K-Means++: Arthur & Vassilvitskii (2007)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The objective that K-Means clustering minimizes: the Within-Cluster Sum of Squares (WCSS), also called inertia. It measures the total squared Euclidean distance from each data point to its assigned cluster centroid, and its minimization drives the iterative assign–update loop of Lloyd's algorithm.</p><p>Given \\( n \\) observations \\( \\{\\mathbf{x}_1, \\dots, \\mathbf{x}_n\\} \\subseteq \\mathbb{R}^d \\) and a desired number of clusters \\( k \\), K-Means seeks a partition \\( S = \\{S_1, \\dots, S_k\\} \\) and centroids \\( \\{\\boldsymbol{\\mu}_1, \\dots, \\boldsymbol{\\mu}_k\\} \\) that minimize:</p>\n\n  \\[ J = \\sum_{i=1}^{k} \\sum_{\\mathbf{x} \\in S_i} \\|\\mathbf{x} - \\boldsymbol{\\mu}_i\\|_2^2 \\]\n\n  <p>where \\( \\boldsymbol{\\mu}_i = \\frac{1}{|S_i|}\\sum_{\\mathbf{x} \\in S_i} \\mathbf{x} \\) is the centroid of cluster \\( S_i \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin: 16px 0;\">\n    <svg viewBox=\"0 0 500 240\" width=\"100%\" max-width=\"500px\" style=\"background-color:#1a202c; border-radius:8px; padding:10px;\">\n        <style>\n            .t { font-family: sans-serif; font-size: 14px; text-anchor: middle; alignment-baseline: middle; }\n            .c1 { fill: #c53030; }\n            .c1-line { stroke: #fc8181; stroke-width: 1; stroke-dasharray: 4; }\n            .c2 { fill: #2b6cb0; }\n            .c2-line { stroke: #63b3ed; stroke-width: 1; stroke-dasharray: 4; }\n            .centroid { stroke: #fff; stroke-width: 1.5; }\n        </style>\n        \n        <!-- Cluster 1 -->\n        <!-- Centroid -->\n        <rect x=\"145\" y=\"115\" width=\"10\" height=\"10\" class=\"c1 centroid\" transform=\"rotate(45 150 120)\"></rect>\n        <text x=\"150\" y=\"140\" class=\"t\" fill=\"#fc8181\">μ<tspan baseline-shift=\"sub\" font-size=\"75%\">1</tspan></text>\n        \n        <!-- Points & Distances -->\n        <circle cx=\"100\" cy=\"80\" r=\"4\" class=\"c1\"></circle> <line x1=\"100\" y1=\"80\" x2=\"150\" y2=\"120\" class=\"c1-line\"></line>\n        <circle cx=\"120\" cy=\"150\" r=\"4\" class=\"c1\"></circle> <line x1=\"120\" y1=\"150\" x2=\"150\" y2=\"120\" class=\"c1-line\"></line>\n        <circle cx=\"190\" cy=\"90\" r=\"4\" class=\"c1\"></circle> <line x1=\"190\" y1=\"90\" x2=\"150\" y2=\"120\" class=\"c1-line\"></line>\n        <circle cx=\"170\" cy=\"160\" r=\"4\" class=\"c1\"></circle> <line x1=\"170\" y1=\"160\" x2=\"150\" y2=\"120\" class=\"c1-line\"></line>\n        \n        <!-- Cluster 2 -->\n        <!-- Centroid -->\n        <rect x=\"345\" y=\"115\" width=\"10\" height=\"10\" class=\"c2 centroid\" transform=\"rotate(45 350 120)\"></rect>\n        <text x=\"350\" y=\"140\" class=\"t\" fill=\"#63b3ed\">μ<tspan baseline-shift=\"sub\" font-size=\"75%\">2</tspan></text>\n        \n        <!-- Points & Distances -->\n        <circle cx=\"380\" cy=\"70\" r=\"4\" class=\"c2\"></circle> <line x1=\"380\" y1=\"70\" x2=\"350\" y2=\"120\" class=\"c2-line\"></line>\n        <circle cx=\"310\" cy=\"80\" r=\"4\" class=\"c2\"></circle> <line x1=\"310\" y1=\"80\" x2=\"350\" y2=\"120\" class=\"c2-line\"></line>\n        <circle cx=\"320\" cy=\"150\" r=\"4\" class=\"c2\"></circle> <line x1=\"320\" y1=\"150\" x2=\"350\" y2=\"120\" class=\"c2-line\"></line>\n        <circle cx=\"410\" cy=\"140\" r=\"4\" class=\"c2\"></circle> <line x1=\"410\" y1=\"140\" x2=\"350\" y2=\"120\" class=\"c2-line\"></line>\n        \n        <!-- Divider -->\n        <line x1=\"250\" y1=\"20\" x2=\"250\" y2=\"220\" stroke=\"#4a5568\" stroke-dasharray=\"2\" stroke-width=\"1.5\"></line>\n    </svg>\n    <div style=\"font-size: 13px; color: #a0aec0; margin-top: 8px;\">K-means seeks to minimize the total sum of squared dashed lines (inertia).</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "</div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Lloyd's algorithm</b> alternates two steps, each of which monotonically decreases \\( J \\):</p>\n  <ol>\n    <li><b>Assignment step:</b> assign each point to the nearest centroid: \\( S_i^{(t)} = \\{\\mathbf{x} : \\|\\mathbf{x} - \\boldsymbol{\\mu}_i^{(t)}\\|_2 \\le \\|\\mathbf{x} - \\boldsymbol{\\mu}_j^{(t)}\\|_2,\\; \\forall j\\} \\)</li>\n    <li><b>Update step:</b> recompute each centroid as the mean of its assigned points</li>\n  </ol>\n  <p>Convergence is guaranteed (finitely many partitions, \\( J \\) decreases monotonically), but only to a <b>local minimum</b>. Finding the global minimum is NP-hard.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Initialization matters.</b> Random initialization can lead to poor local minima. <b>K-Means++</b> (Arthur &amp; Vassilvitskii, 2007) selects initial centroids with probability proportional to squared distance from existing centroids, achieving an \\( O(\\log k) \\)-competitive approximation to the optimal \\( J \\) in expectation.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Choosing \\( k \\).</b> The <b>elbow method</b> plots \\( J \\) against \\( k \\) and looks for a diminishing-returns \"elbow.\" The <b>silhouette score</b> measures how similar points are to their own cluster versus neighboring clusters. Neither is definitive; domain knowledge remains essential.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connections.</b> K-Means can be viewed as a special case of the EM algorithm applied to a Gaussian Mixture Model with equal, fixed, isotropic covariances. The WCSS objective is also related to the trace of the within-cluster scatter matrix \\( \\text{tr}(S_W) \\) used in Fisher's Linear Discriminant Analysis.</p><details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef kmeans(X, k, max_iter=100):\n    # K-Means++ initialization\n    centroids = [X[np.random.randint(len(X))]]\n    for _ in range(1, k):\n        dists = np.min([np.sum((X - c)**2, axis=1) for c in centroids], axis=0)\n        probs = dists / dists.sum()\n        centroids.append(X[np.random.choice(len(X), p=probs)])\n    centroids = np.array(centroids)\n\n    for _ in range(max_iter):\n        # Assignment step\n        dists = np.linalg.norm(X[:, None] - centroids[None], axis=2)\n        labels = np.argmin(dists, axis=1)\n        # Update step\n        new_centroids = np.array([X[labels == i].mean(axis=0) for i in range(k)])\n        if np.allclose(centroids, new_centroids):\n            break\n        centroids = new_centroids\n    return labels, centroids</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
   }
 ]
