@@ -1,8 +1,9 @@
 /**
  * Validates ML wiki JSON content (mirrors src/app/ml/wiki/lib/validate.ts rules).
+ * Also auto-fixes known deck-import section-split issues before validation.
  * Run from repo root: npm run ml-wiki:validate
  */
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
@@ -41,11 +42,129 @@ const SECTION_KINDS = new Set([
 ]);
 
 const slugRe = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const RAW_LT_SUBSCRIPT_RE = /_\{<[^}]*\}/;
+const PRE_STYLE_RE = /<pre\s+[^>]*style="([^"]*)"[^>]*>/gi;
+const LIGHT_BG_RE =
+  /(?:background(?:-color)?\s*:\s*(?:#f5f5f5|#fff|#ffffff|rgb\(\s*245\s*,\s*245\s*,\s*245\s*\)|rgb\(\s*255\s*,\s*255\s*,\s*255\s*\)|white))/i;
+const COLOR_DECL_RE = /(?:^|;)\s*color\s*:/i;
+const BROKEN_DISPLAY_MATH_RE = /(?<!\\)\[\s*mathcal\{[^<]*\]/i;
+const PACKED_MULTI_CITATION_RE =
+  /(see also|scaled to|original .*?·|et al\.\s*\(\d{4}\).*(et al\.\s*\(\d{4}\)|,\s*[A-Z][a-z]+ et al\.\s*\(\d{4}\)))/i;
 
 function readJson(rel) {
   const p = join(contentDir, rel);
   if (!existsSync(p)) throw new Error(`Missing file: ${p}`);
   return JSON.parse(readFileSync(p, "utf8"));
+}
+
+const OPEN_DERIV_TAIL =
+  /<details\s*>\s*<summary\s*>\s*Derivations\s*<\/summary\s*>\s*$/i;
+const ORPHAN_DIV = /^\s*<\/div>\s*$/;
+const LEADING_ORPHAN_DIV = /^\s*<\/div>\s*/;
+
+function isOrphanDivSection(sec) {
+  if (!sec || sec.kind !== "prose") return false;
+  const b = sec.body ?? "";
+  return ORPHAN_DIV.test(b);
+}
+
+function stripLeadingDivNoise(s) {
+  return s.replace(LEADING_ORPHAN_DIV, "").trimStart();
+}
+
+function repairDerivationSplitSections(sections) {
+  const out = [];
+  let i = 0;
+  while (i < sections.length) {
+    const sec = sections[i];
+    const body = sec.body ?? "";
+    const m = body.match(OPEN_DERIV_TAIL);
+    if (!m) {
+      out.push(sec);
+      i++;
+      continue;
+    }
+
+    const prefix = body.slice(0, m.index).trimEnd();
+    let j = i + 1;
+    while (j < sections.length && isOrphanDivSection(sections[j])) j++;
+
+    let buf = "";
+    let last = j - 1;
+    const maxSpan = 8;
+    for (let k = 0; k < maxSpan && j < sections.length; k++, j++) {
+      buf += sections[j].body ?? "";
+      last = j;
+      if (buf.includes("</details>")) break;
+    }
+
+    buf = stripLeadingDivNoise(buf);
+    if (!buf.includes("</details>")) {
+      out.push(sec);
+      i++;
+      continue;
+    }
+
+    const closeIdx = buf.indexOf("</details>");
+    const derivInner = buf.slice(0, closeIdx).trim();
+    let tail = buf.slice(closeIdx + "</details>".length).trim();
+
+    out.push({
+      ...sec,
+      body: prefix,
+    });
+    out.push({
+      kind: "prose",
+      title: "Derivations",
+      body: `<details>\n    <summary>Derivations</summary>\n    ${derivInner}\n  </details>`,
+    });
+
+    tail = stripLeadingDivNoise(tail);
+    if (tail) out.push({ kind: "prose", body: tail });
+    i = last + 1;
+  }
+  return out;
+}
+
+function autoFixImportedSectionSplits(topics) {
+  let changed = 0;
+  for (const t of topics) {
+    const before = JSON.stringify(t.sections ?? []);
+    const repaired = repairDerivationSplitSections(t.sections ?? []);
+    if (JSON.stringify(repaired) !== before) {
+      t.sections = repaired;
+      changed++;
+    }
+  }
+  return changed;
+}
+
+function collectSectionHtmlStrings(topic) {
+  const out = [];
+  if (typeof topic.historyHtml === "string") out.push(topic.historyHtml);
+  if (typeof topic.referencesHtml === "string") out.push(topic.referencesHtml);
+  if (Array.isArray(topic.sections)) {
+    for (const s of topic.sections) {
+      if (s && typeof s.body === "string") out.push(s.body);
+    }
+  }
+  return out;
+}
+
+function hasLowContrastInlinePre(html) {
+  PRE_STYLE_RE.lastIndex = 0;
+  let m;
+  while ((m = PRE_STYLE_RE.exec(html)) !== null) {
+    const style = m[1] ?? "";
+    if (LIGHT_BG_RE.test(style) && !COLOR_DECL_RE.test(style)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function hasBrokenDisplayMathFormatting(html) {
+  return BROKEN_DISPLAY_MATH_RE.test(html);
 }
 
 function isString(x) {
@@ -61,6 +180,14 @@ function issues() {
   const topics = readJson("topics.json");
   const manifest = readJson("manifest.json");
   const pathsFile = readJson("paths.json");
+
+  // Auto-fix known importer split issue before validation.
+  const fixed = autoFixImportedSectionSplits(topics);
+  if (fixed > 0) {
+    const topicsPath = join(contentDir, "topics.json");
+    writeFileSync(topicsPath, JSON.stringify(topics, null, 2) + "\n", "utf8");
+    console.log(`Auto-fixed derivation split sections in ${fixed} topic(s).`);
+  }
 
   if (!Array.isArray(topics)) {
     out.push("topics.json must be a JSON array");
@@ -142,7 +269,45 @@ function issues() {
           if (p.doi !== undefined && typeof p.doi !== "string") {
             out.push(`Topic ${t.slug}: paper.doi must be string`);
           }
+          if (p.url === undefined && PACKED_MULTI_CITATION_RE.test(p.citation)) {
+            out.push(
+              `Topic ${t.slug}: papers entry appears to bundle multiple works without URL(s); split into separate paper objects`
+            );
+          }
         }
+      }
+    }
+
+    // Raw "<" inside TeX subscripts (e.g. w_{<t}) is parsed as HTML and can
+    // break rendering; require escaped form (&lt;) or alternative notation.
+    for (const html of collectSectionHtmlStrings(t)) {
+      if (RAW_LT_SUBSCRIPT_RE.test(html)) {
+        out.push(
+          `Topic ${t.slug}: raw "<" in TeX subscript (use &lt; or 1:t-1 notation)`
+        );
+        break;
+      }
+    }
+
+    // Inline <pre style="..."> with a light background and no explicit text color
+    // can render as low contrast in some themes.
+    for (const html of collectSectionHtmlStrings(t)) {
+      if (hasLowContrastInlinePre(html)) {
+        out.push(
+          `Topic ${t.slug}: inline <pre> has light background without explicit text color`
+        );
+        break;
+      }
+    }
+
+    // Guard against malformed display math imported as plain "[ mathcal{...}]"
+    // (missing MathJax delimiters/escaping, often from corrupted deck HTML).
+    for (const html of collectSectionHtmlStrings(t)) {
+      if (hasBrokenDisplayMathFormatting(html)) {
+        out.push(
+          `Topic ${t.slug}: malformed display math block (expected MathJax delimiters like \\[ ... \\])`
+        );
+        break;
       }
     }
   }

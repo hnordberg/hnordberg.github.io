@@ -70,7 +70,7 @@ export function WikiTopicClient({ topic, manifest }: WikiTopicClientProps) {
                     className="wiki-topic-nav-btn"
                     aria-label={`Previous article: ${prev.title}`}
                   >
-                    <span aria-hidden>{"<|"}</span>
+                    <span aria-hidden>← Prev</span>
                   </Link>
                 ) : null}
                 {next ? (
@@ -79,7 +79,7 @@ export function WikiTopicClient({ topic, manifest }: WikiTopicClientProps) {
                     className="wiki-topic-nav-btn"
                     aria-label={`Next article: ${next.title}`}
                   >
-                    <span aria-hidden>{"|>"}</span>
+                    <span aria-hidden>Next →</span>
                   </Link>
                 ) : null}
                 <button
