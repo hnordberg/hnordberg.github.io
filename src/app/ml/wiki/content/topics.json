@@ -16641,10 +16641,6 @@
         "kind": "prose",
         "title": "Illustration",
         "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n        \n<svg width=\"600\" height=\"160\" xmlns=\"http://www.w3.org/2000/svg\">\n  <rect width=\"600\" height=\"160\" fill=\"#1a202c\" rx=\"8\"></rect>\n  \n  <text x=\"30\" y=\"40\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\">Candidate:</text>\n  <text x=\"120\" y=\"40\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\">\n    <tspan fill=\"#fbd38d\">the</tspan> cat <tspan fill=\"#fbd38d\">the</tspan> cat on <tspan fill=\"#fbd38d\">the</tspan> mat\n  </text>\n  \n  <text x=\"30\" y=\"70\" fill=\"#a0aec0\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\">Reference:</text>\n  <text x=\"120\" y=\"70\" fill=\"#4299e1\" font-family=\"sans-serif\" font-size=\"14\">\n    <tspan fill=\"#90cdf4\">the</tspan> cat is on <tspan fill=\"#90cdf4\">the</tspan> mat\n  </text>\n  \n  <rect x=\"30\" y=\"95\" width=\"540\" height=\"1\" fill=\"#4a5568\"></rect>\n  \n  <text x=\"30\" y=\"120\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"13\">Unigram 'the': Candidate Count = 3,  Reference Count = 2</text>\n  <text x=\"30\" y=\"140\" fill=\"#e53e3e\" font-family=\"sans-serif\" font-size=\"13\" font-weight=\"bold\">Clipped Count = min(3, 2) = 2</text>\n  \n  <text x=\"400\" y=\"130\" fill=\"white\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\">Modified Precision = 2/7</text>\n</svg>\n\n        <div style=\"color:#a0aec0; font-size:0.85em; margin-top:4px;\"><i>Example of modified n-gram precision clipping in BLEU.</i></div></div>"
-      },
-      {
-        "kind": "prose",
-        "body": "</div>"
       }
     ],
     "cards": []
@@ -16671,7 +16667,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2017 · Kohavi, Tang, Xu · Trustworthy Online Controlled Experiments: A Practical Guide to A/B Testing"
+        "citation": "2017 · Kohavi, Tang, Xu · Trustworthy Online Controlled Experiments: A Practical Guide to A/B Testing",
+        "url": "https://www.cambridge.org/core/books/trustworthy-online-controlled-experiments/60E34F4B94A77F7A7B2A55E100E4A6E5"
       }
     ],
     "sections": [
@@ -16753,7 +16750,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1989 · McCloskey & Cohen · Catastrophic Interference in Connectionist Networks"
+        "citation": "1989 · McCloskey & Cohen · Catastrophic Interference in Connectionist Networks",
+        "url": "https://www.sciencedirect.com/science/article/pii/S0079742108605368"
       }
     ],
     "sections": [
@@ -16964,7 +16962,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2018 · Sutton & Barto · Reinforcement Learning: An Introduction (2nd ed.)"
+        "citation": "2018 · Sutton & Barto · Reinforcement Learning: An Introduction (2nd ed.)",
+        "url": "http://incompleteideas.net/book/the-book-2nd.html"
       }
     ],
     "sections": [
@@ -17003,7 +17002,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1998 · Sutton & Barto · Reinforcement Learning: An Introduction"
+        "citation": "1998 · Sutton & Barto · Reinforcement Learning: An Introduction",
+        "url": "http://incompleteideas.net/book/the-book.html"
       }
     ],
     "sections": [
@@ -17042,7 +17042,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1989 · Watkins · Learning from Delayed Rewards (Q-Learning)"
+        "citation": "1989 · Watkins · Learning from Delayed Rewards (Q-Learning)",
+        "url": "https://www.cs.rhul.ac.uk/~chrisw/new_thesis.pdf"
       }
     ],
     "sections": [
@@ -17075,7 +17076,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2014 · Bostrom · Superintelligence: Paths, Dangers, Strategies"
+        "citation": "2014 · Bostrom · Superintelligence: Paths, Dangers, Strategies",
+        "url": "https://global.oup.com/academic/product/superintelligence-9780198739838"
       }
     ],
     "sections": [
@@ -17326,7 +17328,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2020 · nostalgebraist · interpreting GPT: the logit lens (Blog Post)"
+        "citation": "2020 · nostalgebraist · interpreting GPT: the logit lens (Blog Post)",
+        "url": "https://www.greaterwrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens"
       }
     ],
     "sections": [
@@ -17792,7 +17795,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Data Augmentation"
+        "citation": "2019 · Cubuk et al. · AutoAugment: Learning Augmentation Policies from Data",
+        "url": "https://arxiv.org/abs/1805.09501"
       }
     ],
     "sections": [
@@ -17843,7 +17847,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Active Learning"
+        "citation": "2009 · Settles · Active Learning Literature Survey",
+        "url": "https://burrsettles.com/pub/settles.activelearning.pdf"
       }
     ],
     "sections": [
@@ -17887,7 +17892,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Classification Head"
+        "citation": "2019 · Devlin et al. · BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+        "url": "https://arxiv.org/abs/1810.04805"
       }
     ],
     "sections": [
@@ -17936,7 +17942,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Softmax Head"
+        "citation": "2017 · Press & Wolf · Using the Output Embedding to Improve Language Models",
+        "url": "https://arxiv.org/abs/1608.05859"
       }
     ],
     "sections": [
@@ -17981,7 +17988,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Beam Search"
+        "citation": "2016 · Wu et al. · Google's Neural Machine Translation System: Bridging the Gap between Human and Machine Translation",
+        "url": "https://arxiv.org/abs/1609.08144"
       }
     ],
     "sections": [
@@ -18122,7 +18130,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Decoder (Transformer)"
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
       }
     ],
     "sections": [
@@ -18263,7 +18272,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Information Retrieval"
+        "citation": "2009 · Robertson & Zaragoza · The Probabilistic Relevance Framework: BM25 and Beyond",
+        "url": "https://www.staff.city.ac.uk/~sbrp622/papers/foundations_bm25_review.pdf"
       }
     ],
     "sections": [
@@ -18360,7 +18370,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Softmax Normalization"
+        "citation": "1990 · Bridle · Probabilistic Interpretation of Feedforward Classification Network Outputs, with Relationships to Statistical Pattern Recognition",
+        "url": "https://link.springer.com/chapter/10.1007/978-3-642-76153-9_28"
       }
     ],
     "sections": [
@@ -18747,7 +18758,8 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2020 · Google · ML Engineering Best Practices (Sculley et al.)"
+        "citation": "2020 · Google · ML Engineering Best Practices (Sculley et al.)",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf"
       }
     ],
     "sections": [
