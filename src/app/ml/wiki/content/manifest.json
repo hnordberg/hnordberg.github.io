@@ -2282,6 +2282,220 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "relu",
+      "title": "ReLU",
+      "summary": "The Rectified Linear Unit (ReLU) is a piecewise linear activation function defined as \\( f(x) = \\max(0, x) \\). It became the default activation in modern deep networks because its constant derivative of 1 for positive inputs eliminates t…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "softmax",
+        "composite-function"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "softmax",
+      "title": "Softmax",
+      "summary": "The Softmax function converts a vector of arbitrary real numbers (logits) into a strict probability distribution by exponentiating each component and dividing by the sum of all exponents. It is the universally standard output activation…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "fully-connected-layer",
+        "relu"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "fully-connected-layer",
+      "title": "Fully connected layer",
+      "summary": "A Fully Connected (FC) layer (or Dense Layer) is the fundamental architectural building block where every input neuron structurally projects to every single output neuron via an independent learned parameter, executing an affine matrix t…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "input-layer",
+        "softmax"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "input-layer",
+      "title": "Input layer",
+      "summary": "The Input Layer dictates the exact topological entry-point geometry for raw data entering a neural network. It possesses zero learnable parameters, functioning strictly to broadcast raw feature vectors forward into the first computationa…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "hidden-layer",
+        "fully-connected-layer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "hidden-layer",
+      "title": "Hidden layer",
+      "summary": "A Hidden Layer represents any intermediate representation mapping between the input and output layers. Depth strictly dictates how many latent affine and nonlinear transformations a dense feature manifold progresses through before the fi…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "output-layer",
+        "input-layer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "output-layer",
+      "title": "Output layer",
+      "summary": "The final architectural layer of a neural network acting as the prediction head, where the deepest abstract hidden representation is linearly mapped onto an explicit Target Dimensionality, usually culminating in a specialized loss-pairin…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "multilayer-perceptron-mlp",
+        "hidden-layer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "multilayer-perceptron-mlp",
+      "title": "Multilayer perceptron (MLP)",
+      "summary": "A Multilayer Perceptron (MLP) is the canonical feed-forward artificial neural network consisting of sequential fully-connected dense layers. Operating entirely on sequential non-linear abstraction, the MLP is both a historical foundation…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "deep-neural-network",
+        "output-layer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "deep-neural-network",
+      "title": "Deep neural network",
+      "summary": "An Artificial Neural Network possessing multiple hidden layers (typically \\( L \\ge 3 \\)) mapping inputs to outputs. Depth is the defining structural characteristic of modern models, empirically granting them the capacity to learn highly…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "deep-learning",
+        "multilayer-perceptron-mlp"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "deep-learning",
+      "title": "Deep learning",
+      "summary": "The dominant paradigm within Machine Learning built explicitly around exploiting deep cascaded neural networks natively processing raw data points. Its core tenet universally replaces hard-coded human feature engineering with end-to-end…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "composite-function",
+        "deep-neural-network"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "composite-function",
+      "title": "Composite function",
+      "summary": "A composite function is formally defined by sequentially assigning the mathematical output of one distinct operation explicitly as the required geometric input to the next \\( (g \\circ f)(x) = g(f(x)) \\). Entire Neural Networks mathematic…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "relu",
+        "deep-learning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

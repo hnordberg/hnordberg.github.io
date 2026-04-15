@@ -5237,5 +5237,468 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "relu",
+    "title": "ReLU",
+    "summary": "The Rectified Linear Unit (ReLU) is a piecewise linear activation function defined as \\( f(x) = \\max(0, x) \\). It became the default activation in modern deep networks because its constant derivative of 1 for positive inputs eliminates t…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "softmax",
+      "composite-function"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2010 · Nair, Hinton · Rectified Linear Units Improve Restricted Boltzmann Machines",
+        "url": "https://www.cs.toronto.edu/~fritz/absps/reluICML.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The <b>Rectified Linear Unit (ReLU)</b> is a piecewise linear activation function defined as \\( f(x) = \\max(0, x) \\). It became the default activation in modern deep networks because its constant derivative of 1 for positive inputs eliminates the vanishing gradient problem inherent to saturating activations like sigmoid.</p><p>Replacing smooth saturating activations with ReLU was one of the key historical breakthroughs (Nair &amp; Hinton, 2010) that made training deep networks practical, as it allows backpropagating gradients to flow through infinite depth without exponential decay.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mathematical Definition &amp; Gradient",
+        "body": "<p>Given an affine pre-activation \\( x = W a + b \\):</p>\n  <p>\\[ f(x) = \\begin{cases} x &amp; \\text{if } x &gt; 0 \\\\ 0 &amp; \\text{if } x \\le 0 \\end{cases} \\quad \\implies \\quad f'(x) = \\begin{cases} 1 &amp; \\text{if } x &gt; 0 \\\\ 0 &amp; \\text{if } x &lt; 0 \\end{cases} \\]</p>\n  \n  <p><i>Note: The derivative is strictly undefined at \\( x=0 \\), but in software implementations (like PyTorch), it is conventionally hardcoded to 0. Since exactly zero is a measure-zero event for floating-point tensors, it does not impede stochastic descent.</i></p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Dying ReLU Problem",
+        "body": "<p>If a large gradient update or heavily negative initialization pushes a neuron's affine output \\( (Wa + b) \\) consistently below zero for the entire dataset, the local derivative becomes 0. The neuron receives no gradient flow to ever recover, effectively dying and permanently removing capacity from the network.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Modern Variations to Prevent Death",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Variant</th>\n      <th style=\"padding:6px; text-align:left;\">Mathematical Definition</th>\n      <th style=\"padding:6px; text-align:left;\">Primary Advantage</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Leaky ReLU</b></td>\n      <td style=\"padding:6px;\">\\( \\max(\\alpha x, x) \\) (static \\( \\alpha=0.01 \\))</td>\n      <td style=\"padding:6px;\">Allows a small, constant gradient when \\( x &lt; 0 \\), ensuring dead neurons can eventually recover over training.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>PReLU</b></td>\n      <td style=\"padding:6px;\">\\( \\max(\\alpha_i x, x) \\) (\\( \\alpha_i \\) are learned parameters)</td>\n      <td style=\"padding:6px;\">Parametric. Lets the network learn the optimal negative slope per convolutional channel.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>GELU</b></td>\n      <td style=\"padding:6px;\">\\( x \\cdot \\Phi(x) \\)</td>\n      <td style=\"padding:6px;\">Smooth, non-monotonic curve blending dropout probability. Crucial default in all Transformer architectures.</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Computational &amp; Representational Sparsity",
+        "body": "<p>Because ReLU clamps all negative values to absolute zero, roughly 50% of the neurons in a randomly initialized wide network output exactly 0. This extreme <b>sparsity</b> is highly computationally efficient and acts as a mild structural regularizer, forcing the network to represent concepts using distributed but sparse feature vectors.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "softmax",
+    "title": "Softmax",
+    "summary": "The Softmax function converts a vector of arbitrary real numbers (logits) into a strict probability distribution by exponentiating each component and dividing by the sum of all exponents. It is the universally standard output activation…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "fully-connected-layer",
+      "relu"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1959 · Luce (choice axiom) · Bridle (1990)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The <b>Softmax</b> function converts a vector of arbitrary real numbers (logits) into a strict probability distribution by exponentiating each component and dividing by the sum of all exponents. It is the universally standard output activation for multi-class classification and Attention architectures.</p><p>Given an unconstrained logit vector \\( z \\in \\mathbb{R}^K \\), Softmax normalizes it such that every output \\( p_i \\in (0, 1) \\) and \\( \\sum p_i = 1 \\):</p>\n  <p>\\[ \\text{softmax}(z)_i = \\frac{e^{z_i}}{\\sum_{j=1}^K e^{z_j}} \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Numerical Stability Shift",
+        "body": "<p>Because exponentiating large positive logits (e.g., \\( e^{100} \\)) causes floating-point overflow (`NaN`), numerical algorithms exploit Softmax's shift-invariance. Subtracting the absolute maximum element from all logits preserves the identical probabilities while ensuring the largest exponentiated term is elegantly \\( e^0 = 1 \\):</p>\n  <p>\\[ \\text{softmax}(z)_i = \\frac{e^{z_i - \\max(z)}}{\\sum_j e^{z_j - \\max(z)}} \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Gradient Synthesis with Cross-Entropy",
+        "body": "<p>Softmax is almost universally combined with Categorical Cross-Entropy (CCE) loss. Its partial derivative (a Jacobian matrix where off-diagonals are \\( -p_i p_j \\)) analytically perfectly cancels out the logarithmic terms in CCE. Thus, for a logit vector \\( z \\) and a one-hot ground-truth label \\( y \\):</p>\n  <p>\\[ \\nabla_z \\mathcal{L} = p - y \\]</p>\n  <p>This pristine, algebraically clean gradient \\( p - y \\) directly pushes the correct class logit upward proportionally to its current error, entirely bypassing the vanishing gradient pathologies associated with computing logarithms of sigmoid fractions independently.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Temperature Scaling (\\( \\tau \\))",
+        "body": "<p>Scaling the logits by a temperature \\( \\tau \\) before Softmax governs the \"sharpness\" or entropy of the distribution:</p>\n  <p>\\[ p_i = \\frac{e^{z_i / \\tau}}{\\sum e^{z_j / \\tau}} \\]</p>\n  <ul>\n    <li><b>\\( \\tau \\to 0 \\):</b> Distribution collapses entirely into a deterministic Argmax (one-hot) vector.</li>\n    <li><b>\\( \\tau = 1 \\):</b> Standard raw Softmax probability.</li>\n    <li><b>\\( \\tau \\to \\infty \\):</b> Distribution smears into a completely flat Uniform distribution over all classes.</li>\n  </ul>\n  <p>Temperature manipulation is paramount in LLM sampling constraints and Knowledge Distillation frameworks.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Role in Transformer Attention",
+        "body": "<p>In Scaled Dot-Product Attention, Softmax collapses the raw \\( QK^\\top \\) affinity scores into a normalized weighted routing matrix, allowing the Values \\( V \\) to be aggregated safely without exploding in magnitude:</p>\n  <p>\\[ \\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^\\top}{\\sqrt{d_k}}\\right) V \\]</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "fully-connected-layer",
+    "title": "Fully connected layer",
+    "summary": "A Fully Connected (FC) layer (or Dense Layer) is the fundamental architectural building block where every input neuron structurally projects to every single output neuron via an independent learned parameter, executing an affine matrix t…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "input-layer",
+      "softmax"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1958 · Rosenblatt · The perceptron: a probabilistic model for information storage and organization in the brain",
+        "url": "https://courses.cs.washington.edu/courses/cse528/06sp/rosenblatt58.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A <b>Fully Connected (FC) layer</b> (or Dense Layer) is the fundamental architectural building block where every input neuron structurally projects to every single output neuron via an independent learned parameter, executing an affine matrix transformation followed by a non-linearity.</p><p>Given an input vector or tensor squeezed into a sequence \\( x \\in \\mathbb{R}^{d_{in}} \\), the FC Layer computes:</p>\n  <p>\\[ y = \\sigma(Wx + b) \\]</p>\n  <ul>\n    <li><b>\\( W \\in \\mathbb{R}^{d_{out} \\times d_{in}} \\):</b> The dense weight matrix connecting every input to every output.</li>\n    <li><b>\\( b \\in \\mathbb{R}^{d_{out}} \\):</b> The bias vector, effectively translating the hyperplane from the origin.</li>\n    <li><b>\\( \\sigma \\):</b> The element-wise activation function (e.g., ReLU), breaking the structural linear collapse constraint.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Inductive Bias vs Generalization",
+        "body": "<p>Unlike Convolutional layers (which bias towards spatial translation invariance) or Recurrent layers (which bias towards sequence temporality), Fully Connected layers possess <b>zero structural priors</b>. Because every dimension can arbitrarily interact with any other dimension without geometric restriction, they are theoretically capable of representing any complex conceptual entanglement.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Parameter Overhead Pathology",
+        "body": "<p>This absolute flexibility demands exorbitant parameter counts. The layer strictly requires \\( (d_{in} \\cdot d_{out}) + d_{out} \\) parameters. If feeding a standard raw \\( 1024 \\times 1024 \\) RGB image into a layer with \\( 1000 \\) neurons, the first \\( W \\) matrix alone demands over <b>3 billion parameters</b> (\\( 1024 \\cdot 1024 \\cdot 3 \\cdot 1000 \\)), instantly bankrupting modern VRAM before training even begins. This sheer density is precisely what motivated sparse convolutional abstractions in modern vision models.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Modern Locality in Transformers",
+        "body": "<p>In the seminal Attention mechanism, while the Attention module routes sequence data <i>between</i> tokens, the <b>Feed-Forward Network (FFN)</b> inside every block relies specifically on two massive Fully Connected layers operating on a strict per-token basis. This allows the FC layers to act as an immense, unconstrained associative memory bank, independently enriching each token's representation without cross-mixing positional data.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "input-layer",
+    "title": "Input layer",
+    "summary": "The Input Layer dictates the exact topological entry-point geometry for raw data entering a neural network. It possesses zero learnable parameters, functioning strictly to broadcast raw feature vectors forward into the first computationa…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "hidden-layer",
+      "fully-connected-layer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Input layer"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The <b>Input Layer</b> dictates the exact topological entry-point geometry for raw data entering a neural network. It possesses zero learnable parameters, functioning strictly to broadcast raw feature vectors forward into the first computational hidden layer.</p><p>If a network expects a raw feature vector \\( x \\in \\mathbb{R}^{d_{in}} \\), the input layer is mathematically defined as a pure identity passthrough:</p>\n  <p>\\[ a^{(0)} = x \\]</p>\n  <p>Because it executes no affine parameter operations or non-linear scaling, standard architectural notation excludes it from network depth (e.g., A \"5-Layer CNN\" contains 5 weight matrices, ignoring the input node structural definition).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Data Geometric Definitions",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Domain Model</th>\n      <th style=\"padding:6px; text-align:left;\">Input Geometry</th>\n      <th style=\"padding:6px; text-align:left;\">Standard Preprocessing</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Tabular / MLP</b></td>\n      <td style=\"padding:6px;\">Flattened Vector: \\( x \\in \\mathbb{R}^d \\)</td>\n      <td style=\"padding:6px;\">Standardization (Z-score scaling to \\( \\mu = 0, \\sigma^2 = 1 \\)) to prevent high-magnitude features dominating initial gradients.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Vision / CNN</b></td>\n      <td style=\"padding:6px;\">3D Tensor: \\( (C, H, W) \\)</td>\n      <td style=\"padding:6px;\">Pixel normalization from \\( [0, 255] \\) domain down to \\( [0, 1] \\) or \\( [-1, 1] \\).</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>NLP / Transformer</b></td>\n      <td style=\"padding:6px;\">Sequence of Integer IDs</td>\n      <td style=\"padding:6px;\">Passed identically to a dense Embedding layer lookup (where the true learnable transformation actually begins).</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Feature Scaling &amp; Initialization Synergy",
+        "body": "<p>The entire calculus of heuristic variance weight initialization (Xavier / He) rests on the strict assumption that the initial input layer \\( x \\) exhibits unit variance. If raw features wildly oscillate (e.g. house prices \\( 500,000 \\) alongside bedrooms \\( 3 \\)), the first affine projection matrix \\( W_1 x \\) instantly propagates massive activation instability, irreparably stalling convergence.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "hidden-layer",
+    "title": "Hidden layer",
+    "summary": "A Hidden Layer represents any intermediate representation mapping between the input and output layers. Depth strictly dictates how many latent affine and nonlinear transformations a dense feature manifold progresses through before the fi…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "output-layer",
+      "input-layer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · Rumelhart, Hinton, Williams · Learning representations by back-propagating errors",
+        "url": "https://www.nature.com/articles/323533a0"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A <b>Hidden Layer</b> represents any intermediate representation mapping between the input and output layers. Depth strictly dictates how many latent affine and nonlinear transformations a dense feature manifold progresses through before the final prediction classifier.</p><p>Each hidden layer \\( l \\) extracts progressively abstract topological correlations via parameterized multiplication and activation:</p>\n  <p>\\[ h^{(l)} = \\sigma(W^{(l)} h^{(l-1)} + b^{(l)}) \\]</p>\n\n  <p><i>The \"hidden\" nomenclature historically emphasizes that intermediate vectors \\( h^{(l)} \\) are never strictly supervised (observed) by the static ground-truth labels during backpropagation training. They represent pure structural latent representations.</i></p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Geometric Bottlenecks & Expansion",
+        "body": "<p>By defining \\( W \\in \\mathbb{R}^{d_{new} \\times d_{prev}} \\), the exact width \\( d_{new} \\) intrinsically regulates the channel capacity (information bottleneck) of that step in the graph. Expanding width temporarily scatters compressed features back into high-dimensional linear combinations for subsequent non-linear isolating, whereas constricting sequentially compresses identical feature variance into dense autoencoded manifolds.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Continuous Composition (Abstract Hierarchies)",
+        "body": "<p>Zeiler and Fergus (2014) practically proved that sequential hidden transformations in an image classifier naturally learn a spatial visual hierarchy without <i>any</i> explicit human instruction.</p>\n  <ul>\n    <li><b>Layer 1/2:</b> Converges exclusively on Gabor filters (strict edge, color transition angles).</li>\n    <li><b>Layer 3/4:</b> Geometrically combines lines into complex invariant loops/tires/noses.</li>\n    <li><b>Layer 5+:</b> Fuses sub-components entirely to detect exact dog breeds or car chassis.</li>\n  </ul>\n  <p>This automated hierarchical abstraction is categorically the central success of deep learning parameter graphs.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "output-layer",
+    "title": "Output layer",
+    "summary": "The final architectural layer of a neural network acting as the prediction head, where the deepest abstract hidden representation is linearly mapped onto an explicit Target Dimensionality, usually culminating in a specialized loss-pairin…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "multilayer-perceptron-mlp",
+      "hidden-layer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Output layer"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The final architectural layer of a neural network acting as the prediction head, where the deepest abstract hidden representation is linearly mapped onto an explicit Target Dimensionality, usually culminating in a specialized loss-pairing operation like Softmax.</p><p>Operating explicitly on the final \\( L \\)-th layer abstracted representation \\( h^{(L)} \\), the pure output layer maps parameters to the strict dimensional demands of the designated metric:</p>\n  <p>\\[ z = W_{out} h^{(L)} + b_{out} \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Standard Task &amp; Parameter Pairings",
+        "body": "<p>The network's architectural formulation dictates the exact pairing of output non-linearity and backpropagation loss function necessary to correctly isolate probabilistic derivatives:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Objective Prediction Task</th>\n      <th style=\"padding:6px; text-align:left;\">Activation Function</th>\n      <th style=\"padding:6px; text-align:left;\">Paired Output Loss Matrix</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Regression</b> (e.g. Housing Price \\( \\$45,000 \\))</td>\n      <td style=\"padding:6px;\">Identity Line (No activation)</td>\n      <td style=\"padding:6px;\">Mean Squared Error (MSE)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Binary Classification</b></td>\n      <td style=\"padding:6px;\">Sigmoid: \\( \\frac{1}{1+e^{-z}} \\) (Bounds exactly to \\( 0-1 \\))</td>\n      <td style=\"padding:6px;\">Binary Cross-Entropy (BCE)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Multi-class Classification</b> (or LLM Next-Token)</td>\n      <td style=\"padding:6px;\">Softmax: Normalizes all \\( K \\) vectors</td>\n      <td style=\"padding:6px;\">Categorical Cross-Entropy</td>\n    </tr>\n  </tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "LLM Weight Tying (Vocabulary Bottlenecks)",
+        "body": "<p>In standard auto-regressive Transformers (GPT architectures), the final output layer is an enormous dense matrix projecting the local embedding dimension back across the massive Vocabulary length: \\( W_{out} \\in \\mathbb{R}^{|V| \\times d_{model}} \\). Using a \\( 50,000 \\) token bank, this final projection matrix burns immense VRAM.</p>\n  <p><i>Weight Tying</i> elegantly solves this by transposing the identical initial Input Embedding matrix \\( E_{in} \\) to serve exclusively as the Output fully connected matrix (\\( W_{out} = E_{in}^\\top \\)), fundamentally slashing parameter cost while heavily regularizing the model by forcing tokens to structurally exist in identical geometric locations at entry and exit.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "multilayer-perceptron-mlp",
+    "title": "Multilayer perceptron (MLP)",
+    "summary": "A Multilayer Perceptron (MLP) is the canonical feed-forward artificial neural network consisting of sequential fully-connected dense layers. Operating entirely on sequential non-linear abstraction, the MLP is both a historical foundation…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "deep-neural-network",
+      "output-layer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · Rumelhart, Hinton, Williams"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A <b>Multilayer Perceptron (MLP)</b> is the canonical feed-forward artificial neural network consisting of sequential fully-connected dense layers. Operating entirely on sequential non-linear abstraction, the MLP is both a historical foundation and an indispensable expansion subroutine across modern architectures.</p><p>The standard deep-learning MLP strictly sequentially stacks parametric layers without temporal sequence loops (RNNs) or local spatial filters (CNNs):</p>\n  <p>\\[ \\hat{y} = f_L(f_{L-1}(\\dots f_1(x))) \\quad \\text{where} \\quad f_l(h) = \\sigma(W^{(l)}h + b^{(l)}) \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Universal Approximation Theorem",
+        "body": "<p>Cybenko (1989) theoretically bounded that any continuous function across bounded domains can be mathematically approximated to arbitrarily dense precision using an MLP with just <b>one</b> massive hidden layer. However, the exact parameter width required is practically infinite, directly driving modern empirical proofs that extreme model <b>depth</b> represents identical continuous mapping combinations exponentially more efficiently than vast hidden layer width alone.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Position-Wise Memory in Transformers",
+        "body": "<p>While strict isolated MLPs fail on high-dimensional images (collapsing via parameter parameter explosion), they remain the central structural component of sequential LLMs. Standard Transformer blocks alternate globally context-mixing Self-Attention with massive, strictly local parameter expansions called Position-Wise Feed-Forward Networks.</p>\n  <p>This FFN precisely follows modern MLP structures:</p>\n  <p>\\[ \\text{FFN}(x_{token}) = W_2 \\, \\sigma(W_1 x_{token} + b_1) + b_2 \\]</p>\n  <p>Where \\( W_1 \\) explodes the model dimension (e.g., \\( d \\to 4d \\)), and \\( W_2 \\) linearly projects the non-linearity explicitly back down. This dense expansion allows each token to privately compute isolated non-linear feature adjustments natively without distributing attention back into the sequence context vector.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "deep-neural-network",
+    "title": "Deep neural network",
+    "summary": "An Artificial Neural Network possessing multiple hidden layers (typically \\( L \\ge 3 \\)) mapping inputs to outputs. Depth is the defining structural characteristic of modern models, empirically granting them the capacity to learn highly…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "deep-learning",
+      "multilayer-perceptron-mlp"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · Rumelhart, Hinton, Williams"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An Artificial Neural Network possessing multiple hidden layers (typically \\( L \\ge 3 \\)) mapping inputs to outputs. <b>Depth</b> is the defining structural characteristic of modern models, empirically granting them the capacity to learn highly complex, hierarchical feature abstractions exponentially more efficiently than single-layer dense nets.</p><p>Mathematically, a deep network is explicitly a sequential continuous composition of non-linear functions:</p>\n  <p>\\[ \\hat{y} = f_L \\circ f_{L-1} \\circ \\cdots \\circ f_1(x) \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Depth-Width Tradeoff",
+        "body": "<p>While Hornik (1991) proved a single, infinitely wide hidden layer guarantees Universal Approximation over continuous domains, the parameter cost is catastrophic. Telgarsky (2016) quantified that a network of depth \\( k \\) naturally computes polynomials structurally demanding over \\( \\mathcal{O}(2^k) \\) isolated nodes across a single shallow layer. Depth guarantees geometric abstraction efficiency.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Core Pathologies",
+        "body": "<p>Historically, deep architectures failed completely because of optimization degradation via the Chain Rule. Backpropagating a local gradient \\( \\frac{\\partial \\mathcal{L}}{\\partial W_1} \\) back to early layers necessitates recursively multiplying Jacobians:</p>\n  <ul>\n    <li><b>Vanishing Gradients:</b> If the spectral norm of most weight matrices was \\( &lt; 1 \\), or if bounded saturating activations (Sigmoids clamping derivatives explicitly at \\( 0.25 \\)) were used, the multiplied fraction decayed exponentially toward 0. Early layers froze permanently.</li>\n    <li><b>Exploding Gradients:</b> If unregularized initialization pushed norms \\( &gt; 1 \\), the gradients recursively scaled into `NaN` floating-point overflow.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Enabled Modern Deep Scaling",
+        "body": "<p>Modern ResNets effortlessly achieve 152+ layers, while standard LLaMA deployments effortlessly stack upwards of 80 full sequential Transformer blocks. This was technically unlocked by:</p>\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Innovation</th>\n      <th style=\"padding:6px; text-align:left;\">Gradient Preservation</th>\n      <th style=\"padding:6px; text-align:left;\">Origin</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>ReLU</b></td>\n      <td style=\"padding:6px;\">Perfect \\( 1.0 \\) non-decaying positive gradient.</td>\n      <td style=\"padding:6px;\">2010 (Nair &amp; Hinton)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Careful Initialization</b></td>\n      <td style=\"padding:6px;\">He/Xavier mathematically forces the variance output by dense matrices explicitly towards 1 to prevent exploding.</td>\n      <td style=\"padding:6px;\">2010 (Xavier), 2015 (He)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Residual Pass-throughs</b></td>\n      <td style=\"padding:6px;\">\\( f(x) + x \\): Adding skip connections guarantees an explicit identity path (\\( 1.0 \\)) completely bypassing the vanishing blocks entirely to the deep root.</td>\n      <td style=\"padding:6px;\">2015 (He et al.)</td>\n    </tr>\n  </tbody></table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "deep-learning",
+    "title": "Deep learning",
+    "summary": "The dominant paradigm within Machine Learning built explicitly around exploiting deep cascaded neural networks natively processing raw data points. Its core tenet universally replaces hard-coded human feature engineering with end-to-end…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "composite-function",
+      "deep-neural-network"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2012 · Krizhevsky, Sutskever, Hinton · ImageNet Classification with Deep Convolutional Neural Networks",
+        "url": "https://proceedings.neurips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The dominant paradigm within Machine Learning built explicitly around exploiting deep cascaded neural networks natively processing raw data points. Its core tenet universally replaces hard-coded human feature engineering with end-to-end learnable internal representation abstractions.</p><p>Classical ML models cleanly separated feature pipelines: Ph.D. researchers spent decades mathematically engineering SIFT matrices, Gabor edges, or TF-IDF NLP bounds, eventually feeding these handcrafted, dense features into simple regressors (SVMs or Random Forests).</p>\n  \n  <p>Deep Learning entirely subsumes this architecture. The network operates directly on primitive inputs (raw localized pixel grids or distinct Byte-Pair word segments). Sequential layers empirically construct independent progressive features:</p>\n  <ul>\n    <li>\\( f_1(x) \\): Extracts dense Gabor edges/line gradients automatically.</li>\n    <li>\\( f_2(x) \\): Combines invariant lines into structural geometric loops.</li>\n    <li>\\( f_5(x) \\): Detects entire abstract Dog noses or human vocal chords intrinsically.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Triad of Supremacy",
+        "body": "<p>Although backpropagation was formalized in 1986, shallow SVM algorithms vastly outperformed networks for 25 years. Deep Learning became dominant around 2012 (AlexNet) immediately driven by a singular triad:</p>\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Triad Core</th>\n      <th style=\"padding:6px; text-align:left;\">Modern Instantiation</th>\n      <th style=\"padding:6px; text-align:left;\">Historical Limitation Solved</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>High-dimensional Datasets</b></td>\n      <td style=\"padding:6px;\">The compilation of ImageNet (\\(14\\text{M}+\\) supervised images) and uncontrolled internet-crawled text data sets (Pile).</td>\n      <td style=\"padding:6px;\">Overparameterized networks flawlessly memorized small sets. Dense data physically forces them to learn deep invariant hierarchies to compress loss perfectly.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Hardware Computation</b></td>\n      <td style=\"padding:6px;\">Nvidia GPUs providing massive matrix-multiplication SIMD acceleration clusters.</td>\n      <td style=\"padding:6px;\">Collapsed unfeasible months of CPU gradient updates directly down into immediate hour cycles.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Architectural Algorithmic Shifts</b></td>\n      <td style=\"padding:6px;\">Non-saturating Activations (ReLU), Normalization Bounds, Transformer Attention Heads.</td>\n      <td style=\"padding:6px;\">Formally defeated the Vanishing Gradient problem destroying dense \\( L&gt;3 \\) topologies.</td>\n    </tr>\n  </tbody></table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "composite-function",
+    "title": "Composite function",
+    "summary": "A composite function is formally defined by sequentially assigning the mathematical output of one distinct operation explicitly as the required geometric input to the next \\( (g \\circ f)(x) = g(f(x)) \\). Entire Neural Networks mathematic…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "relu",
+      "deep-learning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Composite function"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A composite function is formally defined by sequentially assigning the mathematical output of one distinct operation explicitly as the required geometric input to the next \\( (g \\circ f)(x) = g(f(x)) \\). Entire Neural Networks mathematically compress into a singular, massively deep continuous composite function.</p><p>Given successive dense affine transformations combined with explicit non-linear breaking operations \\( \\sigma \\), the abstract definition of a network is strictly composed depth:</p>\n  <p>\\[ \\hat{y} = F(x) = (\\sigma_3 \\circ W_3 \\circ \\sigma_2 \\circ W_2 \\circ \\sigma_1 \\circ W_1)(x) \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Backpropagation and The Chain Rule",
+        "body": "<p>The entire calculus feasibility of Deep Learning exists solely because of the mathematical derivative properties isolated in continuous composite functions. The Chain Rule precisely isolates local Jacobian gradients for immediate computation.</p>\n  <p>The global gradient isolated to update layer 1 is simply the exact sequential multiplication of strictly local sub-gradients cascaded backward from the isolated loss layer:</p>\n  <p>\\[ \\frac{\\partial \\mathcal{L}}{\\partial W_1} = \\frac{\\partial \\mathcal{L}}{\\partial \\hat{y}} \\cdot \\frac{\\partial \\hat{y}}{\\partial h_2} \\cdot \\frac{\\partial h_2}{\\partial h_1} \\cdot \\frac{\\partial h_1}{\\partial W_1} \\]</p>\n  <p>This isolates intense, global matrix calculations down into computationally cheap \\( O(1) \\) modular operations natively executed identically on Tensor Cores.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Non-Linear Geometries vs Linear Overlap",
+        "body": "<p>Critically, <b>linear</b> functions fail composite isolation. Composing two independent matrices \\( f(x) = W_1 x \\) and \\( g(y) = W_2 y \\) identically collapses structurally into a single useless \\( \\hat{y} = (W_2 W_1) x \\). This is precisely why introducing distinct \\( ReLU \\) or \\( GELU \\) scaling explicitly prevents linear overlapping. Activating functions force the compositional topology to buckle heavily, explicitly permitting multi-layer networks to map enormously complicated dimensional border separations the shallow Perceptron could never trace natively.</p>"
+      }
+    ],
+    "cards": []
   }
 ]
