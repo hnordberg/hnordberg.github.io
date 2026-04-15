@@ -2496,6 +2496,229 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "feedforward-neural-network",
+      "title": "Feedforward neural network",
+      "summary": "An artificial neural network where data flows strictly in a uni-directional forward pass from input to output. The computational graph is a strict Directed Acyclic Graph (DAG) entirely devoid of recurrent cycles or temporal feedback loops.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "convolutional-neural-network-cnn",
+        "minlstm"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "convolutional-neural-network-cnn",
+      "title": "Convolutional neural network (CNN)",
+      "summary": "A highly specialized feedforward architecture heavily biased toward unstructured spatial/grid data (like images) that utilizes isolated sliding discrete convolutional filters instead of global dense matrix multiplication, drastically red…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "cv",
+        "foundational",
+        "ml",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "recurrent-neural-network-rnn",
+        "feedforward-neural-network"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "recurrent-neural-network-rnn",
+      "title": "Recurrent neural network (RNN)",
+      "summary": "A neural network topology featuring explicit cyclical feedback loops, enabling the system to maintain an internal temporal \"Hidden State\" memory across unbounded sequential data steps.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "elman-rnn",
+        "convolutional-neural-network-cnn"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "elman-rnn",
+      "title": "Elman RNN",
+      "summary": "The foundational \"Simple RNN\" conceptualized by Jeffrey Elman (1990) where a dedicated \"context layer\" continuously holds a copied copy of the network's continuous hidden activation to act strictly as temporal input memory on the success…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "hidden-state",
+        "recurrent-neural-network-rnn"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "hidden-state",
+      "title": "Hidden state",
+      "summary": "The Hidden State is the dense latent vector maintained by a neural network's intermediary layers encapsulating its currently computed uninterpretable belief about the input data. Specifically in Recurrent models, it acts as the primary t…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "backpropagation-through-time-bptt",
+        "elman-rnn"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "backpropagation-through-time-bptt",
+      "title": "Backpropagation through time (BPTT)",
+      "summary": "Backpropagation Through Time (BPTT) is the algorithmic prerequisite for training Recurrent networks. It physically \"unrolls\" the cyclic temporal graph horizontally into an immensely deep linear feedforward network spanning \\( T \\) time s…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "what-is-the-vanishing-gradient-problem",
+        "hidden-state"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "what-is-the-vanishing-gradient-problem",
+      "title": "What is the vanishing gradient problem?",
+      "summary": "An optimization pathology absolutely devastating deep neural architectures where the backward-propagating loss gradients progressively decay exponentially toward zero through successive multiplicative Chain Rule layers, permanently paral…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "long-short-term-memory-lstm",
+        "backpropagation-through-time-bptt"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "long-short-term-memory-lstm",
+      "title": "Long short-term memory (LSTM)",
+      "summary": "A radically modified recurrent architecture engineered explicitly to bypass the Vanishing Gradient problem by partitioning the traditional hidden layer into a purely Additive Cell State regulated entirely by learned, multiplicative sigmo…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "xlstm",
+        "what-is-the-vanishing-gradient-problem"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "xlstm",
+      "title": "xLSTM",
+      "summary": "An advanced \"Extended\" modification of the classical 1997 LSTM introduced directly by its original creator (Hochreiter, 2024), utilizing exponential gating functions and massive matrix-memory topologies mathematically engineered specific…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "minlstm",
+        "long-short-term-memory-lstm"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "minlstm",
+      "title": "minLSTM",
+      "summary": "A radically stripped-down \"Minimal\" LSTM variant mathematically severing all hidden-state dependencies from its gating functions, completely destroying the standard Recurrent auto-regressive sequential bottleneck and immediately enabling…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "nlp",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "feedforward-neural-network",
+        "xlstm"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

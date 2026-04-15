@@ -5700,5 +5700,512 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "feedforward-neural-network",
+    "title": "Feedforward neural network",
+    "summary": "An artificial neural network where data flows strictly in a uni-directional forward pass from input to output. The computational graph is a strict Directed Acyclic Graph (DAG) entirely devoid of recurrent cycles or temporal feedback loops.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "convolutional-neural-network-cnn",
+      "minlstm"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Feedforward neural network"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An artificial neural network where data flows strictly in a uni-directional forward pass from input to output. The computational graph is a strict Directed Acyclic Graph (DAG) entirely devoid of recurrent cycles or temporal feedback loops.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 600 300\" style=\"background-color: #f8f9fa; font-family: sans-serif;\">\n  <text x=\"100\" y=\"280\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">Input x</text>\n  <text x=\"250\" y=\"280\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">Hidden h^(1)</text>\n  <text x=\"400\" y=\"280\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">Hidden h^(2)</text>\n  <text x=\"550\" y=\"280\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">Output y</text>\n  <line x1=\"100\" y1=\"100.0\" x2=\"250\" y2=\"75.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"100.0\" x2=\"250\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"100.0\" x2=\"250\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"100.0\" x2=\"250\" y2=\"225.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"150.0\" x2=\"250\" y2=\"75.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"150.0\" x2=\"250\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"150.0\" x2=\"250\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"150.0\" x2=\"250\" y2=\"225.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"200.0\" x2=\"250\" y2=\"75.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"200.0\" x2=\"250\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"200.0\" x2=\"250\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"100\" y1=\"200.0\" x2=\"250\" y2=\"225.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"75.0\" x2=\"400\" y2=\"75.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"75.0\" x2=\"400\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"75.0\" x2=\"400\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"75.0\" x2=\"400\" y2=\"225.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"125.0\" x2=\"400\" y2=\"75.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"125.0\" x2=\"400\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"125.0\" x2=\"400\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"125.0\" x2=\"400\" y2=\"225.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"175.0\" x2=\"400\" y2=\"75.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"175.0\" x2=\"400\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"175.0\" x2=\"400\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"175.0\" x2=\"400\" y2=\"225.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"225.0\" x2=\"400\" y2=\"75.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"225.0\" x2=\"400\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"225.0\" x2=\"400\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"250\" y1=\"225.0\" x2=\"400\" y2=\"225.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"400\" y1=\"75.0\" x2=\"550\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"400\" y1=\"75.0\" x2=\"550\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"400\" y1=\"125.0\" x2=\"550\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"400\" y1=\"125.0\" x2=\"550\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"400\" y1=\"175.0\" x2=\"550\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"400\" y1=\"175.0\" x2=\"550\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"400\" y1=\"225.0\" x2=\"550\" y2=\"125.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <line x1=\"400\" y1=\"225.0\" x2=\"550\" y2=\"175.0\" stroke=\"#cbd5e1\" stroke-width=\"1.5\"/>\n  <circle cx=\"100\" cy=\"100.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"100\" cy=\"150.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"100\" cy=\"200.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"250\" cy=\"75.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"250\" cy=\"125.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"250\" cy=\"175.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"250\" cy=\"225.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"400\" cy=\"75.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"400\" cy=\"125.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"400\" cy=\"175.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"400\" cy=\"225.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"550\" cy=\"125.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <circle cx=\"550\" cy=\"175.0\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"/>\n  <text x=\"175\" y=\"40\" font-size=\"16\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">W^(1)</text>\n  <text x=\"325\" y=\"40\" font-size=\"16\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">W^(2)</text>\n  <text x=\"475\" y=\"40\" font-size=\"16\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">W^(3)</text>\n</svg>\n</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>The standard Feedforward Neural Network (FFN) encapsulates traditional MLPs and CNNs. Given an input \\( x \\in \\mathbb{R}^{d_0} \\), each succeeding layer strictly computes its state from the immediately preceding depth:</p>\n  <p>\\[ h^{(l)} = \\sigma\\left(W^{(l)} h^{(l-1)} + b^{(l)}\\right) \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Computational Determinism",
+        "body": "<p>Because there are no cycles, the forward pass cost is completely deterministic and strictly bounded by the total number of operations: \\( \\mathcal{O}(\\sum_l ||W^{(l)}||_0) \\). Backpropagation traverses this exact graph exactly once in reverse. This contrasts sharply with Recurrent architectures, which must dynamically unroll across sequence time-steps, accumulating theoretically unbounded memory footprint and depth.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Expressive Capacity &amp; Universal Approximation",
+        "body": "<p>Historically, Cybenko (1989) proved that an FFN with a singular non-linear hidden layer is a Universal Approximator, theoretically capable of matching any continuous function over a compact set. However, the width \\( d_1 \\) required grows exponentially. Modern FFNs rely on extreme depth (dozens to hundreds of sequential layers) to hierarchically construct feature spaces parametrically cheaper.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The FFN inside the Transformer",
+        "body": "<p>While global sequences are managed by Attention, every single token in a Transformer is subsequently rushed through an isolated dense FFN subroutine:</p>\n  <p>\\[ \\text{FFN}(x) = W_2 (\\text{GELU}(W_1 x)) \\]</p>\n  <p>This strict feedforward bottleneck is the primary mathematical instrument enabling multi-layer Transformers to execute non-linear memory retrieval independent of positional sequence mixing.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "convolutional-neural-network-cnn",
+    "title": "Convolutional neural network (CNN)",
+    "summary": "A highly specialized feedforward architecture heavily biased toward unstructured spatial/grid data (like images) that utilizes isolated sliding discrete convolutional filters instead of global dense matrix multiplication, drastically red…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "cv",
+      "foundational",
+      "ml",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "recurrent-neural-network-rnn",
+      "feedforward-neural-network"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1998 · Yann LeCun · Gradient-Based Learning Applied to Document Recognition",
+        "url": "http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A highly specialized feedforward architecture heavily biased toward unstructured spatial/grid data (like images) that utilizes isolated sliding discrete convolutional filters instead of global dense matrix multiplication, drastically reducing parameters via structural weight-sharing.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 650 300\" style=\"background-color: #f8f9fa; font-family: sans-serif;\">\n  <defs>\n    <marker id=\"arrow_1772486150734\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\">\n      <path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#94a3b8\" />\n    </marker>\n  </defs>\n  <text x=\"137.5\" y=\"45\" font-size=\"16\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\">Input Image (I)</text>\n  <rect x=\"50\" y=\"60\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"67.5\" y=\"82.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">0</text>\n  <rect x=\"85\" y=\"60\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"102.5\" y=\"82.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">3</text>\n  <rect x=\"120\" y=\"60\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"137.5\" y=\"82.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">6</text>\n  <rect x=\"155\" y=\"60\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"172.5\" y=\"82.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">0</text>\n  <rect x=\"190\" y=\"60\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"207.5\" y=\"82.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">3</text>\n  <rect x=\"50\" y=\"95\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"67.5\" y=\"117.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">7</text>\n  <rect x=\"85\" y=\"95\" width=\"35\" height=\"35\" fill=\"#bfdbfe\" stroke=\"#3b82f6\" stroke-width=\"2\"/>\n  <text x=\"102.5\" y=\"117.5\" font-size=\"12\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">1</text>\n  <rect x=\"120\" y=\"95\" width=\"35\" height=\"35\" fill=\"#bfdbfe\" stroke=\"#3b82f6\" stroke-width=\"2\"/>\n  <text x=\"137.5\" y=\"117.5\" font-size=\"12\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">4</text>\n  <rect x=\"155\" y=\"95\" width=\"35\" height=\"35\" fill=\"#bfdbfe\" stroke=\"#3b82f6\" stroke-width=\"2\"/>\n  <text x=\"172.5\" y=\"117.5\" font-size=\"12\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">7</text>\n  <rect x=\"190\" y=\"95\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"207.5\" y=\"117.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">1</text>\n  <rect x=\"50\" y=\"130\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"67.5\" y=\"152.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">5</text>\n  <rect x=\"85\" y=\"130\" width=\"35\" height=\"35\" fill=\"#bfdbfe\" stroke=\"#3b82f6\" stroke-width=\"2\"/>\n  <text x=\"102.5\" y=\"152.5\" font-size=\"12\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">8</text>\n  <rect x=\"120\" y=\"130\" width=\"35\" height=\"35\" fill=\"#bfdbfe\" stroke=\"#3b82f6\" stroke-width=\"2\"/>\n  <text x=\"137.5\" y=\"152.5\" font-size=\"12\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">2</text>\n  <rect x=\"155\" y=\"130\" width=\"35\" height=\"35\" fill=\"#bfdbfe\" stroke=\"#3b82f6\" stroke-width=\"2\"/>\n  <text x=\"172.5\" y=\"152.5\" font-size=\"12\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">5</text>\n  <rect x=\"190\" y=\"130\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"207.5\" y=\"152.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">8</text>\n  <rect x=\"50\" y=\"165\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"67.5\" y=\"187.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">3</text>\n  <rect x=\"85\" y=\"165\" width=\"35\" height=\"35\" fill=\"#bfdbfe\" stroke=\"#3b82f6\" stroke-width=\"2\"/>\n  <text x=\"102.5\" y=\"187.5\" font-size=\"12\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">6</text>\n  <rect x=\"120\" y=\"165\" width=\"35\" height=\"35\" fill=\"#bfdbfe\" stroke=\"#3b82f6\" stroke-width=\"2\"/>\n  <text x=\"137.5\" y=\"187.5\" font-size=\"12\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">0</text>\n  <rect x=\"155\" y=\"165\" width=\"35\" height=\"35\" fill=\"#bfdbfe\" stroke=\"#3b82f6\" stroke-width=\"2\"/>\n  <text x=\"172.5\" y=\"187.5\" font-size=\"12\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">3</text>\n  <rect x=\"190\" y=\"165\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"207.5\" y=\"187.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">6</text>\n  <rect x=\"50\" y=\"200\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"67.5\" y=\"222.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">1</text>\n  <rect x=\"85\" y=\"200\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"102.5\" y=\"222.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">4</text>\n  <rect x=\"120\" y=\"200\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"137.5\" y=\"222.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">7</text>\n  <rect x=\"155\" y=\"200\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"172.5\" y=\"222.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">1</text>\n  <rect x=\"190\" y=\"200\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <text x=\"207.5\" y=\"222.5\" font-size=\"12\" fill=\"#94a3b8\" text-anchor=\"middle\">4</text>\n  <rect x=\"85\" y=\"95\" width=\"105\" height=\"105\" fill=\"none\" stroke=\"#3b82f6\" stroke-width=\"3\"/>\n  <text x=\"337.5\" y=\"80\" font-size=\"16\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\">Kernel (K)</text>\n  <rect x=\"285\" y=\"95\" width=\"35\" height=\"35\" fill=\"#fdf2f8\" stroke=\"#db2777\" stroke-width=\"1\"/>\n  <text x=\"302.5\" y=\"117.5\" font-size=\"14\" fill=\"#db2777\" font-weight=\"bold\" text-anchor=\"middle\">1</text>\n  <rect x=\"320\" y=\"95\" width=\"35\" height=\"35\" fill=\"#fdf2f8\" stroke=\"#db2777\" stroke-width=\"1\"/>\n  <text x=\"337.5\" y=\"117.5\" font-size=\"14\" fill=\"#db2777\" font-weight=\"bold\" text-anchor=\"middle\">0</text>\n  <rect x=\"355\" y=\"95\" width=\"35\" height=\"35\" fill=\"#fdf2f8\" stroke=\"#db2777\" stroke-width=\"1\"/>\n  <text x=\"372.5\" y=\"117.5\" font-size=\"14\" fill=\"#db2777\" font-weight=\"bold\" text-anchor=\"middle\">-1</text>\n  <rect x=\"285\" y=\"130\" width=\"35\" height=\"35\" fill=\"#fdf2f8\" stroke=\"#db2777\" stroke-width=\"1\"/>\n  <text x=\"302.5\" y=\"152.5\" font-size=\"14\" fill=\"#db2777\" font-weight=\"bold\" text-anchor=\"middle\">1</text>\n  <rect x=\"320\" y=\"130\" width=\"35\" height=\"35\" fill=\"#fdf2f8\" stroke=\"#db2777\" stroke-width=\"1\"/>\n  <text x=\"337.5\" y=\"152.5\" font-size=\"14\" fill=\"#db2777\" font-weight=\"bold\" text-anchor=\"middle\">0</text>\n  <rect x=\"355\" y=\"130\" width=\"35\" height=\"35\" fill=\"#fdf2f8\" stroke=\"#db2777\" stroke-width=\"1\"/>\n  <text x=\"372.5\" y=\"152.5\" font-size=\"14\" fill=\"#db2777\" font-weight=\"bold\" text-anchor=\"middle\">-1</text>\n  <rect x=\"285\" y=\"165\" width=\"35\" height=\"35\" fill=\"#fdf2f8\" stroke=\"#db2777\" stroke-width=\"1\"/>\n  <text x=\"302.5\" y=\"187.5\" font-size=\"14\" fill=\"#db2777\" font-weight=\"bold\" text-anchor=\"middle\">1</text>\n  <rect x=\"320\" y=\"165\" width=\"35\" height=\"35\" fill=\"#fdf2f8\" stroke=\"#db2777\" stroke-width=\"1\"/>\n  <text x=\"337.5\" y=\"187.5\" font-size=\"14\" fill=\"#db2777\" font-weight=\"bold\" text-anchor=\"middle\">0</text>\n  <rect x=\"355\" y=\"165\" width=\"35\" height=\"35\" fill=\"#fdf2f8\" stroke=\"#db2777\" stroke-width=\"1\"/>\n  <text x=\"372.5\" y=\"187.5\" font-size=\"14\" fill=\"#db2777\" font-weight=\"bold\" text-anchor=\"middle\">-1</text>\n  <text x=\"255\" y=\"152.5\" font-size=\"24\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\">*</text>\n  <text x=\"512.5\" y=\"80\" font-size=\"16\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\">Feature Map</text>\n  <rect x=\"460\" y=\"95\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <rect x=\"495\" y=\"95\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <rect x=\"530\" y=\"95\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <rect x=\"460\" y=\"130\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <rect x=\"495\" y=\"130\" width=\"35\" height=\"35\" fill=\"#bfdbfe\" stroke=\"#3b82f6\" stroke-width=\"2\"/>\n  <text x=\"512.5\" y=\"152.5\" font-size=\"14\" fill=\"#3b82f6\" font-weight=\"bold\" text-anchor=\"middle\">0</text>\n  <rect x=\"530\" y=\"130\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <rect x=\"460\" y=\"165\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <rect x=\"495\" y=\"165\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <rect x=\"530\" y=\"165\" width=\"35\" height=\"35\" fill=\"#f1f5f9\" stroke=\"#cbd5e1\" stroke-width=\"1\"/>\n  <line x1=\"400\" y1=\"147.5\" x2=\"450\" y2=\"147.5\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#arrow_1772486150734)\"/>\n  <line x1=\"190\" y1=\"95\" x2=\"495\" y2=\"130\" stroke=\"#3b82f6\" stroke-width=\"1\" stroke-dasharray=\"4,4\" opacity=\"0.5\"/>\n  <line x1=\"190\" y1=\"200\" x2=\"495\" y2=\"165\" stroke=\"#3b82f6\" stroke-width=\"1\" stroke-dasharray=\"4,4\" opacity=\"0.5\"/>\n</svg>\n</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>A Convolutional Neural Network assumes strict spatial locality. Rather than a dense \\( W \\) connecting every input pixel, a CNN sweeps a small 2D kernel matrix (e.g. \\( 3 \\times 3 \\)) across the entire input grid, generating feature maps via discrete 2D cross-correlation:</p>\n  <p>\\[ S(i, j) = (I * K)(i, j) = \\sum_m \\sum_n I(i-m, j-n) K(m, n) \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Dual Inductive Biases",
+        "body": "<p>This architecture is defined by two foundational priors mathematically mirroring biological visual cortex mechanics:</p>\n  <ol>\n    <li><b>Local Connectivity:</b> Instead of global semantic patterns, the kernel exclusively isolates localized pixel gradients (edges, textures).</li>\n    <li><b>Translation Equivariance (Weight Sharing):</b> Exactly the same kernel \\( K \\) is applied identically at every \\( (i, j) \\) coordinate. If a \"cat ear\" filter activates in the top-left, sliding the image translates the identical activation to the bottom-right. \\( f(Shift(x)) \\approx Shift(f(x)) \\).</li>\n  </ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Parameter Efficiency Collapse",
+        "body": "<p>A dense layer processing a small \\( 256 \\times 256 \\) RGB image to output merely \\( 1000 \\) hidden nodes requires an impossible \\( \\sim 196,000,000 \\) parameters for the first layer alone. A CNN layer utilizing 64 discrete \\( 3 \\times 3 \\) filters computes immense localized feature maps using exactly <b>\\( \\sim 1,728 \\) parameters</b> (\\( 3 \\cdot 3 \\cdot 3 \\cdot 64 \\)), regardless of the input resolution's vastness.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Historical Ascension (LeCun &amp; AlexNet)",
+        "body": "<p>Originating with LeCun's digit-recognizing LeNet-5 (1998), CNNs exploded to empirical dominance when Krizhevsky's AlexNet (2012) mapped these localized convolutions massively in parallel across GPU hardware alongside the ReLU activation, instantly annihilating decades of manual computer-vision feature-engineering and officially launching modern Deep Learning.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "recurrent-neural-network-rnn",
+    "title": "Recurrent neural network (RNN)",
+    "summary": "A neural network topology featuring explicit cyclical feedback loops, enabling the system to maintain an internal temporal \"Hidden State\" memory across unbounded sequential data steps.",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "elman-rnn",
+      "convolutional-neural-network-cnn"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · Rumelhart, Hinton, Williams · 1990 · Elman"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A neural network topology featuring explicit cyclical feedback loops, enabling the system to maintain an internal temporal \"Hidden State\" memory across unbounded sequential data steps.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Illustration",
+        "body": "<div class=\"wiki-deck-figure-wrap\"><div style=\"text-align:center; margin:16px 0;\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 250\" style=\"background-color: rgb(255, 228, 225); font-family: sans-serif;\"><defs><marker id=\"arrow_1772486159960\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#94a3b8\"></path></marker><marker id=\"arrow-blue_1772486159960\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#3b82f6\"></path></marker></defs><g><g><circle cx=\"70\" cy=\"200\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></circle><text x=\"70\" y=\"204\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">x</text></g><g><rect x=\"40\" y=\"105\" width=\"60\" height=\"40\" rx=\"5\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></rect><text x=\"70\" y=\"130\" font-size=\"18\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">h</text></g><g><circle cx=\"70\" cy=\"50\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></circle><text x=\"70\" y=\"54\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">y</text></g><line x1=\"70\" y1=\"185\" x2=\"70\" y2=\"151\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#arrow_1772486159960)\"></line><line x1=\"70\" y1=\"105\" x2=\"70\" y2=\"71\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#arrow_1772486159960)\"></line><path d=\"M 100 115 A 25 25 0 1 1 100 135\" fill=\"none\" stroke=\"#3b82f6\" stroke-width=\"2\" marker-end=\"url(#arrow-blue_1772486159960)\"></path><text x=\"155\" y=\"130\" font-size=\"14\" fill=\"#3b82f6\" font-weight=\"bold\">W_hh</text><text x=\"200\" y=\"131\" font-size=\"24\" fill=\"#1e293b\" font-weight=\"bold\">=</text><g><rect x=\"215\" y=\"15\" width=\"345\" height=\"220\" fill=\"none\" stroke=\"#94a3b8\" stroke-width=\"1\" stroke-dasharray=\"5,5\" rx=\"10\"></rect><g><circle cx=\"270\" cy=\"200\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></circle><text x=\"270\" y=\"204\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">x<tspan dy=\"2\" font-size=\"10\">t-1</tspan></text></g><g><rect x=\"240\" y=\"105\" width=\"60\" height=\"40\" rx=\"5\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></rect><text x=\"270\" y=\"130\" font-size=\"18\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">h<tspan dy=\"3\" font-size=\"10\">t-1</tspan></text></g><g><circle cx=\"270\" cy=\"50\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></circle><text x=\"270\" y=\"54\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">y<tspan dy=\"2\" font-size=\"10\">t-1</tspan></text></g><line x1=\"270\" y1=\"185\" x2=\"270\" y2=\"151\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#arrow_1772486159960)\"></line><line x1=\"270\" y1=\"105\" x2=\"270\" y2=\"71\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#arrow_1772486159960)\"></line><line x1=\"300\" y1=\"125\" x2=\"344\" y2=\"125\" stroke=\"#3b82f6\" stroke-width=\"2\" marker-end=\"url(#arrow-blue_1772486159960)\"></line><text x=\"325\" y=\"117\" font-size=\"12\" fill=\"#3b82f6\" text-anchor=\"middle\" font-weight=\"bold\">W_hh</text><g><circle cx=\"380\" cy=\"200\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></circle><text x=\"380\" y=\"204\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">x<tspan dy=\"2\" font-size=\"10\">t</tspan></text></g><g><rect x=\"350\" y=\"105\" width=\"60\" height=\"40\" rx=\"5\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></rect><text x=\"380\" y=\"130\" font-size=\"18\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">h<tspan dy=\"3\" font-size=\"10\">t</tspan></text></g><g><circle cx=\"380\" cy=\"50\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></circle><text x=\"380\" y=\"54\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">y<tspan dy=\"2\" font-size=\"10\">t</tspan></text></g><line x1=\"380\" y1=\"185\" x2=\"380\" y2=\"151\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#arrow_1772486159960)\"></line><line x1=\"380\" y1=\"105\" x2=\"380\" y2=\"71\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#arrow_1772486159960)\"></line><line x1=\"410\" y1=\"125\" x2=\"454\" y2=\"125\" stroke=\"#3b82f6\" stroke-width=\"2\" marker-end=\"url(#arrow-blue_1772486159960)\"></line><text x=\"435\" y=\"117\" font-size=\"12\" fill=\"#3b82f6\" text-anchor=\"middle\" font-weight=\"bold\">W_hh</text><g><circle cx=\"490\" cy=\"200\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></circle><text x=\"490\" y=\"204\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">x<tspan dy=\"2\" font-size=\"10\">t+1</tspan></text></g><g><rect x=\"460\" y=\"105\" width=\"60\" height=\"40\" rx=\"5\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></rect><text x=\"490\" y=\"130\" font-size=\"18\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">h<tspan dy=\"3\" font-size=\"10\">t+1</tspan></text></g><g><circle cx=\"490\" cy=\"50\" r=\"15\" fill=\"#e2e8f0\" stroke=\"#64748b\" stroke-width=\"2\"></circle><text x=\"490\" y=\"54\" font-size=\"14\" font-weight=\"bold\" fill=\"#1e293b\" text-anchor=\"middle\" font-style=\"italic\">y<tspan dy=\"2\" font-size=\"10\">t+1</tspan></text></g><line x1=\"490\" y1=\"185\" x2=\"490\" y2=\"151\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#arrow_1772486159960)\"></line><line x1=\"490\" y1=\"105\" x2=\"490\" y2=\"71\" stroke=\"#94a3b8\" stroke-width=\"2\" marker-end=\"url(#arrow_1772486159960)\"></line><text x=\"240\" y=\"130\" font-size=\"20\" fill=\"#94a3b8\" font-weight=\"bold\">...</text><text x=\"535\" y=\"130\" font-size=\"20\" fill=\"#94a3b8\" font-weight=\"bold\">...</text><line x1=\"250\" y1=\"125\" x2=\"234\" y2=\"125\" stroke=\"#3b82f6\" stroke-width=\"2\" marker-end=\"url(#arrow-blue_1772486159960)\"></line><line x1=\"520\" y1=\"125\" x2=\"530\" y2=\"125\" stroke=\"#3b82f6\" stroke-width=\"2\" marker-end=\"url(#arrow-blue_1772486159960)\"></line><text x=\"387.5\" y=\"35\" font-size=\"14\" fill=\"#94a3b8\" text-anchor=\"middle\" font-weight=\"bold\" font-style=\"italic\">Unrolled Through Time (BPTT)</text></g></g></svg>\n</div></div>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p>Unlike Feedforward networks, Recurrent Neural Networks natively process sequence variables \\( x_t \\) by injecting the output of step \\( t-1 \\) identically back into the calculation of step \\( t \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mathematical Formulation",
+        "body": "<p>The standard \"Vanilla\" RNN simultaneously computes a temporal hidden state \\( h_t \\) and an output prediction \\( y_t \\):</p>\n  <p>\\[ h_t = \\sigma(W_{hx} x_t + W_{hh} h_{t-1} + b_h) \\]</p>\n  <p>\\[ y_t = W_{yh} h_t + b_y \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Temporal Weight Sharing",
+        "body": "<p>Crucially, the exact parameter matrices \\( W_{hx} \\) and \\( W_{hh} \\) are strictly identical and shared absolutely across every single time step \\( t \\). This allows the RNN to process text or time-series variables of theoretically infinite length without expanding parameter size, providing an intense inductive bias toward temporal shift invariance.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Optimization Catastrophe (BPTT)",
+        "body": "<p>Training requires unrolling the sequence loop horizontally into a massively deep feedforward graph and calculating <i>Backpropagation Through Time (BPTT)</i>. The gradient traversing backward from \\( t=100 \\) to \\( t=1 \\) forces the exact recursive multiplication of local Jacobians \\( 100 \\) times:</p>\n  <p>\\[ \\frac{\\partial h_t}{\\partial h_{t-k}} = \\prod_{i=t-k+1}^{t} W_{hh}^\\top \\text{diag}(\\sigma'(z_i)) \\]</p>\n  <p>This causes fatal exponential variance. If the structural spectral radius of \\( W_{hh} \\) deviates from \\( 1.0 \\), the gradient either radically explodes into `NaN` or crashes to \\( 0 \\) (Vanishing Gradients), preventing the standard RNN from learning dependencies further than 5-10 temporal steps apart. This mathematical failure necessitated the invention of LSTMs.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "elman-rnn",
+    "title": "Elman RNN",
+    "summary": "The foundational \"Simple RNN\" conceptualized by Jeffrey Elman (1990) where a dedicated \"context layer\" continuously holds a copied copy of the network's continuous hidden activation to act strictly as temporal input memory on the success…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "hidden-state",
+      "recurrent-neural-network-rnn"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1990 · Jeffrey Elman · Cognitive Science · Finding Structure in Time",
+        "url": "https://onlinelibrary.wiley.com/doi/10.1207/s15516709cog1402_1"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The foundational \"Simple RNN\" conceptualized by Jeffrey Elman (1990) where a dedicated \"context layer\" continuously holds a copied copy of the network's continuous hidden activation to act strictly as temporal input memory on the successive time step.</p><p>The Elman architecture defined the structural baseline for sequence learning. While the preceding Jordan network (1986) fed the network's final output probabilities \\( y_{t-1} \\) back inside, Elman brilliantly fed back the abstract, high-dimensional intermediate layer: the <b>Hidden State</b>.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Mathematical Formalism",
+        "body": "<p>The Elman RNN explicitly concatenates the current input vector with the immediately preceding latent abstraction vector:</p>\n  <p>\\[ h_t = \\tanh(W_{hx} x_t + W_{hh} h_{t-1} + b_h) \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Representational Impact vs Jordan Network",
+        "body": "<ul>\n    <li><b>Jordan (Output Feedback):</b> Feeding back \\( y_{t-1} \\) forces the mathematical state to strictly represent external task goals (e.g., probability of the noun \"car\" limits the memory payload to precisely \\( K \\) classes).</li>\n    <li><b>Elman (Hidden Feedback):</b> Feeding back \\( h_{t-1} \\) allows the model unconstrained dimensional space to develop a highly rich, uninterpretable latent encoding holding vast historical nuance rather than just immediate prediction data.</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Historical Significance",
+        "body": "<p>Elman originally proved that when trained predicting succeeding characters in standard English sentences, these hidden layers naturally arranged themselves into incredibly clean hierarchical clustered branches without explicitly programmed rules (distinguishing strictly between inanimate objects, verbs, pluralities, etc.). It definitively proved backpropagation could synthesize inherent complex grammatical logic from raw sequential input observation alone, laying the groundwork for all modern NLP.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "hidden-state",
+    "title": "Hidden state",
+    "summary": "The Hidden State is the dense latent vector maintained by a neural network's intermediary layers encapsulating its currently computed uninterpretable belief about the input data. Specifically in Recurrent models, it acts as the primary t…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "backpropagation-through-time-bptt",
+      "elman-rnn"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1986 · Rumelhart, Hinton, Williams · Learning representations by back-propagating errors",
+        "url": "https://www.nature.com/articles/323533a0"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The <b>Hidden State</b> is the dense latent vector maintained by a neural network's intermediary layers encapsulating its currently computed uninterpretable belief about the input data. Specifically in Recurrent models, it acts as the primary temporal memory bottleneck carrying the entire encoded sequence history forward.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Feedforward Hierarchy (CNNs / MLPs)",
+        "body": "<p>In standard Feedforward topologies, the individual layer output vectors \\( h^{(l)} \\in \\mathbb{R}^{d_l} \\) continuously serve as the transient hidden state. These latent tensors are rigorously unobservable in the final output prediction space \\( \\hat{y} \\), and mathematically translate raw pixels/inputs into high-dimensional semantic clustering planes (e.g. recognizing edges \\( \\to \\) eyes \\( \\to \\) faces).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Recurrent Sequence Bottlenecks (RNNs)",
+        "body": "<p>In Recurrent Neural Networks, the vector \\( h_t \\in \\mathbb{R}^d \\) structurally functions as the sole temporal transmission unit:</p>\n  <p>\\[ h_t = \\tanh(W_{hx} x_t + W_{hh} h_{t-1} + b_h) \\]</p>\n  <p>Crucially, because \\( h_t \\) contains a strictly fixed dimensionality \\( d \\), it acts as a massive theoretical <b>Information Bottleneck</b>. After continuously absorbing \\( 1,000 \\) words in a document paragraph, it is forced to compress every single syntactic, semantic, and structural relationship down into an identical tiny array of \\( 256 \\) floats. This catastrophic compression failure directly drove the invention of the Transformer.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Transformer Residual Streams",
+        "body": "<p>Transformers (BERT, GPT) explicitly abolish the temporal transmission hidden state entirely. Instead, they maintain a <i>Residual Stream</i> hidden state natively at every isolated token position \\( i \\) simultaneously: \\( h_{i}^{(l)} \\in \\mathbb{R}^{d_{model}} \\). The tokens attend backward dynamically without compressing past context into a recursive singularity bottleneck.</p>\n  \n  <p><i>Note: Alain &amp; Bengio (2017) demonstrated that \"linear probing\" distinct hidden states across deep NLP models perfectly exposes at which exact intermediate layer the model internally comprehends grammar versus object-permanence.</i></p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "backpropagation-through-time-bptt",
+    "title": "Backpropagation through time (BPTT)",
+    "summary": "Backpropagation Through Time (BPTT) is the algorithmic prerequisite for training Recurrent networks. It physically \"unrolls\" the cyclic temporal graph horizontally into an immensely deep linear feedforward network spanning \\( T \\) time s…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "what-is-the-vanishing-gradient-problem",
+      "hidden-state"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1990 · Paul Werbos · Backpropagation Through Time: What It Does and How to Do It",
+        "url": "https://ieeexplore.ieee.org/document/58337"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p><b>Backpropagation Through Time (BPTT)</b> is the algorithmic prerequisite for training Recurrent networks. It physically \"unrolls\" the cyclic temporal graph horizontally into an immensely deep linear feedforward network spanning \\( T \\) time steps, permitting the standard chain-rule derivative calculation to traverse backward across history.</p><p>When computing exactly how the shared recurrent hidden matrix \\( W_{hh} \\) contributed to an error occurring at step \\( t \\), the gradient must traverse backward through the entire history to step \\( k \\):</p>\n  \n  <p>\\[ \\frac{\\partial \\mathcal{L}_t}{\\partial W_{hh}} = \\sum_{k=1}^{t} \\frac{\\partial \\mathcal{L}_t}{\\partial h_t} \\cdot \\left( \\prod_{j=k+1}^{t} \\frac{\\partial h_j}{\\partial h_{j-1}} \\right) \\cdot \\frac{\\partial h_k}{\\partial W_{hh}} \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Pathological Core (Multiplicative Jacobians)",
+        "body": "<p>The exact center product term \\( \\left( \\prod_{j=k+1}^{t} \\frac{\\partial h_j}{\\partial h_{j-1}} \\right) \\) is mathematically defined as repeatedly multiplying the local step Jacobians: \\( W_{hh}^\\top \\text{diag}(\\sigma'(z_j)) \\).</p>\n  <p>If processing a modest sentence of 50 words, this demands multiplying the exact identical hidden weight matrix \\( W_{hh} \\) by itself \\( 50 \\) consecutive times. Equivalently approaching \\( (W_{hh})^{50} \\). Because standard activation derivatives (tanh/sigmoid) are strictly bounded fractional multipliers (e.g. \\( < 1.0 \\)), and spectral norms rarely precisely balance, this continuous multiplication invariably forces the entire gradient formula to unconditionally crash toward absolute 0 (Vanishing Gradients) or multiply into <i>Infinity</i> `NaN` (Exploding Gradients) long before it provides any adjustment to token \\( k=1 \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Truncated BPTT (TBPTT)",
+        "body": "<p>Practically addressing the memory footprint and explosion pathologies, engineering frameworks (PyTorch) almost never unroll a full textbook sequence. TBPTT explicitly severs the computational gradient graph horizontally after a fixed boundary \\( \\tau \\) (e.g. unrolling every 25 steps, detaching the history tensors, and updating). It wildly reduces RAM constraints at the severe theoretical expense of totally blinding the model to causal updates longer than \\( \\tau \\).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "what-is-the-vanishing-gradient-problem",
+    "title": "What is the vanishing gradient problem?",
+    "summary": "An optimization pathology absolutely devastating deep neural architectures where the backward-propagating loss gradients progressively decay exponentially toward zero through successive multiplicative Chain Rule layers, permanently paral…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "optimization",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "long-short-term-memory-lstm",
+      "backpropagation-through-time-bptt"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1991 · Sepp Hochreiter · Untersuchungen zu dynamischen neuronalen Netzen"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An optimization pathology absolutely devastating deep neural architectures where the backward-propagating loss gradients progressively decay exponentially toward zero through successive multiplicative Chain Rule layers, permanently paralyzing the network's earliest structural layers from receiving weight updates.</p><p>During fundamental Feedforward or sequence BPTT backpropagation, computing the explicit parameter gradient for an early initial layer \\( l \\) strictly forces compounding the local derivative Jacobians for every single layer deeper in the model:</p>\n\n  <p>\\[ \\frac{\\partial \\mathcal{L}}{\\partial W^{(1)}} = \\left( \\prod_{k=2}^{L} \\frac{\\partial h^{(k)}}{\\partial h^{(k-1)}} \\right) \\cdot \\frac{\\partial \\mathcal{L}}{\\partial \\hat{y}} \\cdot \\frac{\\partial h^{(1)}}{\\partial W^{(1)}} \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Mathematical Cause (Saturating Non-Linearities)",
+        "body": "<p>Historically, Networks universally deployed the smooth Sigmoid \\( \\sigma(z) \\) function due to biological intuition. However, its strict derivative equation tops out at a theoretical absolute maximum of \\( \\sigma'(z) \\dots \\le 0.25 \\).</p>\n  <p>Tracing backward through an immensely modest 6-layer CNN:</p>\n  <p>\\[ 0.25 \\times 0.25 \\times 0.25 \\times 0.25 \\times 0.25 = 0.000976 \\]</p>\n  <p>The gradient physically reaching Layer 1 to adjust the foundational edge-detection filters is pulverized to less than \\( \\frac{1}{1000} \\text{th} \\) of the final output error magnitude. Layer 1's weights simply freeze natively, stranding the model completely at initialization and destroying convergence likelihood.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Architectural Salvations",
+        "body": "<p>The dominant innovations in the final decade exclusively revolved around bypassing this recursive multiplicative fraction collapse:</p>\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Technique</th>\n      <th style=\"padding:6px; text-align:left;\">Gradient Preservation Strategy</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>ReLU Activation</b></td>\n      <td style=\"padding:6px;\">Mathematically imposes a perfect constant \\( f'(x) = 1.0 \\) specifically for all positive signals, eliminating the fractional 0.25 multiplier penalty completely.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>He / Xavier Initialization</b></td>\n      <td style=\"padding:6px;\">Calculates starting random matrices precisely so the structural variance exiting every layer strictly identically mirrors its input variance.</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Residual Skip Connections</b></td>\n      <td style=\"padding:6px;\">Bypasses multiplicative blocks natively by structuring an Additive graph \\( h^{(l)} = f(x) \\textbf{ + x} \\). The derivative of identical \\( \\textbf{+ x} \\) is explicitly \\( 1.0 \\), carving a direct unadulterated gradient superhighway from layer 150 safely backward to Layer 1.</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>LSTM Gates (RNN)</b></td>\n      <td style=\"padding:6px;\">Operates an entirely additive cell state \\( C_t \\) using \"Forget gate\" parameters empirically preserving temporal Jacobians precisely near \\( \\approx 1.0 \\).</td>\n    </tr>\n  </table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "long-short-term-memory-lstm",
+    "title": "Long short-term memory (LSTM)",
+    "summary": "A radically modified recurrent architecture engineered explicitly to bypass the Vanishing Gradient problem by partitioning the traditional hidden layer into a purely Additive Cell State regulated entirely by learned, multiplicative sigmo…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "xlstm",
+      "what-is-the-vanishing-gradient-problem"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1997 · Sepp Hochreiter, Jürgen Schmidhuber · Long Short-Term Memory",
+        "url": "https://www.bioinf.jku.at/publications/older/2604.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A radically modified recurrent architecture engineered explicitly to bypass the Vanishing Gradient problem by partitioning the traditional hidden layer into a purely <b>Additive Cell State</b> regulated entirely by learned, multiplicative sigmoid gates.</p><p>Rather than compounding non-linearities directly mathematically \\( h_t = \\sigma(W x_t + W h_{t-1}) \\), the LSTM (Hochreiter & Schmidhuber, 1997) isolates a protected foundational memory ribbon — the Cell State \\( C_t \\) — spanning the entire chronological sequence alongside the standard Hidden State \\( h_t \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "The Gating Equations",
+        "body": "<p>The network structurally defines three independent \\( [0, 1] \\) Sigmoid gates interacting identically against the concatenated sequence input \\( [h_{t-1}, x_t] \\):</p>\n  <ul>\n    <li><b>Forget Gate \\( f_t = \\sigma(W_f[h, x] + b_f) \\):</b> Dictates exactly what fractional magnitude of the previous cell state \\( C_{t-1} \\) must be physically erased.</li>\n    <li><b>Input Gate \\( i_t = \\sigma(W_i[h, x] + b_i) \\):</b> Dictates exactly what fractional magnitude of the newly proposed candidate cell \\( \\tilde{C}_t \\) should mathematically be incorporated into the permanent ribbon.</li>\n    <li><b>Output Gate \\( o_t = \\sigma(W_o[h, x] + b_o) \\):</b> Filters the permanent internal Cell state \\( C_t \\), deciding identically what portion of the memory is actively useful to emit right now as the visible Hidden State \\( h_t \\).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Additive Cell State Update",
+        "body": "<p>The actual memory update isolates the gates algebraically via element-wise matrix multiplication (Hadamard Product \\( \\odot \\)):</p>\n  <p>\\[ C_t = f_t \\odot C_{t-1} + i_t \\odot \\tilde{C}_t \\]</p>\n  <p>\\[ h_t = o_t \\odot \\tanh(C_t) \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Solving the BPTT Gradient Collapse",
+        "body": "<p>Crucially, because the central Cell State \\( C_t \\) advances through time using strict <b>addition</b> (\\( + i_t \\odot \\tilde{C}_t \\)) rather than dense matrix multiplication, traversing back across 500 sequence steps via the Chain Rule isolates the local Jacobian purely to the Forget Gate term \\( f_t \\). If the Forget Gate activates at \\( 1.0 \\), the BPTT derivation \\( \\frac{\\partial C_t}{\\partial C_{t-1}} \\) identically equals \\( 1.0 \\). Gradients flow completely unhindered backward across infinite theoretical sequences without vanishing.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "xlstm",
+    "title": "xLSTM",
+    "summary": "An advanced \"Extended\" modification of the classical 1997 LSTM introduced directly by its original creator (Hochreiter, 2024), utilizing exponential gating functions and massive matrix-memory topologies mathematically engineered specific…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "minlstm",
+      "long-short-term-memory-lstm"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2024 · Sepp Hochreiter et al. · xLSTM: Extended Long Short-Term Memory",
+        "url": "https://arxiv.org/abs/2405.04517"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An advanced \"Extended\" modification of the classical 1997 LSTM introduced directly by its original creator (Hochreiter, 2024), utilizing exponential gating functions and massive matrix-memory topologies mathematically engineered specifically to compete comprehensively against state-of-the-art Transformer Large Language Models.</p><p>While standard Transformers completely replaced recurrent architectures universally in 2017 by eliminating sequential bottlenecks during training, they intrinsically require debilitating \\( \\mathcal{O}(N^2) \\) quadratic temporal inference computations. The <b>xLSTM</b> revives the \\( \\mathcal{O}(N) \\) Linear-Time inference recurrent structure by drastically modernizing two core variants: <b>sLSTM</b> and <b>mLSTM</b>.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "1. Exponential Gating (sLSTM - Scalar LSTM)",
+        "body": "<p>Standard LSTMs utilized biological Sigmoid gates bounding values identically between \\( [0, 1] \\), inherently placing a hard structural cap on the mathematical magnitude a state could be weighted (a strict upper bound of 1.0). The sLSTM structurally ditches Sigmoid in favor of <i>Exponential Gating</i>.</p>\n  <p>\\[ i_t = \\exp(W_i[x,h]) \\]</p>\n  <p>This formally grants the network effectively infinite dynamic range. Because exponentials scale boundlessly, an sLSTM cell can dramatically and explicitly over-weight specific extremely salient context tokens (like a rare keyword) exponentially higher than irrelevant background sequences, directly mirroring the sharp attention matrices calculated heavily inside a Transformer.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "2. Matrix Memory Cells (mLSTM)",
+        "body": "<p>A conventional LSTM structurally stores memory purely inside an isolated \\( 1D \\) Vector \\( C_t \\). The mLSTM replaces this limited vector fundamentally with a massive \\( 2D \\) Covariance <b>Matrix Memory</b>, utilizing an outer-product update logic exactly mimicking the Key/Value mathematical mappings in Attention:</p>\n  <p>\\[ C_t = f_t \\cdot C_{t-1} + i_t \\cdot (v_t \\otimes k_t) \\]</p>\n  <p>The output is physically retrieved mechanically by multiplying a Query vector directly against this stored covariance matrix \\( C_t q_t \\). Thus, it directly acts as a massively compressed linear attention mechanism operating inside a continuous \\( \\mathcal{O}(1) \\) hidden state updating organically over time.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "minlstm",
+    "title": "minLSTM",
+    "summary": "A radically stripped-down \"Minimal\" LSTM variant mathematically severing all hidden-state dependencies from its gating functions, completely destroying the standard Recurrent auto-regressive sequential bottleneck and immediately enabling…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "architecture",
+      "ml",
+      "nlp",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "feedforward-neural-network",
+      "xlstm"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2024 · Leo Feng, Yoshua Bengio et al. · Were RNNs All We Needed?",
+        "url": "https://arxiv.org/abs/2410.01201"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A radically stripped-down \"Minimal\" LSTM variant mathematically severing all hidden-state dependencies from its gating functions, completely destroying the standard Recurrent auto-regressive sequential bottleneck and immediately enabling massive temporal parallelization via prefix-scans during hardware training.</p><p>The most catastrophic modern failure of traditional LSTMs strictly versus Transformers rests upon <b>Training Parallelizability</b>. Within a standard LSTM, generating the Hidden State \\( h_{t=100} \\) inherently requires waiting computationally for the explicit generation of \\( h_{t=99} \\) to define the Forget Gate \\( f_{100} \\). Training is forced sequentially sequentially, crippling massive GPU core utilization.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Severing the Backwards Dependence",
+        "body": "<p>The <b>minLSTM</b> entirely removes the \\( h_{t-1} \\) vector entirely from the gating equations. The Forget and Input gates depend strictly exclusively upon the isolated individual input token \\( x_t \\) available instantaneously at step 0:</p>\n  <p>\\[ f_t = \\sigma(W_f x_t + b_f) \\]</p>\n  <p>\\[ i_t = \\sigma(W_i x_t + b_i) \\]</p>\n\n  <p>Additionally, the minLSTM entirely drops the Output element gate, structurally collapsing the standard additive update sequence directly into an explicit convex ratio combining the historical state identically against the newly proposed Hidden input:</p>\n  <p>\\[ h_t = \\frac{f_t}{f_t + i_t} \\odot h_{t-1} + \\frac{i_t}{f_t + i_t} \\odot (W_h x_t + b_h) \\]</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Parallel Prefix Scans",
+        "body": "<p>Because the gating variables \\( f_t \\) and \\( i_t \\) can now be calculated simultaneously for every single token \\( [x_1 \\dots x_N] \\) globally across the entire trillion-token dataset entirely concurrently, the final update function translates perfectly into an associative global Prefix-Sum. This collapses the crippling \\( O(T) \\) sequential temporal traversal directly back into the structurally parallel \\( O(T \\log T) \\) computational acceleration class utilized exclusively by modern linear state-space models like Mamba and S4.</p>"
+      }
+    ],
+    "cards": []
   }
 ]
