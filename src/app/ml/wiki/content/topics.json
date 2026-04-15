@@ -1954,7 +1954,10 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1788 · Joseph-Louis Lagrange · Mécanique Analytique; KKT conditions: Karush (1939), Kuhn & Tucker (1951)"
+        "citation": "1788 · Joseph-Louis Lagrange · Mécanique Analytique"
+      },
+      {
+        "citation": "Karush (1939), Kuhn & Tucker (1951)"
       }
     ],
     "sections": [
@@ -2104,7 +2107,13 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1941–1950s · Signal detection theory (Peterson, Birdsall, Fox) · ML adoption: Swets (1988), Fawcett (2006)"
+        "citation": "1941–1950s · Signal detection theory foundations (Peterson, Birdsall, Fox)"
+      },
+      {
+        "citation": "1988 · Swets · Measuring the accuracy of diagnostic systems"
+      },
+      {
+        "citation": "2006 · Fawcett · An introduction to ROC analysis"
       }
     ],
     "sections": [
@@ -9521,7 +9530,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "General concept in linear algebra; systematically applied to attention by Vaswani et al. (2017) · Attention Is All You Need",
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need (projection matrices for Q/K/V mappings)",
+        "url": "https://arxiv.org/abs/1706.03762"
+      },
+      {
+        "citation": "systematically applied to attention by Vaswani et al. (2017) · Attention Is All You Need",
         "url": "https://arxiv.org/abs/1706.03762"
       }
     ],
@@ -10556,7 +10569,7 @@
         "url": "https://arxiv.org/abs/1910.02054"
       },
       {
-        "citation": "Standard machine learning practice; full-parameter finetuning contrasted with PEFT as model scale increased in the 2020s",
+        "citation": "2023 · Dettmers et al. · QLoRA: Efficient Finetuning of Quantized LLMs",
         "url": "https://arxiv.org/abs/1910.02054"
       }
     ],
@@ -10713,7 +10726,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2021 · Edward Hu et al. · LoRA: Low-Rank Adaptation of Large Language Models ; Multi-adapter serving: S-LoRA (Sheng et al., 2023)",
+        "citation": "2021 · Hu et al. · LoRA: Low-Rank Adaptation of Large Language Models",
+        "url": "https://arxiv.org/abs/2106.09685"
+      },
+      {
+        "citation": "S-LoRA (Sheng et al., 2023)",
         "url": "https://arxiv.org/abs/2106.09685"
       }
     ],
@@ -11832,7 +11849,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2022 · Wortsman et al. (Model Soups); Ilharco et al. (Task Arithmetic) · Editing Models with Task Arithmetic",
+        "citation": "2022 · Wortsman et al. (Model Soups)",
+        "url": "https://arxiv.org/abs/2212.04089"
+      },
+      {
+        "citation": "Ilharco et al. (Task Arithmetic) · Editing Models with Task Arithmetic",
         "url": "https://arxiv.org/abs/2212.04089"
       }
     ],
@@ -12287,7 +12308,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1990 · LeCun, Denker & Solla · Optimal Brain Damage ; modern: Frantar & Alistarh (2023) · SparseGPT",
+        "citation": "1990 · LeCun, Denker & Solla · Optimal Brain Damage",
+        "url": "http://yann.lecun.com/exdb/publis/pdf/lecun-90b.pdf"
+      },
+      {
+        "citation": "Frantar & Alistarh (2023) · SparseGPT",
         "url": "http://yann.lecun.com/exdb/publis/pdf/lecun-90b.pdf"
       }
     ],
@@ -12342,7 +12367,19 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Long history in signal processing; neural network quantization: Hubara et al. (2016) · Quantized Neural Networks ; LLM methods: GPTQ (Frantar et al., 2023), AWQ (Lin et al., 2024), QLoRA/NF4 (Dettmers et al., 2023).",
+        "citation": "2016 · Hubara et al. · Quantized Neural Networks",
+        "url": "https://arxiv.org/abs/1609.07061"
+      },
+      {
+        "citation": "2023 · Frantar et al. · GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers",
+        "url": "https://arxiv.org/abs/1609.07061"
+      },
+      {
+        "citation": "2024 · Lin et al. · AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration",
+        "url": "https://arxiv.org/abs/1609.07061"
+      },
+      {
+        "citation": "2023 · Dettmers et al. · QLoRA: Efficient Finetuning of Quantized LLMs",
         "url": "https://arxiv.org/abs/1609.07061"
       }
     ],
@@ -12398,8 +12435,16 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "LLM-specific methods: GPTQ (Frantar et al., 2023) · GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers ; AWQ (Lin et al., 2024) · AWQ: Activation-aware Weight Quantization ; SmoothQuant (Xiao et al., 2023) · SmoothQuant .",
+        "citation": "2023 · Frantar et al. · GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers",
         "url": "https://arxiv.org/abs/2210.17323"
+      },
+      {
+        "citation": "2024 · Lin et al. · AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration",
+        "url": "https://arxiv.org/abs/2306.00978"
+      },
+      {
+        "citation": "2023 · Xiao et al. · SmoothQuant: Accurate and Efficient Post-Training Quantization for Large Language Models",
+        "url": "https://arxiv.org/abs/2211.10438"
       }
     ],
     "sections": [
@@ -12627,7 +12672,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2020 · Stiennon et al. · Learning to Summarize with Human Feedback ; overoptimisation: Gao et al. (2023) · Scaling Laws for Reward Model Overoptimization",
+        "citation": "2020 · Stiennon et al. · Learning to Summarize with Human Feedback",
+        "url": "https://arxiv.org/abs/2009.01325"
+      },
+      {
+        "citation": "Gao et al. (2023) · Scaling Laws for Reward Model Overoptimization",
         "url": "https://arxiv.org/abs/2009.01325"
       }
     ],
@@ -12910,7 +12959,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Fundamental methodology in psychometrics (Thurstone, 1927); applied to LLM alignment by Ouyang et al. (2022) in Training language models to follow instructions with human feedback .",
+        "citation": "Fundamental methodology in psychometrics (Thurstone, 1927)",
+        "url": "https://arxiv.org/abs/2203.02155"
+      },
+      {
+        "citation": "applied to LLM alignment by Ouyang et al. (2022) in Training language models to follow instructions with human feedback",
         "url": "https://arxiv.org/abs/2203.02155"
       }
     ],
@@ -12962,7 +13015,10 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Foundational in information retrieval; learning-to-rank formalised by Liu (2009), \"Learning to Rank for Information Retrieval.\" RankNet by Burges et al. (2005)."
+        "citation": "Foundational in information retrieval"
+      },
+      {
+        "citation": "learning-to-rank formalised by Liu (2009), \"Learning to Rank for Information Retrieval.\" RankNet by Burges et al. (2005)"
       }
     ],
     "sections": [
@@ -13025,7 +13081,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1960 · Arpad Elo · The Rating of Chess Players, Past and Present; applied to LLMs by Zheng et al., LMSYS Chatbot Arena (2023), Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena .",
+        "citation": "1960 · Arpad Elo · The Rating of Chess Players, Past and Present",
+        "url": "https://arxiv.org/abs/2306.05685"
+      },
+      {
+        "citation": "applied to LLMs by Zheng et al., LMSYS Chatbot Arena (2023), Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena",
         "url": "https://arxiv.org/abs/2306.05685"
       }
     ],
@@ -13072,7 +13132,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Fundamental concept in social choice theory (Condorcet, 1785) and information retrieval; pairwise learning-to-rank formalised by Burges et al. (2005), Learning to Rank using Gradient Descent .",
+        "citation": "Fundamental concept in social choice theory (Condorcet, 1785) and information retrieval",
+        "url": "https://icml.cc/Conferences/2005/proceedings/papers/012_Learning_BurgesEtAl.pdf"
+      },
+      {
+        "citation": "pairwise learning-to-rank formalised by Burges et al. (2005), Learning to Rank using Gradient Descent",
         "url": "https://icml.cc/Conferences/2005/proceedings/papers/012_Learning_BurgesEtAl.pdf"
       }
     ],
@@ -13254,7 +13318,15 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2022 · Alayrac et al. (Flamingo); Li et al. (BLIP-2, 2023); Liu et al. (LLaVA, 2023) · Visual Instruction Tuning",
+        "citation": "2022 · Alayrac et al. (Flamingo)",
+        "url": "https://arxiv.org/abs/2304.08485"
+      },
+      {
+        "citation": "Li et al. (BLIP-2, 2023)",
+        "url": "https://arxiv.org/abs/2304.08485"
+      },
+      {
+        "citation": "Liu et al. (LLaVA, 2023) · Visual Instruction Tuning",
         "url": "https://arxiv.org/abs/2304.08485"
       }
     ],
@@ -13303,7 +13375,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2014 · Bahdanau, Cho, Bengio · Neural Machine Translation by Jointly Learning to Align and Translate ; formalised in the Transformer by Vaswani et al. (2017), Attention Is All You Need .",
+        "citation": "2014 · Bahdanau, Cho, Bengio · Neural Machine Translation by Jointly Learning to Align and Translate",
+        "url": "https://arxiv.org/abs/1409.0473"
+      },
+      {
+        "citation": "formalised in the Transformer by Vaswani et al. (2017), Attention Is All You Need",
         "url": "https://arxiv.org/abs/1409.0473"
       }
     ],
@@ -13356,7 +13432,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2020 · Dosovitskiy et al. (ViT); Radford et al. (CLIP, 2021) · An Image is Worth 16×16 Words",
+        "citation": "2020 · Dosovitskiy et al. (ViT)",
+        "url": "https://arxiv.org/abs/2010.11929"
+      },
+      {
+        "citation": "Radford et al. (CLIP, 2021) · An Image is Worth 16×16 Words",
         "url": "https://arxiv.org/abs/2010.11929"
       }
     ],
@@ -13576,7 +13656,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Standard technique; formalized for deep learning by Dean et al. (2012), Large Scale Distributed Deep Networks .",
+        "citation": "2012 · Dean et al. · Large Scale Distributed Deep Networks",
+        "url": "https://arxiv.org/abs/1206.5533"
+      },
+      {
+        "citation": "formalized for deep learning by Dean et al. (2012), Large Scale Distributed Deep Networks",
         "url": "https://arxiv.org/abs/1206.5533"
       }
     ],
@@ -13684,7 +13768,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2019 · Huang et al. ( GPipe ); Narayanan et al. ( Megatron-LM pipeline, 2021 )",
+        "citation": "2019 · Huang et al. ( GPipe )",
+        "url": "https://arxiv.org/abs/1811.06965"
+      },
+      {
+        "citation": "Narayanan et al. ( Megatron-LM pipeline, 2021 )",
         "url": "https://arxiv.org/abs/1811.06965"
       }
     ],
@@ -13958,7 +14046,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Standard computational measure; scaling laws by Kaplan et al. (2020) · Scaling Laws for Neural Language Models",
+        "citation": "2020 · Kaplan et al. · Scaling Laws for Neural Language Models",
+        "url": "https://arxiv.org/abs/2001.08361"
+      },
+      {
+        "citation": "scaling laws by Kaplan et al. (2020) · Scaling Laws for Neural Language Models",
         "url": "https://arxiv.org/abs/2001.08361"
       }
     ],
@@ -14075,7 +14167,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2023–2024 · Dubey et al. (LLaMA 3, 2024); Peng et al. · YaRN: Efficient Context Window Extension of Large Language Models",
+        "citation": "2023–2024 · Dubey et al. (LLaMA 3, 2024)",
+        "url": "https://arxiv.org/abs/2309.00071"
+      },
+      {
+        "citation": "2023 · Chen et al. · Efficient Context Window Extension of Large Language Models",
         "url": "https://arxiv.org/abs/2309.00071"
       }
     ],
@@ -14284,7 +14380,15 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2018 · Shaw, Uszkoreit, Vaswani · Self-Attention with Relative Position Representations ; Su et al. (RoPE, 2021) · RoFormer ; Press et al. (ALiBi, 2022) · Train Short, Test Long",
+        "citation": "2018 · Shaw, Uszkoreit, Vaswani · Self-Attention with Relative Position Representations",
+        "url": "https://arxiv.org/abs/1803.02155"
+      },
+      {
+        "citation": "Su et al. (RoPE, 2021) · RoFormer",
+        "url": "https://arxiv.org/abs/1803.02155"
+      },
+      {
+        "citation": "Press et al. (ALiBi, 2022) · Train Short, Test Long",
         "url": "https://arxiv.org/abs/1803.02155"
       }
     ],
@@ -14332,7 +14436,11 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Fundamental concept in neural NLP; subword tokenization popularised by Sennrich et al. (2016) · Neural Machine Translation of Rare Words with Subword Units",
+        "citation": "2016 · Sennrich et al. · Neural Machine Translation of Rare Words with Subword Units",
+        "url": "https://arxiv.org/abs/1508.07909"
+      },
+      {
+        "citation": "subword tokenization popularised by Sennrich et al. (2016) · Neural Machine Translation of Rare Words with Subword Units",
         "url": "https://arxiv.org/abs/1508.07909"
       }
     ],
@@ -14384,7 +14492,10 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Practical design choice in all neural language models; vocabulary design discussed in Radford et al. (GPT-2, 2019) and Touvron et al. (LLaMA, 2023)."
+        "citation": "Practical design choice in all neural language models"
+      },
+      {
+        "citation": "vocabulary design discussed in Radford et al. (GPT-2, 2019) and Touvron et al. (LLaMA, 2023)"
       }
     ],
     "sections": [
@@ -14712,7 +14823,13 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "2014 · Sutskever, Vinyals, Le (seq2seq); Vaswani et al. (Transformer enc-dec, 2017); Raffel et al. (T5, 2020)"
+        "citation": "2014 · Sutskever, Vinyals, Le (seq2seq)"
+      },
+      {
+        "citation": "Vaswani et al. (Transformer enc-dec, 2017)"
+      },
+      {
+        "citation": "Raffel et al. (T5, 2020)"
       }
     ],
     "sections": [
@@ -15224,7 +15341,10 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Formal knowledge synthesized around summarisation boundaries; Maynez et al. (2020), \"On Faithfulness and Factuality in Abstractive Summarization.\""
+        "citation": "Formal knowledge synthesized around summarisation boundaries"
+      },
+      {
+        "citation": "Maynez et al. (2020), \"On Faithfulness and Factuality in Abstractive Summarization.\""
       }
     ],
     "sections": [
@@ -15267,7 +15387,13 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "Guo et al. (2017), \"On Calibration of Modern Neural Networks\"; Platt scaling (1999); temperature scaling."
+        "citation": "Guo et al. (2017), \"On Calibration of Modern Neural Networks\""
+      },
+      {
+        "citation": "Platt scaling (1999)"
+      },
+      {
+        "citation": "temperature scaling"
       }
     ],
     "sections": [
@@ -15633,7 +15759,13 @@
     "sourceDeck": "Machine Learning by Henrik Nordberg",
     "papers": [
       {
-        "citation": "1964 · Boris Polyak (heavy ball method); Nesterov (1983, accelerated gradient); applied to neural networks by Rumelhart et al. (1986)."
+        "citation": "1964 · Boris Polyak (heavy ball method)"
+      },
+      {
+        "citation": "Nesterov (1983, accelerated gradient)"
+      },
+      {
+        "citation": "applied to neural networks by Rumelhart et al. (1986)"
       }
     ],
     "sections": [

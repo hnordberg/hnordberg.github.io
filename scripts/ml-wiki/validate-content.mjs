@@ -50,12 +50,15 @@ const COLOR_DECL_RE = /(?:^|;)\s*color\s*:/i;
 const BROKEN_DISPLAY_MATH_RE = /(?<!\\)\[\s*mathcal\{[^<]*\]/i;
 const PACKED_MULTI_CITATION_RE =
   /(see also|scaled to|original .*?·|et al\.\s*\(\d{4}\).*(et al\.\s*\(\d{4}\)|,\s*[A-Z][a-z]+ et al\.\s*\(\d{4}\)))/i;
+const YEAR_RE = /\b(?:19|20)\d{2}\b|\(\d{4}\)/;
+const INLINE_URL_RE = /https?:\/\/\S+/i;
 
 function appearsBundledMultiWorkCitation(citation) {
   if (PACKED_MULTI_CITATION_RE.test(citation)) return true;
 
   const yearParenCount = (citation.match(/\(\d{4}\)/g) || []).length;
   const etAlCount = (citation.match(/et al\./gi) || []).length;
+  const commaCount = (citation.match(/,/g) || []).length;
   const semicolonParts = citation
     .split(";")
     .map((x) => x.trim())
@@ -66,8 +69,32 @@ function appearsBundledMultiWorkCitation(citation) {
   // - "..., Author et al. (2019), Author et al. (2024)"
   if (semicolonParts >= 2 && (yearParenCount >= 1 || etAlCount >= 2)) return true;
   if (yearParenCount >= 2 && etAlCount >= 2) return true;
+  // Covers citation lists that may omit repeated "et al." tokens but still
+  // include multiple parenthesized years/work markers in one paper entry.
+  if (yearParenCount >= 2 && (semicolonParts >= 2 || commaCount >= 2)) return true;
 
   return false;
+}
+
+function hasDuplicatedTrailingTitle(citation) {
+  const parts = citation
+    .split("·")
+    .map((x) => x.trim())
+    .filter(Boolean);
+  if (parts.length < 2) return false;
+  const last = parts[parts.length - 1].toLowerCase();
+  const prev = parts[parts.length - 2].toLowerCase();
+  return last === prev;
+}
+
+function isLikelyTitleOnlyCitation(citation) {
+  const parts = citation
+    .split("·")
+    .map((x) => x.trim())
+    .filter(Boolean);
+  const hasYear = YEAR_RE.test(citation);
+  const hasAuthorCue = /\bet al\.\b|\b[A-Z][a-zA-Z'`-]+\s*\(\d{4}\)/.test(citation);
+  return parts.length <= 1 && !hasYear && !hasAuthorCue;
 }
 
 function readJson(rel) {
@@ -287,6 +314,24 @@ function issues() {
           }
           if (p.doi !== undefined && typeof p.doi !== "string") {
             out.push(`Topic ${t.slug}: paper.doi must be string`);
+          }
+          if (INLINE_URL_RE.test(p.citation)) {
+            out.push(
+              `Topic ${t.slug}: paper citation should not include inline URL text; use paper.url field`
+            );
+          }
+          if (hasDuplicatedTrailingTitle(p.citation)) {
+            out.push(
+              `Topic ${t.slug}: papers citation appears to repeat the title (remove duplicate segment)`
+            );
+          }
+          // For arXiv-linked entries, guard against title-only citations.
+          if (typeof p.url === "string" && p.url.includes("arxiv.org")) {
+            if (isLikelyTitleOnlyCitation(p.citation)) {
+              out.push(
+                `Topic ${t.slug}: arXiv-linked paper citation looks title-only; include author and year`
+              );
+            }
           }
           if (appearsBundledMultiWorkCitation(p.citation)) {
             if (p.url === undefined) {
