@@ -2719,6 +2719,235 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gated-recurrent-unit-gru",
+      "title": "Gated recurrent unit (GRU)",
+      "summary": "A gated recurrent unit (GRU) is a recurrent cell that adaptively interpolates between copying old memory and writing new content using only two gates. It keeps the long-term gradient path of gated RNNs but removes LSTM's separate cell st…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "embedding-layer",
+        "bag-of-words"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "embedding-layer",
+      "title": "Embedding layer",
+      "summary": "A learnable lookup table that maps discrete categorical inputs (such as token IDs) to dense, continuous vector representations of fixed dimensionality, serving as the interface between symbolic input and neural computation.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "embedding-vector",
+        "gated-recurrent-unit-gru"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "embedding-vector",
+      "title": "Embedding vector",
+      "summary": "A dense, low-dimensional, continuous vector representing a discrete entity (word, token, item, or node) in a learned latent space where geometric proximity encodes semantic or functional similarity.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "word-embedding",
+        "embedding-layer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "word-embedding",
+      "title": "Word embedding",
+      "summary": "A mapping from words in a vocabulary to dense, real-valued vectors in a continuous space, where distances and directions encode linguistic relationships such as synonymy, analogy, and syntactic role.",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "word2vec",
+        "embedding-vector"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "word2vec",
+      "title": "Word2Vec",
+      "summary": "A family of shallow neural network models that learn word embeddings by predicting either a target word from its context (CBOW) or the context from a target word (Skip-gram), trained efficiently on billions of words using negative sampli…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "landmark",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "skip-gram",
+        "word-embedding"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "skip-gram",
+      "title": "Skip-gram",
+      "summary": "A Word2Vec training objective that learns word embeddings by predicting surrounding context words given a center word, inverting the typical language modeling direction and producing high-quality representations especially for rare words.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "fasttext",
+        "word2vec"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "fasttext",
+      "title": "FastText",
+      "summary": "An extension of Word2Vec's Skip-gram that represents each word as a bag of character n-grams, enabling meaningful embeddings for out-of-vocabulary words and morphologically rich languages.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "semantic-similarity",
+        "skip-gram"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "semantic-similarity",
+      "title": "Semantic similarity",
+      "summary": "A measure of how closely two linguistic units (words, sentences, or documents) relate in meaning, typically quantified by distance or angle in an embedding space using metrics such as cosine similarity.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "cosine-similarity",
+        "fasttext"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "cosine-similarity",
+      "title": "Cosine similarity",
+      "summary": "A similarity metric that measures the cosine of the angle between two vectors, capturing directional alignment independently of magnitude. It is the standard metric for comparing embeddings in NLP and information retrieval.",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "bag-of-words",
+        "semantic-similarity"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bag-of-words",
+      "title": "Bag of words",
+      "summary": "A text representation that discards word order and grammar, encoding a document solely as an unordered multiset of its word frequencies — the simplest and historically most influential document representation in NLP and information retri…",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "gated-recurrent-unit-gru",
+        "cosine-similarity"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

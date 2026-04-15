@@ -6207,5 +6207,428 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "gated-recurrent-unit-gru",
+    "title": "Gated recurrent unit (GRU)",
+    "summary": "A gated recurrent unit (GRU) is a recurrent cell that adaptively interpolates between copying old memory and writing new content using only two gates. It keeps the long-term gradient path of gated RNNs but removes LSTM's separate cell st…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "embedding-layer",
+      "bag-of-words"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2014 · Kyunghyun Cho, Bart van Merrienboer, Dzmitry Bahdanau, Yoshua Bengio · Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation 2014 · Junyoung Chung, Caglar Gulcehre, Kyunghyun Cho, Yoshua Bengio · Empirical Evaluation of Gated Recurrent Neural Networks on Sequence Modeling 2015 · Rafal Jozefowicz, Wojciech Zaremba, Ilya Sutskever · An Empirical Exploration of Recurrent Network Architectures",
+        "url": "https://arxiv.org/abs/1406.1078"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A gated recurrent unit (GRU) is a recurrent cell that adaptively interpolates between copying old memory and writing new content using only two gates. It keeps the long-term gradient path of gated RNNs but removes LSTM's separate cell state, so it often reaches similar accuracy with fewer parameters and faster training.</p><p>Given input \\(x_t \\in \\mathbb{R}^d\\) and previous hidden state \\(h_{t-1} \\in \\mathbb{R}^n\\), the GRU computes:</p>\n\n  <p>\\[  z_t = \\sigma(W_z [h_{t-1}, x_t] + b_z), \\quad\n  r_t = \\sigma(W_r [h_{t-1}, x_t] + b_r)\n  \\]</p>\n\n  <p>\\[  \\tilde{h}_t = \\tanh\\!\\left(W_h [r_t \\odot h_{t-1}, x_t] + b_h\\right), \\quad\n  h_t = (1-z_t) \\odot h_{t-1} + z_t \\odot \\tilde{h}_t\n  \\]</p>\n\n  <p>where \\(\\sigma\\) is sigmoid, \\(\\odot\\) is element-wise multiplication, and \\([\\cdot,\\cdot]\\) is concatenation. The update gate \\(z_t\\) sets the memory timescale: small \\(z_t\\) preserves old state (long memory), large \\(z_t\\) overwrites with fresh evidence. The reset gate \\(r_t\\) controls how strongly the past participates in candidate construction; if \\(r_t \\approx 0\\), the candidate ignores most prior state and behaves like a near-input-driven feature extractor.</p>\n\n  <p>Intuitively, GRU can be viewed as a learned exponential smoothing process per hidden dimension. In dimensions where sequence statistics are stable, training tends to keep \\(z_t\\) small, creating nearly identity recurrence and better gradient flow through time; in rapidly changing dimensions, \\(z_t\\) opens and allows quick state updates. This adaptive timescale mechanism is why GRUs are robust on medium-length dependencies despite their simpler parameterization.</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Aspect</th>\n      <th style=\"padding:6px; text-align:left;\">GRU</th>\n      <th style=\"padding:6px; text-align:left;\">LSTM</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">State variables</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Single \\(h_t\\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\(h_t\\) and \\(c_t\\)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Gate count</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">2 (update, reset)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">3 (input, forget, output)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Affine transforms per step</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">3</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">4</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Typical trade-off</td>\n      <td style=\"padding:6px;\">Lower parameter/FLOP budget, often similar quality</td>\n      <td style=\"padding:6px;\">More expressive gating, sometimes better on very long dependencies</td>\n    </tr>\n  </tbody></table>\n\n  <p>In practice, GRUs are common when latency or memory matters (embedded ASR, compact sequence models, time-series forecasting). For large-scale NLP, self-attention largely displaced recurrent cells, but GRU remains a strong baseline when sequence lengths are moderate and compute is constrained.</p><details>\n    <summary>Derivations</summary>\n    <p>Write the recurrence as \\(h_t = h_{t-1} + z_t \\odot (\\tilde{h}_t - h_{t-1})\\). This makes explicit that each coordinate performs a gated residual update toward the candidate state. If \\(z_t^{(i)} \\approx 0\\), coordinate \\(i\\) behaves close to identity and contributes a near-unity temporal Jacobian term, helping preserve gradients. If \\(z_t^{(i)} \\approx 1\\), the coordinate is rapidly rewritten. Thus GRU learns per-dimension retention half-lives directly from data.</p>\n  </details>\n\n  <details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef sigmoid(x):\n    return 1.0 / (1.0 + np.exp(-x))\n\ndef gru_step(x_t, h_prev, Wz, Wr, Wh, bz, br, bh):\n    \"\"\"One GRU step.\n    x_t: (d,), h_prev: (n,)\n    W*: (n, n + d), b*: (n,)\n    \"\"\"\n    concat = np.concatenate([h_prev, x_t])\n\n    z_t = sigmoid(Wz @ concat + bz)        # update gate\n    r_t = sigmoid(Wr @ concat + br)        # reset gate\n\n    candidate_in = np.concatenate([r_t * h_prev, x_t])\n    h_tilde = np.tanh(Wh @ candidate_in + bh)\n\n    h_t = (1.0 - z_t) * h_prev + z_t * h_tilde\n    return h_t</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "embedding-layer",
+    "title": "Embedding layer",
+    "summary": "A learnable lookup table that maps discrete categorical inputs (such as token IDs) to dense, continuous vector representations of fixed dimensionality, serving as the interface between symbolic input and neural computation.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "embedding-vector",
+      "gated-recurrent-unit-gru"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2003 · Bengio, Ducharme, Vincent, Jauvin · A Neural Probabilistic Language Model",
+        "url": "https://jmlr.org/papers/volume3/bengio03a/bengio03a.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A learnable lookup table that maps discrete categorical inputs (such as token IDs) to dense, continuous vector representations of fixed dimensionality, serving as the interface between symbolic input and neural computation.</p><p>Formally, an embedding layer maintains a weight matrix \\( E \\in \\mathbb{R}^{|V| \\times d} \\), where \\( |V| \\) is the vocabulary size and \\( d \\) is the embedding dimension. Given a token index \\( i \\), the embedding is simply the \\( i \\)-th row:</p>\n\n  <p>\\[ e_i = E[i, :] \\in \\mathbb{R}^d \\]</p>\n\n  <p>This is mathematically equivalent to multiplying a one-hot vector by \\( E \\): \\( e_i = \\text{onehot}(i)^T E \\), but implementations use direct indexing (a gather operation) for efficiency, avoiding the \\( O(|V| \\cdot d) \\) matrix multiply.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Gradient flow and sparsity.</b> During backpropagation, gradients flow only to the rows corresponding to tokens present in the current mini-batch. The gradient of the loss \\( \\mathcal{L} \\) with respect to the embedding matrix is extremely sparse: \\( \\frac{\\partial \\mathcal{L}}{\\partial E[i,:]} \\neq 0 \\) only for indices \\( i \\) appearing in the batch. This sparsity motivates specialized optimizers — for example, adaptive methods like Adam naturally handle the varying update frequencies across rows.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Initialization.</b> Common strategies include small random Gaussian \\( \\mathcal{N}(0, 0.01) \\), uniform \\( U(-\\frac{1}{\\sqrt{d}}, \\frac{1}{\\sqrt{d}}) \\), or initialization from pre-trained embeddings (Word2Vec, GloVe, FastText) for transfer learning.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Role in Transformers.</b> Embedding layers are the entry point of all Transformer-based models. Token embeddings are summed with positional encodings (sinusoidal or learned) before entering the first self-attention layer. In the original Transformer (Vaswani et al., 2017), the embedding weights are scaled by \\( \\sqrt{d_{\\text{model}}} \\) to maintain variance relative to the positional encoding. Modern LLMs commonly use <b>weight tying</b> (Press & Wolf, 2017): the input embedding matrix \\( E \\) is shared with the output projection layer, so \\( \\text{logits} = h \\cdot E^T \\), reducing parameters by \\( |V| \\times d \\) and often improving perplexity.</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Model</th>\n      <th style=\"padding:6px; text-align:left;\">\\( |V| \\)</th>\n      <th style=\"padding:6px; text-align:left;\">\\( d \\)</th>\n      <th style=\"padding:6px; text-align:left;\">Embedding params</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">BERT-base</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">30,522</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">768</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">~23M</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">GPT-2</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">50,257</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">768–1600</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">39M–80M</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">LLaMA-2 (7B)</td>\n      <td style=\"padding:6px;\">32,000</td>\n      <td style=\"padding:6px;\">4,096</td>\n      <td style=\"padding:6px;\">~131M</td>\n    </tr>\n  </table><details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\nclass Embedding:\n    def __init__(self, vocab_size, embed_dim):\n        # Xavier-style init\n        bound = 1.0 / np.sqrt(embed_dim)\n        self.W = np.random.uniform(-bound, bound, (vocab_size, embed_dim))\n\n    def forward(self, token_ids):\n        \"\"\"token_ids: array of ints, shape (seq_len,)\"\"\"\n        return self.W[token_ids]  # shape: (seq_len, embed_dim)\n\n    def project(self, hidden):\n        \"\"\"Weight-tied output projection: logits = hidden @ E^T\"\"\"\n        return hidden @ self.W.T  # shape: (seq_len, vocab_size)</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "embedding-vector",
+    "title": "Embedding vector",
+    "summary": "A dense, low-dimensional, continuous vector representing a discrete entity (word, token, item, or node) in a learned latent space where geometric proximity encodes semantic or functional similarity.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "word-embedding",
+      "embedding-layer"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2003 · Bengio et al. · A Neural Probabilistic Language Model",
+        "url": "https://jmlr.org/papers/volume3/bengio03a/bengio03a.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A dense, low-dimensional, continuous vector representing a discrete entity (word, token, item, or node) in a learned latent space where geometric proximity encodes semantic or functional similarity.</p><p>An embedding vector \\( e \\in \\mathbb{R}^d \\) is the output of an embedding layer for a specific input. The central insight is that the geometry of the embedding space captures meaningful relationships: semantically similar entities are mapped to nearby points, and directions in the space can encode relational structure. The classic demonstration is Word2Vec's analogy arithmetic:</p>\n\n  <p>\\[ \\vec{\\text{king}} - \\vec{\\text{man}} + \\vec{\\text{woman}} \\approx \\vec{\\text{queen}} \\]</p>\n\n  <p>This works because the vector offset \\( \\vec{\\text{king}} - \\vec{\\text{man}} \\) approximates a \"royalty\" direction, which transfers across genders. Such linear regularities emerge from the distributional training objective without explicit supervision.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Similarity measurement.</b> The most common metric for comparing embedding vectors is cosine similarity: \\( \\text{sim}(a, b) = \\frac{a \\cdot b}{\\|a\\|\\|b\\|} \\), which captures directional alignment independent of magnitude. Euclidean distance \\( \\|a - b\\|_2 \\) is used when magnitude is meaningful (e.g., frequency-weighted embeddings). In retrieval systems, approximate nearest-neighbor algorithms (FAISS, ScaNN, HNSW) enable efficient similarity search over millions of vectors.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Dimensionality.</b> Embedding dimension \\( d \\) is a critical hyperparameter balancing expressiveness against computational cost:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Setting</th>\n      <th style=\"padding:6px; text-align:left;\">Typical \\( d \\)</th>\n      <th style=\"padding:6px; text-align:left;\">Examples</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Static word embeddings</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">50–300</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Word2Vec, GloVe, FastText</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Contextual embeddings</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">768–12288</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">BERT (768), GPT-4 (12288)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Recommender systems</td>\n      <td style=\"padding:6px;\">32–256</td>\n      <td style=\"padding:6px;\">User/item embeddings in collaborative filtering</td>\n    </tr>\n  </table>\n\n  <p>Lower dimensions risk information loss; higher dimensions increase compute and memory cost and risk overfitting on small corpora. The Johnson-Lindenstrauss lemma provides a theoretical lower bound: \\( O(\\log N / \\epsilon^2) \\) dimensions suffice to preserve pairwise distances among \\( N \\) points within a \\( (1 \\pm \\epsilon) \\) factor.</p>\n\n  <p>Embeddings extend far beyond NLP: recommender systems embed users and items into shared spaces, graph neural networks embed nodes, and multimodal models (CLIP) embed images and text into aligned vector spaces for cross-modal retrieval.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "word-embedding",
+    "title": "Word embedding",
+    "summary": "A mapping from words in a vocabulary to dense, real-valued vectors in a continuous space, where distances and directions encode linguistic relationships such as synonymy, analogy, and syntactic role.",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "landmark",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "word2vec",
+      "embedding-vector"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2003 · Bengio et al. · A Neural Probabilistic Language Model",
+        "url": "https://jmlr.org/papers/volume3/bengio03a/bengio03a.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A mapping from words in a vocabulary to dense, real-valued vectors in a continuous space, where distances and directions encode linguistic relationships such as synonymy, analogy, and syntactic role.</p><p>Word embeddings assign each word \\( w \\in V \\) a vector \\( e_w \\in \\mathbb{R}^d \\), replacing sparse one-hot representations (\\( \\mathbb{R}^{|V|} \\), where \\( |V| \\) can exceed 100k) with dense, low-dimensional alternatives (typically \\( d \\in [50, 300] \\)). The foundational hypothesis is the <b>distributional hypothesis</b> (Firth, 1957: \"You shall know a word by the company it keeps\"): words appearing in similar contexts have similar meanings, and this similarity should be reflected geometrically.</p>\n\n  <p>Two major families emerged in the 2010s:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Approach</th>\n      <th style=\"padding:6px; text-align:left;\">Method</th>\n      <th style=\"padding:6px; text-align:left;\">Objective</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Prediction-based</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Word2Vec (2013), FastText (2017)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Predict context words from center word (or vice versa) via shallow neural network</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Count-based</td>\n      <td style=\"padding:6px;\">GloVe (2014)</td>\n      <td style=\"padding:6px;\">Factorize global word co-occurrence matrix \\( X \\) via weighted least squares: \\( \\sum_{i,j} f(X_{ij})(w_i^T \\tilde{w}_j + b_i + \\tilde{b}_j - \\log X_{ij})^2 \\)</td>\n    </tr>\n  </tbody></table>\n\n  <p>Levy and Goldberg (2014) proved that Word2Vec's Skip-gram with negative sampling (SGNS) implicitly factorizes a shifted PMI matrix, unifying the two approaches theoretically: both recover a low-rank approximation to word co-occurrence statistics.</p>\n\n  <p>These are <b>static embeddings</b> — each word type has a single fixed vector regardless of context. The word \"bank\" receives the same representation whether it refers to a financial institution or a river bank. This polysemy limitation was addressed by <b>contextual embeddings</b> (ELMo, 2018; BERT, 2019; GPT), where representations are functions of the entire input sequence. Static embeddings remain valuable for low-resource languages, fast retrieval baselines, and interpretability studies.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "word2vec",
+    "title": "Word2Vec",
+    "summary": "A family of shallow neural network models that learn word embeddings by predicting either a target word from its context (CBOW) or the context from a target word (Skip-gram), trained efficiently on billions of words using negative sampli…",
+    "domain": "history",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "landmark",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "skip-gram",
+      "word-embedding"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2013 · Tomas Mikolov, Kai Chen, Greg Corrado, Jeffrey Dean · Efficient Estimation of Word Representations in Vector Space",
+        "url": "https://arxiv.org/abs/1301.3781"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A family of shallow neural network models that learn word embeddings by predicting either a target word from its context (CBOW) or the context from a target word (Skip-gram), trained efficiently on billions of words using negative sampling or hierarchical softmax.</p><p>Word2Vec was a landmark contribution that made high-quality word embeddings practical at scale. It introduced two architectures:</p>\n\n  <ul>\n    <li><b>CBOW (Continuous Bag of Words):</b> predicts the center word \\( w_t \\) from the average of surrounding context word vectors within a fixed window: \\( P(w_t \\mid w_{t-c}, \\ldots, w_{t+c}) \\). Faster to train, slightly better for frequent words.</li>\n    <li><b>Skip-gram:</b> predicts each context word from the center word: \\( P(w_{t+j} \\mid w_t) \\) for \\( j \\in [-c, c], j \\neq 0 \\). Slower but produces better representations for rare words and small datasets.</li>\n  </ul>\n\n  <p>The Skip-gram objective over a corpus of words \\( w_1, \\ldots, w_T \\) is:</p>\n\n  <p>\\[ J = \\frac{1}{T} \\sum_{t=1}^{T} \\sum_{\\substack{-c \\leq j \\leq c \\\\ j \\neq 0}} \\log P(w_{t+j} \\mid w_t) \\]</p>\n\n  <p>where the softmax probability is:</p>\n\n  <p>\\[ P(w_O \\mid w_I) = \\frac{\\exp({v'_{w_O}}^\\top v_{w_I})}{\\sum_{w \\in V} \\exp({v'_w}^\\top v_{w_I})} \\]</p>\n\n  <p>Computing the full softmax over \\( |V| \\) (often 100k–1M) is prohibitively expensive at \\( O(|V| \\cdot d) \\) per update. Two approximations make training tractable:</p>\n\n  <ul>\n    <li><b>Negative sampling (SGNS):</b> replace the softmax with a binary classification objective — distinguish true (center, context) pairs from \\( k \\) randomly sampled negatives drawn from \\( P_n(w) \\propto f(w)^{3/4} \\). Typical \\( k \\): 5–20 for small datasets, 2–5 for large corpora.</li>\n    <li><b>Hierarchical softmax:</b> organize the vocabulary as a Huffman tree, reducing the output computation from \\( O(|V|) \\) to \\( O(\\log |V|) \\).</li>\n  </ul>\n\n  <p>Additional training tricks include subsampling frequent words (discarding tokens like \"the\" with probability \\( P(\\text{discard}) = 1 - \\sqrt{t / f(w)} \\), where \\( t \\approx 10^{-5} \\)) and dynamic context windows (sampling \\( c' \\sim \\text{Uniform}(1, c) \\) per training instance).</p>\n\n  <p>The resulting vectors famously exhibit <b>linear algebraic structure</b> encoding semantic analogies: \\( \\vec{\\text{king}} - \\vec{\\text{man}} + \\vec{\\text{woman}} \\approx \\vec{\\text{queen}} \\). Levy and Goldberg (2014) later showed that SGNS implicitly factorizes a shifted pointwise mutual information (PMI) matrix, connecting it theoretically to classical count-based distributional semantics (LSA, GloVe).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "skip-gram",
+    "title": "Skip-gram",
+    "summary": "A Word2Vec training objective that learns word embeddings by predicting surrounding context words given a center word, inverting the typical language modeling direction and producing high-quality representations especially for rare words.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "fasttext",
+      "word2vec"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2013 · Mikolov, Sutskever, Chen, Corrado, Dean · Distributed Representations of Words and Phrases and their Compositionality",
+        "url": "https://arxiv.org/abs/1310.4546"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A Word2Vec training objective that learns word embeddings by predicting surrounding context words given a center word, inverting the typical language modeling direction and producing high-quality representations especially for rare words.</p><p>Given a center word \\( w_t \\) and a context window of size \\( c \\), Skip-gram maximizes:</p>\n\n  <p>\\[ J = \\sum_{\\substack{-c \\leq j \\leq c \\\\ j \\neq 0}} \\log P(w_{t+j} \\mid w_t) \\]</p>\n\n  <p>Each word maintains two learned vectors: an <b>input embedding</b> \\( v_w \\in \\mathbb{R}^d \\) (when it serves as center) and an <b>output embedding</b> \\( v'_w \\in \\mathbb{R}^d \\) (when it serves as context). In practice, only the input embeddings \\( v_w \\) are used after training, though averaging \\( v_w \\) and \\( v'_w \\) sometimes improves quality.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Negative sampling (SGNS).</b> The expensive full-vocabulary softmax is replaced by a binary classification objective. For a true (center, context) pair \\( (w_I, w_O) \\), the loss becomes:</p>\n\n  <p>\\[ \\mathcal{L} = \\log \\sigma({v'_{w_O}}^\\top v_{w_I}) + \\sum_{i=1}^{k} \\mathbb{E}_{w_i \\sim P_n(w)} \\left[\\log \\sigma(-{v'_{w_i}}^\\top v_{w_I})\\right] \\]</p>\n\n  <p>where \\( \\sigma \\) is the sigmoid function and \\( P_n(w) \\propto f(w)^{3/4} \\) is a smoothed unigram distribution. The \\( 3/4 \\) exponent was found empirically to work well: it upweights rare words relative to the raw frequency distribution. Typical values: \\( k = 5\\text{--}20 \\) negatives for small datasets, \\( k = 2\\text{--}5 \\) for large corpora.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Theoretical connection.</b> Levy and Goldberg (2014) proved that SGNS, with sufficient training data and embedding dimension, implicitly factorizes a shifted pointwise mutual information (PMI) matrix:</p>\n\n  <p>\\[ v_w \\cdot v'_c \\approx \\text{PMI}(w, c) - \\log k \\]</p>\n\n  <p>This result unified Skip-gram with classical count-based distributional semantics methods (LSA, PPMI+SVD), showing they optimize closely related objectives. It also explains why GloVe — which explicitly factorizes a co-occurrence matrix — produces similar embeddings.</p><details>\n    <summary>Derivations</summary>\n    <p>Starting from the softmax: \\( P(w_O \\mid w_I) = \\frac{\\exp({v'_{w_O}}^\\top v_{w_I})}{\\sum_{w} \\exp({v'_w}^\\top v_{w_I})} \\). The partition function is intractable for large \\( |V| \\). Negative sampling replaces this with noise-contrastive estimation: model the problem as distinguishing data from noise. The probability that a pair \\( (w, c) \\) came from data rather than noise: \\( P(D=1 \\mid w, c) = \\sigma(v'_c \\cdot v_w) \\). The full SGNS loss per positive pair is the binary cross-entropy summing over 1 positive + \\( k \\) negative samples.</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "fasttext",
+    "title": "FastText",
+    "summary": "An extension of Word2Vec's Skip-gram that represents each word as a bag of character n-grams, enabling meaningful embeddings for out-of-vocabulary words and morphologically rich languages.",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "semantic-similarity",
+      "skip-gram"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Piotr Bojanowski, Edouard Grave, Armand Joulin, Tomas Mikolov · Enriching Word Vectors with Subword Information",
+        "url": "https://arxiv.org/abs/1607.04606"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An extension of Word2Vec's Skip-gram that represents each word as a bag of character n-grams, enabling meaningful embeddings for out-of-vocabulary words and morphologically rich languages.</p><p>In standard Word2Vec, each word is an atomic unit — unseen words have no representation, and morphological relationships (e.g., \"teach\" / \"teacher\" / \"teaching\") are not explicitly modeled. FastText decomposes word \\( w \\) into its set of character n-grams \\( \\mathcal{G}_w \\) (typically \\( n \\in [3, 6] \\)), plus a special whole-word token \\( \\langle w \\rangle \\). The word's embedding is the sum of its constituent n-gram vectors:</p>\n\n  <p>\\[ v_w = \\sum_{g \\in \\mathcal{G}_w} z_g \\]</p>\n\n  <p>where \\( z_g \\in \\mathbb{R}^d \\) is the embedding for n-gram \\( g \\). For example, \"where\" with \\( n = 3 \\) and boundary markers &lt; &gt; yields: {&lt;wh, whe, her, ere, re&gt;, &lt;where&gt;}. The Skip-gram scoring function becomes:</p>\n\n  <p>\\[ s(w, c) = \\sum_{g \\in \\mathcal{G}_w} z_g^\\top v'_c \\]</p>\n\n  <p>This is plugged into the same negative sampling objective as Word2Vec SGNS.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Hashing trick.</b> The number of possible character n-grams is very large, so FastText hashes n-grams into a fixed number of buckets (default: 2M), keeping the embedding matrix at a manageable size \\( \\mathbb{R}^{B \\times d} \\) regardless of vocabulary. Collisions are rare enough to have minimal impact on embedding quality.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key advantages",
+        "body": "<ul>\n    <li><b>OOV handling:</b> entirely unseen words can be embedded by summing their constituent n-grams — critical for web text, user-generated content, and agglutinative languages (Turkish, Finnish).</li>\n    <li><b>Morphological regularities:</b> words sharing stems or affixes naturally share n-gram vectors, so \"teach,\" \"teacher,\" and \"teaching\" receive related embeddings without supervision.</li>\n    <li><b>Rare word quality:</b> rare words benefit from shared n-gram statistics with frequent words, partially alleviating the data sparsity problem.</li>\n  </ul>\n\n  <p>FastText also includes a highly efficient text classification model (supervised mode) that averages n-gram embeddings and passes them through a linear classifier, competitive with deep models at orders-of-magnitude less compute.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "semantic-similarity",
+    "title": "Semantic similarity",
+    "summary": "A measure of how closely two linguistic units (words, sentences, or documents) relate in meaning, typically quantified by distance or angle in an embedding space using metrics such as cosine similarity.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "cosine-similarity",
+      "fasttext"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1957 · J.R. Firth (distributional hypothesis) · Modern operationalization: Mikolov et al. (2013), Reimers & Gurevych (2019)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A measure of how closely two linguistic units (words, sentences, or documents) relate in meaning, typically quantified by distance or angle in an embedding space using metrics such as cosine similarity.</p><p>Semantic similarity is operationalized by embedding texts into a shared vector space and computing a distance metric. The dominant choice is <b>cosine similarity</b>:</p>\n\n  <p>\\[ \\text{sim}(a, b) = \\frac{a \\cdot b}{\\|a\\| \\, \\|b\\|} \\in [-1, 1] \\]</p>\n\n  <p>Other metrics include Euclidean distance \\( \\|a - b\\|_2 \\) (sensitive to magnitude) and raw dot product \\( a \\cdot b \\) (conflates magnitude with direction, but used in attention mechanisms and some retrieval systems for efficiency).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Similarity vs. relatedness.</b> A persistent and important distinction: <b>similarity</b> means belonging to the same category or being substitutable (\"coffee\" / \"tea\" — both hot beverages), while <b>relatedness</b> means any semantic association (\"coffee\" / \"mug\" — associated but not substitutable). SimLex-999 was specifically designed to measure similarity (not relatedness), unlike earlier benchmarks like WordSim-353 which conflated the two. Most embedding models trained with distributional objectives capture relatedness better than strict similarity.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Evaluation benchmarks",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Level</th>\n      <th style=\"padding:6px; text-align:left;\">Benchmark</th>\n      <th style=\"padding:6px; text-align:left;\">Metric</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Word</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">SimLex-999, WordSim-353, MEN</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Spearman \\( \\rho \\) between model scores and human ratings</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Sentence</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">STS Benchmark (STS-B)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Pearson / Spearman correlation with human scores (0–5 scale)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">Document</td>\n      <td style=\"padding:6px;\">MTEB (Massive Text Embedding Benchmark)</td>\n      <td style=\"padding:6px;\">Suite of retrieval, clustering, classification tasks</td>\n    </tr>\n  </table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Modern approaches.</b> Sentence-level semantic similarity improved dramatically with contrastive learning objectives. Sentence-BERT (Reimers & Gurevych, 2019) fine-tunes BERT with a siamese architecture, and SimCSE (Gao et al., 2021) achieves strong results using simple dropout-based augmentation as positive pairs. These models produce embedding spaces where cosine similarity aligns tightly with human similarity judgments, enabling efficient retrieval-augmented generation (RAG) pipelines.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "cosine-similarity",
+    "title": "Cosine similarity",
+    "summary": "A similarity metric that measures the cosine of the angle between two vectors, capturing directional alignment independently of magnitude. It is the standard metric for comparing embeddings in NLP and information retrieval.",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "bag-of-words",
+      "semantic-similarity"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1880s · Various (inner product geometry) · Popularized in IR by Salton & McGill (1983)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A similarity metric that measures the cosine of the angle between two vectors, capturing directional alignment independently of magnitude. It is the standard metric for comparing embeddings in NLP and information retrieval.</p><p>For two vectors \\( a, b \\in \\mathbb{R}^d \\):</p>\n\n  <p>\\[ \\cos(a, b) = \\frac{a \\cdot b}{\\|a\\| \\, \\|b\\|} = \\frac{\\sum_{i=1}^d a_i b_i}{\\sqrt{\\sum_{i=1}^d a_i^2} \\; \\sqrt{\\sum_{i=1}^d b_i^2}} \\]</p>\n\n  <p>The result lies in \\( [-1, 1] \\): \\( +1 \\) indicates identical direction, \\( 0 \\) indicates orthogonality (no linear relationship), and \\( -1 \\) indicates opposite direction. When vectors are L2-normalized (unit vectors on the hypersphere), cosine similarity reduces to the dot product: \\( \\cos(\\hat{a}, \\hat{b}) = \\hat{a} \\cdot \\hat{b} \\), and cosine distance equals \\( 1 - \\cos(a,b) \\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why magnitude invariance matters.</b> Cosine similarity is preferred over Euclidean distance in NLP because vector magnitude often encodes irrelevant information — word frequency, document length, or arbitrary scaling. A document repeated twice should not appear more similar to a query simply because its TF-IDF vector has larger norm. By normalizing away magnitude, cosine focuses purely on the \"direction\" of meaning in the embedding space.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Relationship to attention.</b> Scaled dot-product attention in Transformers computes:</p>\n\n  <p>\\[ \\text{Attention}(Q, K, V) = \\text{softmax}\\!\\left(\\frac{QK^\\top}{\\sqrt{d_k}}\\right) V \\]</p>\n\n  <p>The \\( QK^\\top \\) term is an unnormalized dot-product similarity (not cosine, since queries and keys are not L2-normalized). The \\( \\sqrt{d_k} \\) scaling prevents dot products from growing large in high dimensions, which would push softmax into saturated regions with near-zero gradients. Some recent architectures (e.g., QK-normalization in ViT-22B) do apply L2-normalization to queries and keys, making attention weights true cosine similarities.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Practical considerations",
+        "body": "<ul>\n    <li>For retrieval at scale, pre-normalizing all vectors to unit length converts cosine similarity to a dot product, enabling faster MIPS (maximum inner product search) with libraries like FAISS.</li>\n    <li>Cosine similarity is undefined for zero vectors — implementations must handle this edge case.</li>\n    <li>In high-dimensional spaces, random vectors tend to be nearly orthogonal (cosine ~ 0), so meaningful similarities are typically in a narrow positive range.</li>\n  </ul><details>\n    <summary>Python</summary>\n    <pre><code>import numpy as np\n\ndef cosine_similarity(a, b):\n    \"\"\"Cosine similarity between vectors a and b.\"\"\"\n    dot = np.dot(a, b)\n    norms = np.linalg.norm(a) * np.linalg.norm(b)\n    if norms == 0:\n        return 0.0\n    return dot / norms\n\n# Batch version: cosine similarity matrix\ndef cosine_sim_matrix(X, Y):\n    \"\"\"X: (n, d), Y: (m, d) -> (n, m) similarity matrix.\"\"\"\n    X_norm = X / np.linalg.norm(X, axis=1, keepdims=True)\n    Y_norm = Y / np.linalg.norm(Y, axis=1, keepdims=True)\n    return X_norm @ Y_norm.T</code></pre>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "bag-of-words",
+    "title": "Bag of words",
+    "summary": "A text representation that discards word order and grammar, encoding a document solely as an unordered multiset of its word frequencies — the simplest and historically most influential document representation in NLP and information retri…",
+    "domain": "foundations",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "gated-recurrent-unit-gru",
+      "cosine-similarity"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1954 · Zellig Harris (distributional analysis) · Formalized in IR by Salton, Wong, Yang (1975)"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A text representation that discards word order and grammar, encoding a document solely as an unordered multiset of its word frequencies — the simplest and historically most influential document representation in NLP and information retrieval.</p><p>Given a vocabulary \\( V = \\{w_1, \\ldots, w_{|V|}\\} \\), a document \\( d \\) is represented as a sparse vector \\( x \\in \\mathbb{R}^{|V|} \\). Three common weighting schemes:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Scheme</th>\n      <th style=\"padding:6px; text-align:left;\">Formula</th>\n      <th style=\"padding:6px; text-align:left;\">Notes</th>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Raw count</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( x_i = \\text{count}(w_i, d) \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Simplest; biased toward long documents</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Binary</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">\\( x_i = \\mathbb{1}[w_i \\in d] \\)</td>\n      <td style=\"padding:6px; border-bottom:1px solid #ddd;\">Presence/absence only; used in some Naive Bayes variants</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\">TF-IDF</td>\n      <td style=\"padding:6px;\">\\( x_i = \\text{tf}(w_i, d) \\cdot \\log\\frac{N}{\\text{df}(w_i)} \\)</td>\n      <td style=\"padding:6px;\">Downweights ubiquitous terms; standard in retrieval</td>\n    </tr>\n  </tbody></table>\n\n  <p>The sentence \"the cat sat on the mat\" becomes a sparse vector: the=2, cat=1, sat=1, on=1, mat=1 (with all other entries zero). Despite the extreme simplicity — \"dog bites man\" and \"man bites dog\" are identical under BoW — the representation proved remarkably effective throughout the 1990s–2000s for:</p>\n\n  <ul>\n    <li><b>Document classification:</b> Naive Bayes, logistic regression, and SVMs over BoW features were the dominant paradigm. Multinomial Naive Bayes models \\( P(w \\mid c) \\) directly from word counts per class.</li>\n    <li><b>Topic modeling:</b> LDA treats each document as a mixture of topics, each topic as a distribution over words — essentially a probabilistic decomposition of the BoW representation.</li>\n    <li><b>Information retrieval:</b> TF-IDF BoW vectors with cosine similarity formed the basis of vector space models (Salton et al., 1975).</li>\n  </ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>BM25</b> (Robertson et al., 1995), the most successful BoW retrieval function, extends TF-IDF with saturation and length normalization:</p>\n\n  <p>\\[ \\text{BM25}(q, d) = \\sum_{w \\in q} \\text{IDF}(w) \\cdot \\frac{f(w, d) \\cdot (k_1 + 1)}{f(w, d) + k_1 \\cdot \\left(1 - b + b \\cdot \\frac{|d|}{\\text{avgdl}}\\right)} \\]</p>\n\n  <p>where \\( k_1 \\approx 1.2 \\) controls term frequency saturation and \\( b \\approx 0.75 \\) controls length normalization. BM25 remains a competitive baseline even against neural dense retrieval systems and is the standard first-stage ranker in modern search pipelines.</p>\n\n  <p>BoW was gradually superseded by word embeddings and then contextual representations for tasks requiring semantic understanding, but its virtues — interpretability, computational efficiency, and no training data requirement — keep it relevant. Hybrid retrieval systems often combine BM25 sparse scores with dense embedding scores for best results.</p>"
+      }
+    ],
+    "cards": []
   }
 ]
