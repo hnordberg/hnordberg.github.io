@@ -4271,6 +4271,236 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "causal-mask",
+      "title": "Causal Mask",
+      "summary": "A lower-triangular binary mask applied inside scaled dot-product attention to prevent each position from attending to future positions, enforcing the autoregressive property: position \\( t \\) can only attend to positions \\( 1, \\ldots, t \\).",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "multi-head-attention",
+        "context-window"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "multi-head-attention",
+      "title": "Multi-Head Attention",
+      "summary": "An extension of self-attention that runs \\( h \\) parallel attention operations (\"heads\"), each with its own learned projections, then concatenates and linearly projects the results. This allows the model to jointly attend to information…",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "intermediate",
+        "landmark",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "attention-head",
+        "causal-mask"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "attention-head",
+      "title": "Attention Head",
+      "summary": "A single instance of the scaled dot-product attention mechanism within multi-head attention, operating on a lower-dimensional subspace of the full model dimension. Each head learns its own query, key, and value projections, enabling it t…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "grouped-query-attention-gqa",
+        "multi-head-attention"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "grouped-query-attention-gqa",
+      "title": "Grouped-Query Attention (GQA)",
+      "summary": "A variant of multi-head attention that shares key and value projections across groups of query heads, reducing KV-cache memory during inference while retaining most of multi-head attention's quality. GQA interpolates between multi-head a…",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "query-key-value-qkv",
+        "attention-head"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "query-key-value-qkv",
+      "title": "Query, Key, Value (QKV)",
+      "summary": "The three linear projections of the input in attention mechanisms. The query asks \"what am I looking for?\", the key advertises \"what do I contain?\", and the value provides \"what information do I give if selected?\" Attention computes comp…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "attention",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "projection-matrix",
+        "grouped-query-attention-gqa"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "projection-matrix",
+      "title": "Projection Matrix",
+      "summary": "A learned linear transformation that maps input vectors into a different subspace. In Transformers, projection matrices create the Q, K, V representations from the input and project the concatenated multi-head output back to the model di…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "position-wise-mlp",
+        "query-key-value-qkv"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "position-wise-mlp",
+      "title": "Position-wise MLP",
+      "summary": "A two-layer feed-forward network applied independently and identically to each position in the sequence. It is the second sub-layer in every Transformer block, acting as a per-token non-linear transformation after attention has mixed inf…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "residual-connection-skip-connection",
+        "projection-matrix"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "residual-connection-skip-connection",
+      "title": "Residual Connection (Skip Connection)",
+      "summary": "A shortcut that adds a layer's input directly to its output, so the layer only needs to learn a residual function \\( F(\\mathbf{x}) \\) rather than the full mapping. Residual connections enable training of very deep networks by providing g…",
+      "domain": "history",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "root-mean-square-normalization-rmsnorm",
+        "position-wise-mlp"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "root-mean-square-normalization-rmsnorm",
+      "title": "Root Mean Square Normalization (RMSNorm)",
+      "summary": "A simplified layer normalisation that normalises activations by their root mean square only, omitting the mean-centering step. RMSNorm is computationally cheaper than LayerNorm while achieving comparable performance, and has become the d…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "context-window",
+        "residual-connection-skip-connection"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "context-window",
+      "title": "Context Window",
+      "summary": "The maximum number of tokens a Transformer-based model can process in a single forward pass. It defines the model's \"working memory\" — all tokens within the window can attend to each other, but the model has no access to information beyo…",
+      "domain": "llm",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "foundational",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "causal-mask",
+        "root-mean-square-normalization-rmsnorm"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

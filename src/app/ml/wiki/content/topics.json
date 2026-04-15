@@ -9296,5 +9296,421 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "causal-mask",
+    "title": "Causal Mask",
+    "summary": "A lower-triangular binary mask applied inside scaled dot-product attention to prevent each position from attending to future positions, enforcing the autoregressive property: position \\( t \\) can only attend to positions \\( 1, \\ldots, t \\).",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "multi-head-attention",
+      "context-window"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A lower-triangular binary mask applied inside scaled dot-product attention to prevent each position from attending to future positions, enforcing the autoregressive property: position \\( t \\) can only attend to positions \\( 1, \\ldots, t \\).</p><p>The causal mask \\( \\mathbf{M} \\in \\{0, -\\infty\\}^{n \\times n} \\) is defined as:</p>\n\n\\[ M_{ij} = \\begin{cases} 0 &amp; \\text{if } j \\leq i \\\\ -\\infty &amp; \\text{if } j &gt; i \\end{cases} \\]\n\n<p>It is applied <b>additively</b> to the attention logits before the softmax:</p>\n\n\\[ \\text{Attention}(Q,K,V) = \\text{softmax}\\!\\left(\\frac{QK^\\top}{\\sqrt{d_k}} + M\\right)V \\]\n\n<p>Because \\( e^{-\\infty} = 0 \\), the masked positions receive zero attention weight after softmax. In practice, \\( -\\infty \\) is replaced by a large negative float (e.g., \\(-10^{9}\\) or <code>-float('inf')</code> in PyTorch).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why it matters for training:</b> During training with teacher forcing, the entire target sequence is fed in at once. The causal mask allows parallel computation of all next-token predictions in a single forward pass — position \\( t \\) predicts token \\( t+1 \\) using only tokens \\( 1, \\ldots, t \\). Without the mask, every position would see the full sequence, including the token it is supposed to predict, making the task trivial and the model useless at generation time.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>During inference</b>, tokens are generated one at a time, so the autoregressive property is naturally satisfied. However, when using a KV cache, the mask is still applied to ensure cached keys from future positions (if any exist from padding) are not attended to.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Variants and related masks",
+        "body": "<ul>\n<li><b>Padding mask</b> — masks out padding tokens in variable-length batches (applied in both encoder and decoder)</li>\n<li><b>Encoder-decoder mask</b> — in cross-attention, the decoder queries attend to all encoder positions (no causal constraint)</li>\n<li><b>Prefix LM mask</b> — a hybrid where a prefix is fully visible (bidirectional) and the rest is causal; used in T5 and UL2</li>\n<li><b>Sliding-window causal mask</b> — restricts attention to a fixed window of recent tokens (used in Mistral)</li>\n</ul>\n\n<p>The original paper calls it the \"subsequent mask.\" It is also known as the \"look-ahead mask\" in some frameworks (e.g., TensorFlow tutorials).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "multi-head-attention",
+    "title": "Multi-Head Attention",
+    "summary": "An extension of self-attention that runs \\( h \\) parallel attention operations (\"heads\"), each with its own learned projections, then concatenates and linearly projects the results. This allows the model to jointly attend to information…",
+    "domain": "history",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "intermediate",
+      "landmark",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "attention-head",
+      "causal-mask"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An extension of self-attention that runs \\( h \\) parallel attention operations (\"heads\"), each with its own learned projections, then concatenates and linearly projects the results. This allows the model to jointly attend to information from different representation subspaces at different positions.</p>\\[ \\text{MultiHead}(Q,K,V) = \\text{Concat}(\\text{head}_1, \\ldots, \\text{head}_h)\\,W^O \\]\n\n<p>where each head computes:</p>\n\n\\[ \\text{head}_i = \\text{Attention}(QW_i^Q,\\; KW_i^K,\\; VW_i^V) \\]\n\n<p>with projection matrices \\( W_i^Q, W_i^K \\in \\mathbb{R}^{d \\times d_k} \\), \\( W_i^V \\in \\mathbb{R}^{d \\times d_v} \\), and output projection \\( W^O \\in \\mathbb{R}^{hd_v \\times d} \\). Typically \\( d_k = d_v = d/h \\), so the total computation is similar to single-head attention with full dimensionality.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why multiple heads?</b> A single attention head computes one set of weights — a single \"view\" of the relationships in the sequence. Multiple heads allow the model to capture different types of relationships simultaneously:</p>\n<ul>\n<li>One head might attend to the syntactic head of a phrase</li>\n<li>Another might track coreference</li>\n<li>Another might attend to the previous token (local context)</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Heads \\( h \\)</th><th style=\"padding:6px; text-align:left;\">\\( d_{\\text{model}} \\)</th><th style=\"padding:6px; text-align:left;\">\\( d_k \\)</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Transformer (base)</td><td style=\"padding:6px;\">8</td><td style=\"padding:6px;\">512</td><td style=\"padding:6px;\">64</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPT-3</td><td style=\"padding:6px;\">96</td><td style=\"padding:6px;\">12288</td><td style=\"padding:6px;\">128</td></tr>\n<tr><td style=\"padding:6px;\">LLaMA-70B</td><td style=\"padding:6px;\">64</td><td style=\"padding:6px;\">8192</td><td style=\"padding:6px;\">128</td></tr>\n</table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "attention-head",
+    "title": "Attention Head",
+    "summary": "A single instance of the scaled dot-product attention mechanism within multi-head attention, operating on a lower-dimensional subspace of the full model dimension. Each head learns its own query, key, and value projections, enabling it t…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "grouped-query-attention-gqa",
+      "multi-head-attention"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A single instance of the scaled dot-product attention mechanism within multi-head attention, operating on a lower-dimensional subspace of the full model dimension. Each head learns its own query, key, and value projections, enabling it to specialise in capturing different types of relationships.</p><p>Head \\( i \\) computes:</p>\n\n\\[ \\text{head}_i = \\text{softmax}\\!\\left(\\frac{(XW_i^Q)(XW_i^K)^\\top}{\\sqrt{d_k}}\\right)(XW_i^V) \\]\n\n<p>where \\( W_i^Q, W_i^K \\in \\mathbb{R}^{d \\times d_k} \\) and \\( W_i^V \\in \\mathbb{R}^{d \\times d_v} \\), with \\( d_k = d_v = d/h \\) typically.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Head specialisation:</b> Empirical studies (e.g., Clark et al., 2019; Voita et al., 2019) have found that individual heads often specialise:</p>\n<ul>\n<li><b>Positional heads</b> — attend to fixed relative positions (e.g., previous token, first token)</li>\n<li><b>Syntactic heads</b> — track dependency relations (subject→verb, noun→modifier)</li>\n<li><b>Rare-pattern heads</b> — activate for specific semantic or lexical patterns</li>\n<li><b>Redundant heads</b> — some heads can be pruned with minimal performance loss</li>\n</ul>\n\n<p>The discovery that many heads are redundant motivated <b>grouped-query attention</b> (GQA), which shares key-value projections across groups of heads to reduce KV-cache memory during inference.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "grouped-query-attention-gqa",
+    "title": "Grouped-Query Attention (GQA)",
+    "summary": "A variant of multi-head attention that shares key and value projections across groups of query heads, reducing KV-cache memory during inference while retaining most of multi-head attention's quality. GQA interpolates between multi-head a…",
+    "domain": "deep-learning",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "attention",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "query-key-value-qkv",
+      "attention-head"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2023 · Joshua Ainslie et al. · GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints",
+        "url": "https://arxiv.org/abs/2305.13245"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A variant of multi-head attention that shares key and value projections across groups of query heads, reducing KV-cache memory during inference while retaining most of multi-head attention's quality. GQA interpolates between multi-head attention (MHA) and multi-query attention (MQA).</p><p>In standard MHA with \\( h \\) heads, there are \\( h \\) separate Q, K, V projections each. In GQA with \\( g \\) groups:</p>\n<ul>\n<li>\\( h \\) query heads (unchanged)</li>\n<li>\\( g \\) key-value heads, each shared by \\( h/g \\) query heads</li>\n</ul>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">KV heads</th><th style=\"padding:6px; text-align:left;\">KV cache size</th><th style=\"padding:6px; text-align:left;\">Quality</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">MHA</td><td style=\"padding:6px;\">\\( h \\)</td><td style=\"padding:6px;\">\\( O(h \\cdot n \\cdot d_k) \\)</td><td style=\"padding:6px;\">Highest</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GQA</td><td style=\"padding:6px;\">\\( g \\) (1 &lt; g &lt; h)</td><td style=\"padding:6px;\">\\( O(g \\cdot n \\cdot d_k) \\)</td><td style=\"padding:6px;\">Near-MHA</td></tr>\n<tr><td style=\"padding:6px;\">MQA</td><td style=\"padding:6px;\">1</td><td style=\"padding:6px;\">\\( O(n \\cdot d_k) \\)</td><td style=\"padding:6px;\">Slightly lower</td></tr>\n</tbody></table>\n\n<p>The primary motivation is <b>inference efficiency</b>: during autoregressive generation, the KV cache stores key and value tensors for all previous tokens. With MHA, this grows as \\( O(Lhn d_k) \\) across layers, which becomes a memory bottleneck for long sequences. GQA reduces this by a factor of \\( h/g \\).</p>\n\n<p>GQA is used in LLaMA 2 (70B), Mistral, and many other modern LLMs. It can be obtained from a pre-trained MHA model via \"uptraining\" — mean-pooling adjacent KV heads and fine-tuning briefly.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "query-key-value-qkv",
+    "title": "Query, Key, Value (QKV)",
+    "summary": "The three linear projections of the input in attention mechanisms. The query asks \"what am I looking for?\", the key advertises \"what do I contain?\", and the value provides \"what information do I give if selected?\" Attention computes comp…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "attention",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "projection-matrix",
+      "grouped-query-attention-gqa"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The three linear projections of the input in attention mechanisms. The query asks \"what am I looking for?\", the key advertises \"what do I contain?\", and the value provides \"what information do I give if selected?\" Attention computes compatibility between queries and keys to weight the aggregation of values.</p><p>Given input \\( \\mathbf{X} \\in \\mathbb{R}^{n \\times d} \\), the projections are:</p>\n\n\\[ Q = XW^Q, \\quad K = XW^K, \\quad V = XW^V \\]\n\n<p>where \\( W^Q, W^K \\in \\mathbb{R}^{d \\times d_k} \\) and \\( W^V \\in \\mathbb{R}^{d \\times d_v} \\).</p>\n\n<p>The naming comes from an analogy to <b>information retrieval</b>:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Component</th><th style=\"padding:6px; text-align:left;\">Retrieval analogy</th><th style=\"padding:6px; text-align:left;\">Role in attention</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Query \\( Q \\)</td><td style=\"padding:6px;\">Search query</td><td style=\"padding:6px;\">What this position is looking for</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Key \\( K \\)</td><td style=\"padding:6px;\">Index/tag of a document</td><td style=\"padding:6px;\">What this position advertises</td></tr>\n<tr><td style=\"padding:6px;\">Value \\( V \\)</td><td style=\"padding:6px;\">Content of the document</td><td style=\"padding:6px;\">Information to retrieve if matched</td></tr>\n</tbody></table>\n\n<p>The attention score \\( \\mathbf{q}_i^\\top \\mathbf{k}_j / \\sqrt{d_k} \\) measures compatibility between query \\( i \\) and key \\( j \\). After softmax normalisation, these scores weight the value vectors to produce the output.</p>\n\n<p>In <b>self-attention</b>, Q, K, V all come from the same input. In <b>cross-attention</b>, Q comes from one sequence (e.g., decoder) while K, V come from another (e.g., encoder output).</p>\n\n<p>Crucially, the separate projections allow the model to learn different representations for \"what to look for\" versus \"what to advertise\" versus \"what to return\" — a single input token plays all three roles simultaneously for different interactions.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "projection-matrix",
+    "title": "Projection Matrix",
+    "summary": "A learned linear transformation that maps input vectors into a different subspace. In Transformers, projection matrices create the Q, K, V representations from the input and project the concatenated multi-head output back to the model di…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "position-wise-mlp",
+      "query-key-value-qkv"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "General concept in linear algebra; systematically applied to attention by Vaswani et al. (2017) · Attention Is All You Need",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A learned linear transformation that maps input vectors into a different subspace. In Transformers, projection matrices create the Q, K, V representations from the input and project the concatenated multi-head output back to the model dimension.</p><p>Given an input \\( \\mathbf{x} \\in \\mathbb{R}^d \\), a projection matrix \\( W \\in \\mathbb{R}^{d \\times d'} \\) maps it to a new space:</p>\n\n\\[ \\mathbf{z} = \\mathbf{x}\\,W \\]\n\n<p>The key projection matrices in multi-head attention are:</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Matrix</th><th style=\"padding:6px; text-align:left;\">Shape</th><th style=\"padding:6px; text-align:left;\">Purpose</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\\( W_i^Q \\)</td><td style=\"padding:6px;\">\\( d \\times d_k \\)</td><td style=\"padding:6px;\">Project input to query subspace for head \\( i \\)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\\( W_i^K \\)</td><td style=\"padding:6px;\">\\( d \\times d_k \\)</td><td style=\"padding:6px;\">Project input to key subspace for head \\( i \\)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\\( W_i^V \\)</td><td style=\"padding:6px;\">\\( d \\times d_v \\)</td><td style=\"padding:6px;\">Project input to value subspace for head \\( i \\)</td></tr>\n<tr><td style=\"padding:6px;\">\\( W^O \\)</td><td style=\"padding:6px;\">\\( hd_v \\times d \\)</td><td style=\"padding:6px;\">Project concatenated heads back to model dim</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Parameter count:</b> For a single multi-head attention layer with \\( h \\) heads and \\( d_k = d_v = d/h \\):</p>\n\n\\[ \\text{Parameters} = \\underbrace{3 \\cdot d \\cdot d}_{W^Q, W^K, W^V} + \\underbrace{d \\cdot d}_{W^O} = 4d^2 \\]\n\n<p>This is independent of the number of heads \\( h \\), because splitting into heads merely partitions the columns of a single large matrix.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Terminology note:</b> In mathematics, a projection matrix satisfies \\( P^2 = P \\) (idempotent). The \"projection matrices\" in Transformers are not projections in this strict sense — they are general linear maps. The term is used loosely to mean \"a matrix that maps to a (typically lower-dimensional) subspace.\"</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Beyond attention,</b> projection matrices appear throughout deep learning:</p>\n<ul>\n<li><b>Classification head</b> — projects final hidden states to logits: \\( W \\in \\mathbb{R}^{d \\times |\\mathcal{V}|} \\)</li>\n<li><b>Embedding layer</b> — projects token IDs to dense vectors (often weight-tied with the classification head)</li>\n<li><b>LoRA</b> — adds low-rank pairs \\( BA \\) where \\( A \\in \\mathbb{R}^{d \\times r} \\), \\( B \\in \\mathbb{R}^{r \\times d} \\), with \\( r \\ll d \\)</li>\n<li><b>Down/up projections in FFN</b> — \\( W_1 \\in \\mathbb{R}^{d \\times d_{ff}} \\) and \\( W_2 \\in \\mathbb{R}^{d_{ff} \\times d} \\)</li>\n</ul>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "position-wise-mlp",
+    "title": "Position-wise MLP",
+    "summary": "A two-layer feed-forward network applied independently and identically to each position in the sequence. It is the second sub-layer in every Transformer block, acting as a per-token non-linear transformation after attention has mixed inf…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "residual-connection-skip-connection",
+      "projection-matrix"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2017 · Vaswani et al. · Attention Is All You Need · SwiGLU: Shazeer (2020)",
+        "url": "https://arxiv.org/abs/1706.03762"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A two-layer feed-forward network applied independently and identically to each position in the sequence. It is the second sub-layer in every Transformer block, acting as a per-token non-linear transformation after attention has mixed information across positions.</p><p>The standard formulation:</p>\n\n\\[ \\text{FFN}(\\mathbf{x}) = W_2\\,\\sigma(W_1\\mathbf{x} + b_1) + b_2 \\]\n\n<p>where \\( W_1 \\in \\mathbb{R}^{d \\times d_{ff}} \\), \\( W_2 \\in \\mathbb{R}^{d_{ff} \\times d} \\), and the inner dimension \\( d_{ff} \\) is typically \\( 4d \\). The activation \\( \\sigma \\) was originally ReLU; modern models use <b>SwiGLU</b> or <b>GeGLU</b>:</p>\n\n\\[ \\text{SwiGLU}(\\mathbf{x}) = (\\text{Swish}(W_1\\mathbf{x}) \\odot W_3\\mathbf{x})\\,W_2 \\]\n\n<p>which introduces a gating mechanism and a third weight matrix, often with \\( d_{ff} = \\frac{8}{3}d \\) to keep the parameter count comparable.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>\"Position-wise\"</b> means the same weights are applied to every position independently — there is no interaction between positions in this layer. Cross-position mixing happens only in the attention sub-layer. This separation is a key design principle of the Transformer.</p>\n\n<p>The FFN accounts for roughly <b>two-thirds of a Transformer's parameters</b> (the attention projections account for the other third). Research suggests FFN layers act as key-value memories, storing factual knowledge that can be retrieved via the input activations.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "residual-connection-skip-connection",
+    "title": "Residual Connection (Skip Connection)",
+    "summary": "A shortcut that adds a layer's input directly to its output, so the layer only needs to learn a residual function \\( F(\\mathbf{x}) \\) rather than the full mapping. Residual connections enable training of very deep networks by providing g…",
+    "domain": "history",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "landmark",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "root-mean-square-normalization-rmsnorm",
+      "position-wise-mlp"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2015 · Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun · Deep Residual Learning for Image Recognition",
+        "url": "https://arxiv.org/abs/1512.03385"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A shortcut that adds a layer's input directly to its output, so the layer only needs to learn a residual function \\( F(\\mathbf{x}) \\) rather than the full mapping. Residual connections enable training of very deep networks by providing gradient highways that mitigate the vanishing gradient problem.</p>\\[ \\mathbf{y} = F(\\mathbf{x}) + \\mathbf{x} \\]\n\n<p>where \\( F \\) is the transformation applied by the layer (e.g., attention or FFN sub-layer). The gradient flows through both \\( F \\) and the identity shortcut:</p>\n\n\\[ \\frac{\\partial \\mathbf{y}}{\\partial \\mathbf{x}} = \\frac{\\partial F}{\\partial \\mathbf{x}} + I \\]\n\n<p>The identity term \\( I \\) ensures that gradients can flow unimpeded through the skip path, even if \\( \\partial F / \\partial \\mathbf{x} \\) is small. This is why networks with hundreds of layers (ResNets, deep Transformers) can be trained effectively.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Residual connections in Transformers:</b> Every sub-layer (attention, FFN) is wrapped with a residual connection:</p>\n\n\\[ \\mathbf{x}' = \\mathbf{x} + \\text{SubLayer}(\\text{Norm}(\\mathbf{x})) \\quad \\text{(pre-norm)} \\]\n\n<p>Originally introduced for convolutional networks (ResNet), residual connections have become universal in deep learning. They also facilitate <b>ensemble-like behaviour</b> — Veit et al. (2016) showed that residual networks can be viewed as implicit ensembles of shallower networks.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Variant</th><th style=\"padding:6px; text-align:left;\">Formula</th><th style=\"padding:6px; text-align:left;\">Used in</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Post-norm</td><td style=\"padding:6px;\">\\( \\text{Norm}(\\mathbf{x} + F(\\mathbf{x})) \\)</td><td style=\"padding:6px;\">Original Transformer</td></tr>\n<tr><td style=\"padding:6px;\">Pre-norm</td><td style=\"padding:6px;\">\\( \\mathbf{x} + F(\\text{Norm}(\\mathbf{x})) \\)</td><td style=\"padding:6px;\">GPT-2+, LLaMA, most modern LLMs</td></tr>\n</tbody></table>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "root-mean-square-normalization-rmsnorm",
+    "title": "Root Mean Square Normalization (RMSNorm)",
+    "summary": "A simplified layer normalisation that normalises activations by their root mean square only, omitting the mean-centering step. RMSNorm is computationally cheaper than LayerNorm while achieving comparable performance, and has become the d…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "context-window",
+      "residual-connection-skip-connection"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2019 · Biao Zhang, Rico Sennrich · Root Mean Square Layer Normalization",
+        "url": "https://arxiv.org/abs/1910.07467"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A simplified layer normalisation that normalises activations by their root mean square only, omitting the mean-centering step. RMSNorm is computationally cheaper than LayerNorm while achieving comparable performance, and has become the default normalisation in modern LLMs.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>LayerNorm</b> (Ba et al., 2016) normalises by both mean and variance:</p>\n\n\\[ \\text{LayerNorm}(\\mathbf{x}) = \\gamma \\odot \\frac{\\mathbf{x} - \\mu}{\\sqrt{\\sigma^2 + \\epsilon}} + \\beta \\]"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>RMSNorm</b> drops the mean subtraction and bias, normalising only by the RMS:</p>\n\n\\[ \\text{RMSNorm}(\\mathbf{x}) = \\gamma \\odot \\frac{\\mathbf{x}}{\\text{RMS}(\\mathbf{x})}, \\quad \\text{RMS}(\\mathbf{x}) = \\sqrt{\\frac{1}{d}\\sum_{i=1}^{d} x_i^2 + \\epsilon} \\]\n\n<p>where \\( \\gamma \\in \\mathbb{R}^d \\) is a learned scale parameter and \\( \\epsilon \\) is a small constant for numerical stability.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Why drop the mean?</b> Zhang and Sennrich (2019) hypothesised that the success of LayerNorm comes primarily from the scale invariance (dividing by the norm), not from re-centering. Empirically, RMSNorm matches LayerNorm on language modelling and translation tasks while being ~10–15% faster due to fewer operations.</p>\n\n<p>RMSNorm is used in LLaMA, Mistral, GPT-NeoX, and most other modern open LLMs, always in the <b>pre-norm</b> configuration.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "context-window",
+    "title": "Context Window",
+    "summary": "The maximum number of tokens a Transformer-based model can process in a single forward pass. It defines the model's \"working memory\" — all tokens within the window can attend to each other, but the model has no access to information beyo…",
+    "domain": "llm",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "foundational",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "causal-mask",
+      "root-mean-square-normalization-rmsnorm"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Architectural property of Transformer models; long-context research ongoing (2023–present)."
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The maximum number of tokens a Transformer-based model can process in a single forward pass. It defines the model's \"working memory\" — all tokens within the window can attend to each other, but the model has no access to information beyond it.</p><p>The context window is fundamentally limited by the \\( O(n^2) \\) cost of self-attention, where \\( n \\) is the sequence length. Both compute and memory scale quadratically, making very long contexts expensive.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Context window</th><th style=\"padding:6px; text-align:left;\">Approx. pages of text</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPT-3 (2020)</td><td style=\"padding:6px;\">2,048 tokens</td><td style=\"padding:6px;\">~3 pages</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPT-4 (2023)</td><td style=\"padding:6px;\">8K / 128K tokens</td><td style=\"padding:6px;\">~12 / ~200 pages</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Claude 3.5 (2024)</td><td style=\"padding:6px;\">200K tokens</td><td style=\"padding:6px;\">~300 pages</td></tr>\n<tr><td style=\"padding:6px;\">Gemini 1.5 (2024)</td><td style=\"padding:6px;\">1M+ tokens</td><td style=\"padding:6px;\">~1,500 pages</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Extending context:</b> Techniques for longer contexts include:</p>\n<ul>\n<li><b>RoPE scaling</b> — interpolating or extrapolating rotary position embeddings beyond training length</li>\n<li><b>FlashAttention</b> — IO-aware exact attention that reduces memory from \\( O(n^2) \\) to \\( O(n) \\)</li>\n<li><b>Sparse attention</b> — attending to subsets of positions (Longformer, BigBird)</li>\n<li><b>Long-context pretraining</b> — gradually increasing context during training</li>\n</ul>\n\n<p>A larger context window does not guarantee the model uses all of it effectively — \"lost in the middle\" (Liu et al., 2023) showed that models often struggle with information placed in the middle of long contexts.</p>"
+      }
+    ],
+    "cards": []
   }
 ]
