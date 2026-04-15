@@ -16,7 +16,7 @@ export const WIKI_DOMAINS = [
 
 export type WikiDomain = (typeof WIKI_DOMAINS)[number];
 
-export const WIKI_LEVELS = ["intro", "intermediate", "advanced"] as const;
+export const WIKI_LEVELS = ["basic", "intro", "intermediate", "advanced"] as const;
 export type WikiLevel = (typeof WIKI_LEVELS)[number];
 
 export const WIKI_TYPES = [
