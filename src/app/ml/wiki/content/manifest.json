@@ -5632,6 +5632,232 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "structured-pruning",
+      "title": "Structured Pruning",
+      "summary": "A pruning approach that removes entire structural units — neurons, attention heads, channels, or layers — rather than individual weights. Structured pruning produces smaller dense models that run faster on standard hardware without requi…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "architecture",
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "unstructured-pruning",
+        "constitutional-ai"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "unstructured-pruning",
+      "title": "Unstructured Pruning",
+      "summary": "A pruning approach that zeros out individual weights at arbitrary positions in the weight matrices, producing sparse matrices. Unstructured pruning achieves higher compression ratios than structured pruning at equivalent quality, but req…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "quantization",
+        "structured-pruning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "quantization",
+      "title": "Quantization",
+      "summary": "The process of reducing the numerical precision of model weights and/or activations (e.g., from 32-bit floating-point to 8-bit or 4-bit integers), decreasing model size and accelerating inference. Quantization is the most widely used LLM…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "post-training-quantization-ptq",
+        "unstructured-pruning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "post-training-quantization-ptq",
+      "title": "Post-Training Quantization (PTQ)",
+      "summary": "A quantization approach applied after training is complete, converting a pre-trained model's weights (and optionally activations) to lower precision without retraining. PTQ is fast and requires minimal data (a small calibration set) but…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "quantization-aware-training-qat",
+        "quantization"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "quantization-aware-training-qat",
+      "title": "Quantization-Aware Training (QAT)",
+      "summary": "A training approach that simulates the effect of quantization during the forward pass while maintaining full-precision weights for gradient computation. The model learns to be robust to quantization noise, resulting in better accuracy at…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "preference-based-alignment",
+        "post-training-quantization-ptq"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "preference-based-alignment",
+      "title": "Preference-Based Alignment",
+      "summary": "A class of methods that align language model behaviour with human preferences by training on pairwise comparisons (preferred vs. dispreferred responses) rather than absolute quality labels. This is the dominant paradigm for making LLMs h…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "reinforcement-learning-from-human-feedback-rlhf",
+        "quantization-aware-training-qat"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "reinforcement-learning-from-human-feedback-rlhf",
+      "title": "Reinforcement Learning from Human Feedback (RLHF)",
+      "summary": "A method for aligning language models with human preferences by first training a reward model on human comparisons, then using reinforcement learning (PPO) to optimise the language model to maximise the learned reward while staying close…",
+      "domain": "history",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "reward-model",
+        "preference-based-alignment"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "reward-model",
+      "title": "Reward Model",
+      "summary": "A model trained to predict human preferences by assigning a scalar score to (prompt, response) pairs. The reward model serves as a proxy for human judgement in RLHF, providing the training signal that guides the language model toward pre…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "self-critique",
+        "reinforcement-learning-from-human-feedback-rlhf"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "self-critique",
+      "title": "Self-Critique",
+      "summary": "A technique where a language model evaluates and refines its own outputs by generating critiques of its initial response and then producing an improved version. Self-critique enables iterative refinement without external human feedback,…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "constitutional-ai",
+        "reward-model"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "constitutional-ai",
+      "title": "Constitutional AI",
+      "summary": "An alignment method developed by Anthropic that uses a set of written principles (a \"constitution\") to guide model self-critique and revision, replacing much of the human feedback in RLHF with AI-generated feedback (RLAIF). The model lea…",
+      "domain": "history",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "nlp",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "structured-pruning",
+        "self-critique"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

@@ -12178,5 +12178,575 @@
       }
     ],
     "cards": []
+  },
+  {
+    "slug": "structured-pruning",
+    "title": "Structured Pruning",
+    "summary": "A pruning approach that removes entire structural units — neurons, attention heads, channels, or layers — rather than individual weights. Structured pruning produces smaller dense models that run faster on standard hardware without requi…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "architecture",
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "unstructured-pruning",
+      "constitutional-ai"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Applied broadly; LLM examples: Michel et al. (2019, Are Sixteen Heads Really Better than One? ), Voita et al. (2019, Analyzing Multi-Head Self-Attention ), Men et al. (2024, ShortGPT layer pruning).",
+        "url": "https://arxiv.org/abs/1905.10650"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A pruning approach that removes entire structural units — neurons, attention heads, channels, or layers — rather than individual weights. Structured pruning produces smaller dense models that run faster on standard hardware without requiring sparse matrix support.</p><p>Unlike unstructured pruning, which zeros out individual weights at arbitrary positions, structured pruning removes complete computational units. The resulting model is a standard dense model with smaller dimensions — no sparse kernels needed, and inference speedup is immediate on commodity GPUs.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "What can be pruned",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Structure</th><th style=\"padding:6px; text-align:left;\">Granularity</th><th style=\"padding:6px; text-align:left;\">Effect</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Neurons / channels</td><td style=\"padding:6px;\">Remove rows/columns of weight matrices</td><td style=\"padding:6px;\">Reduces width</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Attention heads</td><td style=\"padding:6px;\">Remove entire heads from multi-head attention</td><td style=\"padding:6px;\">Reduces attention cost</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Layers</td><td style=\"padding:6px;\">Remove entire Transformer blocks</td><td style=\"padding:6px;\">Reduces depth</td></tr>\n<tr><td style=\"padding:6px;\">FFN intermediate dim</td><td style=\"padding:6px;\">Shrink hidden dimension of MLP sub-layer</td><td style=\"padding:6px;\">Reduces ~2/3 of layer params</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Importance scoring.</b> To decide which units to remove, a scoring function ranks each structure by its contribution to model quality. Common criteria include:</p>\n\n<ul>\n<li><b>Magnitude-based:</b> rank units by the \\(\\ell_1\\) or \\(\\ell_2\\) norm of their weight vectors, \\(\\| \\mathbf{w}_i \\|\\). Cheap but ignores interactions between units.</li>\n<li><b>Gradient / Taylor-based:</b> estimate the increase in loss from removing unit \\(i\\) via a first-order Taylor expansion: \\(\\Delta \\mathcal{L}_i \\approx \\left| \\frac{\\partial \\mathcal{L}}{\\partial h_i} \\cdot h_i \\right|\\), where \\(h_i\\) is the unit's output. This accounts for how much the unit is actually used during inference.</li>\n<li><b>Fisher information:</b> use \\(I_i = \\mathbb{E}\\!\\left[\\left(\\frac{\\partial \\mathcal{L}}{\\partial h_i}\\right)^2\\right]\\) to estimate sensitivity.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Advantage over unstructured pruning:</b> The result is a smaller but regular dense model — standard matrix multiplications on GPUs with no special sparse kernels. This makes structured pruning practical for deployment on any hardware.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Disadvantage:</b> Removing an entire unit is a coarser operation than zeroing individual weights. At the same compression ratio, structured pruning typically causes more quality degradation than unstructured pruning because the model has less flexibility in choosing what to discard.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>LLM results.</b> Michel et al. (2019) showed that in many Transformer models a large fraction of attention heads can be removed after training with minimal accuracy loss — in some cases only 20% of heads are truly important. Voita et al. (2019) confirmed this with an information-theoretic analysis. The \"ShortGPT\" approach (Men et al., 2024) showed that removing up to 25% of layers in some LLMs barely affects downstream metrics, suggesting significant redundancy in depth. After structured pruning, a brief fine-tuning phase (a few hundred steps) typically recovers most lost quality.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "unstructured-pruning",
+    "title": "Unstructured Pruning",
+    "summary": "A pruning approach that zeros out individual weights at arbitrary positions in the weight matrices, producing sparse matrices. Unstructured pruning achieves higher compression ratios than structured pruning at equivalent quality, but req…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "quantization",
+      "structured-pruning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "1990 · LeCun, Denker & Solla · Optimal Brain Damage ; modern: Frantar & Alistarh (2023) · SparseGPT",
+        "url": "http://yann.lecun.com/exdb/publis/pdf/lecun-90b.pdf"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A pruning approach that zeros out individual weights at arbitrary positions in the weight matrices, producing sparse matrices. Unstructured pruning achieves higher compression ratios than structured pruning at equivalent quality, but requires sparse computation support for actual inference speedup.</p><p>The pruned weight matrix has entries set to zero based on an importance criterion:</p>\n\n\\[ W'_{ij} = \\begin{cases} W_{ij} &amp; \\text{if } |W_{ij}| &gt; \\tau \\text{ (or other criterion)} \\\\ 0 &amp; \\text{otherwise} \\end{cases} \\]\n\n<p>where \\(\\tau\\) is a threshold, often set to achieve a target sparsity level \\(s = \\frac{\\text{number of zeros}}{\\text{total parameters}}\\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Importance criteria",
+        "body": "<ul>\n<li><b>Magnitude pruning</b> (simplest): remove weights with smallest absolute value \\(|W_{ij}|\\). Assumes small weights contribute least.</li>\n<li><b>Optimal Brain Damage (OBD)</b> (LeCun et al., 1990): uses second-order information — approximates the loss increase from removing weight \\(W_{ij}\\) as \\(\\Delta \\mathcal{L} \\approx \\frac{1}{2} H_{ii} W_{ij}^2\\), where \\(H_{ii}\\) is the diagonal of the Hessian. Accounts for curvature, not just magnitude.</li>\n<li><b>Optimal Brain Surgeon (OBS)</b> (Hasselmo et al., 1993): extends OBD by using off-diagonal Hessian entries and adjusting remaining weights to compensate: \\(\\delta \\mathbf{w} = -\\frac{W_q}{[\\mathbf{H}^{-1}]_{qq}} \\mathbf{H}^{-1} \\mathbf{e}_q\\), yielding better results but at higher cost.</li>\n<li><b>SparseGPT</b> (Frantar &amp; Alistarh, 2023): adapts OBS for LLMs by solving a layer-wise sparse regression problem efficiently, achieving 50–60% unstructured sparsity in one shot without retraining.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "title": "Sparsity levels achievable",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Sparsity</th><th style=\"padding:6px; text-align:left;\">Typical Quality Impact</th><th style=\"padding:6px; text-align:left;\">Notes</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">50%</td><td style=\"padding:6px;\">Negligible loss</td><td style=\"padding:6px;\">Safe for most models</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">80–90%</td><td style=\"padding:6px;\">Modest loss (recoverable with fine-tuning)</td><td style=\"padding:6px;\">Practical ceiling for many architectures</td></tr>\n<tr><td style=\"padding:6px;\">95%+</td><td style=\"padding:6px;\">Significant degradation</td><td style=\"padding:6px;\">Requires lottery-ticket-style techniques</td></tr>\n</tbody></table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Hardware challenges",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tbody><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Challenge</th><th style=\"padding:6px; text-align:left;\">Issue</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPU optimisation</td><td style=\"padding:6px;\">GPUs are optimised for dense matmul; random sparsity patterns cannot exploit SIMD parallelism</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Irregular memory access</td><td style=\"padding:6px;\">Random sparsity patterns cause cache misses, negating theoretical FLOP savings</td></tr>\n<tr><td style=\"padding:6px;\">Storage overhead</td><td style=\"padding:6px;\">Sparse formats (CSR, COO) require index arrays, partially offsetting compression gains</td></tr>\n</tbody></table>\n\n<p>NVIDIA's Ampere and Hopper GPUs support <b>2:4 structured sparsity</b> — exactly 2 zeros per group of 4 elements — a hardware-friendly compromise that achieves 2x speedup with dedicated Sparse Tensor Cores. This semi-structured pattern sits between fully unstructured and structured pruning, offering a practical middle ground for deployment.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Derivations",
+        "body": "<details>\n    <summary>Derivations</summary>\n    <p><b>OBD loss approximation.</b> Taylor-expand the loss around the current weights, assuming the model is at a local minimum (\\(\\nabla \\mathcal{L} = 0\\)):</p>\n\\[ \\Delta \\mathcal{L} = \\mathcal{L}(\\mathbf{w} + \\delta\\mathbf{w}) - \\mathcal{L}(\\mathbf{w}) \\approx \\frac{1}{2}\\, \\delta\\mathbf{w}^\\top \\mathbf{H}\\, \\delta\\mathbf{w} \\]\n<p>Setting a single weight \\(W_q\\) to zero means \\(\\delta w_q = -W_q\\) and all other \\(\\delta w_i = 0\\). Under the diagonal Hessian approximation:</p>\n\\[ \\Delta \\mathcal{L}_q \\approx \\frac{1}{2} H_{qq} W_q^2 \\]\n<p>Prune the weight with smallest \\(\\Delta \\mathcal{L}_q\\).</p>\n  </details>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "quantization",
+    "title": "Quantization",
+    "summary": "The process of reducing the numerical precision of model weights and/or activations (e.g., from 32-bit floating-point to 8-bit or 4-bit integers), decreasing model size and accelerating inference. Quantization is the most widely used LLM…",
+    "domain": "deep-learning",
+    "level": "intro",
+    "type": "mixed",
+    "tags": [
+      "foundational",
+      "implementation",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "post-training-quantization-ptq",
+      "unstructured-pruning"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "Long history in signal processing; neural network quantization: Hubara et al. (2016) · Quantized Neural Networks ; LLM methods: GPTQ (Frantar et al., 2023), AWQ (Lin et al., 2024), QLoRA/NF4 (Dettmers et al., 2023).",
+        "url": "https://arxiv.org/abs/1609.07061"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>The process of reducing the numerical precision of model weights and/or activations (e.g., from 32-bit floating-point to 8-bit or 4-bit integers), decreasing model size and accelerating inference. Quantization is the most widely used LLM compression technique due to its simplicity, hardware support, and effectiveness.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Uniform quantization</b> maps a floating-point value \\( x \\) to an integer grid:</p>\n\n\\[ x_q = \\text{round}\\!\\left(\\frac{x - z_f}{s}\\right), \\quad \\hat{x} = s \\cdot x_q + z_f \\]\n\n<p>where \\( s = \\frac{x_{\\max} - x_{\\min}}{2^b - 1} \\) is the <b>scale factor</b>, \\( z_f \\) is the <b>zero point</b> (ensuring real zero maps exactly to an integer), and \\( b \\) is the target bit width. The quantization error for any single value is bounded by \\(\\frac{s}{2}\\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Symmetric vs. asymmetric:</b> symmetric quantization sets \\(z_f = 0\\) and maps \\([-\\alpha, \\alpha]\\) to \\([-2^{b-1}, 2^{b-1}-1]\\), simplifying computation. Asymmetric quantization uses a non-zero zero point to handle distributions not centered at zero (common for activations after ReLU).</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Precision</th><th style=\"padding:6px; text-align:left;\">Bits/param</th><th style=\"padding:6px; text-align:left;\">Size (7B model)</th><th style=\"padding:6px; text-align:left;\">Quality</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">FP32</td><td style=\"padding:6px;\">32</td><td style=\"padding:6px;\">~28 GB</td><td style=\"padding:6px;\">Baseline</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">FP16 / BF16</td><td style=\"padding:6px;\">16</td><td style=\"padding:6px;\">~14 GB</td><td style=\"padding:6px;\">Near-lossless</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">INT8</td><td style=\"padding:6px;\">8</td><td style=\"padding:6px;\">~7 GB</td><td style=\"padding:6px;\">Minimal loss</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">NF4 (4-bit NormalFloat)</td><td style=\"padding:6px;\">4</td><td style=\"padding:6px;\">~3.5 GB</td><td style=\"padding:6px;\">Small loss</td></tr>\n<tr><td style=\"padding:6px;\">2-bit</td><td style=\"padding:6px;\">2</td><td style=\"padding:6px;\">~1.75 GB</td><td style=\"padding:6px;\">Noticeable degradation</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Two main approaches",
+        "body": "<ul>\n<li><b>Post-training quantization (PTQ):</b> Quantize a pre-trained model with no or minimal calibration data. Methods include GPTQ (second-order weight quantization), AWQ (activation-aware weight quantization), and GGUF (block-wise quantization used by llama.cpp). Fast but quality-limited at very low bit widths.</li>\n<li><b>Quantization-aware training (QAT):</b> Simulate quantization during training using fake quantize operations and the straight-through estimator for gradients. The model learns to be robust to quantization noise. Better quality but expensive — rarely used for full LLM training.</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>NF4 (NormalFloat4).</b> Introduced by Dettmers et al. (2023) for QLoRA, NF4 is an information-theoretically optimal 4-bit data type for normally distributed weights. The 16 quantization levels are placed at quantiles of \\(\\mathcal{N}(0,1)\\), ensuring each bin captures equal probability mass. This exploits the empirical observation that neural network weights are approximately Gaussian.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Block-wise quantization.</b> Rather than using a single scale for an entire tensor, the weights are divided into blocks (e.g., 64 or 128 elements), each with its own scale factor. This reduces quantization error from outliers at the cost of storing one scale per block.</p>\n\n<p>Quantization is essential for LLM deployment: a 70B model at FP16 requires ~140 GB VRAM (multiple expensive GPUs), but at 4-bit it fits on a single 48 GB GPU with modest quality loss (typically &lt;0.5 perplexity points).</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "post-training-quantization-ptq",
+    "title": "Post-Training Quantization (PTQ)",
+    "summary": "A quantization approach applied after training is complete, converting a pre-trained model's weights (and optionally activations) to lower precision without retraining. PTQ is fast and requires minimal data (a small calibration set) but…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "quantization-aware-training-qat",
+      "quantization"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "LLM-specific methods: GPTQ (Frantar et al., 2023) · GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers ; AWQ (Lin et al., 2024) · AWQ: Activation-aware Weight Quantization ; SmoothQuant (Xiao et al., 2023) · SmoothQuant .",
+        "url": "https://arxiv.org/abs/2210.17323"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A quantization approach applied after training is complete, converting a pre-trained model's weights (and optionally activations) to lower precision without retraining. PTQ is fast and requires minimal data (a small calibration set) but may degrade quality more than quantization-aware training at very low bit widths.</p><p>PTQ works by analysing the distribution of weights and activations on a calibration dataset to determine optimal quantization parameters. For uniform quantization with bit width \\(b\\):</p>\n\n\\[ s = \\frac{x_{\\max} - x_{\\min}}{2^b - 1}, \\quad z = \\text{round}\\!\\left(-\\frac{x_{\\min}}{s}\\right) \\]\n\n<p>The goal is to minimise the <b>layer-wise reconstruction error</b>: for each layer with weight matrix \\(\\mathbf{W}\\) and input activations \\(\\mathbf{X}\\), find the quantized weights \\(\\hat{\\mathbf{W}}\\) that minimise:</p>\n\n\\[ \\min_{\\hat{\\mathbf{W}}} \\left\\| \\mathbf{W}\\mathbf{X} - \\hat{\\mathbf{W}}\\mathbf{X} \\right\\|_2^2 \\]\n\n<p>This layer-wise formulation makes PTQ tractable for large models — each layer is quantized independently using a small calibration set (typically 128–512 examples).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key PTQ methods for LLMs",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Approach</th><th style=\"padding:6px; text-align:left;\">Bits</th><th style=\"padding:6px; text-align:left;\">Key Idea</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GPTQ</td><td style=\"padding:6px;\">Layer-wise second-order quantization</td><td style=\"padding:6px;\">3–4</td><td style=\"padding:6px;\">Extends OBS: quantize one weight at a time, update remaining weights to compensate using Hessian \\(\\mathbf{H} = 2\\mathbf{X}\\mathbf{X}^\\top\\)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">AWQ</td><td style=\"padding:6px;\">Activation-aware weight quantization</td><td style=\"padding:6px;\">4</td><td style=\"padding:6px;\">Identifies salient weight channels (those multiplied by large activations) and scales them up before quantization to protect them</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">GGUF (llama.cpp)</td><td style=\"padding:6px;\">Block-wise quantization with mixed formats</td><td style=\"padding:6px;\">2–8</td><td style=\"padding:6px;\">Groups of 32–256 weights share one scale; supports many quant types (Q4_K_M, Q5_K_S, etc.)</td></tr>\n<tr><td style=\"padding:6px;\">SmoothQuant</td><td style=\"padding:6px;\">Activation-to-weight migration</td><td style=\"padding:6px;\">W8A8</td><td style=\"padding:6px;\">Divides activation outliers by a per-channel factor \\(s_j\\) and multiplies weights by \\(s_j\\), smoothing the activation distribution for easier quantization</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Weight-only vs. weight-and-activation quantization:</b> Quantizing only weights (e.g., W4A16: 4-bit weights, 16-bit activations) is simpler because weight distributions are static and near-Gaussian. Activation quantization is harder because activations have dynamic ranges with outliers that vary per input — a few channels in Transformer models can have activations 100x larger than the median, causing severe quantization error if not handled (this is what SmoothQuant addresses).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Calibration.</b> PTQ methods use a small calibration dataset (not for training, just to observe activation statistics). The calibration set should be representative of the deployment distribution. GPTQ uses ~128 sequences from C4 or WikiText; AWQ similarly. Results are not very sensitive to the specific calibration data.</p>\n\n<p>PTQ dominates LLM quantization because retraining (QAT) is prohibitively expensive for models with tens of billions of parameters. A 70B model can be quantized to 4-bit in hours on a single GPU, with perplexity increase of only 0.1–0.5 points.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "quantization-aware-training-qat",
+    "title": "Quantization-Aware Training (QAT)",
+    "summary": "A training approach that simulates the effect of quantization during the forward pass while maintaining full-precision weights for gradient computation. The model learns to be robust to quantization noise, resulting in better accuracy at…",
+    "domain": "deep-learning",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "implementation",
+      "intermediate",
+      "ml",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "preference-based-alignment",
+      "post-training-quantization-ptq"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2018 · Benoit Jacob et al. · Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference",
+        "url": "https://arxiv.org/abs/1712.05877"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A training approach that simulates the effect of quantization during the forward pass while maintaining full-precision weights for gradient computation. The model learns to be robust to quantization noise, resulting in better accuracy at low bit widths compared to post-training quantization.</p><p>During the forward pass, weights pass through a <b>fake quantize</b> operation — quantize then immediately dequantize:</p>\n\n\\[ \\hat{W} = s \\cdot \\text{clamp}\\!\\left(\\text{round}\\!\\left(\\frac{W}{s}\\right) + z,\\; q_{\\min},\\; q_{\\max}\\right) - s \\cdot z \\]\n\n<p>The forward pass uses \\( \\hat{W} \\) (which contains quantization noise), but the backward pass computes gradients with respect to the original full-precision \\( W \\) using the <b>straight-through estimator (STE)</b>. The STE treats the non-differentiable rounding function as the identity for gradient purposes:</p>\n\n\\[ \\frac{\\partial \\mathcal{L}}{\\partial W} \\approx \\frac{\\partial \\mathcal{L}}{\\partial \\hat{W}} \\cdot \\mathbf{1}_{q_{\\min} \\leq W/s \\leq q_{\\max}} \\]\n\n<p>The indicator function clips gradients to zero for weights outside the quantization range, preventing the optimizer from pushing weights into regions that will be clamped anyway.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>What the model learns during QAT:</b> By experiencing quantization noise throughout training, the model shifts its weight distribution to be more quantization-friendly — weights cluster near quantization grid points, and the model learns to rely less on precise weight values. This is why QAT outperforms PTQ at low bit widths where quantization noise is large.</p>\n\n<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Aspect</th><th style=\"padding:6px; text-align:left;\">PTQ</th><th style=\"padding:6px; text-align:left;\">QAT</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Training cost</td><td style=\"padding:6px;\">None (calibration only)</td><td style=\"padding:6px;\">Full or partial retraining</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Quality at INT8</td><td style=\"padding:6px;\">Near-lossless</td><td style=\"padding:6px;\">Near-lossless</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Quality at INT4</td><td style=\"padding:6px;\">Small loss</td><td style=\"padding:6px;\">Minimal loss</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Quality at INT2</td><td style=\"padding:6px;\">Large degradation</td><td style=\"padding:6px;\">Moderate degradation</td></tr>\n<tr><td style=\"padding:6px;\">When to use</td><td style=\"padding:6px;\">INT8+, or when retraining is too expensive</td><td style=\"padding:6px;\">INT4 and below, or when maximum quality needed</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>QAT for LLMs.</b> Full QAT is rarely applied to LLMs because the retraining cost is enormous. Instead, <b>QLoRA</b> (Dettmers et al., 2023) offers an effective compromise: the base model is frozen in 4-bit NF4 precision, and only small LoRA adapter weights are trained in full precision. This combines the memory savings of quantization with the quality benefits of fine-tuning, making it possible to fine-tune a 65B model on a single 48 GB GPU. Strictly speaking QLoRA is quantized fine-tuning rather than pure QAT, but it captures the same principle of training while accounting for quantization effects.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Practical details:</b> QAT typically requires 10–20% of the original training compute. The fake quantize operations are inserted at specific points in the computational graph (after each linear layer, and optionally after activations). Batch normalization folding must be handled carefully — the folded weights must be quantized as they will appear at inference time.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "preference-based-alignment",
+    "title": "Preference-Based Alignment",
+    "summary": "A class of methods that align language model behaviour with human preferences by training on pairwise comparisons (preferred vs. dispreferred responses) rather than absolute quality labels. This is the dominant paradigm for making LLMs h…",
+    "domain": "llm",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "reinforcement-learning-from-human-feedback-rlhf",
+      "quantization-aware-training-qat"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Ouyang et al. · Training language models to follow instructions with human feedback (InstructGPT/RLHF); Rafailov et al. (2023) · Direct Preference Optimization ; Bai et al. (2022) · Constitutional AI",
+        "url": "https://arxiv.org/abs/2203.02155"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A class of methods that align language model behaviour with human preferences by training on pairwise comparisons (preferred vs. dispreferred responses) rather than absolute quality labels. This is the dominant paradigm for making LLMs helpful, harmless, and honest after supervised fine-tuning.</p><p>The key insight behind preference-based alignment is that relative judgements are far more reliable than absolute ones: it is easier for a human annotator to say \"response A is better than response B\" than to assign a numerical quality score. All preference-based methods share a common data format — tuples \\( (x, y_w, y_l) \\) consisting of a prompt \\(x\\), a preferred (winning) response \\(y_w\\), and a dispreferred (losing) response \\(y_l\\).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The Bradley-Terry preference model.</b> Most methods assume pairwise preferences follow the Bradley-Terry model, where the probability that response \\(y_1\\) is preferred over \\(y_2\\) depends on a latent reward function \\(r^*(x, y)\\):</p>\n\n\\[ p(y_1 \\succ y_2 \\mid x) = \\sigma\\!\\left(r^*(x, y_1) - r^*(x, y_2)\\right) \\]\n\n<p>where \\(\\sigma\\) is the sigmoid function. This model underlies both RLHF reward model training and the DPO derivation.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Two main approaches",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Approach</th><th style=\"padding:6px; text-align:left;\">Pipeline</th><th style=\"padding:6px; text-align:left;\">Objective</th><th style=\"padding:6px; text-align:left;\">Complexity</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">RLHF</td><td style=\"padding:6px;\">Train reward model \\(R_\\phi\\) on preferences, then PPO to maximise \\(R_\\phi\\)</td><td style=\"padding:6px;\">\\(\\max_\\pi \\mathbb{E}[R_\\phi(x,y)] - \\beta D_{\\text{KL}}(\\pi \\| \\pi_{\\text{ref}})\\)</td><td style=\"padding:6px;\">High — 3 models in memory</td></tr>\n<tr><td style=\"padding:6px;\">DPO</td><td style=\"padding:6px;\">Directly optimise policy from preference pairs, no reward model</td><td style=\"padding:6px;\">\\(\\mathcal{L}_{\\text{DPO}} = -\\mathbb{E}\\!\\left[\\log \\sigma\\!\\left(\\beta \\log \\frac{\\pi_\\theta(y_w|x)}{\\pi_{\\text{ref}}(y_w|x)} - \\beta \\log \\frac{\\pi_\\theta(y_l|x)}{\\pi_{\\text{ref}}(y_l|x)}\\right)\\right]\\)</td><td style=\"padding:6px;\">Low — same as SFT</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>DPO derivation insight.</b> Rafailov et al. showed that the optimal policy under the KL-constrained RLHF objective has a closed-form solution \\(\\pi^*(y|x) \\propto \\pi_{\\text{ref}}(y|x) \\exp\\!\\left(\\frac{1}{\\beta} r^*(x,y)\\right)\\), which can be rearranged to express the reward in terms of the policy: \\(r^*(x,y) = \\beta \\log \\frac{\\pi^*(y|x)}{\\pi_{\\text{ref}}(y|x)} + C(x)\\). Substituting this into the Bradley-Terry loss eliminates the reward model entirely, yielding the DPO loss above. This means DPO implicitly optimises the same objective as RLHF but without needing to train a separate reward model or run RL.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Data collection pipeline",
+        "body": "<ol>\n<li>Sample \\(k\\) responses from the current policy (or a mix of policies) for each prompt</li>\n<li>Human annotators (or an AI judge) rank or compare response pairs</li>\n<li>Construct preference pairs \\((x, y_w, y_l)\\) from the rankings</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The \\(\\beta\\) parameter</b> controls how far the aligned policy can drift from the reference policy. Low \\(\\beta\\) allows large deviations (more alignment, risk of reward hacking); high \\(\\beta\\) keeps the model close to its SFT baseline (conservative, may under-align). Typical values range from 0.1 to 0.5.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Beyond RLHF and DPO",
+        "body": "<ul>\n<li><b>IPO</b> (Azar et al., 2023): replaces the sigmoid loss with a squared loss to avoid overfitting to deterministic preferences</li>\n<li><b>KTO</b> (Ethayarajh et al., 2024): uses only per-example thumbs-up/down labels rather than pairwise comparisons — easier to collect</li>\n<li><b>RLAIF / Constitutional AI</b> (Bai et al., 2022): uses a stronger AI model to generate preference labels, scaling data cheaply</li>\n<li><b>Iterative DPO / online DPO:</b> generates fresh responses from the current policy each round, preventing the staleness problem of offline preference data</li>\n</ul>\n\n<p>Preference-based alignment sits after SFT in the standard LLM training pipeline (pretraining → SFT → alignment) and is responsible for many qualities that make modern assistants useful: precise instruction following, refusal of harmful requests, calibrated uncertainty, and balanced perspectives.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "reinforcement-learning-from-human-feedback-rlhf",
+    "title": "Reinforcement Learning from Human Feedback (RLHF)",
+    "summary": "A method for aligning language models with human preferences by first training a reward model on human comparisons, then using reinforcement learning (PPO) to optimise the language model to maximise the learned reward while staying close…",
+    "domain": "history",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "landmark",
+      "ml",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "reward-model",
+      "preference-based-alignment"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Long Ouyang et al. · Training language models to follow instructions with human feedback (InstructGPT) · landmark",
+        "url": "https://arxiv.org/abs/2203.02155"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A method for aligning language models with human preferences by first training a reward model on human comparisons, then using reinforcement learning (PPO) to optimise the language model to maximise the learned reward while staying close to the SFT policy. RLHF was the technique behind InstructGPT and ChatGPT.</p><p>The RLHF pipeline has three stages:</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Stage 1 — Supervised fine-tuning (SFT):</b> Fine-tune the base pretrained model on high-quality demonstration data (prompt, ideal response) to produce a policy \\(\\pi_{\\text{SFT}}\\) that can follow instructions. This model serves as the starting point and the KL anchor (reference policy).</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Stage 2 — Reward model training:</b> Collect pairwise human preferences: for each prompt \\(x\\), annotators compare two model-generated responses and label one as preferred (\\(y_w\\)) over the other (\\(y_l\\)). Train a reward model \\(R_\\phi(x, y)\\) — typically the SFT model with a scalar head replacing the language modelling head — using the Bradley-Terry loss:</p>\n\n\\[ \\mathcal{L}_R = -\\mathbb{E}_{(x, y_w, y_l)}\\!\\left[\\log \\sigma\\!\\left(R_\\phi(x, y_w) - R_\\phi(x, y_l)\\right)\\right] \\]\n\n<p>where \\(\\sigma\\) is the sigmoid function. This loss maximises the probability that the reward model scores the preferred response higher.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Stage 3 — RL optimisation (PPO):</b> Use Proximal Policy Optimization to maximise the reward while staying close to the reference policy:</p>\n\n\\[ \\max_\\pi \\;\\mathbb{E}_{x \\sim \\mathcal{D},\\, y \\sim \\pi(\\cdot|x)}\\!\\left[R_\\phi(x, y)\\right] - \\beta\\, D_{\\text{KL}}\\!\\left(\\pi(\\cdot|x) \\;\\|\\; \\pi_{\\text{SFT}}(\\cdot|x)\\right) \\]\n\n<p>The KL divergence penalty is critical: without it, the policy collapses to degenerate outputs that exploit weaknesses in the reward model (\"reward hacking\"). In practice, the KL term is computed token-by-token: \\(D_{\\text{KL}} = \\sum_t \\log \\frac{\\pi_\\theta(y_t|x, y_{1:t-1})}{\\pi_{\\text{SFT}}(y_t|x, y_{1:t-1})}\\).</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Models in memory during Stage 3",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Component</th><th style=\"padding:6px; text-align:left;\">Model</th><th style=\"padding:6px; text-align:left;\">Trainable?</th><th style=\"padding:6px; text-align:left;\">Purpose</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Policy \\(\\pi_\\theta\\)</td><td style=\"padding:6px;\">LLM being trained</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">Generate responses</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Value function \\(V_\\psi\\)</td><td style=\"padding:6px;\">Critic (often shares backbone with policy)</td><td style=\"padding:6px;\">Yes</td><td style=\"padding:6px;\">Estimate expected return for PPO advantage</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Reward model \\(R_\\phi\\)</td><td style=\"padding:6px;\">Frozen from Stage 2</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">Score generated responses</td></tr>\n<tr><td style=\"padding:6px;\">Reference policy \\(\\pi_{\\text{SFT}}\\)</td><td style=\"padding:6px;\">Frozen copy of SFT model</td><td style=\"padding:6px;\">No</td><td style=\"padding:6px;\">KL anchor to prevent drift</td></tr>\n</table>\n\n<p>Having up to four models in memory simultaneously (though the critic often shares the policy backbone) is the main practical difficulty of RLHF — it roughly doubles the GPU memory compared to SFT.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>PPO specifics for language models.</b> Each \"episode\" consists of generating a response \\(y\\) to a prompt \\(x\\). The reward is given only at the end of generation (sparse reward). The advantage is estimated using Generalized Advantage Estimation (GAE). The PPO clipping objective prevents destructively large policy updates:</p>\n\n\\[ \\mathcal{L}_{\\text{PPO}} = \\mathbb{E}_t\\!\\left[\\min\\!\\left(\\frac{\\pi_\\theta(a_t|s_t)}{\\pi_{\\text{old}}(a_t|s_t)} \\hat{A}_t,\\; \\text{clip}\\!\\left(\\frac{\\pi_\\theta(a_t|s_t)}{\\pi_{\\text{old}}(a_t|s_t)},\\, 1-\\epsilon,\\, 1+\\epsilon\\right) \\hat{A}_t\\right)\\right] \\]\n\n<p>where \\(\\hat{A}_t\\) is the GAE advantage estimate and \\(\\epsilon \\approx 0.2\\) is the clipping parameter.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Known issues",
+        "body": "<ul>\n<li><b>Reward hacking:</b> the policy finds outputs scoring highly on \\(R_\\phi\\) that are not genuinely good, exploiting distribution shift</li>\n<li><b>Reward overoptimisation:</b> Gao et al. (2023) showed that beyond a certain KL budget, further RL training <i>decreases</i> true quality while continuing to increase proxy reward</li>\n<li><b>Training instability:</b> PPO requires careful hyperparameter tuning (learning rate, KL coefficient \\(\\beta\\), number of PPO epochs)</li>\n</ul>\n\n<p>These difficulties motivated simpler alternatives like DPO, which collapses the reward model and RL stages into a single supervised loss.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "reward-model",
+    "title": "Reward Model",
+    "summary": "A model trained to predict human preferences by assigning a scalar score to (prompt, response) pairs. The reward model serves as a proxy for human judgement in RLHF, providing the training signal that guides the language model toward pre…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "self-critique",
+      "reinforcement-learning-from-human-feedback-rlhf"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2020 · Stiennon et al. · Learning to Summarize with Human Feedback ; overoptimisation: Gao et al. (2023) · Scaling Laws for Reward Model Overoptimization",
+        "url": "https://arxiv.org/abs/2009.01325"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A model trained to predict human preferences by assigning a scalar score to (prompt, response) pairs. The reward model serves as a proxy for human judgement in RLHF, providing the training signal that guides the language model toward preferred behaviour.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Architecture.</b> The reward model \\(R_\\phi(x, y)\\) is typically a Transformer initialised from the SFT model checkpoint, with the language modelling head replaced by a linear projection to a single scalar. The input is the concatenation of prompt \\(x\\) and response \\(y\\); the scalar reward is read from the final token's hidden state:</p>\n\n\\[ R_\\phi(x, y) = \\mathbf{w}^\\top \\mathbf{h}_T + b \\]\n\n<p>where \\(\\mathbf{h}_T\\) is the last-token hidden representation, \\(\\mathbf{w}\\) and \\(b\\) are learnable parameters of the reward head.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Training objective.</b> Given preference data \\((x, y_w, y_l)\\), the reward model is trained using the <b>Bradley-Terry</b> pairwise loss:</p>\n\n\\[ \\mathcal{L} = -\\mathbb{E}_{(x, y_w, y_l)}\\!\\left[\\log \\sigma\\!\\left(R_\\phi(x, y_w) - R_\\phi(x, y_l)\\right)\\right] \\]\n\n<p>This loss drives the reward model to assign higher scores to preferred responses. Note that only the <i>difference</i> in rewards matters — the absolute scale is arbitrary, and a constant can be added to all rewards without changing the loss. This is why reward models cannot be meaningfully compared across training runs.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Reward model accuracy.</b> In practice, reward models achieve roughly 65–75% agreement with held-out human preferences (InstructGPT reported ~72%). Perfect agreement is impossible due to inherent annotator disagreement — inter-annotator agreement on preference tasks is typically 70–80%.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Challenges",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Challenge</th><th style=\"padding:6px; text-align:left;\">Description</th><th style=\"padding:6px; text-align:left;\">Mitigation</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Reward hacking</td><td style=\"padding:6px;\">Policy exploits reward model weaknesses — generates outputs that score highly but are not genuinely good</td><td style=\"padding:6px;\">KL penalty against reference policy; reward model ensembles</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Overoptimisation</td><td style=\"padding:6px;\">Gao et al. (2023) showed proxy reward can increase while true quality decreases beyond a KL threshold: \\(R_{\\text{true}} \\approx \\alpha \\sqrt{D_{\\text{KL}}} - \\beta D_{\\text{KL}}\\)</td><td style=\"padding:6px;\">Careful KL budget; early stopping</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Distribution shift</td><td style=\"padding:6px;\">Reward model trained on SFT-policy outputs must generalise to RL-policy outputs, which drift during training</td><td style=\"padding:6px;\">Iterative reward model retraining; conservative KL</td></tr>\n<tr><td style=\"padding:6px;\">Annotation noise</td><td style=\"padding:6px;\">Human preferences are noisy (70–80% inter-annotator agreement), limiting ceiling accuracy</td><td style=\"padding:6px;\">Majority voting; better annotation guidelines</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Uses beyond RLHF training",
+        "body": "<ul>\n<li><b>Best-of-N sampling (rejection sampling):</b> generate \\(N\\) candidate responses and select the one with highest reward. This achieves quality improvements comparable to PPO with no training, but at \\(N\\times\\) inference cost. Stiennon et al. showed best-of-64 nearly matches PPO quality.</li>\n<li><b>Data filtering:</b> score training data and discard low-reward examples before SFT.</li>\n<li><b>Evaluation:</b> use as an automatic evaluator for model quality (though subject to the same biases).</li>\n</ul>\n\n<p>DPO and related methods bypass the explicit reward model by showing that the optimal reward can be recovered from the policy itself: \\(r^*(x,y) = \\beta \\log \\frac{\\pi^*(y|x)}{\\pi_{\\text{ref}}(y|x)} + C(x)\\). However, explicit reward models remain useful for best-of-N sampling and as evaluators.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "self-critique",
+    "title": "Self-Critique",
+    "summary": "A technique where a language model evaluates and refines its own outputs by generating critiques of its initial response and then producing an improved version. Self-critique enables iterative refinement without external human feedback,…",
+    "domain": "llm",
+    "level": "intermediate",
+    "type": "mixed",
+    "tags": [
+      "intermediate",
+      "ml",
+      "nlp",
+      "theory",
+      "transformer",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "constitutional-ai",
+      "reward-model"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Bai et al. (Constitutional AI) · Constitutional AI: Harmlessness from AI Feedback ; Madaan et al. (2023) · Self-Refine: Iterative Refinement with Self-Feedback ; Shinn et al. (2023) · Reflexion",
+        "url": "https://arxiv.org/abs/2212.08073"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>A technique where a language model evaluates and refines its own outputs by generating critiques of its initial response and then producing an improved version. Self-critique enables iterative refinement without external human feedback, leveraging the model's own capabilities as a judge.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>The generate-critique-revise loop.</b> Self-critique follows a structured multi-turn process:</p>\n<ol>\n<li><b>Generate:</b> The model produces an initial response \\(y_0\\) to prompt \\(x\\)</li>\n<li><b>Critique:</b> The model receives \\((x, y_0)\\) with an instruction like \"Identify any errors, omissions, or areas for improvement\" and generates a critique \\(c\\)</li>\n<li><b>Revise:</b> The model receives \\((x, y_0, c)\\) and generates a revised response \\(y_1\\)</li>\n<li>Optionally iterate: \\(y_1 \\to c_1 \\to y_2 \\to \\ldots\\) for \\(k\\) rounds</li>\n</ol>\n\n<p>This can be viewed as a form of <b>iterated best response</b>: each revision is conditioned on the critique of the previous attempt, creating an improving sequence. Empirically, most gains come in the first 1–2 rounds; further iterations show diminishing returns.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key methods using self-critique",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Method</th><th style=\"padding:6px; text-align:left;\">Critique mechanism</th><th style=\"padding:6px; text-align:left;\">Use of critique output</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Constitutional AI (Bai et al., 2022)</td><td style=\"padding:6px;\">Critique against explicit constitutional principles</td><td style=\"padding:6px;\">Revised responses become SFT training data; AI preferences become RL signal</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Self-Refine (Madaan et al., 2023)</td><td style=\"padding:6px;\">Open-ended self-feedback on quality dimensions</td><td style=\"padding:6px;\">Directly serves the improved response to the user (inference-time only)</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">Reflexion (Shinn et al., 2023)</td><td style=\"padding:6px;\">Verbal reinforcement — the model reflects on failed attempts</td><td style=\"padding:6px;\">Reflections stored in memory for future attempts at the same task</td></tr>\n<tr><td style=\"padding:6px;\">CriticGPT (OpenAI, 2024)</td><td style=\"padding:6px;\">Dedicated critic model trained to find bugs in code</td><td style=\"padding:6px;\">Assists human reviewers in RLHF data collection</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Self-critique for training data (Constitutional AI).</b> In the supervised phase of Constitutional AI, self-critique is used at scale to generate improved training data. Starting from a potentially harmful response, the model critiques it against a constitutional principle (e.g., \"Choose the response that is most respectful\") and then revises. The revised responses form SFT training pairs. This is more scalable than collecting human demonstrations because the model generates both the critique and the revision.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Self-critique at inference time (Self-Refine).</b> Madaan et al. showed that GPT-4 outputs improve by 5–20% across diverse tasks (dialogue, code, math reasoning) after just one round of self-feedback plus revision, with no additional training. The improvement is measured by task-specific metrics and is robust across domains. This makes self-critique a lightweight way to improve outputs without any model modification.</p>"
+      },
+      {
+        "kind": "prose",
+        "title": "Limitations and failure modes",
+        "body": "<ul>\n<li><b>Sycophantic self-critique:</b> models may generate superficially critical but vacuous feedback (\"I should have been more thorough\") that does not identify real errors</li>\n<li><b>Blind spots:</b> a model cannot reliably catch errors it is confident about — particularly factual hallucinations, since the same knowledge gap that caused the error prevents the model from recognising it during critique</li>\n<li><b>Capability ceiling:</b> Huang et al. (2024) showed that self-critique cannot reliably improve reasoning beyond the model's own capability level without external verification (e.g., a code interpreter or search engine)</li>\n<li><b>Critique quality scales with model size:</b> smaller models generate less useful critiques, so the technique is most effective with frontier models</li>\n</ul>\n\n<p>Self-critique relates to several broader ideas: <b>chain-of-thought prompting</b> (externalizing reasoning), <b>ensemble methods</b> (multiple passes improve quality), and <b>RLHF</b> (the model acts as its own annotator). It is increasingly used as a component in agentic systems where models must verify and correct their own outputs across multi-step tasks.</p>"
+      }
+    ],
+    "cards": []
+  },
+  {
+    "slug": "constitutional-ai",
+    "title": "Constitutional AI",
+    "summary": "An alignment method developed by Anthropic that uses a set of written principles (a \"constitution\") to guide model self-critique and revision, replacing much of the human feedback in RLHF with AI-generated feedback (RLAIF). The model lea…",
+    "domain": "history",
+    "level": "advanced",
+    "type": "mixed",
+    "tags": [
+      "advanced",
+      "landmark",
+      "ml",
+      "nlp",
+      "theory",
+      "wiki-import"
+    ],
+    "prerequisites": [],
+    "related": [
+      "structured-pruning",
+      "self-critique"
+    ],
+    "updatedAt": "2026-04-15",
+    "sourceDeck": "Machine Learning by Henrik Nordberg",
+    "papers": [
+      {
+        "citation": "2022 · Yuntao Bai et al. (Anthropic) · Constitutional AI: Harmlessness from AI Feedback",
+        "url": "https://arxiv.org/abs/2212.08073"
+      }
+    ],
+    "sections": [
+      {
+        "kind": "prose",
+        "body": "<p>An alignment method developed by Anthropic that uses a set of written principles (a \"constitution\") to guide model self-critique and revision, replacing much of the human feedback in RLHF with AI-generated feedback (RLAIF). The model learns to be helpful, harmless, and honest through two phases: supervised critique-and-revision, then RL against an AI preference model.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Motivation.</b> Standard RLHF requires large volumes of human preference annotations, which are expensive and require annotators to evaluate harmful content. Constitutional AI reduces this burden by having the model itself generate feedback, guided by explicit principles that can be inspected, debated, and updated without recollecting data.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Phase 1 — Supervised critique and revision (SL-CAI).</b> This phase generates improved training data through self-critique:</p>\n<ol>\n<li>Sample a potentially harmful prompt and generate a response (possibly by using a helpful-only model that does not refuse)</li>\n<li>Present the (prompt, response) pair to the model along with a randomly sampled constitutional principle</li>\n<li>The model critiques its response against the principle: \"Identify specific ways in which the response is harmful, unethical, or unhelpful according to this principle\"</li>\n<li>The model revises the response to address the critique</li>\n<li>Repeat with different principles for multiple rounds of critique-revision</li>\n<li>Fine-tune a new model on the final revised responses (SL-CAI model)</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Phase 2 — Reinforcement Learning from AI Feedback (RLAIF).</b> This phase mirrors RLHF but replaces human annotators with the AI model:</p>\n<ol>\n<li>Generate pairs of responses from the SL-CAI model</li>\n<li>Ask a model (guided by constitutional principles) to choose the better response — this creates AI-labelled preference data</li>\n<li>Train a reward model \\(R_\\phi\\) on these AI preferences using the standard Bradley-Terry loss:\n\\[ \\mathcal{L} = -\\mathbb{E}\\!\\left[\\log \\sigma\\!\\left(R_\\phi(x, y_w) - R_\\phi(x, y_l)\\right)\\right] \\]</li>\n<li>Run PPO against \\(R_\\phi\\) with a KL penalty: \\(\\max_\\pi \\mathbb{E}[R_\\phi(x,y)] - \\beta D_{\\text{KL}}(\\pi \\| \\pi_{\\text{SL-CAI}})\\)</li>\n</ol>"
+      },
+      {
+        "kind": "prose",
+        "title": "Example constitutional principles",
+        "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n<tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Principle</th><th style=\"padding:6px; text-align:left;\">Target behaviour</th></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\"Choose the response that is least likely to be used for harmful purposes\"</td><td style=\"padding:6px;\">Safety</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\"Choose the response that is most respectful of everyone's autonomy\"</td><td style=\"padding:6px;\">Ethical respect</td></tr>\n<tr style=\"border-bottom:1px solid #ccc;\"><td style=\"padding:6px;\">\"Choose the response that is most honest and doesn't include false claims\"</td><td style=\"padding:6px;\">Truthfulness</td></tr>\n<tr><td style=\"padding:6px;\">\"Choose the response that best answers the question directly\"</td><td style=\"padding:6px;\">Helpfulness</td></tr>\n</table>"
+      },
+      {
+        "kind": "prose",
+        "title": "Key advantages over standard RLHF",
+        "body": "<ul>\n<li><b>Scalability:</b> AI feedback is orders of magnitude cheaper than human annotations, enabling larger preference datasets</li>\n<li><b>Transparency:</b> the constitution is an explicit document that can be audited, versioned, and debated — unlike implicit preferences encoded in human annotations</li>\n<li><b>Reduced red-teaming burden:</b> humans do not need to write or evaluate harmful content, as the AI handles toxic text in the self-critique loop</li>\n<li><b>Modularity:</b> principles can be added, removed, or reweighted without recollecting preference data</li>\n</ul>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Results.</b> Bai et al. found that Constitutional AI models were simultaneously more helpful <i>and</i> more harmless than RLHF-only baselines — the two objectives are not purely in tension when principles guide alignment. The RLAIF preference model was nearly as accurate as one trained on human preferences, supporting the viability of AI-generated feedback.</p>"
+      },
+      {
+        "kind": "prose",
+        "body": "<p><b>Connections.</b> Constitutional AI formalises the self-critique loop (see Self-Critique card) into a training pipeline. It introduced the RLAIF paradigm that has since been adopted more broadly — e.g., in synthetic data generation where stronger models label data for weaker ones. The principle-based approach also influenced later work on \"system prompts\" and \"rules\" that steer model behaviour at inference time.</p>"
+      }
+    ],
+    "cards": []
   }
 ]
