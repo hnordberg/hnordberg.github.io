@@ -5411,6 +5411,227 @@
       ],
       "updatedAt": "2026-04-15",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "switch-transformer",
+      "title": "Switch Transformer",
+      "summary": "A simplified Mixture-of-Experts (MoE) Transformer that routes each token to exactly one expert (top-1 routing), demonstrating that sparse expert models can be scaled to trillions of parameters while training faster than dense models of c…",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "attention",
+        "ml",
+        "transformer",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "model-merging",
+        "pruning"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "model-merging",
+      "title": "Model Merging",
+      "summary": "The practice of combining the weights of multiple fine-tuned models into a single model without additional training. Model merging can combine the strengths of models specialised for different tasks (e.g., code, chat, reasoning) into one…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "model-soups",
+        "switch-transformer"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "model-soups",
+      "title": "Model Soups",
+      "summary": "A model merging technique that averages the weights of multiple models fine-tuned from the same base with different hyperparameters. The resulting \"soup\" often outperforms any individual ingredient model, without additional training or i…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "slerp-spherical-linear-interpolation",
+        "model-merging"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "slerp-spherical-linear-interpolation",
+      "title": "SLERP (Spherical Linear Interpolation)",
+      "summary": "A method for interpolating between two sets of model weights along the surface of a hypersphere, preserving the magnitude (norm) of the weight vectors throughout the interpolation. SLERP is used in model merging as an alternative to simp…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "ties-merging",
+        "model-soups"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "ties-merging",
+      "title": "TIES-Merging",
+      "summary": "A model merging method that resolves interference between task vectors by trimming small-magnitude parameters, resolving sign conflicts (via majority vote), and then averaging the remaining values. TIES addresses the performance degradat…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "dare-drop-and-rescale",
+        "slerp-spherical-linear-interpolation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "dare-drop-and-rescale",
+      "title": "DARE (Drop And REscale)",
+      "summary": "A model merging preprocessing step that randomly drops (zeros out) a large fraction of each task vector's delta parameters, then rescales the remaining values to preserve the expected magnitude. DARE reduces interference between models b…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "task-vector",
+        "ties-merging"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "task-vector",
+      "title": "Task Vector",
+      "summary": "The difference between a fine-tuned model's weights and the base model's weights: \\( \\tau = \\theta_{\\text{ft}} - \\theta_0 \\). Task vectors encode the knowledge and skills learned during fine-tuning and can be arithmetically combined to t…",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "optimization",
+        "theory",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "model-compression",
+        "dare-drop-and-rescale"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "model-compression",
+      "title": "Model Compression",
+      "summary": "A family of techniques that reduce the size, memory footprint, and computational cost of neural networks while preserving as much performance as possible. Compression enables deployment of large models on resource-constrained devices (mo…",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "knowledge-distillation",
+        "task-vector"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "knowledge-distillation",
+      "title": "Knowledge Distillation",
+      "summary": "A compression technique where a small \"student\" model is trained to reproduce the behaviour of a larger \"teacher\" model. The student learns from the teacher's soft probability distributions (which contain richer information than hard lab…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "pruning",
+        "model-compression"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pruning",
+      "title": "Pruning",
+      "summary": "A model compression technique that removes unnecessary weights or structures from a neural network to reduce its size and computational cost. Pruning exploits the observation that most parameters in over-parameterised networks contribute…",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "implementation",
+        "intermediate",
+        "ml",
+        "optimization",
+        "wiki-import"
+      ],
+      "prerequisites": [],
+      "related": [
+        "switch-transformer",
+        "knowledge-distillation"
+      ],
+      "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }

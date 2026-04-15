@@ -98,7 +98,7 @@ The pipeline treats **Anki note IDs** as the unit of work (one note → one wiki
 
 | Last processed note ID | Next notes to pull |
 | ---: | --- |
-| `1772500701825` | Strictly greater than `1772500701825` (sort ascending; take the next window). |
+| `1772500831042` | Strictly greater than `1772500831042` (sort ascending; take the next window). |
 
 **How to use:** Keep this row in sync with Git whenever you import (commit it with the same batch as `topics.json` / `manifest.json`). Optional offline HTML snapshots under `preview-notes/` are only for the legacy `seed-five-notes.mjs` path; the main bulk path is **`npm run ml-wiki:import-batch`** (`import-anki-batch.mjs`).
 
