@@ -17781,6 +17781,10 @@
       {
         "citation": "1986 · Rumelhart, Hinton, and Williams · Learning Representations by Back-Propagating Errors",
         "url": "https://www.nature.com/articles/323533a0"
+      },
+      {
+        "citation": "2017 · Goh · Why Momentum Really Works · Distill",
+        "url": "https://doi.org/10.23915/distill.00006"
       }
     ],
     "sections": [
