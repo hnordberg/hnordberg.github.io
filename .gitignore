@@ -28,3 +28,4 @@ scripts/ml-wiki/rendered-references-audit.json
 .idea/
 .DS_Store
 .claude/settings.local.json
+tsconfig.tsbuildinfo
