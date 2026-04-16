@@ -1073,6 +1073,130 @@ body.dark-mode .wiki-topic-list-link {
     margin-top: 0.15rem;
 }
 
+.wiki-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Learning-paths card: spans 2 columns in the wiki hub grid when there's room. */
+.wiki-hub-card-span-2 {
+    grid-column: span 2;
+}
+
+/* Fallback: on a 1-column grid, "span 2" resolves to 1 column, which is fine. */
+
+.wiki-paths-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+}
+
+.wiki-paths-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.wiki-paths-table tbody tr:hover {
+    background-color: rgba(33, 150, 243, 0.06);
+}
+
+body.dark-mode .wiki-paths-table tbody tr:hover {
+    background-color: rgba(100, 181, 246, 0.08);
+}
+
+.wiki-paths-table tbody tr + tr th,
+.wiki-paths-table tbody tr + tr td {
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+body.dark-mode .wiki-paths-table tbody tr + tr th,
+body.dark-mode .wiki-paths-table tbody tr + tr td {
+    border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.wiki-paths-table tbody th,
+.wiki-paths-table tbody td {
+    padding: 0.75rem 1rem 0.75rem 0;
+    vertical-align: middle;
+}
+
+.wiki-paths-table tbody th:first-child,
+.wiki-paths-table tbody td:first-child {
+    padding-left: 0.25rem;
+}
+
+.wiki-paths-table-title {
+    text-align: left;
+    font-weight: 500;
+    width: 100%;
+}
+
+.wiki-paths-table-title a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s ease;
+}
+
+.wiki-paths-table-title a:hover {
+    border-bottom-color: currentColor;
+}
+
+.wiki-paths-table-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: #555;
+    width: 1%;
+}
+
+body.dark-mode .wiki-paths-table-num {
+    color: #bbb;
+}
+
+.wiki-paths-table-unit {
+    opacity: 0.6;
+    font-weight: 400;
+    margin-left: 0.15rem;
+}
+
+.wiki-paths-table-action {
+    text-align: right;
+    padding-right: 0.25rem !important;
+    width: 1%;
+    white-space: nowrap;
+}
+
+.wiki-paths-table-btn {
+    padding: 0 0.9rem;
+    height: 2rem;
+    min-width: 0;
+    font-size: 0.8rem;
+}
+
+@media (max-width: 640px) {
+    .wiki-paths-table {
+        font-size: 0.9rem;
+    }
+
+    .wiki-paths-table tbody th,
+    .wiki-paths-table tbody td {
+        padding: 0.6rem 0.5rem 0.6rem 0;
+    }
+
+    .wiki-paths-table-btn {
+        padding: 0 0.6rem;
+        font-size: 0.75rem;
+    }
+}
+
 .wiki-topic-nav-btn {
     display: inline-flex;
     align-items: center;

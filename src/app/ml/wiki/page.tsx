@@ -6,9 +6,18 @@ import {
   getPaths,
   getWikiCorpus,
 } from "./lib/loadContent";
+import { resolvePathTopics } from "./lib/paths";
 import { WikiIndexFilter } from "./components/WikiIndexFilter";
 import { TopicChips } from "./components/TopicChips";
 import { HomeStats } from "./flashcards";
+
+function formatStudyTime(minutes?: number): string {
+  if (minutes == null) return "—";
+  if (minutes < 60) return `~${minutes} min`;
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return m === 0 ? `~${h}h` : `~${h}h ${m}m`;
+}
 
 export const metadata: Metadata = {
   title: "ML Wiki | Henrik Nordberg",
@@ -20,9 +29,19 @@ export default function MlWikiIndexPage() {
   const manifest = getManifest();
   const tags = collectAllTags();
   const paths = getPaths();
-  const allCandidates = [...getWikiCorpus().topicsBySlug.values()]
+  const topicsBySlug = getWikiCorpus().topicsBySlug;
+  const allCandidates = [...topicsBySlug.values()]
     .filter((t) => t.sections.length > 0)
     .map((t) => ({ noteId: t.slug, topicSlug: t.slug }));
+
+  const pathRows = paths.paths.map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    cardCount: resolvePathTopics(manifest, p).filter(
+      (t) => (topicsBySlug.get(t.slug)?.sections.length ?? 0) > 0
+    ).length,
+    estimatedMinutes: p.estimatedMinutes,
+  }));
 
   return (
     <main className="wiki-main">
@@ -45,7 +64,7 @@ export default function MlWikiIndexPage() {
       </div>
 
       <section className="wiki-hub-links card-grid">
-        <div className="card">
+        <div className="card wiki-hub-card-span-2">
           <Link
             href="/ml/wiki/paths"
             className="card-title wiki-hub-card-heading-link"
@@ -53,16 +72,36 @@ export default function MlWikiIndexPage() {
             Learning paths
           </Link>
           <div className="card-text">
-            <ul className="list">
-              {paths.paths.map((p) => (
-                <li key={p.slug}>
-                  <Link href={`/ml/wiki/paths/${p.slug}`}>{p.title}</Link>
-                  {p.estimatedMinutes != null ? (
-                    <span className="wiki-muted"> — ~{p.estimatedMinutes} min</span>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
+            <table className="wiki-paths-table">
+              <caption className="wiki-sr-only">
+                Learning paths with card counts and estimated study time
+              </caption>
+              <tbody>
+                {pathRows.map((row) => (
+                  <tr key={row.slug}>
+                    <th scope="row" className="wiki-paths-table-title">
+                      <Link href={`/ml/wiki/paths/${row.slug}`}>{row.title}</Link>
+                    </th>
+                    <td className="wiki-paths-table-num">
+                      {row.cardCount}
+                      <span className="wiki-paths-table-unit"> cards</span>
+                    </td>
+                    <td className="wiki-paths-table-num">
+                      {formatStudyTime(row.estimatedMinutes)}
+                    </td>
+                    <td className="wiki-paths-table-action">
+                      <Link
+                        href={`/ml/wiki/study?path=${encodeURIComponent(row.slug)}`}
+                        className="wiki-topic-nav-btn wiki-paths-table-btn"
+                        aria-label={`Study ${row.title} with flashcards`}
+                      >
+                        Study →
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
         <div className="card">
