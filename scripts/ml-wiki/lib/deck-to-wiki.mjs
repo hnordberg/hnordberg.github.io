@@ -90,7 +90,9 @@ export function splitIntoWikiSections(inner) {
   for (const part of parts) {
     const hm = part.match(/^<p><b>([^<]+)<\/b><\/p>/i);
     if (hm) {
-      const title = hm[1].replace(/:\s*$/, "").trim();
+      // Section titles are rendered as plain text in the UI, so decode any
+      // HTML entities (e.g. `&amp;` -> `&`) that the deck exporter leaves in.
+      const title = normalizeCitationText(hm[1].replace(/:\s*$/, ""));
       const body = part.slice(hm[0].length).trim();
       if (body) {
         sections.push({ kind: "prose", title, body });
@@ -116,7 +118,9 @@ export function transformDeckNoteHtml(rawHtml) {
 export function firstParagraphPlainFromBody(body) {
   const m = body.match(/<p>([\s\S]*?)<\/p>/i);
   if (!m) return "";
-  return m[1].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  // Strip tags then decode entities so the resulting plain-text summary
+  // (rendered directly in React) doesn't contain literal `&amp;`, `&mdash;`, etc.
+  return normalizeCitationText(m[1].replace(/<[^>]+>/g, " "));
 }
 
 export function summaryFromSections(sections) {
