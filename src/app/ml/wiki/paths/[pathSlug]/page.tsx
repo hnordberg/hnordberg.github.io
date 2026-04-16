@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getManifest, getPaths } from "../../lib/loadContent";
+import { getManifest, getPaths, getWikiCorpus } from "../../lib/loadContent";
 import { resolvePathTopics } from "../../lib/paths";
+import { PathStudyButton } from "../../flashcards";
 type PageProps = { params: Promise<{ pathSlug: string }> };
 
 export function generateStaticParams() {
@@ -28,6 +29,10 @@ export default async function MlWikiPathDetailPage({ params }: PageProps) {
 
   const manifest = getManifest();
   const matchedTopics = resolvePathTopics(manifest, path);
+  const topicsBySlug = getWikiCorpus().topicsBySlug;
+  const pathCandidates = matchedTopics
+    .filter((t) => (topicsBySlug.get(t.slug)?.sections.length ?? 0) > 0)
+    .map((t) => ({ noteId: t.slug, topicSlug: t.slug }));
 
   return (
     <main className="wiki-main">
@@ -45,6 +50,8 @@ export default async function MlWikiPathDetailPage({ params }: PageProps) {
           <p className="wiki-meta-inline">Estimated time: ~{path.estimatedMinutes} min</p>
         ) : null}
       </header>
+
+      <PathStudyButton pathSlug={path.slug} candidates={pathCandidates} />
 
       <ol className="wiki-path-steps" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderLeft: '2px solid var(--color-base-300)', paddingLeft: '1.5rem', marginLeft: '1rem' }}>
         {matchedTopics.map((topic, i) => {

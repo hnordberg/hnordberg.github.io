@@ -14,6 +14,7 @@ import { SectionBlock } from "./SectionBlock";
 import { CardEvidence } from "./CardEvidence";
 import { WikiTopicReferences } from "./WikiTopicReferences";
 import { WikiTopicSidebar } from "./WikiTopicSidebar";
+import { TopicStudyButton } from "../flashcards";
 
 type WikiTopicClientProps = {
   topic: WikiTopic;
@@ -140,6 +141,12 @@ export function WikiTopicClient({ topic, manifest }: WikiTopicClientProps) {
             <WikiTopicReferences topic={topic} />
             {topic.cards.length > 0 ? (
               <CardEvidence cards={topic.cards} />
+            ) : null}
+            {topic.sections.length > 0 ? (
+              <TopicStudyButton
+                topicSlug={topic.slug}
+                candidates={[{ noteId: topic.slug, topicSlug: topic.slug }]}
+              />
             ) : null}
             <div style={{ marginTop: '3rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-base-200)', display: 'flex', justifyContent: 'center' }}>
               <button 

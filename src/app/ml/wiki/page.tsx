@@ -4,9 +4,11 @@ import {
   collectAllTags,
   getManifest,
   getPaths,
+  getWikiCorpus,
 } from "./lib/loadContent";
 import { WikiIndexFilter } from "./components/WikiIndexFilter";
 import { TopicChips } from "./components/TopicChips";
+import { HomeStats } from "./flashcards";
 
 export const metadata: Metadata = {
   title: "ML Wiki | Henrik Nordberg",
@@ -18,6 +20,9 @@ export default function MlWikiIndexPage() {
   const manifest = getManifest();
   const tags = collectAllTags();
   const paths = getPaths();
+  const allCandidates = [...getWikiCorpus().topicsBySlug.values()]
+    .filter((t) => t.sections.length > 0)
+    .map((t) => ({ noteId: t.slug, topicSlug: t.slug }));
 
   return (
     <main className="wiki-main">
@@ -29,8 +34,9 @@ export default function MlWikiIndexPage() {
         <p className="wiki-lead">
           Mini-wiki derived from the Anki deck <b><Link href="https://ankiweb.net/shared/info/2014176013?cb=1773248155654">{manifest.sourceDeck}</Link></b>.
           Browse by topic, filter below, or explore{" "}
-          <Link href="/ml/wiki/paths">learning paths</Link> and{" "}
-          <Link href="/ml/wiki/tags">all tags</Link>.
+          <Link href="/ml/wiki/paths">learning paths</Link>,{" "}
+          <Link href="/ml/wiki/tags">all tags</Link>, or{" "}
+          <Link href="/ml/wiki/study">flashcards</Link>.
         </p>
         <p className="wiki-meta-inline">
           Last content update: {manifest.updatedAt} · {manifest.topics.length}{" "}
@@ -70,6 +76,7 @@ export default function MlWikiIndexPage() {
             ) : null}
           </div>
         </div>
+        <HomeStats candidates={allCandidates} />
       </section>
 
       <section className="wiki-index-section">

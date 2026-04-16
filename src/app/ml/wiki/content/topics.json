@@ -5810,7 +5810,7 @@
       },
       {
         "kind": "prose",
-        "title": "Mathematical Definition &amp; Gradient",
+        "title": "Mathematical Definition & Gradient",
         "body": "<p>Given an affine pre-activation \\( x = W a + b \\):</p>\n  <p>\\[ f(x) = \\begin{cases} x &amp; \\text{if } x &gt; 0 \\\\ 0 &amp; \\text{if } x \\le 0 \\end{cases} \\quad \\implies \\quad f'(x) = \\begin{cases} 1 &amp; \\text{if } x &gt; 0 \\\\ 0 &amp; \\text{if } x &lt; 0 \\end{cases} \\]</p>\n  \n  <p><i>Note: The derivative is strictly undefined at \\( x=0 \\), but in software implementations (like PyTorch), it is conventionally hardcoded to 0. Since exactly zero is a measure-zero event for floating-point tensors, it does not impede stochastic descent.</i></p>"
       },
       {
@@ -5825,7 +5825,7 @@
       },
       {
         "kind": "prose",
-        "title": "Computational &amp; Representational Sparsity",
+        "title": "Computational & Representational Sparsity",
         "body": "<p>Because ReLU clamps all negative values to absolute zero, roughly 50% of the neurons in a randomly initialized wide network output exactly 0. This extreme <b>sparsity</b> is highly computationally efficient and acts as a mild structural regularizer, forcing the network to represent concepts using distributed but sparse feature vectors.</p>"
       }
     ],
@@ -5990,7 +5990,7 @@
       },
       {
         "kind": "prose",
-        "title": "Feature Scaling &amp; Initialization Synergy",
+        "title": "Feature Scaling & Initialization Synergy",
         "body": "<p>The entire calculus of heuristic variance weight initialization (Xavier / He) rests on the strict assumption that the initial input layer \\( x \\) exhibits unit variance. If raw features wildly oscillate (e.g. house prices \\( 500,000 \\) alongside bedrooms \\( 3 \\)), the first affine projection matrix \\( W_1 x \\) instantly propagates massive activation instability, irreparably stalling convergence.</p>"
       }
     ],
@@ -6084,7 +6084,7 @@
       },
       {
         "kind": "prose",
-        "title": "Standard Task &amp; Parameter Pairings",
+        "title": "Standard Task & Parameter Pairings",
         "body": "<p>The network's architectural formulation dictates the exact pairing of output non-linearity and backpropagation loss function necessary to correctly isolate probabilistic derivatives:</p>\n\n  <table style=\"width:100%; border-collapse:collapse; margin:12px 0;\">\n    <tbody><tr style=\"background:#4a5568; color:#fff;\">\n      <th style=\"padding:6px; text-align:left;\">Objective Prediction Task</th>\n      <th style=\"padding:6px; text-align:left;\">Activation Function</th>\n      <th style=\"padding:6px; text-align:left;\">Paired Output Loss Matrix</th>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Regression</b> (e.g. Housing Price \\( \\$45,000 \\))</td>\n      <td style=\"padding:6px;\">Identity Line (No activation)</td>\n      <td style=\"padding:6px;\">Mean Squared Error (MSE)</td>\n    </tr>\n    <tr style=\"border-bottom:1px solid #ccc;\">\n      <td style=\"padding:6px;\"><b>Binary Classification</b></td>\n      <td style=\"padding:6px;\">Sigmoid: \\( \\frac{1}{1+e^{-z}} \\) (Bounds exactly to \\( 0-1 \\))</td>\n      <td style=\"padding:6px;\">Binary Cross-Entropy (BCE)</td>\n    </tr>\n    <tr>\n      <td style=\"padding:6px;\"><b>Multi-class Classification</b> (or LLM Next-Token)</td>\n      <td style=\"padding:6px;\">Softmax: Normalizes all \\( K \\) vectors</td>\n      <td style=\"padding:6px;\">Categorical Cross-Entropy</td>\n    </tr>\n  </tbody></table>"
       },
       {
@@ -6342,7 +6342,7 @@
       },
       {
         "kind": "prose",
-        "title": "Expressive Capacity &amp; Universal Approximation",
+        "title": "Expressive Capacity & Universal Approximation",
         "body": "<p>Historically, Cybenko (1989) proved that an FFN with a singular non-linear hidden layer is a Universal Approximator, theoretically capable of matching any continuous function over a compact set. However, the width \\( d_1 \\) required grows exponentially. Modern FFNs rely on extreme depth (dozens to hundreds of sequential layers) to hierarchically construct feature spaces parametrically cheaper.</p>"
       },
       {
@@ -6412,7 +6412,7 @@
       },
       {
         "kind": "prose",
-        "title": "Historical Ascension (LeCun &amp; AlexNet)",
+        "title": "Historical Ascension (LeCun & AlexNet)",
         "body": "<p>Originating with LeCun's digit-recognizing LeNet-5 (1998), CNNs exploded to empirical dominance when Krizhevsky's AlexNet (2012) mapped these localized convolutions massively in parallel across GPU hardware alongside the ReLU activation, instantly annihilating decades of manual computer-vision feature-engineering and officially launching modern Deep Learning.</p>"
       }
     ],
@@ -18970,7 +18970,7 @@
   {
     "slug": "preference-dataset",
     "title": "Preference Dataset",
-    "summary": "A dataset mapping human or AI evaluation queries to pairwise or ranked responses &mdash; typically a collection of (prompt, chosen, rejected) pairs &mdash; used to train Reward Models in RLHF or directly optimize language models via DPO.",
+    "summary": "A dataset mapping human or AI evaluation queries to pairwise or ranked responses — typically a collection of (prompt, chosen, rejected) pairs — used to train Reward Models in RLHF or directly optimize language models via DPO.",
     "domain": "llm",
     "level": "intro",
     "type": "mixed",
@@ -20952,12 +20952,12 @@
       },
       {
         "kind": "prose",
-        "title": "Applications &amp; Efficacy",
+        "title": "Applications & Efficacy",
         "body": "<ul>\n    <li><b>Expert Simulation:</b> Roles like \"Expert Mathematician\" have empirically been shown to improve reasoning benchmark scores because the persona anchors the generation to high-quality academic data clusters.</li>\n    <li><b>Synthetic Data Generation:</b> Role-playing allows a single model to simulate diverse populations for sociological research or synthetic testing (e.g., simulating 1,000 users with different political personas).</li>\n  </ul>"
       },
       {
         "kind": "prose",
-        "title": "Safety &amp; Alignment Constraints",
+        "title": "Safety & Alignment Constraints",
         "body": "<p>Adversarial users exploit this via \"Jailbreaks\" (e.g., the infamous <b>DAN - Do Anything Now</b> prompt). By instructing the model to adopt a persona that explicitly \"ignores safety training,\" the prior \\( P(A \\mid c, q) \\) can overpower the finetuned safety constraints. Modern post-training actively attempts to make refusal robust against persona shifts.</p>"
       }
     ],
