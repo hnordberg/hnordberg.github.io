@@ -1,18 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { countDue, type CardCandidate } from "../lib/deck";
 import { applyRating, initialCardState } from "../lib/scheduler";
 import {
   emptyState,
   getDaily,
-  loadSrs,
-  saveSrs,
+  isSrsState,
   todayKey,
   withCard,
   withDaily,
 } from "../lib/storage";
 import {
+  DEFAULT_SETTINGS,
   RATING_AGAIN,
   RATING_EASY,
   RATING_GOOD,
@@ -21,6 +22,8 @@ import {
   type Rating,
   type SrsState,
 } from "../lib/types";
+import { useAuth } from "../../../../lib/AuthContext";
+import { db } from "../../../../lib/firebase";
 
 const UNDO_DEPTH = 10;
 
@@ -32,7 +35,7 @@ type UndoEntry = {
 };
 
 export type UseSrsResult = {
-  /** True once we've hydrated from localStorage; false during SSR + first paint. */
+  /** True once we've hydrated from Firestore; false during SSR + first paint or while waiting for Auth. */
   hydrated: boolean;
   state: SrsState;
   rate(noteId: string, topicSlug: string, rating: Rating): CardState;
@@ -43,19 +46,54 @@ export type UseSrsResult = {
 };
 
 /**
- * React hook wrapping the SRS state. Mirrors the shape of `useWikiProgress`:
- * hydrates on mount, SSR-safe during first render.
+ * React hook wrapping the SRS state.
+ * Syncs in real-time with Firestore using standard optimistic updates.
  */
 export function useSrs(): UseSrsResult {
+  const { user } = useAuth();
   const [state, setState] = useState<SrsState>(() => emptyState());
   const [hydrated, setHydrated] = useState(false);
   const undoStack = useRef<UndoEntry[]>([]);
   const [, forceRerender] = useState(0);
 
   useEffect(() => {
-    setState(loadSrs());
-    setHydrated(true);
-  }, []);
+    if (!user) {
+      setHydrated(false);
+      return;
+    }
+
+    const docRef = doc(db, "users", user.uid);
+    const unsubscribe = onSnapshot(docRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data();
+        if (data && data.srs && isSrsState(data.srs)) {
+          // Defensive merge of settings
+          data.srs.settings = { ...DEFAULT_SETTINGS, ...data.srs.settings };
+          setState(data.srs as SrsState);
+        } else {
+          // Use current state if remote doc is initialized but lacks SRS prop
+          // Usually we want emptyState but to avoid clobbering optimistic writes,
+          // it's safer to only override if it's truly broken.
+          if (!data.srs) setState(emptyState());
+        }
+      } else {
+        setState(emptyState());
+      }
+      setHydrated(true);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  const saveToFirestore = useCallback((nextState: SrsState) => {
+    if (!user) return;
+    setDoc(doc(db, "users", user.uid), {
+      srs: nextState,
+      updatedAt: new Date().toISOString()
+    }, { merge: true }).catch((err) => {
+      console.error("Failed to save SRS state to Firestore", err);
+    });
+  }, [user]);
 
   const rate = useCallback(
     (noteId: string, topicSlug: string, rating: Rating): CardState => {
@@ -84,11 +122,11 @@ export function useSrs(): UseSrsResult {
       }
 
       setState(nextState);
-      saveSrs(nextState);
+      saveToFirestore(nextState);
       forceRerender((n) => n + 1);
       return updated;
     },
-    [state]
+    [state, saveToFirestore]
   );
 
   const undo = useCallback((): string | null => {
@@ -103,18 +141,15 @@ export function useSrs(): UseSrsResult {
       }
       const nextDaily = { ...prev.daily, [last.prevDailyKey]: last.prevDaily };
       const next: SrsState = { ...prev, cards: nextCards, daily: nextDaily };
-      saveSrs(next);
+      saveToFirestore(next);
       return next;
     });
     forceRerender((n) => n + 1);
     return last.noteId;
-  }, []);
+  }, [saveToFirestore]);
 
   const ensureCards = useCallback((_cards: CardCandidate[]) => {
-    // Currently a no-op: cards are seeded lazily via `buildQueue`
-    // (`initialCardState`). We keep this in the hook API so that a future
-    // change (e.g. eager instantiation for stats) can happen without
-    // touching call sites.
+    // Currently a no-op
   }, []);
 
   const dueCountFor = useCallback(

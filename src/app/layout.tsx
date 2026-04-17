@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Navigation from './components/Navigation';
 import ThemeSwitcher from './components/ThemeSwitcher'
+import { AuthProvider } from './lib/AuthContext'
+
 
 export const metadata: Metadata = {
   title: 'Henrik Nordberg, Principal Engineer',
@@ -36,14 +38,16 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
-        <header className="site-header">
-          <Navigation />
-          <ThemeSwitcher />
-        </header>
-        {children}
-        <footer>
-          <p>&copy; {new Date().getFullYear()} Henrik Nordberg</p>
-        </footer>
+        <AuthProvider>
+          <header className="site-header">
+            <Navigation />
+            <ThemeSwitcher />
+          </header>
+          {children}
+          <footer>
+            <p>&copy; {new Date().getFullYear()} Henrik Nordberg</p>
+          </footer>
+        </AuthProvider>
       </body>
     </html>
   )

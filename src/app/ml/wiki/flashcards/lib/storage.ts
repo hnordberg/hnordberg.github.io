@@ -26,7 +26,7 @@ function isBrowser(): boolean {
   return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
 }
 
-function isSrsState(value: unknown): value is SrsState {
+export function isSrsState(value: unknown): value is SrsState {
   if (!value || typeof value !== "object") return false;
   const v = value as Partial<SrsState>;
   return (
@@ -40,34 +40,7 @@ function isSrsState(value: unknown): value is SrsState {
   );
 }
 
-/**
- * Load SRS state from localStorage. Unknown schema versions are discarded
- * silently so a future migration can reset cleanly.
- */
-export function loadSrs(): SrsState {
-  if (!isBrowser()) return emptyState();
-  try {
-    const raw = window.localStorage.getItem(SRS_STORAGE_KEY);
-    if (!raw) return emptyState();
-    const parsed = JSON.parse(raw);
-    if (!isSrsState(parsed)) return emptyState();
-    // Defensive: ensure required settings keys exist (forward-compat if we
-    // add new settings later without bumping the schema version).
-    parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
-    return parsed;
-  } catch {
-    return emptyState();
-  }
-}
-
-export function saveSrs(state: SrsState): void {
-  if (!isBrowser()) return;
-  try {
-    window.localStorage.setItem(SRS_STORAGE_KEY, JSON.stringify(state));
-  } catch {
-    // Quota exceeded or serialization error; fail silently.
-  }
-}
+// loadSrs and saveSrs have been replaced by Firestore sync in useSrs.ts
 
 /** Today's local-date key, YYYY-MM-DD. */
 export function todayKey(now: Date = new Date()): string {
