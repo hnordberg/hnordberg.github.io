@@ -92,7 +92,7 @@ export function applyRating(
   if (next.phase === "new" || next.phase === "learning" || next.phase === "relearning") {
     if (rating === RATING_EASY) {
       next.phase = "review";
-      next.stepIdx = undefined;
+      delete next.stepIdx;
       next.intervalD = settings.easyIntervalD;
       next.reps = next.reps + 1;
       next.dueAt = addDays(now, next.intervalD);
@@ -105,7 +105,7 @@ export function applyRating(
       const nextIdx = idx + 1;
       if (nextIdx >= steps.length) {
         next.phase = "review";
-        next.stepIdx = undefined;
+        delete next.stepIdx;
         next.intervalD = settings.graduatingIntervalD;
         next.reps = next.reps + 1;
         next.dueAt = addDays(now, next.intervalD);
