@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-15",
+  "updatedAt": "2026-04-16",
   "sourceDeck": "Machine Learning by Henrik Nordberg",
   "topics": [
     {
@@ -9560,6 +9560,1423 @@
         "exponential-family-of-distributions"
       ],
       "updatedAt": "2026-04-15",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "kl-divergence",
+      "title": "KL Divergence",
+      "summary": "An information-theoretic measure of how one probability distribution differs from a reference distribution — the asymmetric \"extra bits\" needed to encode samples from \\( p \\) using a code optimized for \\( q \\). It underpins maximum-likelihood estimation, variational inference, RLHF, and countless other learning objectives.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "optimization",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "probability-distribution",
+        "shannon-entropy"
+      ],
+      "related": [
+        "cross-entropy",
+        "shannon-entropy",
+        "negative-log-likelihood",
+        "kl-divergence-penalty-in-rlhf",
+        "reparameterization-trick-vae"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "jensens-inequality",
+      "title": "Jensen's Inequality",
+      "summary": "For any convex function \\( \\varphi \\) and random variable \\( X \\), \\( \\varphi(\\mathbb{E}[X]) \\le \\mathbb{E}[\\varphi(X)] \\). This single inequality is the engine behind the non-negativity of KL divergence, the ELBO, the concavity of entropy, and most convergence proofs in machine learning.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "convex-function",
+        "probability-distribution"
+      ],
+      "related": [
+        "convex-function",
+        "kl-divergence",
+        "cross-entropy",
+        "shannon-entropy",
+        "maximum-likelihood-estimate-mle"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bayes-theorem",
+      "title": "Bayes' Theorem",
+      "summary": "A rule for updating beliefs in light of new evidence: the posterior probability of a hypothesis given data is proportional to the likelihood of the data times the prior. It is the foundation of probabilistic inference and distinguishes Bayesian from frequentist statistics.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "probability-distribution"
+      ],
+      "related": [
+        "maximum-a-posteriori-map-estimation",
+        "maximum-likelihood-estimate-mle",
+        "markov-chain-monte-carlo-mcmc",
+        "kl-divergence"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "expectation-maximization-em-algorithm",
+      "title": "Expectation–Maximization (EM) Algorithm",
+      "summary": "An iterative algorithm for maximum-likelihood estimation in models with latent variables. Each iteration alternates between computing the expected complete-data log-likelihood under the current posterior (E-step) and maximising it with respect to the parameters (M-step), monotonically increasing the observed-data likelihood.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "optimization",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "maximum-likelihood-estimate-mle",
+        "jensens-inequality"
+      ],
+      "related": [
+        "k-means-objective-function-inertia",
+        "hidden-markov-model-hmm",
+        "kl-divergence",
+        "maximum-likelihood-estimate-mle",
+        "jensens-inequality"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "eigenvalues-and-eigenvectors",
+      "title": "Eigenvalues and Eigenvectors",
+      "summary": "For a square matrix \\( A \\), an eigenvector \\( v \\neq 0 \\) satisfies \\( Av = \\lambda v \\) for some scalar eigenvalue \\( \\lambda \\). Eigendecomposition diagonalises linear operators in a basis that rescales rather than rotates, and is the backbone of PCA, spectral clustering, stability analysis, and Fisher-information geometry.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [],
+      "related": [
+        "singular-value-decomposition-svd",
+        "principal-component-analysis-pca",
+        "the-fisher-information-matrix",
+        "convex-function"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "jacobian-and-hessian",
+      "title": "Jacobian and Hessian",
+      "summary": "The Jacobian is the matrix of first-order partial derivatives of a vector-valued function; the Hessian is the symmetric matrix of second-order partial derivatives of a scalar function. Together they encode the local linear and quadratic structure of a map, underpinning Newton's method, backpropagation, curvature analysis, and optimisation theory.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "optimization",
+        "path-core-foundations"
+      ],
+      "prerequisites": [],
+      "related": [
+        "gradient-descent",
+        "convex-function",
+        "the-fisher-information-matrix",
+        "eigenvalues-and-eigenvectors"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "multivariate-gaussian-distribution",
+      "title": "Multivariate Gaussian Distribution",
+      "summary": "The d-dimensional generalisation of the normal distribution, parameterised by a mean vector and positive-definite covariance matrix. Its density, closed-form marginals / conditionals, and closure under affine transforms make it the workhorse continuous distribution underpinning PCA, GMMs, Kalman filters, Gaussian processes, and VAEs.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "probability-distribution",
+        "eigenvalues-and-eigenvectors"
+      ],
+      "related": [
+        "principal-component-analysis-pca",
+        "reparameterization-trick-vae",
+        "kl-divergence",
+        "the-fisher-information-matrix",
+        "expectation-maximization-em-algorithm"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "naive-bayes-classifier",
+      "title": "Naive Bayes Classifier",
+      "summary": "A fast linear probabilistic classifier that applies Bayes' theorem under the (strong) conditional-independence assumption on features. Despite its wrong assumption it is a strong baseline for text classification and remains widely used when data is small and dimensionality is high.",
+      "domain": "supervised",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "bayes-theorem",
+        "probability-distribution"
+      ],
+      "related": [
+        "bayes-theorem",
+        "maximum-likelihood-estimate-mle",
+        "linear-regression-basics",
+        "logistic-regression"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "k-nearest-neighbors-knn",
+      "title": "k-Nearest Neighbors (k-NN)",
+      "summary": "Non-parametric classifier and regressor that predicts by voting / averaging over the k training points nearest to the query under a chosen distance. Essentially no training; slow inference; highly sensitive to feature scaling and the curse of dimensionality.",
+      "domain": "supervised",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "implementation",
+        "path-core-foundations"
+      ],
+      "prerequisites": [],
+      "related": [
+        "the-curse-of-dimensionality",
+        "bias-variance-tradeoff",
+        "k-means-objective-function-inertia",
+        "kernel-methods"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "universal-approximation-theorem",
+      "title": "Universal Approximation Theorem",
+      "summary": "A single-hidden-layer neural network with a non-polynomial activation can approximate any continuous function on a compact set to arbitrary accuracy given enough hidden units. An existence guarantee about representation — not about trainability, sample complexity, or depth vs. width.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "landmark",
+        "ml",
+        "theory",
+        "path-core-foundations",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "multilayer-perceptron-mlp"
+      ],
+      "related": [
+        "multilayer-perceptron-mlp",
+        "perceptron",
+        "kernel-methods",
+        "neural-tangent-kernel-ntk"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "double-descent",
+      "title": "Double Descent",
+      "summary": "Test error is not a simple U-curve in model capacity: after the classical bias–variance sweet spot, error spikes at the interpolation threshold and then <i>descends again</i> in the over-parameterised regime. A direct empirical challenge to the textbook bias–variance story.",
+      "domain": "foundations",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "theory",
+        "path-core-foundations",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "bias-variance-tradeoff",
+        "overfitting"
+      ],
+      "related": [
+        "bias-variance-tradeoff",
+        "overfitting",
+        "generalization",
+        "scaling-laws",
+        "grokking"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "grokking",
+      "title": "Grokking",
+      "summary": "A delayed-generalisation phenomenon in which a network memorises the training set long before test accuracy moves, then — usually driven by weight decay — suddenly generalises after many additional training steps. Key evidence that generalisation and memorisation can be decoupled in time.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "optimization",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "overfitting",
+        "weight-decay"
+      ],
+      "related": [
+        "double-descent",
+        "weight-decay",
+        "generalization",
+        "neural-tangent-kernel-ntk"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "neural-tangent-kernel-ntk",
+      "title": "Neural Tangent Kernel (NTK)",
+      "summary": "In the infinite-width, small-learning-rate limit, a trained neural network behaves like kernel regression with a deterministic, architecture-defined kernel — the NTK. It gave the first rigorous bridge between deep networks and kernel methods and is a central tool in modern learning theory.",
+      "domain": "foundations",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "theory",
+        "path-core-foundations",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "kernel-methods",
+        "gradient-descent"
+      ],
+      "related": [
+        "kernel-methods",
+        "multilayer-perceptron-mlp",
+        "jacobian-and-hessian",
+        "universal-approximation-theorem",
+        "double-descent"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "state-space-models-mamba",
+      "title": "State Space Models / Mamba",
+      "summary": "Sequence models that evolve a hidden state by a linear recurrence and can be evaluated either as an O(T) scan (inference) or an O(T log T) convolution (training). Mamba added input-dependent (selective) transitions and hardware-aware scans, making SSMs competitive Transformer alternatives with linear complexity.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "path-transformer-llm",
+        "path-architectures",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "recurrent-neural-network-rnn",
+        "self-attention"
+      ],
+      "related": [
+        "transformer",
+        "recurrent-neural-network-rnn",
+        "long-short-term-memory-lstm",
+        "flashattention",
+        "linear-attention"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "linear-attention",
+      "title": "Linear Attention",
+      "summary": "Replaces softmax similarity with a kernel feature map so that attention factors into O(T) running sums, enabling linear-time Transformers and a direct bridge to RNNs / SSMs. Lossy compared to softmax but central to Performer, Linear Transformer, RetNet, and modern SSM–attention hybrids.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "ml",
+        "theory",
+        "transformer",
+        "path-transformer-llm",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "self-attention",
+        "softmax"
+      ],
+      "related": [
+        "self-attention",
+        "multi-head-attention",
+        "state-space-models-mamba",
+        "flashattention",
+        "kernel-methods"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "alibi-attention-with-linear-biases",
+      "title": "ALiBi (Attention with Linear Biases)",
+      "summary": "A positional encoding that adds a fixed, head-specific linear penalty on query–key distance directly into the attention logits. Enables training-free length extrapolation: models trained on short contexts can evaluate on much longer ones with only modest perplexity degradation.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "ml",
+        "transformer",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "self-attention",
+        "sinusoidal-positional-encoding"
+      ],
+      "related": [
+        "rotary-positional-embedding-rope",
+        "sinusoidal-positional-encoding",
+        "self-attention",
+        "multi-head-attention",
+        "yarn-ntk-aware-rope-scaling"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "yarn-ntk-aware-rope-scaling",
+      "title": "YaRN / NTK-aware RoPE Scaling",
+      "summary": "Techniques that extend a RoPE Transformer's effective context length by re-parameterising rotary frequencies — preserving high-frequency components while compressing low-frequency ones. Covers Position Interpolation, NTK-aware scaling, and YaRN (with temperature correction).",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "ml",
+        "transformer",
+        "implementation",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "rotary-positional-embedding-rope"
+      ],
+      "related": [
+        "rotary-positional-embedding-rope",
+        "alibi-attention-with-linear-biases",
+        "self-attention",
+        "sinusoidal-positional-encoding"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sliding-window-attention",
+      "title": "Sliding-Window Attention",
+      "summary": "Each query attends only to the last w keys, yielding O(w) cost per step and an O(w)-sized rolling KV cache. Combined with global tokens (Longformer), dilated windows (BigBird), or a few full-attention layers (Mistral), it is a ubiquitous tool for efficient long-context Transformers.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "ml",
+        "transformer",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "self-attention",
+        "attention-mask"
+      ],
+      "related": [
+        "self-attention",
+        "flashattention",
+        "pagedattention",
+        "causal-masked-self-attention",
+        "linear-attention"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "multi-head-latent-attention-mla",
+      "title": "Multi-head Latent Attention (MLA)",
+      "summary": "DeepSeek-V2's attention variant that compresses per-head keys/values through a shared low-rank latent projection, shrinking the KV cache an order of magnitude below GQA while matching or improving quality. Requires decoupled RoPE to preserve positional information.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "ml",
+        "implementation",
+        "transformer",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "multi-head-attention",
+        "grouped-query-attention-gqa"
+      ],
+      "related": [
+        "multi-head-attention",
+        "grouped-query-attention-gqa",
+        "flashattention",
+        "pagedattention",
+        "self-attention"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "chinchilla-scaling-laws",
+      "title": "Chinchilla Scaling Laws",
+      "summary": "DeepMind's 2022 analysis showing that, under a fixed compute budget C ≈ 6ND, pretraining is compute-optimal when model parameters N and training tokens D scale in lockstep — roughly D ≈ 20N. Reversed the earlier Kaplan recommendation and set the standard for modern LLM training.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "theory",
+        "scaling",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "scaling-laws",
+        "large-language-model-llm"
+      ],
+      "related": [
+        "scaling-laws",
+        "large-language-model-llm",
+        "data-mixture",
+        "next-token-prediction-objective-causal-language-modeling",
+        "transformer"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "auxiliary-load-balancing-loss-moe",
+      "title": "Auxiliary Load-Balancing Loss (MoE)",
+      "summary": "A differentiable penalty added to a sparse Mixture-of-Experts training objective that pushes the router toward an even token distribution across experts, preventing the positive-feedback collapse where most tokens are sent to a few dominant experts.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "ml",
+        "optimization",
+        "transformer",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "sparse-mixture-of-experts-moe-layer",
+        "load-balancing-moe"
+      ],
+      "related": [
+        "router-network",
+        "top-k-routing",
+        "switch-transformer",
+        "sparsely-gated-mixture-of-experts-moe"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "muon-optimizer",
+      "title": "Muon Optimizer",
+      "summary": "A second-order-style optimizer for hidden matrix weights that replaces each parameter-space gradient with its orthogonalized version (via a few Newton–Schulz iterations), effectively performing steepest descent under the spectral norm. Muon trains transformers measurably faster than AdamW on matching compute budgets.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "optimization",
+        "theory",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "adamw-optimizer",
+        "gradient-descent",
+        "singular-value-decomposition-svd"
+      ],
+      "related": [
+        "adam-optimizer",
+        "learning-rate",
+        "weight-decay",
+        "learning-rate-schedule"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pretraining-data-deduplication",
+      "title": "Pretraining Data Deduplication",
+      "summary": "The systematic removal of near-duplicate documents and passages from a pretraining corpus. Deduplication reduces memorisation, improves per-token efficiency, and sharply lowers evaluation-set contamination — often delivering as much quality improvement as a 10× compute increase.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "nlp",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "pretraining-corpus",
+        "pretraining",
+        "tokenization"
+      ],
+      "related": [
+        "data-mixture",
+        "chinchilla-scaling-laws",
+        "data-leakage",
+        "perplexity"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "reinforce-algorithm",
+      "title": "REINFORCE Algorithm",
+      "summary": "The classical policy-gradient algorithm (Williams, 1992): estimate \\( \\nabla_\\theta J(\\theta) \\) by Monte-Carlo-sampling trajectories and weighting the log-probability of each action by the (possibly baseline-subtracted) return. All modern policy-gradient methods — A2C, PPO, GRPO, RLHF — are descendants of this one estimator.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "landmark",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-rl",
+        "policy-reinforcement-learning",
+        "gradient-descent"
+      ],
+      "related": [
+        "proximal-policy-optimization-ppo",
+        "grpo-group-relative-policy-optimization",
+        "actor-critic-methods",
+        "generalized-advantage-estimation-gae"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "generalized-advantage-estimation-gae",
+      "title": "Generalized Advantage Estimation (GAE)",
+      "summary": "A family of advantage estimators that interpolates between low-variance 1-step TD residuals and high-variance Monte-Carlo returns, indexed by a parameter \\( \\lambda \\in [0, 1] \\). GAE is the default advantage signal in PPO and most modern on-policy RL.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforce-algorithm",
+        "actor-critic-methods",
+        "value-function"
+      ],
+      "related": [
+        "proximal-policy-optimization-ppo",
+        "grpo-group-relative-policy-optimization",
+        "policy-reinforcement-learning",
+        "the-bellman-equation"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "actor-critic-methods",
+      "title": "Actor–Critic Methods",
+      "summary": "A hybrid policy-gradient framework that learns both a policy (\"actor\") and a value function (\"critic\") simultaneously. The critic's estimates serve as a learned baseline that sharply reduces the variance of the policy gradient, enabling stable on-policy RL at scale.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "landmark",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforce-algorithm",
+        "value-function",
+        "policy-reinforcement-learning"
+      ],
+      "related": [
+        "proximal-policy-optimization-ppo",
+        "generalized-advantage-estimation-gae",
+        "the-bellman-equation",
+        "q-learning"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "process-reward-models-vs-outcome-reward-models",
+      "title": "Process Reward Models (PRM) vs Outcome Reward Models (ORM)",
+      "summary": "Two ways to score a multi-step solution: an ORM gives a single scalar for the final answer; a PRM grades each intermediate step. PRMs provide denser, per-step signal — essential for training and search in reasoning models, but expensive to annotate and vulnerable to reward hacking.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "reward-model",
+        "reinforcement-learning-from-human-feedback-rlhf",
+        "chain-of-thought"
+      ],
+      "related": [
+        "reasoning-models-long-cot",
+        "process-supervision",
+        "mcts-for-llm-reasoning",
+        "test-time-compute-scaling"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "kto-kahneman-tversky-optimization",
+      "title": "KTO (Kahneman–Tversky Optimization)",
+      "summary": "A preference-optimization objective that trains on single-sided labels (\"this completion is good\" / \"this completion is bad\") instead of pairwise comparisons. KTO uses a reference-model-relative utility inspired by Kahneman–Tversky prospect theory: loss-aversion asymmetrically penalises completions that fall below the reference-implicit utility threshold.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "direct-preference-optimization-dpo",
+        "preference-based-alignment",
+        "reinforcement-learning-from-human-feedback-rlhf"
+      ],
+      "related": [
+        "reward-model",
+        "preference-dataset",
+        "kl-divergence-penalty-in-rlhf",
+        "bradley-terry-model"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "rlaif-rl-from-ai-feedback",
+      "title": "RLAIF (RL from AI Feedback)",
+      "summary": "Replace the human annotator in RLHF with a strong LLM that generates preference labels from a rubric. RLAIF scales preference collection by orders of magnitude, achieves parity with RLHF on helpfulness/harmlessness, and is the dominant pipeline for safety and reasoning alignment at modern-frontier scale.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "product",
+        "path-reinforcement",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-from-human-feedback-rlhf",
+        "constitutional-ai",
+        "preference-dataset"
+      ],
+      "related": [
+        "reward-model",
+        "direct-preference-optimization-dpo",
+        "self-critique",
+        "safety-alignment"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "reasoning-models-long-cot",
+      "title": "Reasoning Models (o1 / R1-style Long-CoT)",
+      "summary": "A class of LLMs that spend disproportionate <i>inference</i> compute on internal chain-of-thought before answering. OpenAI's o1 and DeepSeek-R1 showed that pure-RL training on verifiable reward (math, code) elicits emergent behaviours — backtracking, self-correction, hypothesis enumeration — and that test-time compute scales monotonically with accuracy.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "reinforcement",
+        "product",
+        "path-scaling-advanced",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "chain-of-thought",
+        "reinforcement-learning-from-human-feedback-rlhf",
+        "test-time-compute-scaling"
+      ],
+      "related": [
+        "grpo-group-relative-policy-optimization",
+        "process-reward-models-vs-outcome-reward-models",
+        "mcts-for-llm-reasoning",
+        "process-supervision",
+        "self-refine-reflexion"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "process-supervision",
+      "title": "Process Supervision",
+      "summary": "Training a model (usually a process reward model) on step-level correctness labels rather than only on final-answer correctness. Process supervision gives denser credit assignment, makes verification tractable for long reasoning chains, and underpins the best published results on MATH.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "reinforcement",
+        "path-scaling-advanced",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reward-model",
+        "chain-of-thought",
+        "process-reward-models-vs-outcome-reward-models"
+      ],
+      "related": [
+        "reasoning-models-long-cot",
+        "mcts-for-llm-reasoning",
+        "reinforcement-learning-from-human-feedback-rlhf",
+        "self-refine-reflexion"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "mcts-for-llm-reasoning",
+      "title": "Monte Carlo Tree Search for LLM Reasoning",
+      "summary": "Apply the AlphaZero-style MCTS framework to tree-structured LLM reasoning: expand candidate continuations as children of the current partial solution, evaluate leaves with a value/PRM, and select promising branches via UCB. MCTS is the default search procedure for deliberate test-time reasoning when a step-level scorer is available.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-scaling-advanced",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "chain-of-thought",
+        "tree-of-thought",
+        "process-reward-models-vs-outcome-reward-models"
+      ],
+      "related": [
+        "reasoning-models-long-cot",
+        "process-supervision",
+        "test-time-compute-scaling",
+        "self-consistency"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "self-refine-reflexion",
+      "title": "Self-Refine / Reflexion",
+      "summary": "Two closely related inference-time techniques in which an LLM critiques and revises its own output over multiple rounds. Self-Refine uses the same model in three roles (generate → feedback → refine); Reflexion adds an episodic memory of past failures to guide future trajectories in agentic tasks.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "chain-of-thought",
+        "prompt-engineering",
+        "self-critique"
+      ],
+      "related": [
+        "react-reason-act",
+        "tree-of-thought",
+        "test-time-compute-scaling",
+        "reasoning-models-long-cot"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "vllm-continuous-batching",
+      "title": "vLLM & Continuous Batching",
+      "summary": "vLLM is an open-source LLM serving system built around PagedAttention and <i>continuous batching</i>: a scheduler admits, evicts, and interleaves requests at every decoding iteration, eliminating the padding and head-of-line blocking that plague static batching. vLLM routinely delivers 5–20× throughput over naive HuggingFace serving at the same latency.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "product",
+        "transformer",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "pagedattention",
+        "key-value-kv-caching",
+        "inference-optimization"
+      ],
+      "related": [
+        "speculative-decoding",
+        "flashattention",
+        "memory-optimization-ml-training",
+        "key-value-kv-caching"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gptq-quantization",
+      "title": "GPTQ Quantization",
+      "summary": "A one-shot, layer-wise post-training quantization that pushes LLM weights to 3–4 bits while preserving generation quality. GPTQ reformulates quantization as a per-row error-minimisation problem solved greedily using the inverse Hessian of a small calibration set, achieving 3-bit LLaMA-65B with <1% perplexity loss.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "optimization",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "quantization",
+        "post-training-quantization-ptq",
+        "inference-optimization"
+      ],
+      "related": [
+        "awq-activation-aware-weight-quantization",
+        "qlora-quantized-lora",
+        "model-compression",
+        "quantization-aware-training-qat"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "awq-activation-aware-weight-quantization",
+      "title": "AWQ (Activation-aware Weight Quantization)",
+      "summary": "A post-training quantization that protects the ~1% of weights connected to the largest-magnitude activation channels by scaling them before rounding. AWQ achieves 4-bit LLM inference with negligible quality loss, is ~simpler than GPTQ, and is widely deployed via kernels in TensorRT-LLM and vLLM.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "optimization",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "quantization",
+        "post-training-quantization-ptq",
+        "inference-optimization"
+      ],
+      "related": [
+        "gptq-quantization",
+        "qlora-quantized-lora",
+        "model-compression",
+        "quantization-aware-training-qat"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "attention-sinks-streamingllm",
+      "title": "Attention Sinks / StreamingLLM",
+      "summary": "An empirical phenomenon in causal Transformers: the first few tokens receive disproportionately large attention weight from <i>all</i> later queries, even when they carry no semantic value. Keeping these tokens pinned in the KV-cache (StreamingLLM) lets pretrained models generate unbounded streams without quality collapse.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "ml",
+        "theory",
+        "transformer",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "self-attention",
+        "causal-masked-self-attention",
+        "key-value-kv-caching"
+      ],
+      "related": [
+        "sliding-window-attention",
+        "long-context-pretraining",
+        "rotary-positional-embedding-rope",
+        "softmax"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "induction-heads",
+      "title": "Induction Heads",
+      "summary": "A specific two-head circuit in Transformer attention that copies the next token after a previous occurrence of the current token — the computational basis for in-context learning. Anthropic showed induction heads form suddenly during training, coinciding with the sharp jump in ICL ability.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "interpretability",
+        "ml",
+        "theory",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "multi-head-attention",
+        "self-attention",
+        "in-context-learning"
+      ],
+      "related": [
+        "circuit-analysis",
+        "mechanistic-interpretability",
+        "attention-head",
+        "superposition-neural-networks"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "circuit-analysis",
+      "title": "Circuit Analysis",
+      "summary": "The mechanistic-interpretability practice of identifying subgraphs of weights, residual-stream components, and attention heads that jointly implement a human-interpretable algorithm (indirect object identification, modular addition, greater-than). Circuit analysis produces falsifiable, causal accounts of what a network has learned.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "interpretability",
+        "ml",
+        "theory",
+        "transformer",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "mechanistic-interpretability",
+        "attention-head",
+        "induction-heads"
+      ],
+      "related": [
+        "activation-patching",
+        "logit-lens",
+        "sparse-autoencoder-mechanistic-interpretability",
+        "superposition-neural-networks"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "rome-memit-model-editing",
+      "title": "ROME / MEMIT Model Editing",
+      "summary": "Rank-one edits to MLP weights that inject a single fact (ROME) or thousands of facts (MEMIT) into a pretrained LLM without retraining. They exploit the observation that MLP blocks act as key–value memories, identify the causal neurons via activation patching, and solve a closed-form optimisation problem for the minimal-norm weight update.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "interpretability",
+        "ml",
+        "theory",
+        "transformer",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "mechanistic-interpretability",
+        "position-wise-mlp",
+        "circuit-analysis"
+      ],
+      "related": [
+        "activation-patching",
+        "knowledge-distillation",
+        "finetuning",
+        "attention-head"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "vision-transformer-vit",
+      "title": "Vision Transformer (ViT)",
+      "summary": "Dosovitskiy et al. (2020) showed that a pure Transformer applied to fixed-size image patches as tokens matches or exceeds state-of-the-art CNNs on ImageNet when pretrained on enough data. ViT is the backbone of modern vision-language models (CLIP, SigLIP, DINOv2, MAE) and the foundation of nearly all 2020s visual representation work.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "cv",
+        "landmark",
+        "ml",
+        "transformer",
+        "path-vision",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "transformer",
+        "self-attention",
+        "convolutional-neural-network-cnn"
+      ],
+      "related": [
+        "clip-contrastive-language-image-pre-training",
+        "masked-autoencoder-mae",
+        "dinov2",
+        "siglip",
+        "vision-encoder"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "masked-autoencoder-mae",
+      "title": "Masked Autoencoder (MAE)",
+      "summary": "A self-supervised ViT pretraining objective: randomly mask 75% of image patches and train an asymmetric encoder–decoder to reconstruct pixel values from the visible 25%. MAE is simple, compute-efficient (the encoder sees only unmasked patches), and produces state-of-the-art ImageNet fine-tuning representations.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "cv",
+        "landmark",
+        "ml",
+        "path-vision",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "vision-transformer-vit",
+        "autoencoders",
+        "representation-learning"
+      ],
+      "related": [
+        "dinov2",
+        "clip-contrastive-language-image-pre-training",
+        "siglip",
+        "self-attention"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "dinov2",
+      "title": "DINOv2",
+      "summary": "A self-supervised ViT pretraining recipe from Meta (Oquab et al., 2023) that combines a DINO-style self-distillation objective with an iBOT masked-patch prediction objective and a curated 142M-image dataset. DINOv2 produces general-purpose frozen visual features that outperform task-specific supervised baselines on classification, segmentation, depth, and correspondence.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "cv",
+        "ml",
+        "path-vision",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "vision-transformer-vit",
+        "masked-autoencoder-mae",
+        "representation-learning"
+      ],
+      "related": [
+        "clip-contrastive-language-image-pre-training",
+        "siglip",
+        "self-attention",
+        "knowledge-distillation"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "siglip",
+      "title": "SigLIP",
+      "summary": "A contrastive image–text pretraining method (Zhai et al., 2023) that replaces CLIP's softmax-over-batch contrastive loss with a pairwise sigmoid binary cross-entropy. SigLIP removes the need for large global batches, scales batch-size-efficiently, and achieves CLIP-level or better zero-shot accuracy at a fraction of the training compute.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "cv",
+        "ml",
+        "nlp",
+        "path-vision",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "clip-contrastive-language-image-pre-training",
+        "vision-transformer-vit",
+        "cross-entropy"
+      ],
+      "related": [
+        "dinov2",
+        "masked-autoencoder-mae",
+        "vision-encoder",
+        "vision-language-model-vlm"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "denoising-diffusion-probabilistic-models-ddpm",
+      "title": "Denoising Diffusion Probabilistic Models (DDPM)",
+      "summary": "A generative model that learns to reverse a fixed Gaussian corruption process. Ho et al. (2020) showed that predicting the added noise with a neural network, trained by a simple MSE loss on \\( T \\) diffusion steps, yields state-of-the-art image synthesis — the foundation of all modern image/video diffusion.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "landmark",
+        "ml",
+        "theory",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "gradient-descent",
+        "reparameterization-trick-vae",
+        "probability-distribution"
+      ],
+      "related": [
+        "classifier-free-guidance",
+        "flow-matching-rectified-flow",
+        "latent-diffusion",
+        "gan-minimax-objective"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "classifier-free-guidance",
+      "title": "Classifier-Free Guidance",
+      "summary": "A sampling-time technique for conditional diffusion models: jointly train a conditional and an unconditional score model, then extrapolate along their difference at inference to amplify the conditioning. Classifier-free guidance replaced classifier-guided diffusion and is the reason text-to-image models follow prompts.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "conditional-probability"
+      ],
+      "related": [
+        "latent-diffusion",
+        "flow-matching-rectified-flow",
+        "classification-head",
+        "softmax-temperature"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "flow-matching-rectified-flow",
+      "title": "Flow Matching / Rectified Flow",
+      "summary": "A generative modelling framework that learns a time-dependent velocity field mapping noise to data along a fixed probability path. Rectified Flow in particular learns straight-line paths between noise and data samples, enabling 1–4 step sampling with quality matching much deeper diffusion models.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "gradient-descent",
+        "probability-distribution"
+      ],
+      "related": [
+        "classifier-free-guidance",
+        "latent-diffusion",
+        "reparameterization-trick-vae",
+        "autoencoders"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "latent-diffusion",
+      "title": "Latent Diffusion",
+      "summary": "Run the diffusion process in the compressed latent space of a pretrained VAE rather than in pixel space. Latent diffusion (Rombach et al., 2022) slashes memory and compute by ~8× for images while preserving sample quality, and is the architecture behind Stable Diffusion, SDXL, SD3, and most text-to-image systems.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "landmark",
+        "ml",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "autoencoders",
+        "reparameterization-trick-vae"
+      ],
+      "related": [
+        "classifier-free-guidance",
+        "flow-matching-rectified-flow",
+        "vision-transformer-vit",
+        "cross-attention"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "core-llm-benchmarks",
+      "title": "Core LLM Benchmarks (MMLU, HumanEval, GSM8K, MATH)",
+      "summary": "Four widely reported LLM evaluation suites. MMLU: 57-subject multiple-choice knowledge. HumanEval: Python function synthesis from docstrings, graded by unit tests. GSM8K: ~8.5K grade-school multi-step word problems. MATH: competition math with written-derivation answers. Each stresses a different capability and has well-known failure modes.",
+      "domain": "evaluation",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "product",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "benchmark-ml-evaluation",
+        "large-language-model-llm"
+      ],
+      "related": [
+        "lmsys-chatbot-arena",
+        "data-leakage",
+        "chain-of-thought",
+        "reasoning-models-long-cot"
+      ],
+      "updatedAt": "2026-04-16",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "lmsys-chatbot-arena",
+      "title": "LMSYS Chatbot Arena",
+      "summary": "A crowdsourced pairwise-preference leaderboard where anonymous users chat with two LLMs in parallel and vote for the better response. Bradley–Terry-fit Elo ratings produce a continuously-updated ranking that is arguably the most informative public signal of frontier-model quality outside automated benchmarks.",
+      "domain": "evaluation",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "product",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "benchmark-ml-evaluation",
+        "human-evaluation",
+        "bradley-terry-model",
+        "elo-rating"
+      ],
+      "related": [
+        "pairwise-comparison",
+        "preference-dataset",
+        "core-llm-benchmarks",
+        "reinforcement-learning-from-human-feedback-rlhf"
+      ],
+      "updatedAt": "2026-04-16",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
