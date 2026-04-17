@@ -66,7 +66,6 @@ export function WikiTopicReferences({ topic }: WikiTopicReferencesProps) {
       ) : null}
       {papers.length > 0 ? (
         <div className="wiki-papers">
-          <h3 className="wiki-papers-heading">Papers and further reading</h3>
           <ul className="wiki-papers-list">
             {papers.map((p, i) => (
               <WikiPaperLine key={i} paper={p} />
