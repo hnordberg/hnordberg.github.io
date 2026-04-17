@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { typesetMathInSubtree, useMathJax } from "../../../components/MathJax";
 import type { WikiManifest } from "../types";
 
 type WikiIndexFilterProps = {
@@ -9,6 +10,9 @@ type WikiIndexFilterProps = {
 };
 
 export function WikiIndexFilter({ manifest }: WikiIndexFilterProps) {
+  const listRef = useRef<HTMLDivElement>(null);
+  const { MathJaxScript } = useMathJax(listRef);
+
   const [q, setQ] = useState("");
   const [domain, setDomain] = useState<string>("");
 
@@ -27,53 +31,61 @@ export function WikiIndexFilter({ manifest }: WikiIndexFilterProps) {
     return [...s].sort();
   }, [manifest.topics]);
 
+  // Summaries can contain TeX (e.g. \( ... \)); re-typeset after filter updates the list.
+  useEffect(() => {
+    typesetMathInSubtree(listRef.current);
+  }, [filtered]);
+
   return (
-    <div className="wiki-index-controls">
-      <div className="wiki-index-filters">
-        <label className="wiki-filter-label">
-          <span className="wiki-filter-span">Search</span>
-          <input
-            type="search"
-            className="wiki-filter-input"
-            placeholder="Title, summary, tags…"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            aria-label="Filter topics"
-          />
-        </label>
-        <label className="wiki-filter-label">
-          <span className="wiki-filter-span">Domain</span>
-          <select
-            className="wiki-filter-select"
-            value={domain}
-            onChange={(e) => setDomain(e.target.value)}
-            aria-label="Filter by domain"
-          >
-            <option value="">All</option>
-            {domains.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
-        </label>
+    <>
+      <MathJaxScript />
+      <div ref={listRef} className="wiki-index-controls">
+        <div className="wiki-index-filters">
+          <label className="wiki-filter-label">
+            <span className="wiki-filter-span">Search</span>
+            <input
+              type="search"
+              className="wiki-filter-input"
+              placeholder="Title, summary, tags…"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              aria-label="Filter topics"
+            />
+          </label>
+          <label className="wiki-filter-label">
+            <span className="wiki-filter-span">Domain</span>
+            <select
+              className="wiki-filter-select"
+              value={domain}
+              onChange={(e) => setDomain(e.target.value)}
+              aria-label="Filter by domain"
+            >
+              <option value="">All</option>
+              {domains.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <p className="wiki-index-count">
+          Showing {filtered.length} of {manifest.topics.length} topics
+        </p>
+        <ul className="wiki-topic-list">
+          {filtered.map((t) => (
+            <li key={t.slug} className="wiki-topic-list-item">
+              <Link href={`/ml/wiki/${t.slug}`} className="wiki-topic-list-link">
+                <span className="wiki-topic-list-title">{t.title}</span>
+                <span className="wiki-topic-list-meta">
+                  {t.domain} · {t.level}
+                </span>
+                <span className="wiki-topic-list-summary">{t.summary}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
-      <p className="wiki-index-count">
-        Showing {filtered.length} of {manifest.topics.length} topics
-      </p>
-      <ul className="wiki-topic-list">
-        {filtered.map((t) => (
-          <li key={t.slug} className="wiki-topic-list-item">
-            <Link href={`/ml/wiki/${t.slug}`} className="wiki-topic-list-link">
-              <span className="wiki-topic-list-title">{t.title}</span>
-              <span className="wiki-topic-list-meta">
-                {t.domain} · {t.level}
-              </span>
-              <span className="wiki-topic-list-summary">{t.summary}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    </>
   );
 }
