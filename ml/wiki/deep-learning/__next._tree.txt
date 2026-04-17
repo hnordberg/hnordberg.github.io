@@ -1,4 +1,4 @@
-:HL["/_next/static/chunks/0xwbh~njs9pmx.css","style"]
+:HL["/_next/static/chunks/14k5~rrxq59ad.css","style"]
 :HL["/_next/static/chunks/15wfqkhpg5y6g.css","style"]
 :HL["/_next/static/chunks/0f.j-ezqifxhv.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"ml","param":null,"prefetchHints":0,"slots":{"children":{"name":"wiki","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"deep-learning","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"A3jB-PVvlwMj7oGArT30j"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"ml","param":null,"prefetchHints":0,"slots":{"children":{"name":"wiki","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"deep-learning","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"TqfbFvgi7JRqRag5Pqc_j"}
