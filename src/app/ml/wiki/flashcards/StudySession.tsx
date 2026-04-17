@@ -152,7 +152,7 @@ function StudySessionInner() {
   );
 
   return (
-    <main className="wiki-main">
+    <>
       <header className="wiki-hero" style={{ marginBottom: "1.5rem" }}>
         <p className="wiki-breadcrumb">
           <Link href="/ml">Machine Learning</Link>
@@ -174,7 +174,7 @@ function StudySessionInner() {
         backHref={scope.backHref}
         backLabel={scope.backLabel}
       />
-    </main>
+    </>
   );
 }
 
@@ -182,11 +182,9 @@ export function StudySession() {
   return (
     <Suspense
       fallback={
-        <main className="wiki-main">
-          <p style={{ padding: "2rem", textAlign: "center", opacity: 0.7 }}>
-            Loading flashcards…
-          </p>
-        </main>
+        <p style={{ padding: "2rem", textAlign: "center", opacity: 0.7 }}>
+          Loading flashcards…
+        </p>
       }
     >
       <StudySessionInner />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { StudySession } from "../flashcards";
+import WikiShell from "../components/WikiShell";
 
 export const metadata: Metadata = {
   title: "Study | ML Wiki",
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function MlWikiStudyPage() {
-  return <StudySession />;
+  return (
+    <WikiShell>
+      <StudySession />
+    </WikiShell>
+  );
 }

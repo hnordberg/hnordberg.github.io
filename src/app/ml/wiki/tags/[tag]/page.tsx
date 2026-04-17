@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { collectAllTags, getTopicsForTag } from "../../lib/loadContent";
+import WikiShell from "../../components/WikiShell";
 
 type PageProps = { params: Promise<{ tag: string }> };
 
@@ -27,7 +28,7 @@ export default async function MlWikiTagPage({ params }: PageProps) {
   const rows = getTopicsForTag(decoded);
 
   return (
-    <main className="wiki-main">
+    <WikiShell>
       <header className="wiki-hero">
         <p className="wiki-breadcrumb">
           <a href="/ml">Machine Learning</a>
@@ -49,6 +50,6 @@ export default async function MlWikiTagPage({ params }: PageProps) {
           </li>
         ))}
       </ul>
-    </main>
+    </WikiShell>
   );
 }

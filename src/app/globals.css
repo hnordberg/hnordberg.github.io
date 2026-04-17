@@ -791,6 +791,50 @@ body.dark-mode .card .block-quote {
     max-width: 72rem;
 }
 
+/* Wiki shell: sidebar + content layout used on landing + section pages */
+.wiki-shell {
+    display: block;
+}
+
+.wiki-shell-content {
+    max-width: 52rem;
+    margin: 0 auto;
+    min-width: 0;
+}
+
+.wiki-shell-content--wide {
+    max-width: 72rem;
+}
+
+@media (min-width: 1200px) {
+    main.wiki-shell {
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
+        max-width: 96rem;
+        margin: 0 auto;
+    }
+
+    main.wiki-shell .wiki-shell-content {
+        flex: 1;
+        min-width: 0;
+        max-width: none;
+        margin: 0;
+    }
+}
+
+@media print {
+    main.wiki-shell {
+        display: block !important;
+    }
+
+    main.wiki-shell .wiki-shell-content {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+    }
+}
+
 .wiki-hero {
     margin-bottom: 2rem;
 }

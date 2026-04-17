@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getManifest, getPaths, getWikiCorpus } from "../../lib/loadContent";
 import { resolvePathTopics } from "../../lib/paths";
 import { PathStudyButton } from "../../flashcards";
+import WikiShell from "../../components/WikiShell";
 type PageProps = { params: Promise<{ pathSlug: string }> };
 
 export function generateStaticParams() {
@@ -35,7 +36,7 @@ export default async function MlWikiPathDetailPage({ params }: PageProps) {
     .map((t) => ({ noteId: t.slug, topicSlug: t.slug }));
 
   return (
-    <main className="wiki-main">
+    <WikiShell>
       <header className="wiki-hero">
         <p className="wiki-breadcrumb">
           <a href="/ml">Machine Learning</a>
@@ -78,6 +79,6 @@ export default async function MlWikiPathDetailPage({ params }: PageProps) {
         {" · "}
         <Link href="/ml/wiki">Wiki home</Link>
       </p>
-    </main>
+    </WikiShell>
   );
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useCallback } from 'react'
-import styles from './Contents.module.css'
+import styles from './SidebarNav.module.css'
 
 interface Article {
   id: string
@@ -65,14 +65,14 @@ export default function Contents({ articles }: ContentsProps) {
   }
 
   return (
-    <div className={styles.contents}>
-      <div className={styles.contentsTitle}>Contents</div>
-      <ul className={styles.contentsList}>
+    <div className={styles.sidebar}>
+      <div className={styles.title}>Contents</div>
+      <ul className={styles.list}>
         {articles.map((article) => (
           <li key={article.id}>
             <button
               onClick={() => handleClick(article.id)}
-              className={styles.contentsLink}
+              className={styles.link}
             >
               {article.title}
             </button>

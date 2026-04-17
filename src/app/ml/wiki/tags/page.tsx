@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { collectAllTags, getManifest } from "../lib/loadContent";
+import WikiShell from "../components/WikiShell";
 
 export const metadata: Metadata = {
   title: "ML Wiki — Tags | Henrik Nordberg",
@@ -19,7 +20,7 @@ export default function MlWikiTagsIndexPage() {
   }
 
   return (
-    <main className="wiki-main">
+    <WikiShell>
       <header className="wiki-hero">
         <p className="wiki-breadcrumb">
           <a href="/ml">Machine Learning</a>
@@ -39,6 +40,6 @@ export default function MlWikiTagsIndexPage() {
           </li>
         ))}
       </ul>
-    </main>
+    </WikiShell>
   );
 }

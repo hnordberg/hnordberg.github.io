@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getManifest, getPaths } from "../lib/loadContent";
 import { resolvePathTopics } from "../lib/paths";
+import WikiShell from "../components/WikiShell";
 
 export const metadata: Metadata = {
   title: "ML Wiki — Learning paths | Henrik Nordberg",
@@ -13,7 +14,7 @@ export default function MlWikiPathsIndexPage() {
   const manifest = getManifest();
 
   return (
-    <main className="wiki-main">
+    <WikiShell>
       <header className="wiki-hero">
         <p className="wiki-breadcrumb">
           <a href="/ml">Machine Learning</a>
@@ -44,6 +45,6 @@ export default function MlWikiPathsIndexPage() {
           );
         })}
       </ul>
-    </main>
+    </WikiShell>
   );
 }
