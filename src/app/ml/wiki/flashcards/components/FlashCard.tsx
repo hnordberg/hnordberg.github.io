@@ -158,8 +158,8 @@ export function FlashCard({
             onClick={onUndo}
             className="wiki-topic-nav-btn"
             style={{ height: "2rem", minWidth: "auto", padding: "0 0.7rem", fontSize: "0.8rem" }}
-            aria-label="Undo last rating (U)"
-            title="Undo (U)"
+            aria-label="Undo last rating"
+            title="Undo"
           >
             Undo
           </button>
@@ -176,9 +176,10 @@ export function FlashCard({
           className="wiki-topic-nav-btn"
           style={{ alignSelf: "center", padding: "0.6rem 1.75rem", height: "auto", fontSize: "0.95rem" }}
           onClick={() => setRevealed(true)}
-          aria-label="Reveal answer (Space)"
+          aria-label="Reveal answer"
         >
-          Show answer (Space)
+          Show answer
+          <span className="wiki-flashcard-kbd-hint"> (Space)</span>
         </button>
       ) : (
         <>
@@ -254,7 +255,7 @@ export function FlashCard({
                   key={r}
                   type="button"
                   onClick={() => onRate(r)}
-                  aria-label={`${label}: next in ${formatInterval(minutes)} (shortcut ${idx + 1})`}
+                  aria-label={`${label}: next in ${formatInterval(minutes)}`}
                   style={{
                     display: "flex",
                     flexDirection: "column",
@@ -279,7 +280,10 @@ export function FlashCard({
                     (e.currentTarget as HTMLButtonElement).style.transform = "";
                   }}
                 >
-                  <span style={{ fontSize: "0.65rem", opacity: 0.7, letterSpacing: "0.05em" }}>
+                  <span
+                    className="wiki-flashcard-kbd-hint"
+                    style={{ fontSize: "0.65rem", opacity: 0.7, letterSpacing: "0.05em" }}
+                  >
                     [{idx + 1}]
                   </span>
                   <span style={{ fontSize: "0.95rem" }}>{label}</span>

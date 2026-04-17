@@ -1887,3 +1887,10 @@ body.dark-mode .wiki-card-panel {
     border-radius: 4px;
     background: rgba(33, 150, 243, 0.12);
 }
+
+/* Flashcard study UI: hide keyboard shortcut hints on touch-primary viewports (typical phones). */
+@media (pointer: coarse) {
+    .wiki-flashcard-kbd-hint {
+        display: none !important;
+    }
+}

@@ -240,6 +240,7 @@ export function StudyDeck({ cards, scopeLabel, backHref, backLabel }: StudyDeckP
       />
 
       <p
+        className="wiki-flashcard-kbd-hint"
         style={{
           fontSize: "0.75rem",
           opacity: 0.55,
