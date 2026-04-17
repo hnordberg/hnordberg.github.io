@@ -35,11 +35,21 @@ export default function MlWikiPathsIndexPage() {
                 <Link href={`/ml/wiki/paths/${p.slug}`}>{p.title}</Link>
               </div>
               <div className="card-text">{p.description}</div>
-              <div className="card-title-subtitle" style={{ marginTop: "auto", paddingTop: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span>{matchedTopics.length} topics</span>
-                {p.estimatedMinutes != null ? (
-                  <span>~{p.estimatedMinutes} min</span>
-                ) : null}
+              <div style={{ marginTop: "auto", paddingTop: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.75rem" }}>
+                <div
+                  className="card-title-subtitle"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <span>{matchedTopics.length} topics</span>
+                </div>
+                <Link
+                  href={`/ml/wiki/study?path=${encodeURIComponent(p.slug)}`}
+                  className="wiki-topic-nav-btn"
+                  aria-label={`Study ${p.title} with flashcards`}
+                  style={{ padding: "0 1rem", height: "2.25rem", fontSize: "0.85rem" }}
+                >
+                  Study →
+                </Link>
               </div>
             </li>
           );

@@ -4,14 +4,6 @@ import { getManifest, getPaths, getWikiCorpus } from "./lib/loadContent";
 import { resolvePathTopics } from "./lib/paths";
 import WikiShell from "./components/WikiShell";
 
-function formatStudyTime(minutes?: number): string {
-  if (minutes == null) return "—";
-  if (minutes < 60) return `~${minutes} min`;
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  return m === 0 ? `~${h}h` : `~${h}h ${m}m`;
-}
-
 export const metadata: Metadata = {
   title: "ML Wiki | Henrik Nordberg",
   description:
@@ -29,7 +21,6 @@ export default function MlWikiIndexPage() {
     cardCount: resolvePathTopics(manifest, p).filter(
       (t) => (topicsBySlug.get(t.slug)?.sections.length ?? 0) > 0
     ).length,
-    estimatedMinutes: p.estimatedMinutes,
   }));
 
   return (
@@ -56,7 +47,7 @@ export default function MlWikiIndexPage() {
         </p>
         <table className="wiki-paths-table">
           <caption className="wiki-sr-only">
-            Learning paths with card counts and estimated study time
+            Learning paths with card counts
           </caption>
           <tbody>
             {pathRows.map((row) => (
@@ -67,9 +58,6 @@ export default function MlWikiIndexPage() {
                 <td className="wiki-paths-table-num">
                   {row.cardCount}
                   <span className="wiki-paths-table-unit"> cards</span>
-                </td>
-                <td className="wiki-paths-table-num">
-                  {formatStudyTime(row.estimatedMinutes)}
                 </td>
                 <td className="wiki-paths-table-action">
                   <Link
