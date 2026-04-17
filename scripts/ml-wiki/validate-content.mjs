@@ -460,7 +460,7 @@ function issues() {
         out.push(`paths: duplicate or missing path slug`);
       }
       pathSlugs.add(p.slug);
-      for (const ts of p.topicSlugs) {
+      for (const ts of p.topicSlugs || []) {
         if (!topicSlugs.has(ts)) {
           out.push(`Path ${p.slug}: unknown topic ${ts}`);
         }
