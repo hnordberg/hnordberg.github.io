@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import Timeline from '../../../components/Timeline'
+import Timeline from '../../components/Timeline'
 
 type InterestingEntry = {
   id: string

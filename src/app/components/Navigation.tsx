@@ -4,8 +4,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
+function isNavLinkActive(pathname: string, href: string): boolean {
+  if (href === '/') return pathname === '/' || pathname === ''
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
+
 export default function Navigation() {
-  const pathname = usePathname()
+  const pathname = usePathname() ?? ''
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const links = [
     { href: '/', label: 'Home' },
@@ -39,7 +44,7 @@ export default function Navigation() {
       <ul className={isMenuOpen ? 'menu-open' : ''}>
         {links.map(link => (
           <li key={link.href}>
-            <Link href={link.href} className={pathname === link.href ? 'active' : ''} onClick={closeMenu} >
+            <Link href={link.href} className={isNavLinkActive(pathname, link.href) ? 'active' : ''} onClick={closeMenu} >
               {link.label}
             </Link>
           </li>
