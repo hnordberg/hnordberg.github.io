@@ -7,7 +7,7 @@ import pathsJson from "../content/paths.json";
 import { resolvePathTopics, sortTopics } from "../lib/paths";
 import { useWikiProgress } from "./useWikiProgress";
 import type { WikiPathsFile } from "../types";
-import { useMathJax } from "../../../components/MathJax";
+import { typesetMathInSubtree, useMathJax } from "../../../components/MathJax";
 import type { WikiManifest, WikiTopic, WikiTopicIndexEntry } from "../types";
 import { buildTitleBySlug } from "./TopicRelations";
 import { SectionBlock } from "./SectionBlock";
@@ -76,6 +76,11 @@ export function WikiTopicClient({ topic, manifest }: WikiTopicClientProps) {
       document.body.style.overflow = prev;
     };
   }, [infoOpen]);
+
+  /** Re-typeset after topic HTML updates; `useMathJax` only runs once per mount — client navigations reuse this component. */
+  useEffect(() => {
+    typesetMathInSubtree(mathRef.current);
+  }, [topic.slug]);
 
   return (
     <>
