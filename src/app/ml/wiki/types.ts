@@ -126,7 +126,7 @@ export type WikiManifest = {
 export interface PathCriteria {
   includeTags: string[]; // Let's interpret this as OR (matching 'or' user preference)
   excludeTags?: string[];
-  levels?: ("intro" | "basic" | "intermediate" | "advanced")[];
+  levels?: WikiLevel[];
 }
 
 export type WikiLearningPath = {

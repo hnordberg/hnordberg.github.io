@@ -3,8 +3,9 @@ import type { WikiManifest, WikiTopicIndexEntry, WikiLearningPath } from "../typ
 const LEVEL_WEIGHTS: Record<string, number> = {
   intro: 1,
   basic: 2,
-  intermediate: 3,
-  advanced: 4,
+  foundational: 3,
+  intermediate: 4,
+  advanced: 5,
 };
 
 export function sortTopics(topics: WikiTopicIndexEntry[]): WikiTopicIndexEntry[] {
