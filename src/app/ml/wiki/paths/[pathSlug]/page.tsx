@@ -5,6 +5,7 @@ import { getManifest, getPaths, getWikiCorpus } from "../../lib/loadContent";
 import { resolvePathTopics } from "../../lib/paths";
 import { PathStudyButton } from "../../flashcards";
 import WikiShell from "../../components/WikiShell";
+import { WikiPathSteps } from "../../components/WikiPathSteps";
 type PageProps = { params: Promise<{ pathSlug: string }> };
 
 export function generateStaticParams() {
@@ -54,25 +55,7 @@ export default async function MlWikiPathDetailPage({ params }: PageProps) {
 
       <PathStudyButton pathSlug={path.slug} candidates={pathCandidates} />
 
-      <ol className="wiki-path-steps" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderLeft: '2px solid var(--color-base-300)', paddingLeft: '1.5rem', marginLeft: '1rem' }}>
-        {matchedTopics.map((topic, i) => {
-          const slug = topic.slug;
-          return (
-            <li key={slug} className="wiki-path-step card" style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', left: '-2.2rem', top: '1.5rem', width: '1rem', height: '1rem', borderRadius: '50%', backgroundColor: 'var(--color-primary-500)', border: '2px solid var(--color-bg)' }} />
-              <div className="wiki-path-step-num" style={{ fontSize: '0.85rem', color: 'var(--color-base-500)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                Step {i + 1}
-              </div>
-              <div className="card-title">
-                <Link href={`/ml/wiki/${slug}?path=${path.slug}`}>{topic.title}</Link>
-              </div>
-              <div className="card-text">
-                {topic.summary}
-              </div>
-            </li>
-          );
-        })}
-      </ol>
+      <WikiPathSteps pathSlug={path.slug} topics={matchedTopics} />
 
       <p className="wiki-path-footer">
         <Link href="/ml/wiki/paths">All paths</Link>
