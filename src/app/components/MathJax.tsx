@@ -17,6 +17,8 @@ const MATHJAX_SRC =
 type MathJaxGlobal = {
   version?: string;
   typesetPromise?: (nodes: HTMLElement[]) => Promise<unknown>;
+  /** Removes rendered math under nodes so React-updated DOM can be typeset again without stale offsets. */
+  typesetClear?: (nodes: HTMLElement[]) => void;
   tex?: typeof defaultMathJaxConfig.tex;
   svg?: typeof defaultMathJaxConfig.svg;
   startup?: {
@@ -61,6 +63,28 @@ export function configureMathJax(
 }
 
 /**
+ * Clear previous MathJax output under `roots`, then typeset. Clearing is required
+ * whenever React replaces or mutates text under a subtree that was already
+ * typeset — otherwise MathJax may call `splitText` at stale offsets
+ * (`IndexSizeError`).
+ */
+function typesetAfterClear(
+  mj: MathJaxGlobal,
+  roots: HTMLElement[],
+  onError?: (err: unknown) => void
+): void {
+  const nodes = roots.filter(Boolean);
+  if (nodes.length === 0 || !mj.typesetPromise) return;
+  if (typeof mj.typesetClear === "function") {
+    mj.typesetClear(nodes);
+  }
+  void mj.typesetPromise(nodes).catch((err: unknown) => {
+    if (onError) onError(err);
+    else console.error("MathJax typeset error:", err);
+  });
+}
+
+/**
  * Typeset TeX delimiters inside `root` only. Does not use the one-shot guard in
  * {@link useMathJax}, so it is safe to call when new HTML (e.g. a collapsible
  * answer) mounts after the initial article pass.
@@ -71,9 +95,7 @@ export function typesetMathInSubtree(root: HTMLElement | null): void {
   const run = () => {
     const mj = w.MathJax;
     if (!mj?.typesetPromise) return;
-    void mj.typesetPromise([root]).catch((err: unknown) => {
-      console.error("MathJax typeset error:", err);
-    });
+    typesetAfterClear(mj, [root]);
   };
   const mj = w.MathJax;
   if (mj?.typesetPromise) {
@@ -100,7 +122,7 @@ function typeset(
   const MathJax = (window as MathJaxWindow).MathJax;
   if (!MathJax?.typesetPromise || !containerRef.current) return;
   hasRenderedRef.current = true;
-  MathJax.typesetPromise([containerRef.current]).catch((err: unknown) => {
+  typesetAfterClear(MathJax, [containerRef.current], (err: unknown) => {
     hasRenderedRef.current = false;
     console.error("MathJax typeset error:", err);
   });
