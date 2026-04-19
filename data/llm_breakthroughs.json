@@ -1186,6 +1186,7 @@
     ],
     "description": "LLaMA showed that carefully trained smaller foundation models could compete strongly with much larger systems, and its release catalyzed the open-weight LLM ecosystem. It accelerated research on fine-tuning, alignment, evaluation, and local deployment by giving the community a strong accessible base model family. In practice, it was a major inflection point for open LLM development.",
     "citations": 18300,
+    "icon": "ml/meta.png",
     "details": "To reproduce the main LLaMA lesson, focus on data quality and training discipline rather than only model size. Train decoder-only transformers on a large, cleaned corpus with efficient tokenization, long schedules, and stable optimization. The important downstream implication is ecosystem-level: once a strong base model is available, adapter tuning, quantization, safety work, and domain specialization progress much faster because many groups can iterate on the same backbone. Evaluate not only raw benchmark accuracy but also the extent to which the model unlocks follow-on work.",
     "controversialness": 5,
     "controversialReason": "Extremely influential, but the leak and the downstream misuse debate made its release unusually contentious for an open-weight foundation model."
