@@ -16416,7 +16416,7 @@
         "red-teaming"
       ],
       "related": [
-        "jailbreak-in-context-of-llms",
+        "what-is-a-jailbreak-in-the-context-of-llms",
         "adversarial-prompting",
         "refusal-training-harmlessness-objectives",
         "model-context-protocol-mcp"
