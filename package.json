@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "ml-wiki:validate": "node scripts/ml-wiki/validate-content.mjs",
+    "llm-studies:validate": "node scripts/llm-papers/validate-studies.mjs",
     "ml-wiki:seed-five": "node scripts/ml-wiki/seed-five-notes.mjs",
     "ml-wiki:import-batch": "node scripts/ml-wiki/import-anki-batch.mjs",
     "ml-wiki:import-batch-loop": "node scripts/ml-wiki/import-batch-loop.mjs"
