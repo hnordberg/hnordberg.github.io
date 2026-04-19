@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { typesetMathInSubtree } from "../../../../components/MathJax";
+import { ReportIssueModal } from "./ReportIssueModal";
 import { formatInterval, nextIntervals } from "../lib/scheduler";
 import {
   RATING_AGAIN,
@@ -37,6 +38,8 @@ type FlashCardProps = {
   onRate(rating: Rating): void;
   onUndo?: () => void;
   canUndo?: boolean;
+  siteKey: string;
+  submitUrl: string | null;
 };
 
 const RATING_KEYS: Record<string, Rating> = {
@@ -63,9 +66,12 @@ export function FlashCard({
   onRate,
   onUndo,
   canUndo,
+  siteKey,
+  submitUrl,
 }: FlashCardProps) {
   const [revealed, setRevealed] = useState(false);
   const [extraOpen, setExtraOpen] = useState(false);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
   const promptRef = useRef<HTMLDivElement>(null);
   const answerRef = useRef<HTMLDivElement>(null);
   const extraRef = useRef<HTMLDivElement>(null);
@@ -164,7 +170,26 @@ export function FlashCard({
             Undo
           </button>
         ) : null}
+        <button
+          type="button"
+          onClick={() => setReportModalOpen(true)}
+          className="wiki-topic-nav-btn wiki-topic-nav-btn--ghost"
+          style={{ height: "2rem", minWidth: "auto", padding: "0 0.7rem", fontSize: "0.8rem", opacity: 0.7 }}
+          aria-label="Report error or suggest change for this card"
+          title="Report error or suggest change"
+        >
+          Report issue
+        </button>
       </div>
+
+      <ReportIssueModal 
+        isOpen={reportModalOpen}
+        onClose={() => setReportModalOpen(false)}
+        siteKey={siteKey}
+        submitUrl={submitUrl}
+        topicSlug={card.topicSlug}
+        topicTitle={card.topicTitle}
+      />
 
       <div ref={promptRef} style={{ fontSize: "1.35rem", lineHeight: 1.35, fontWeight: 600 }}>
         {card.prompt}
