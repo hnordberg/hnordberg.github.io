@@ -1,1 +1,0 @@
-self.__SSG_MANIFEST=new Set(["\u002Fml\u002Fllm\u002Fstudy\u002F[id]","\u002Fml\u002Fwiki\u002F[slug]","\u002Fml\u002Fwiki\u002Fpaths\u002F[pathSlug]","\u002Fml\u002Fwiki\u002Ftags\u002F[tag]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
