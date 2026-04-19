@@ -50,6 +50,17 @@ const LLMPapersPage = () => {
   const timelineContent = fs.readFileSync(timelinePath, 'utf8')
   const timeline = JSON.parse(timelineContent) as TimelineEntry[]
 
+  const studiesDir = path.join(process.cwd(), 'src/app/ml/llm/content/studies')
+  const availableStudies = new Set<string>()
+  if (fs.existsSync(studiesDir)) {
+    const files = fs.readdirSync(studiesDir)
+    for (const file of files) {
+      if (file.endsWith('.json')) {
+        availableStudies.add(file.replace('.json', ''))
+      }
+    }
+  }
+
   const rankedByCitations = [...timeline]
     .sort((a, b) => (a.citations ?? 0) - (b.citations ?? 0))
     .map((entry, index) => [entry.id, index] as const)
@@ -58,6 +69,7 @@ const LLMPapersPage = () => {
   const timelineWithImpact = timeline.map((entry) => ({
     ...entry,
     impactScore: computeImpactScore(entry, rankById, timeline.length),
+    hasStudy: availableStudies.has(entry.id),
   }))
 
   return (

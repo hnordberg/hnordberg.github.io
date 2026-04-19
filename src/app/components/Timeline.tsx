@@ -18,6 +18,7 @@ type Entry = {
   icon?: string; // filename inside public/img, e.g. 'jgi.webp'
   citations?: number;
   impactScore?: number;
+  hasStudy?: boolean;
 };
 
 const numberFormatter = new Intl.NumberFormat('en-US');
@@ -287,19 +288,29 @@ export default function Timeline({
                     )}
                   </div>
                   <div className={`relative z-20 text-box rounded-lg shadow w-full ${styles.card}`}>
-                    { item.details && <button
+                    <div className="absolute top-3 right-3 flex gap-2">
+                      {item.hasStudy && (
+                        <a
+                          href={`/ml/llm/study/${item.id}`}
+                          className="text-xs font-medium px-2 py-1 rounded transition-colors flex items-center gap-1 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30"
+                          aria-label={`Study ${item.title}`}
+                        >
+                          Study Topic <span aria-hidden="true">&rarr;</span>
+                        </a>
+                      )}
+                      <button
                         type="button"
                         onClick={() => handleOpenDetails(item)}
-                        className={`absolute top-3 right-3 text-xs font-medium px-2 py-1 rounded transition-colors ${
+                        className={`text-xs font-medium px-2 py-1 rounded transition-colors ${
                           item.details
                             ? 'text-sky-600 dark:text-sky-400 border border-sky-200 dark:border-sky-800 hover:bg-sky-50 dark:hover:bg-slate-900'
-                            : 'text-gray-400 border border-gray-200 cursor-not-allowed'
+                            : 'text-gray-400 border border-gray-200 cursor-not-allowed hidden'
                         }`}
                         aria-label={item.details ? `View more details for ${item.title}` : `Details not available for ${item.title}`}
                       >
                         Details
                       </button>
-                    }
+                    </div>
                     <h3 className="font-semibold text-lg">{item.title}</h3>
                     {item.org && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{item.org}</p>}
                     {item.authors && item.authors.length > 0 && <ExpandableAuthors authors={item.authors} />}

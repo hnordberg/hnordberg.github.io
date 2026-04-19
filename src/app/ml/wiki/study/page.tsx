@@ -9,9 +9,12 @@ export const metadata: Metadata = {
 };
 
 export default function MlWikiStudyPage() {
+  const siteKey = process.env.CLOUDFLARE_SITE_KEY ?? "";
+  const submitUrl = process.env.NEXT_PUBLIC_WIKI_SUGGEST_URL ?? null;
+
   return (
     <WikiShell>
-      <StudySession />
+      <StudySession siteKey={siteKey} submitUrl={submitUrl} />
     </WikiShell>
   );
 }

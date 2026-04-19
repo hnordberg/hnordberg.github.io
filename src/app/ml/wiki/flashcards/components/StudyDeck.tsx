@@ -23,6 +23,8 @@ type StudyDeckProps = {
   /** Optional "Back to X" link shown in the empty/done state. */
   backHref?: string;
   backLabel?: string;
+  siteKey: string;
+  submitUrl: string | null;
 };
 
 type SessionStats = {
@@ -31,7 +33,7 @@ type SessionStats = {
   startedAt: number;
 };
 
-export function StudyDeck({ cards, scopeLabel, backHref, backLabel }: StudyDeckProps) {
+export function StudyDeck({ cards, scopeLabel, backHref, backLabel, siteKey, submitUrl }: StudyDeckProps) {
   const srs = useSrs();
   const containerRef = useRef<HTMLDivElement>(null);
   const { MathJaxScript } = useMathJax(containerRef);
@@ -237,6 +239,8 @@ export function StudyDeck({ cards, scopeLabel, backHref, backLabel }: StudyDeckP
         onRate={handleRate}
         onUndo={handleUndo}
         canUndo={srs.canUndo}
+        siteKey={siteKey}
+        submitUrl={submitUrl}
       />
 
       <p

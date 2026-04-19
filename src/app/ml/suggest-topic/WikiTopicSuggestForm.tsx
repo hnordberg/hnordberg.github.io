@@ -5,6 +5,10 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 type Props = {
   siteKey: string;
   submitUrl: string | null;
+  initialTopic?: string;
+  initialNotes?: string;
+  onSuccess?: () => void;
+  onCancel?: () => void;
 };
 
 declare global {
@@ -25,12 +29,12 @@ declare global {
   }
 }
 
-export default function WikiTopicSuggestForm({ siteKey, submitUrl }: Props) {
+export default function WikiTopicSuggestForm({ siteKey, submitUrl, initialTopic = "", initialNotes = "", onSuccess, onCancel }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [topic, setTopic] = useState("");
-  const [notes, setNotes] = useState("");
+  const [topic, setTopic] = useState(initialTopic);
+  const [notes, setNotes] = useState(initialNotes);
   const [contact, setContact] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">(
     "idle"
@@ -150,6 +154,7 @@ export default function WikiTopicSuggestForm({ siteKey, submitUrl }: Props) {
       }
       setToken(null);
       setStatus("ok");
+      onSuccess?.();
     } catch (err) {
       setStatus("error");
       setErrorMessage(
@@ -238,7 +243,7 @@ export default function WikiTopicSuggestForm({ siteKey, submitUrl }: Props) {
         </p>
       )}
 
-      <div className="wiki-suggest-actions">
+      <div className="wiki-suggest-actions" style={{ display: "flex", gap: "0.5rem" }}>
         <button
           type="submit"
           className="wiki-topic-nav-btn"
@@ -246,6 +251,15 @@ export default function WikiTopicSuggestForm({ siteKey, submitUrl }: Props) {
         >
           {status === "sending" ? "Sending…" : "Send suggestion"}
         </button>
+        {onCancel && (
+          <button
+            type="button"
+            className="wiki-topic-nav-btn wiki-topic-nav-btn--ghost"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+        )}
         {status === "ok" && (
           <button
             type="button"

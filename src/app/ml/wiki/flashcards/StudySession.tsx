@@ -140,7 +140,7 @@ function resolveScope(
   };
 }
 
-function StudySessionInner() {
+function StudySessionInner({ siteKey, submitUrl }: { siteKey: string, submitUrl: string | null }) {
   const searchParams = useSearchParams();
   const pathSlug = searchParams?.get("path") ?? null;
   const tag = searchParams?.get("tag") ?? null;
@@ -173,12 +173,14 @@ function StudySessionInner() {
         scopeLabel={scope.label}
         backHref={scope.backHref}
         backLabel={scope.backLabel}
+        siteKey={siteKey}
+        submitUrl={submitUrl}
       />
     </>
   );
 }
 
-export function StudySession() {
+export function StudySession({ siteKey, submitUrl }: { siteKey: string, submitUrl: string | null }) {
   return (
     <Suspense
       fallback={
@@ -187,7 +189,7 @@ export function StudySession() {
         </p>
       }
     >
-      <StudySessionInner />
+      <StudySessionInner siteKey={siteKey} submitUrl={submitUrl} />
     </Suspense>
   );
 }
