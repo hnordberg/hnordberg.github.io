@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:is(.dark-mode *));
 
 :root {
     --background-color-dark: #121212;
@@ -418,6 +419,12 @@ footer {
     text-align: center;
     padding: 1rem;
     margin-top: 2rem;
+}
+
+.cf-turnstile-footer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
 }
 
 /* Theme Switch Styles */
@@ -875,6 +882,104 @@ body.dark-mode .wiki-lead {
 .wiki-muted {
     opacity: 0.75;
     font-size: 0.9rem;
+}
+
+.wiki-code-inline {
+    font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+    font-size: 0.88em;
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.06);
+}
+
+body.dark-mode .wiki-code-inline {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.wiki-suggest-section {
+    margin-top: 1rem;
+    max-width: 42rem;
+}
+
+.wiki-suggest-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.wiki-suggest-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.wiki-suggest-input,
+.wiki-suggest-textarea {
+    padding: 0.55rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    font-weight: 400;
+    background: var(--card-background-light);
+    color: var(--text-color-light);
+}
+
+body.dark-mode .wiki-suggest-input,
+body.dark-mode .wiki-suggest-textarea {
+    border-color: #444;
+    background: var(--card-background-dark);
+    color: var(--text-color-dark);
+}
+
+.wiki-suggest-textarea {
+    resize: vertical;
+    min-height: 8rem;
+    line-height: 1.5;
+    font-family: inherit;
+}
+
+.wiki-suggest-error {
+    color: #c62828;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+body.dark-mode .wiki-suggest-error {
+    color: #ef9a9a;
+}
+
+.wiki-suggest-success {
+    color: #2e7d32;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+body.dark-mode .wiki-suggest-success {
+    color: #a5d6a7;
+}
+
+.wiki-suggest-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.wiki-suggest-actions .wiki-topic-nav-btn {
+    min-width: auto;
+    height: auto;
+    padding: 0.5rem 1rem;
+}
+
+.wiki-topic-nav-btn--ghost {
+    border-color: rgba(120, 120, 120, 0.45);
+    background: transparent;
+}
+
+body.dark-mode .wiki-topic-nav-btn--ghost {
+    border-color: rgba(180, 180, 180, 0.35);
 }
 
 .wiki-hub-links {
