@@ -67,10 +67,12 @@ export default {
     }
 
     const payload = {
-      topic,
-      notes,
-      contact,
-      at: new Date().toISOString(),
+      fields: {
+        topic: { stringValue: topic },
+        notes: { stringValue: notes },
+        contact: { stringValue: contact },
+        at: { timestampValue: new Date().toISOString() }
+      }
     };
 
     if (env.WEBHOOK_URL) {
