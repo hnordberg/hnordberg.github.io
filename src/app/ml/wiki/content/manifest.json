@@ -15523,6 +15523,1052 @@
       ],
       "updatedAt": "2026-04-18",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "long-context-data-recipes",
+      "title": "Long-Context Data Recipes (RULER, Needle Variants)",
+      "summary": "Extending effective context beyond 128k requires (a) RoPE-scaling or position-interpolation to keep positional encodings sane, (b) a continued-pretraining dataset with real long documents and synthetic stitched tasks, and (c) evaluation beyond simple needle-in-a-haystack — RULER adds multi-needle, multi-hop, and aggregation subtasks that expose superficial-match shortcuts.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "nlp",
+        "product",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "long-context-pretraining",
+        "rotary-positional-embedding-rope",
+        "yarn-ntk-aware-rope-scaling",
+        "continual-pretraining-mid-training"
+      ],
+      "related": [
+        "needle-in-a-haystack",
+        "ring-attention-context-parallel",
+        "attention-sinks-streamingllm"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "tokenizer-training-dynamics",
+      "title": "Tokenizer Training Dynamics & Vocab Sizing",
+      "summary": "Larger vocab cuts sequence length but inflates embedding / output-softmax compute and fragments rare tokens; too-small vocab over-segments rare words and domain tokens. Choice interacts with data mixture (code needs special tokens), tokenizer algorithm (BPE vs unigram), and downstream compute budget. Getting it wrong costs 5–15% quality.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "nlp",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "byte-pair-encoding-bpe",
+        "wordpiece-unigram-sentencepiece-tokenization",
+        "tokenization",
+        "embedding-layer"
+      ],
+      "related": [
+        "vocabulary-size",
+        "pretraining-corpus",
+        "data-curation-quality-filters"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "orpo-odds-ratio-preference-optimization",
+      "title": "ORPO (Odds-Ratio Preference Optimization)",
+      "summary": "A reference-model-free preference-optimisation objective that combines SFT and preference learning in one loss: \\( \\mathcal{L}_{\\text{ORPO}} = \\mathcal{L}_{\\text{SFT}} - \\lambda \\log \\sigma(\\log \\text{odds}(y_w) - \\log \\text{odds}(y_l)) \\). Eliminates DPO's reference-model requirement, halving training memory.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "nlp",
+        "path-transformer-llm",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "direct-preference-optimization-dpo",
+        "preference-based-alignment",
+        "supervised-fine-tuning-sft"
+      ],
+      "related": [
+        "simpo-simple-preference-optimization",
+        "ipo-identity-preference-optimization",
+        "kto-kahneman-tversky-optimization"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "simpo-simple-preference-optimization",
+      "title": "SimPO (Simple Preference Optimization)",
+      "summary": "Reference-free preference objective that replaces DPO's reference ratio with a length-normalised policy log-likelihood: \\( r(x, y) = \\log \\pi_\\theta(y\\mid x) / |y| \\). Adds a margin \\( \\gamma \\) to the preferred response. Simpler than DPO, matches or beats it, and length-normalisation reduces verbosity exploitation.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "nlp",
+        "path-transformer-llm",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "direct-preference-optimization-dpo",
+        "orpo-odds-ratio-preference-optimization",
+        "preference-based-alignment"
+      ],
+      "related": [
+        "ipo-identity-preference-optimization",
+        "rlaif-rl-from-ai-feedback",
+        "kto-kahneman-tversky-optimization"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "ipo-identity-preference-optimization",
+      "title": "IPO (Identity Preference Optimization)",
+      "summary": "Replaces DPO's sigmoid objective with a squared-error criterion on preference probabilities: \\( \\mathcal{L}_{\\text{IPO}} = \\mathbb{E}[(h_\\theta(y_w, y_l) - 1/(2\\beta))^2] \\). Prevents DPO's tendency to over-separate preferred and rejected responses on easy pairs, reducing overfitting and improving generalisation.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "theory",
+        "path-transformer-llm",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "direct-preference-optimization-dpo",
+        "preference-based-alignment",
+        "cross-entropy"
+      ],
+      "related": [
+        "orpo-odds-ratio-preference-optimization",
+        "simpo-simple-preference-optimization",
+        "kto-kahneman-tversky-optimization"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "rlvr-rl-verifiable-rewards",
+      "title": "RLVR: RL from Verifiable Rewards",
+      "summary": "Train a reasoning policy with pure RL signals from tasks whose answers are automatically verifiable — math (exact match), code (unit-test execution), proof (checker), chess (engine eval). No preference model needed. The method behind DeepSeek-R1-Zero and the o1-style long-CoT reasoning families.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "nlp",
+        "reinforcement",
+        "path-alignment",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "grpo-group-relative-policy-optimization",
+        "proximal-policy-optimization-ppo",
+        "reasoning-models-long-cot"
+      ],
+      "related": [
+        "process-reward-models-vs-outcome-reward-models",
+        "self-rewarding-language-models",
+        "process-supervision"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "reward-hacking-specification-gaming-rlhf",
+      "title": "Reward Hacking & Specification Gaming in RLHF",
+      "summary": "When a learned reward model is a proxy for human preference, RL optimisation finds adversarial inputs that maximise reward without matching the true objective — verbose apologies, sycophancy, confident wrong answers, format exploitation. Goodhart's law in practice. Mitigations range from KL penalty and reward normalisation to process supervision and debate.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "nlp",
+        "reinforcement",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "goodharts-law-and-specification-gaming",
+        "reinforcement-learning-from-human-feedback-rlhf",
+        "reward-model"
+      ],
+      "related": [
+        "process-reward-models-vs-outcome-reward-models",
+        "kl-divergence-penalty-in-rlhf",
+        "constitutional-ai",
+        "rlvr-rl-verifiable-rewards"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "refusal-training-harmlessness-objectives",
+      "title": "Refusal Training & Harmlessness Objectives",
+      "summary": "Teach a model to decline unsafe or out-of-policy queries while remaining helpful on benign ones. Typical recipe: SFT on curated refusal examples, preference optimisation with harm-labelled pairs, red-team-driven iteration. Badly done, this causes over-refusal (the 'brittle helpfulness' regime); done well, it achieves high refusal rate with minimal utility loss.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "path-alignment",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "safety-alignment",
+        "instruction-tuning",
+        "reinforcement-learning-from-human-feedback-rlhf"
+      ],
+      "related": [
+        "red-teaming",
+        "constitutional-ai",
+        "representation-engineering-refusal-direction"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "graph-of-thoughts",
+      "title": "Graph of Thoughts",
+      "summary": "Generalises chain-of-thought and tree-of-thought to an arbitrary DAG of reasoning nodes, each produced by a prompt. Enables aggregation (merge parallel solutions), refinement loops, and reuse of intermediate results. Useful for problems where branch-and-combine dominates (sorting, constraint satisfaction, multi-step planning).",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "tree-of-thought",
+        "chain-of-thought",
+        "self-consistency"
+      ],
+      "related": [
+        "react-reason-act",
+        "self-refine-reflexion",
+        "mcts-for-llm-reasoning"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "toolformer-learned-tool-use",
+      "title": "Toolformer & Learned Tool Use",
+      "summary": "Trains a language model to decide <i>when</i> to call external tools and <i>what</i> arguments to pass via self-supervised fine-tuning. The model generates candidate API calls, filters them by whether the result reduces perplexity of the continuation, and fine-tunes on the winners. Parent of modern tool-calling agents.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "nlp",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "function-calling",
+        "supervised-fine-tuning-sft",
+        "prompt-engineering"
+      ],
+      "related": [
+        "react-reason-act",
+        "agent-benchmarks-swe-gaia-webarena",
+        "tool-use-function-calling-benchmarks"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "plan-and-solve-prompting",
+      "title": "Plan-and-Solve Prompting",
+      "summary": "Two-stage prompt pattern: first ask the model to produce a plan (step-by-step outline), then execute the plan step by step. Improves over naive zero-shot CoT on arithmetic and multi-hop reasoning by forcing explicit decomposition. Contrasts with ReAct's interleaved thought-action loop.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "chain-of-thought",
+        "prompt-engineering",
+        "zero-shot-learning"
+      ],
+      "related": [
+        "react-reason-act",
+        "tree-of-thought",
+        "self-consistency"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "constrained-decoding-grammars",
+      "title": "Constrained Decoding: Grammars, JSON Mode, Regex",
+      "summary": "At each decoding step, mask out tokens that would lead to grammar or schema violations, keeping only compliant next-tokens. Guarantees output is valid JSON / XML / regex-matching / grammar-accepted. Implemented via pushdown automata or FSM tracking; used in OpenAI JSON mode, Outlines, llama.cpp's GBNF.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "nlp",
+        "product",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "sampling-in-language-models",
+        "tokenization",
+        "logit-adjustment"
+      ],
+      "related": [
+        "function-calling",
+        "beam-search",
+        "greedy-decoding"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "model-context-protocol-mcp",
+      "title": "Model Context Protocol (MCP)",
+      "summary": "Anthropic-initiated open standard for connecting LLM agents to external tools, data sources, and services via a uniform JSON-RPC interface. Separates 'what tools does this agent have' from 'which model is running' — any MCP-aware client can load any MCP server, without provider lock-in.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "nlp",
+        "product",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "function-calling",
+        "toolformer-learned-tool-use",
+        "prompt-engineering"
+      ],
+      "related": [
+        "react-reason-act",
+        "agent-benchmarks-swe-gaia-webarena",
+        "tool-use-function-calling-benchmarks"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "agentic-multi-agent-orchestration",
+      "title": "Agentic Workflows & Multi-Agent Orchestration",
+      "summary": "Systems that compose multiple LLM calls — planner, executor, critic, tool-user — into an end-to-end workflow. Patterns range from ReAct loops to fixed DAGs (LangGraph) to role-playing ensembles (AutoGPT, BabyAGI). Success requires careful handoff design, termination criteria, and cost control.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "product",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "react-reason-act",
+        "model-context-protocol-mcp",
+        "function-calling"
+      ],
+      "related": [
+        "tree-of-thought",
+        "graph-of-thoughts",
+        "debate-and-amplification"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "flashattention-2-3",
+      "title": "FlashAttention-2 and FlashAttention-3",
+      "summary": "Two successor designs to the original FlashAttention's tiled softmax. FA-2 reorders loops to parallelise better across GPU warps and removes redundant mask/rescaling work, halving wall-clock latency. FA-3 (Hopper / H100) uses asynchronous warp-specialised pipelines, FP8 / multi-precision, and TMAs to push attention past 80% of peak.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "implementation",
+        "ml",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "flashattention",
+        "self-attention",
+        "tensor-cores-gemm-fundamentals"
+      ],
+      "related": [
+        "xformers-memory-efficient-attention",
+        "pagedattention",
+        "ring-attention-context-parallel"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "medusa-eagle-speculative-heads",
+      "title": "Medusa & EAGLE Speculative-Decoding Heads",
+      "summary": "Speculative decoding with learned draft heads instead of a separate draft model. Medusa adds \\( K \\) small lightweight heads on the base model predicting future tokens; the base verifies tree-hypotheses in one forward pass. EAGLE models the residual stream directly and achieves 3–4× speedup with a tiny draft network.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "implementation",
+        "ml",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "speculative-decoding",
+        "sampling-in-language-models",
+        "key-value-kv-caching"
+      ],
+      "related": [
+        "lookahead-decoding",
+        "vllm-continuous-batching",
+        "rejection-sampling-fine-tuning-rft"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "lookahead-decoding",
+      "title": "Lookahead Decoding",
+      "summary": "Exact speculative-like decoding without any draft model: maintain a running n-gram 'Jacobi window' that proposes multiple tokens ahead in parallel; verify in one pass. Lossless — outputs match greedy decoding exactly — and requires no extra training. Trades increased per-step compute for fewer sequential steps.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "speculative-decoding",
+        "greedy-decoding",
+        "key-value-kv-caching"
+      ],
+      "related": [
+        "medusa-eagle-speculative-heads",
+        "beam-search",
+        "disaggregated-prefill-decode-serving"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "radix-prefix-cache-attention",
+      "title": "Radix / Prefix-Cache Attention (SGLang)",
+      "summary": "Share the KV cache across requests that start with a common prompt prefix. Store prefix trees keyed by token sequence; on a new request, find the longest matching prefix in the cache and reuse it. Cuts prefill latency and memory use for chat applications with shared system prompts or few-shot contexts.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "product",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "key-value-kv-caching",
+        "paged-vs-block-kv-cache",
+        "pagedattention"
+      ],
+      "related": [
+        "vllm-continuous-batching",
+        "flashattention-2-3",
+        "disaggregated-prefill-decode-serving"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "quantized-kv-cache",
+      "title": "Quantized KV Cache (int4 / int8 / KIVI)",
+      "summary": "Store the KV cache at lower precision — int8 or int4 — instead of fp16. Halves or quarters the memory footprint of long contexts at negligible quality cost. Different quantisation per key / value (K usually int8, V int4 via grouping) and per-head asymmetric scales are the main tricks.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "attention",
+        "implementation",
+        "ml",
+        "product",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "key-value-kv-caching",
+        "quantization",
+        "post-training-quantization-ptq"
+      ],
+      "related": [
+        "kv-cache-compression-h2o-snapkv",
+        "pagedattention",
+        "attention-sinks-streamingllm"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "continuous-vs-static-batching",
+      "title": "Continuous vs Static Batching",
+      "summary": "Static batching groups requests before a forward pass and runs them to completion together — tail latency is set by the slowest request. Continuous batching (Orca, vLLM) evicts finished requests mid-step and admits new ones each iteration, keeping GPU utilisation high and tail latency bounded. Default in production LLM serving.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "product",
+        "path-scaling-advanced",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "vllm-continuous-batching",
+        "key-value-kv-caching",
+        "pagedattention"
+      ],
+      "related": [
+        "radix-prefix-cache-attention",
+        "disaggregated-prefill-decode-serving",
+        "chunked-prefill"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "transcoders-sparse-crosscoders",
+      "title": "Transcoders & Sparse Crosscoders",
+      "summary": "Sparse-autoencoder successors that aim to factor out interpretable features across layers (crosscoders) or to predict one layer's activations from another's sparsified dictionary (transcoders). Central to modern mechanistic interpretability of large LLMs.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-alignment",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "sparse-autoencoder-mechanistic-interpretability",
+        "superposition-neural-networks",
+        "monosemanticity-sae-features"
+      ],
+      "related": [
+        "mechanistic-interpretability",
+        "circuit-analysis",
+        "activation-patching"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "causal-scrubbing-mediation-analysis",
+      "title": "Causal Scrubbing & Mediation Analysis",
+      "summary": "Rigorous protocols for validating interpretability hypotheses. Causal scrubbing replaces the hypothesised-irrelevant computations with samples from a distribution that should preserve the output; mediation analysis tests whether a candidate component mediates the causal effect of an input on an output. Tools for turning 'this feature looks meaningful' into falsifiable claims.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "mechanistic-interpretability",
+        "activation-patching",
+        "circuit-analysis"
+      ],
+      "related": [
+        "transcoders-sparse-crosscoders",
+        "steering-vectors",
+        "rome-memit-model-editing"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "circuit-discovery-pipelines",
+      "title": "Circuit Discovery Pipelines (ACDC, Attribution Patching)",
+      "summary": "Automated methods to locate the minimal sub-graph of attention heads and MLP components responsible for a given behaviour. ACDC greedily ablates edges in a causal graph, keeping only those whose removal degrades the behaviour; attribution patching approximates this with a single forward-backward pass per hypothesis.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "activation-patching",
+        "mechanistic-interpretability",
+        "causal-scrubbing-mediation-analysis"
+      ],
+      "related": [
+        "induction-heads",
+        "rome-memit-model-editing",
+        "transcoders-sparse-crosscoders"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "representation-engineering-refusal-direction",
+      "title": "Representation Engineering & the Refusal Direction",
+      "summary": "Shift model behaviour by directly manipulating residual-stream activations along interpretable directions. The 'refusal direction' (Arditi et al. 2024) is a single direction in activation space whose ablation jailbreaks open-weight chat models, and whose injection forces refusal — evidence that safety training installs a shallow, targeted feature.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "steering-vectors",
+        "mechanistic-interpretability",
+        "refusal-training-harmlessness-objectives"
+      ],
+      "related": [
+        "activation-patching",
+        "circuit-discovery-pipelines",
+        "concept-erasure-null-space-projection"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "concept-erasure-null-space-projection",
+      "title": "Concept Erasure & Null-Space Projection",
+      "summary": "Remove a protected concept (gender, ethnicity, refusal, a specific memory) from representations by iteratively projecting activations onto the null space of linear classifiers for that concept. Achieves provable linear guarding of downstream use against the erased attribute, with bounded utility loss.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "representation-engineering-refusal-direction",
+        "singular-value-decomposition-svd",
+        "bias-mitigation"
+      ],
+      "related": [
+        "rome-memit-model-editing",
+        "steering-vectors",
+        "transfer-learning"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "differential-privacy-dp-sgd",
+      "title": "Differential Privacy & DP-SGD",
+      "summary": "Formal guarantee that an algorithm's output distribution barely changes if any single training example is replaced. DP-SGD achieves \\( (\\varepsilon, \\delta) \\)-DP by clipping per-example gradients and adding calibrated Gaussian noise. Central to privacy-preserving ML training on sensitive data.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "optimization",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "stochastic-gradient-descent-sgd",
+        "gradient-clipping"
+      ],
+      "related": [
+        "federated-learning-fedavg",
+        "membership-inference-attacks"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "federated-learning-fedavg",
+      "title": "Federated Learning (FedAvg)",
+      "summary": "Train a shared model across many clients (phones, hospitals) without centralising data. Each round: clients train locally for a few epochs, server averages their weight updates. Introduces non-IID-data, communication-cost, and privacy / security challenges absent in centralised training.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "product",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "stochastic-gradient-descent-sgd",
+        "data-parallelism"
+      ],
+      "related": [
+        "differential-privacy-dp-sgd",
+        "continual-learning",
+        "model-merging"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "membership-inference-attacks",
+      "title": "Membership Inference Attacks (MIA)",
+      "summary": "Determine whether a specific example was in the training set of a deployed model. Attacks exploit loss / confidence gaps between seen and unseen examples — trained models are typically more confident on memorised training points. A baseline for privacy leakage in ML systems.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "maximum-likelihood-estimate-mle",
+        "loss-function",
+        "overfitting"
+      ],
+      "related": [
+        "differential-privacy-dp-sgd",
+        "model-stealing-extraction-attacks",
+        "pretraining-data-deduplication"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "model-stealing-extraction-attacks",
+      "title": "Model Stealing & Extraction Attacks",
+      "summary": "Reconstruct a model's weights, architecture, or training data through query access. Ranges from distillation of an API-only model (clone via output matching) to cryptographic-precision extraction of individual weights (Carlini et al. 2024 against OpenAI's ada embedding endpoint). Central concern for commercial ML APIs.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "product",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "knowledge-distillation",
+        "membership-inference-attacks"
+      ],
+      "related": [
+        "differential-privacy-dp-sgd"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "data-poisoning-backdoor-attacks",
+      "title": "Data Poisoning & Backdoor Attacks",
+      "summary": "Insert malicious training examples so the model learns a targeted behaviour — misclassification on a trigger pattern, backdoored refusal bypasses, or degraded accuracy on specific classes. BadNets demonstrated pixel-trigger backdoors; modern LLM poisoning targets alignment-layer susceptibilities and pretraining data.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "product",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "pretraining",
+        "supervised-fine-tuning-sft",
+        "data-curation-quality-filters"
+      ],
+      "related": [
+        "membership-inference-attacks",
+        "model-stealing-extraction-attacks",
+        "red-teaming"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "llm-watermarking",
+      "title": "LLM Watermarking (Kirchenbauer et al.)",
+      "summary": "Embed a statistical signature into generated text that is invisible to humans but detectable by an algorithm with the watermarking secret. Kirchenbauer et al. (2023) partition the vocabulary into a pseudo-random green / red list per step, biasing generation toward green; later detection uses a \\( z \\)-test on green-token frequency.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "product",
+        "path-alignment",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "sampling-in-language-models",
+        "top-p-sampling-nucleus-sampling",
+        "hypothesis-testing-and-p-values"
+      ],
+      "related": [
+        "data-poisoning-backdoor-attacks",
+        "model-stealing-extraction-attacks",
+        "constrained-decoding-grammars"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "dangerous-capability-evaluations",
+      "title": "Dangerous-Capability Evaluations (Bio, Cyber, Persuasion, Autonomy)",
+      "summary": "Benchmarks that specifically probe whether a model can meaningfully assist in high-consequence harms — biological weapon synthesis, offensive cyber operations, mass persuasion, autonomous goal pursuit. Used by frontier labs (Anthropic, OpenAI, DeepMind) to gate deployment and by governments (UK AISI, US AISI) to audit frontier systems.",
+      "domain": "evaluation",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "product",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "benchmark-ml-evaluation",
+        "ai-safety",
+        "red-teaming"
+      ],
+      "related": [
+        "constitutional-ai",
+        "refusal-training-harmlessness-objectives",
+        "weak-to-strong-generalization",
+        "model-organisms-of-misalignment"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "prompt-injection-taxonomy-defenses",
+      "title": "Prompt Injection: Taxonomy & Defences",
+      "summary": "Adversarial instructions embedded in model-accessible content — tool outputs, retrieved documents, emails — that override the user's original task. Direct (in user prompt) vs indirect (in external content). Defences include input filtering, dual-model separation, and structured prompt templates; none is a complete solution.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "product",
+        "path-alignment",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "prompt-engineering",
+        "retrieval-augmented-generation-rag",
+        "function-calling",
+        "red-teaming"
+      ],
+      "related": [
+        "jailbreak-in-context-of-llms",
+        "adversarial-prompting",
+        "refusal-training-harmlessness-objectives",
+        "model-context-protocol-mcp"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "ctc-rnn-transducer",
+      "title": "CTC Loss & RNN-Transducer",
+      "summary": "Two objectives for training sequence-to-sequence models when alignment between input and output frames is unknown. CTC sums over all alignment paths with blank symbols; RNN-T decomposes into a prediction network and joint network to model output-length independently. Backbones of modern ASR pipelines.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "landmark",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "cross-entropy",
+        "hidden-markov-model-hmm",
+        "recurrent-neural-network-rnn"
+      ],
+      "related": [
+        "conformer-architecture",
+        "whisper-speech-to-text",
+        "sequence-to-sequence-seq2seq",
+        "beam-search"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "conformer-architecture",
+      "title": "Conformer Architecture",
+      "summary": "A hybrid CNN-plus-attention block for speech recognition: each Conformer layer combines multi-head self-attention (global), depthwise convolutions (local), and sandwiched feed-forward modules. Outperforms pure Transformer and pure CNN on LibriSpeech and became the de facto encoder for production ASR.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "landmark",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "self-attention",
+        "convolutional-neural-network-cnn",
+        "ctc-rnn-transducer"
+      ],
+      "related": [
+        "whisper-speech-to-text",
+        "vision-transformer-vit"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "text-to-image-dalle-imagen",
+      "title": "Text-to-Image: DALL-E Lineage & Imagen",
+      "summary": "Autoregressive (DALL-E 1, Parti) vs diffusion (DALL-E 2, DALL-E 3, Imagen, Stable Diffusion, Flux) lineages for prompt-to-pixel generation. DALL-E 3 uses a specialised caption-rewriting stage; Imagen emphasises text-encoder scale (T5-XXL) as the dominant quality lever.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "cv",
+        "generative",
+        "landmark",
+        "ml",
+        "product",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "latent-diffusion",
+        "classifier-free-guidance",
+        "clip-contrastive-language-image-pre-training"
+      ],
+      "related": [
+        "u-net-architecture",
+        "stable-diffusion-pipeline",
+        "vision-language-model-vlm",
+        "video-diffusion-sora-style"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "unified-multimodal-models",
+      "title": "Unified Multimodal Models (GPT-4o / Gemini any-to-any)",
+      "summary": "Single models that process and generate multiple modalities — text, image, audio, video — through a shared backbone with per-modality tokenisers. Native multimodal training yields far richer cross-modal reasoning than cascaded pipelines: image understanding in context of speech, audio generation from visual cues, unified embeddings.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "cv",
+        "generative",
+        "landmark",
+        "ml",
+        "nlp",
+        "product",
+        "path-transformer-llm",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "vision-language-model-vlm",
+        "llava-visual-instruction-tuning",
+        "encodec-neural-audio-codecs"
+      ],
+      "related": [
+        "audio-language-models-audiolm-musiclm",
+        "whisper-speech-to-text",
+        "video-diffusion-sora-style"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "video-diffusion-sora-style",
+      "title": "Video Diffusion (Sora, Veo, Gen-3)",
+      "summary": "Extend image-diffusion recipes to video with 3D patch embeddings, temporal attention, and long-context handling. Sora (OpenAI), Veo (Google), and Gen-3 (Runway) train DiT-style transformers over space-time patches of 1–60 second clips, conditioning on rich text captions for controllable generation.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "cv",
+        "generative",
+        "landmark",
+        "ml",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "diffusion-transformers-dit",
+        "text-to-image-dalle-imagen"
+      ],
+      "related": [
+        "flow-matching-rectified-flow",
+        "latent-diffusion",
+        "unified-multimodal-models"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
