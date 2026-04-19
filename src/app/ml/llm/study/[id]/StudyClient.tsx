@@ -1,9 +1,17 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useLayoutEffect } from 'react';
 import { WikiSectionBody } from '../../../wiki/components/WikiSectionBody';
-import { useMathJax } from '../../../../components/MathJax';
+import { useMathJax, typesetMathInSubtree } from '../../../../components/MathJax';
 import Link from 'next/link';
+
+function TypesetInline({ html, as: Tag = 'span', className }: { html: string; as?: 'span' | 'h3'; className?: string }) {
+  const ref = useRef<HTMLElement>(null);
+  useLayoutEffect(() => {
+    if (ref.current) typesetMathInSubtree(ref.current);
+  }, [html]);
+  return <Tag ref={ref as never} className={className} dangerouslySetInnerHTML={{ __html: html }} />;
+}
 
 type Section = {
   kind: 'prose' | 'equation' | 'pitfall' | 'example' | 'code';
@@ -87,7 +95,9 @@ export default function StudyClient({ studyContent }: { studyContent: StudyConte
             <div className="flex flex-col gap-6">
               {studyContent.pages[currentIndex].sections.map((section, idx) => (
                 <div key={idx}>
-                  {section.title && <h3 className="font-medium text-lg mb-2">{section.title}</h3>}
+                  {section.title && (
+                    <TypesetInline as="h3" className="font-medium text-lg mb-2" html={section.title} />
+                  )}
                   {section.kind === 'equation' ? (
                     <div className="py-4 my-2 overflow-x-auto">
                       <WikiSectionBody html={`\\[ ${section.equation} \\]`} />
@@ -119,7 +129,7 @@ export default function StudyClient({ studyContent }: { studyContent: StudyConte
                     className="w-full text-left p-4 bg-gray-50 dark:bg-slate-800/50 font-medium flex justify-between items-center hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
                     onClick={() => toggleAnswer(idx)}
                   >
-                    <span>{q.prompt}</span>
+                    <TypesetInline html={q.prompt} />
                     <span className="text-gray-400 shrink-0 ml-4">{revealedAnswers[idx] ? '▼' : '▶'}</span>
                   </button>
                   {revealedAnswers[idx] && (
