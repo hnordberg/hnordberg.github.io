@@ -837,6 +837,7 @@
     ],
     "description": "RAG combined parametric language models with non-parametric document retrieval, allowing generation to be grounded in an external knowledge index rather than only in model weights. This substantially improved factual QA and made it practical to update a system's knowledge without full retraining. The paper became the conceptual template for modern retrieval-augmented LLM systems.",
     "citations": 7900,
+    "icon": "ml/meta.png",
     "details": "To implement RAG, pair a dense retriever with a seq2seq generator. Encode a query, retrieve top-k documents from a vector index, and condition the generator on both the query and retrieved passages. Train the retriever and generator jointly or initialize from DPR/BART checkpoints. In production, refresh the document index independently of model weights so factual updates do not require retraining the base LM. Evaluate both retrieval recall and answer accuracy, since failures can come from either component.",
     "controversialness": 3,
     "controversialReason": "Widely adopted, though there is debate about retrieval quality, latency, and how much RAG reduces hallucinations in practice."
@@ -1006,6 +1007,7 @@
     ],
     "description": "FLAN showed that instruction tuning across a broad mixture of tasks can dramatically improve zero-shot and few-shot generalization, making pretrained models much better at following natural-language instructions without task-specific finetuning. It helped establish instruction tuning as a core post-training step for useful LLM assistants. Much of the later chat-assistant paradigm builds on this lesson.",
     "citations": 9100,
+    "icon": "ml/google.png",
     "details": "To reproduce FLAN-style instruction tuning, convert many supervised datasets into natural-language instructions with text inputs and outputs, then finetune a pretrained language model on the entire mixture. Diversity matters: combine QA, classification, reasoning, translation, and structured tasks so the model learns to treat instructions as the interface. During evaluation, test truly unseen task templates rather than only held-out examples from the same dataset family. The resulting model is often far better at zero-shot prompting even before preference tuning.",
     "repo": "https://github.com/google-research/FLAN",
     "controversialness": 2,
