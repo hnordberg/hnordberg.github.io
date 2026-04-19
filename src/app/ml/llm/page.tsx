@@ -75,11 +75,6 @@ const LLMPapersPage = () => {
   return (
     <main>
       <div className="text-center pt-8 pb-4">
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-          <a href="/ml/papers" className="text-sky-600 dark:text-sky-400 hover:underline">
-            Papers
-          </a>
-        </p>
         <h1 className="text-4xl font-bold">History of Machine Learning & LLMs</h1>
         <p className="text-lg text-gray-600 dark:text-gray-400">
           Disclaimer: I used various LLMs to generate some of the data for this timeline.
