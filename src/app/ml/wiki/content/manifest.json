@@ -13774,6 +13774,1755 @@
       ],
       "updatedAt": "2026-04-18",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "wasserstein-distance-optimal-transport",
+      "title": "Wasserstein Distance & Optimal Transport",
+      "summary": "The \\( p \\)-Wasserstein distance \\( W_p(\\mu,\\nu) = \\inf_{\\gamma \\in \\Pi(\\mu,\\nu)} \\big( \\mathbb{E}_{(x,y)\\sim\\gamma}\\|x-y\\|^p \\big)^{1/p} \\) measures the minimum cost of reshaping distribution \\( \\mu \\) into \\( \\nu \\). It underpins WGAN, flow matching, and a whole family of divergences that remain well-behaved when KL blows up.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-core-foundations",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "probability-distribution",
+        "kl-divergence",
+        "multivariate-gaussian-distribution"
+      ],
+      "related": [
+        "gan-minimax-objective",
+        "flow-matching-rectified-flow",
+        "f-divergences-unified-view",
+        "jensens-inequality"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "f-divergences-unified-view",
+      "title": "f-Divergences (Unified View)",
+      "summary": "For any convex \\( f \\) with \\( f(1) = 0 \\), the \\( f \\)-divergence \\( D_f(P \\| Q) = \\mathbb{E}_Q[f(dP/dQ)] \\) recovers KL (\\( f = t \\log t \\)), reverse KL, Jensen–Shannon, total variation, \\( \\chi^2 \\), Hellinger, and α-divergences as special cases. The variational (Fenchel) form underlies f-GAN and density-ratio estimation.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-core-foundations",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "kl-divergence",
+        "jensens-inequality",
+        "convex-function"
+      ],
+      "related": [
+        "wasserstein-distance-optimal-transport",
+        "gan-minimax-objective",
+        "noise-contrastive-estimation",
+        "mutual-information-and-conditional-entropy"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "ito-calculus-stochastic-differential-equations",
+      "title": "Itô Calculus & Stochastic Differential Equations",
+      "summary": "Itô calculus extends ordinary calculus to processes driven by Brownian motion. An SDE \\( dX_t = \\mu(X_t, t)\\,dt + \\sigma(X_t, t)\\,dW_t \\) combines a drift and a diffusion term; Itô's lemma replaces the chain rule. This is the mathematical substrate of score-based diffusion models, flow matching, and neural SDEs.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "probability-distribution",
+        "multivariate-gaussian-distribution",
+        "taylor-series-expansion"
+      ],
+      "related": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "score-matching",
+        "fokker-planck-probability-flow-ode",
+        "score-based-sdes-continuous-diffusion"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "fokker-planck-probability-flow-ode",
+      "title": "Fokker–Planck & Probability-Flow ODE",
+      "summary": "The Fokker–Planck equation \\( \\partial_t p_t = -\\nabla \\cdot (f p_t) + \\tfrac{1}{2} \\nabla^2 : (g g^\\top p_t) \\) governs how the density of an SDE-driven process evolves. The probability-flow ODE shares these exact marginals with a deterministic vector field, enabling DDIM-style deterministic sampling and likelihood computation.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "ito-calculus-stochastic-differential-equations",
+        "score-matching",
+        "denoising-diffusion-probabilistic-models-ddpm"
+      ],
+      "related": [
+        "ddim-deterministic-diffusion-sampling",
+        "flow-matching-rectified-flow",
+        "score-based-sdes-continuous-diffusion",
+        "neural-ode"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "reproducing-kernel-hilbert-spaces-rkhs",
+      "title": "Reproducing Kernel Hilbert Spaces (RKHS) & the Representer Theorem",
+      "summary": "An RKHS is a Hilbert space of functions in which point evaluation is continuous, implemented by a kernel \\( k(x, y) \\) with the reproducing property \\( f(x) = \\langle f, k(\\cdot, x) \\rangle \\). The representer theorem says that the minimiser of any regularised empirical risk lies in the span of kernel evaluations on the training points — reducing infinite-dimensional optimisation to \\( n \\) coefficients.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "kernel-methods",
+        "convex-optimization-fundamentals",
+        "positive-semi-definite-matrices"
+      ],
+      "related": [
+        "support-vector-machine-svm",
+        "gaussian-process-regression",
+        "mercers-theorem-kernel-feature-maps",
+        "kernel-pca"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "mercers-theorem-kernel-feature-maps",
+      "title": "Mercer's Theorem & Kernel Feature Maps",
+      "summary": "Mercer's theorem: any continuous, symmetric, positive semi-definite kernel \\( k(x, y) \\) on a compact domain admits an eigendecomposition \\( k(x, y) = \\sum_i \\lambda_i \\phi_i(x) \\phi_i(y) \\). The map \\( \\varphi(x) = (\\sqrt{\\lambda_i} \\phi_i(x))_i \\) makes every kernel an inner product in a (possibly infinite-dimensional) Hilbert space.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "kernel-methods",
+        "eigenvalues-and-eigenvectors",
+        "positive-semi-definite-matrices"
+      ],
+      "related": [
+        "reproducing-kernel-hilbert-spaces-rkhs",
+        "kernel-pca",
+        "support-vector-machine-svm",
+        "gaussian-process-regression"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "natural-gradient-fisher-rao-geometry",
+      "title": "Natural Gradient & Fisher–Rao Geometry",
+      "summary": "The natural gradient \\( \\tilde\\nabla_\\theta \\mathcal{L} = F(\\theta)^{-1} \\nabla_\\theta \\mathcal{L} \\) preconditions the Euclidean gradient by the inverse Fisher information matrix, yielding steepest descent under the KL-divergence metric on the statistical manifold. It underlies K-FAC, Shampoo, TRPO's trust region, and the original motivation for reparameterisation-invariant optimisation.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "optimization",
+        "theory",
+        "reinforcement",
+        "path-core-foundations",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "the-fisher-information-matrix",
+        "gradient-descent",
+        "kl-divergence"
+      ],
+      "related": [
+        "trust-region-policy-optimization-trpo",
+        "shampoo-kfac-preconditioners",
+        "proximal-policy-optimization-ppo",
+        "adam-optimizer"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "hamiltonian-monte-carlo-hmc",
+      "title": "Hamiltonian Monte Carlo (HMC) & NUTS",
+      "summary": "HMC augments the target distribution with an auxiliary momentum variable and simulates Hamiltonian dynamics so that proposals move long distances while staying on near-constant-energy shells. It explores complex posteriors dramatically faster than random-walk Metropolis; the No-U-Turn Sampler (NUTS) adapts the integration length automatically.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "markov-chain-monte-carlo-mcmc",
+        "metropolis-hastings-algorithm",
+        "gradient-descent"
+      ],
+      "related": [
+        "gibbs-sampling",
+        "variational-inference-elbo",
+        "langevin-dynamics"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "metropolis-hastings-algorithm",
+      "title": "Metropolis–Hastings Algorithm",
+      "summary": "The canonical MCMC recipe: propose \\( \\theta' \\sim q(\\theta' \\mid \\theta) \\), accept with probability \\( \\min(1, \\pi(\\theta')q(\\theta\\mid\\theta')/[\\pi(\\theta)q(\\theta'\\mid\\theta)]) \\). Produces a Markov chain with stationary distribution \\( \\pi \\) for any valid proposal, turning intractable posterior sampling into a correctness-guaranteed iterative procedure.",
+      "domain": "math",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "landmark",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "markov-chain-monte-carlo-mcmc",
+        "probability-distribution",
+        "bayes-theorem"
+      ],
+      "related": [
+        "gibbs-sampling",
+        "hamiltonian-monte-carlo-hmc",
+        "variational-inference-elbo",
+        "the-markov-property"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gibbs-sampling",
+      "title": "Gibbs Sampling",
+      "summary": "A special case of Metropolis–Hastings: cycle through variables, sampling each from its full conditional \\( p(\\theta_j \\mid \\theta_{-j}, D) \\). When the conditionals are tractable (conjugate priors, mixture models, LDA), Gibbs is simple, always accepts, and has been the workhorse of Bayesian inference for four decades.",
+      "domain": "math",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "markov-chain-monte-carlo-mcmc",
+        "metropolis-hastings-algorithm",
+        "conditional-probability"
+      ],
+      "related": [
+        "conjugate-priors",
+        "hidden-markov-model-hmm",
+        "gaussian-mixture-models-gmm",
+        "variational-inference-elbo"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "concentration-inequalities-hoeffding-bernstein",
+      "title": "Concentration Inequalities (Hoeffding, Bernstein, McDiarmid)",
+      "summary": "High-probability bounds on how far a sum or function of independent random variables can deviate from its mean. Hoeffding uses boundedness, Bernstein exploits known variance for a tighter bound, and McDiarmid handles functions whose value changes little when any single argument changes — the workhorses behind PAC / generalization proofs.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "central-limit-theorem",
+        "variance-covariance-correlation",
+        "probability-distribution"
+      ],
+      "related": [
+        "pac-bayes-bounds",
+        "rademacher-complexity",
+        "vc-dimension-and-shattering",
+        "pac-learning-probably-approximately-correct"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pac-bayes-bounds",
+      "title": "PAC-Bayes Generalization Bounds",
+      "summary": "PAC-Bayes bounds the generalization gap of a stochastic classifier \\( Q \\) by a Kullback–Leibler term against a data-independent prior \\( P \\): with probability \\( 1 - \\delta \\), \\( \\mathbb{E}_{h\\sim Q}[R(h)] \\le \\mathbb{E}_{h\\sim Q}[\\hat R(h)] + O(\\sqrt{\\text{KL}(Q\\|P)/n}) \\). Used for non-vacuous bounds on overparameterised networks.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "pac-learning-probably-approximately-correct",
+        "kl-divergence",
+        "rademacher-complexity",
+        "concentration-inequalities-hoeffding-bernstein"
+      ],
+      "related": [
+        "vc-dimension-and-shattering",
+        "double-descent",
+        "generalization",
+        "neural-tangent-kernel-ntk"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "xgboost-lightgbm-catboost",
+      "title": "XGBoost, LightGBM, and CatBoost",
+      "summary": "Three production gradient-boosted-decision-tree implementations with distinct tree-construction strategies: XGBoost does level-wise exact/approximate splits with second-order Taylor objective; LightGBM uses histogram-based leaf-wise growth and GOSS subsampling; CatBoost uses ordered boosting to avoid target leakage with categorical features.",
+      "domain": "supervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "product",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "gradient-boosting-machines-gbm",
+        "decision-tree",
+        "loss-function"
+      ],
+      "related": [
+        "random-forest",
+        "adaboost-adaptive-boosting",
+        "bootstrap-aggregating-bagging"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "hierarchical-clustering",
+      "title": "Hierarchical Clustering & Linkage",
+      "summary": "Builds a tree (dendrogram) of clusters either bottom-up (agglomerative: start with singletons, merge closest pairs) or top-down (divisive). The linkage criterion — single, complete, average, Ward — defines distance between clusters and dictates the cluster shapes the algorithm prefers.",
+      "domain": "unsupervised",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "intro",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "k-means-objective-function-inertia"
+      ],
+      "related": [
+        "dbscan-density-based-clustering",
+        "spectral-clustering-graph-laplacian",
+        "dimensionality-reduction"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "spectral-clustering-graph-laplacian",
+      "title": "Spectral Clustering & the Graph Laplacian",
+      "summary": "Construct a similarity graph over data points, embed each point into \\( \\mathbb{R}^k \\) using the \\( k \\) smallest eigenvectors of the graph Laplacian, and run k-means in that space. The Laplacian's spectrum encodes cluster structure as low-frequency eigenmodes — works for non-convex clusters where Euclidean k-means fails.",
+      "domain": "unsupervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "k-means-objective-function-inertia",
+        "eigenvalues-and-eigenvectors",
+        "dimensionality-reduction"
+      ],
+      "related": [
+        "hierarchical-clustering",
+        "graph-convolutional-network-gcn",
+        "principal-component-analysis-pca",
+        "kernel-pca"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "non-negative-matrix-factorization",
+      "title": "Non-Negative Matrix Factorization (NMF)",
+      "summary": "Factorise a nonnegative matrix \\( V \\approx W H \\) with \\( W, H \\ge 0 \\) entrywise. The nonnegativity constraint yields parts-based, interpretable components (topic–word, basis–image) and distinguishes NMF from PCA, whose sign-free components are typically holistic and hard to name.",
+      "domain": "unsupervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "matrix-factorization-and-collaborative-filtering",
+        "principal-component-analysis-pca",
+        "gradient-descent"
+      ],
+      "related": [
+        "latent-space",
+        "dimensionality-reduction",
+        "independent-component-analysis"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "independent-component-analysis",
+      "title": "Independent Component Analysis (ICA)",
+      "summary": "ICA separates a linear mixture \\( x = A s \\) into statistically independent non-Gaussian sources by finding a de-mixing matrix \\( W \\) that maximises the non-Gaussianity of \\( y = W x \\). Classical application: the cocktail-party problem. Key distinction from PCA: maximises independence, not variance.",
+      "domain": "unsupervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "principal-component-analysis-pca",
+        "central-limit-theorem",
+        "mutual-information-and-conditional-entropy"
+      ],
+      "related": [
+        "non-negative-matrix-factorization",
+        "dimensionality-reduction",
+        "kernel-pca"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "kernel-pca",
+      "title": "Kernel PCA",
+      "summary": "Principal component analysis in the implicit feature space of a positive-definite kernel \\( k(x, y) \\). Eigendecomposes the centred Gram matrix \\( K \\) rather than the data covariance; recovers non-linear principal directions without ever instantiating the feature map. Used for non-linear dimensionality reduction and feature extraction.",
+      "domain": "unsupervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "principal-component-analysis-pca",
+        "mercers-theorem-kernel-feature-maps",
+        "eigenvalues-and-eigenvectors"
+      ],
+      "related": [
+        "reproducing-kernel-hilbert-spaces-rkhs",
+        "spectral-clustering-graph-laplacian",
+        "isomap-locally-linear-embedding"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "isomap-locally-linear-embedding",
+      "title": "Isomap & Locally Linear Embedding (LLE)",
+      "summary": "Two classical manifold-learning algorithms: Isomap replaces Euclidean distances with geodesic distances on a \\( k \\)-NN graph and applies MDS; LLE reconstructs each point from its neighbours' linear weights and finds a low-dimensional embedding that preserves those weights. Both set the conceptual stage for t-SNE and UMAP.",
+      "domain": "unsupervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "principal-component-analysis-pca",
+        "dimensionality-reduction"
+      ],
+      "related": [
+        "t-distributed-stochastic-neighbor-embedding-tsne",
+        "umap-uniform-manifold-approximation",
+        "spectral-clustering-graph-laplacian"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "conditional-random-fields",
+      "title": "Conditional Random Fields (CRF)",
+      "summary": "A discriminative model of \\( p(y \\mid x) = \\tfrac{1}{Z(x)} \\exp \\sum_k \\lambda_k f_k(y, x) \\) over structured outputs. Linear-chain CRFs add sequence-level constraints on top of per-token scores, enabling tractable training via forward–backward and Viterbi decoding — still the backbone of NER/tagging heads above neural encoders.",
+      "domain": "supervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "hidden-markov-model-hmm",
+        "logistic-regression",
+        "log-likelihood"
+      ],
+      "related": [
+        "bayesian-networks-directed-graphical-models",
+        "belief-propagation-sum-product",
+        "maximum-likelihood-estimate-mle"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bayesian-networks-directed-graphical-models",
+      "title": "Bayesian Networks & Directed Graphical Models",
+      "summary": "A Bayesian network is a DAG \\( G \\) over variables whose joint factorises as \\( p(x) = \\prod_i p(x_i \\mid \\text{pa}_G(x_i)) \\). D-separation reads conditional independences off the graph; parameter learning uses MLE under complete data, EM under latent variables. The mathematical foundation of structured probabilistic modelling.",
+      "domain": "math",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "chain-rule-of-probability",
+        "conditional-probability",
+        "bayes-theorem"
+      ],
+      "related": [
+        "hidden-markov-model-hmm",
+        "belief-propagation-sum-product",
+        "conditional-random-fields",
+        "variational-inference-elbo"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "belief-propagation-sum-product",
+      "title": "Belief Propagation (Sum–Product Algorithm)",
+      "summary": "A message-passing algorithm that computes exact marginals on tree-structured graphical models in linear time and approximate marginals (loopy BP) on general graphs. Each node sends summarising messages to neighbours; final beliefs equal the product of incoming messages.",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "bayesian-networks-directed-graphical-models",
+        "hidden-markov-model-hmm",
+        "chain-rule-of-probability"
+      ],
+      "related": [
+        "conditional-random-fields",
+        "variational-inference-elbo",
+        "message-passing-in-graph-neural-networks-gnns"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "variational-autoencoder-vae",
+      "title": "Variational Autoencoder (VAE)",
+      "summary": "A latent-variable generative model trained by maximising the ELBO \\( \\mathcal{L}(x) = \\mathbb{E}_{q_\\phi(z\\mid x)}[\\log p_\\theta(x\\mid z)] - D_{\\text{KL}}(q_\\phi(z\\mid x)\\,\\|\\,p(z)) \\). The reparameterisation trick makes the encoder \\( q_\\phi \\) differentiable; the decoder \\( p_\\theta \\) learns to reconstruct \\( x \\) from latent codes \\( z \\sim \\mathcal{N}(0, I) \\).",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "generative",
+        "landmark",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "reparameterization-trick-vae",
+        "variational-inference-elbo",
+        "autoencoders",
+        "kl-divergence"
+      ],
+      "related": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "normalizing-flows",
+        "gan-minimax-objective",
+        "evidence-lower-bound-elbo-derivation"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "beta-vae-disentanglement",
+      "title": "β-VAE & Disentanglement",
+      "summary": "β-VAE replaces the ELBO's KL term with a weighted \\( \\beta \\cdot D_{\\text{KL}} \\). Values \\( \\beta > 1 \\) push the encoder toward an isotropic prior, encouraging each latent dimension to capture one independent factor of variation — the original disentanglement recipe.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "variational-autoencoder-vae",
+        "kl-divergence",
+        "evidence-lower-bound-elbo-derivation"
+      ],
+      "related": [
+        "latent-space",
+        "autoencoders",
+        "normalizing-flows"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "normalizing-flows",
+      "title": "Normalizing Flows (RealNVP, Glow)",
+      "summary": "Invertible neural networks \\( f_\\theta: \\mathbb{R}^d \\to \\mathbb{R}^d \\) with tractable Jacobian determinant. The change-of-variables formula \\( \\log p_X(x) = \\log p_Z(f(x)) + \\log |\\det J_f(x)| \\) gives exact likelihood; sampling runs \\( f^{-1} \\). RealNVP and Glow use coupling layers to make both directions \\( O(d) \\) per step.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "variational-autoencoder-vae",
+        "multivariate-gaussian-distribution",
+        "jacobian-and-hessian"
+      ],
+      "related": [
+        "autoregressive-flows-maf-iaf",
+        "flow-matching-rectified-flow",
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "variational-inference-elbo"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "autoregressive-flows-maf-iaf",
+      "title": "Autoregressive Flows (MAF & IAF)",
+      "summary": "Flows in which the \\( i \\)-th output depends only on previous inputs \\( x_{<i} \\), giving a triangular Jacobian. MAF (masked autoregressive flow) has fast density evaluation but slow sampling; IAF (inverse autoregressive flow) is the mirror image — fast sampling, slow density. Both are cornerstones of modern density estimation.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "normalizing-flows",
+        "autoregressive-language-model",
+        "chain-rule-of-probability"
+      ],
+      "related": [
+        "pixelcnn",
+        "flow-matching-rectified-flow",
+        "variational-autoencoder-vae"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "energy-based-models",
+      "title": "Energy-Based Models (EBM)",
+      "summary": "A generative model \\( p_\\theta(x) = \\exp(-E_\\theta(x))/Z(\\theta) \\) defined by a scalar energy \\( E_\\theta \\). The intractable normaliser \\( Z(\\theta) = \\int e^{-E_\\theta(x)} dx \\) precludes direct MLE; training uses contrastive divergence, score matching, or noise-contrastive estimation to approximate it.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "restricted-boltzmann-machines",
+        "score-matching",
+        "maximum-likelihood-estimate-mle"
+      ],
+      "related": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "noise-contrastive-estimation",
+        "variational-inference-elbo"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "restricted-boltzmann-machines",
+      "title": "Restricted Boltzmann Machines (RBM)",
+      "summary": "A bipartite EBM over visible and hidden binary units with energy \\( E(v, h) = -v^\\top W h - b^\\top v - c^\\top h \\). Conditional independence within each layer gives closed-form conditionals \\( p(h\\mid v), p(v\\mid h) \\); Hinton's Contrastive Divergence trains them and the RBM stack forms a deep belief net.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "generative",
+        "historical",
+        "landmark",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "energy-based-models",
+        "autoencoders",
+        "gibbs-sampling"
+      ],
+      "related": [
+        "deep-neural-network",
+        "noise-contrastive-estimation",
+        "variational-autoencoder-vae"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "noise-contrastive-estimation",
+      "title": "Noise-Contrastive Estimation (NCE)",
+      "summary": "Learn an unnormalised model \\( \\tilde p_\\theta(x) \\) by training a binary classifier to distinguish data samples from noise samples. The classifier's logit becomes \\( \\log \\tilde p_\\theta(x) - \\log q_{\\text{noise}}(x) \\), so the partition function is absorbed into a learnable constant. Foundation of word2vec's negative sampling and of InfoNCE contrastive learning.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "nlp",
+        "theory",
+        "path-core-foundations",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "maximum-likelihood-estimate-mle",
+        "cross-entropy",
+        "logistic-regression"
+      ],
+      "related": [
+        "word2vec",
+        "skip-gram",
+        "contrastive-learning-simclr-moco",
+        "energy-based-models"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "score-based-sdes-continuous-diffusion",
+      "title": "Score-Based SDEs (Continuous-Time Diffusion)",
+      "summary": "Song et al. (2021) showed that discrete-time DDPM and noise-conditional score models are both limits of a continuous-time SDE \\( dx = f(x,t)dt + g(t)dW \\). The unified framework gives a reverse-time SDE and a probability-flow ODE that share marginals, enabling flexible samplers (Euler, Heun, DPM-Solver) and exact likelihoods.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "ito-calculus-stochastic-differential-equations",
+        "fokker-planck-probability-flow-ode",
+        "score-matching"
+      ],
+      "related": [
+        "ddim-deterministic-diffusion-sampling",
+        "flow-matching-rectified-flow",
+        "denoising-score-matching"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gan-family-wgan-stylegan-biggan",
+      "title": "GAN Family: WGAN, StyleGAN, BigGAN",
+      "summary": "Three architectural and objective milestones: WGAN uses the Kantorovich–Rubinstein dual of \\( W_1 \\) as a smoother critic, StyleGAN introduces AdaIN-controlled style injection for image generation, BigGAN scales class-conditional GANs to 512×512 with orthogonal regularisation and truncation tricks.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "cv",
+        "generative",
+        "landmark",
+        "ml",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "gan-minimax-objective",
+        "wasserstein-distance-optimal-transport",
+        "f-divergences-unified-view"
+      ],
+      "related": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "classifier-free-guidance",
+        "stable-diffusion-pipeline"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "u-net-architecture",
+      "title": "U-Net Architecture",
+      "summary": "A fully-convolutional encoder–decoder with symmetric skip connections between contracting and expanding paths. Designed for biomedical segmentation; now the standard backbone of Stable Diffusion and most pixel-to-pixel models because skip connections preserve spatial detail across downsampling.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "architecture",
+        "cv",
+        "generative",
+        "landmark",
+        "ml",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "convolutional-neural-network-cnn",
+        "residual-connection-skip-connection"
+      ],
+      "related": [
+        "stable-diffusion-pipeline",
+        "latent-diffusion",
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "resnet-architecture"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "semantic-instance-segmentation",
+      "title": "Semantic & Instance Segmentation",
+      "summary": "Semantic segmentation assigns a class label to every pixel; instance segmentation further distinguishes object instances (two cats become two masks). Panoptic segmentation unifies them: one label per pixel with 'thing' vs 'stuff' classes. Backbones: FCN, DeepLab, Mask R-CNN, DETR/Mask2Former.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "cv",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "convolutional-neural-network-cnn",
+        "u-net-architecture",
+        "vision-transformer-vit"
+      ],
+      "related": [
+        "object-detection-rcnn-detr",
+        "yolo-family",
+        "resnet-architecture"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "object-detection-rcnn-detr",
+      "title": "Object Detection: R-CNN → Faster R-CNN → DETR",
+      "summary": "R-CNN ran a CNN classifier on externally-proposed regions; Fast R-CNN shared backbone features across proposals; Faster R-CNN introduced a learned Region Proposal Network; DETR replaced the entire region-proposal pipeline with a transformer that predicts a fixed set of boxes via bipartite matching.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "architecture",
+        "cv",
+        "landmark",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "convolutional-neural-network-cnn",
+        "vision-transformer-vit",
+        "attention-mechanism"
+      ],
+      "related": [
+        "yolo-family",
+        "semantic-instance-segmentation",
+        "resnet-architecture"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "yolo-family",
+      "title": "YOLO Family (v1 – v10)",
+      "summary": "Single-stage detectors that divide the image into a grid and predict bounding boxes and class probabilities directly from a single CNN forward pass. YOLOv1 was real-time but coarse; YOLOv3–v10 progressively adopted anchor boxes, FPN, CSP blocks, decoupled heads, and finally anchor-free / NMS-free designs for edge deployment.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "cv",
+        "implementation",
+        "ml",
+        "product",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "convolutional-neural-network-cnn",
+        "object-detection-rcnn-detr"
+      ],
+      "related": [
+        "semantic-instance-segmentation",
+        "resnet-architecture"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "nerf-gaussian-splatting",
+      "title": "Neural Radiance Fields (NeRF) & 3D Gaussian Splatting",
+      "summary": "NeRF encodes a 3-D scene as a continuous function \\( (x, y, z, \\theta, \\phi) \\to (\\text{colour}, \\text{density}) \\) queried along camera rays and volume-rendered into pixels. 3D Gaussian Splatting replaces the implicit MLP with an explicit set of anisotropic Gaussians rasterised in real time.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "cv",
+        "generative",
+        "landmark",
+        "ml",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "multilayer-perceptron-mlp",
+        "positional-encoding"
+      ],
+      "related": [
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "vision-transformer-vit"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pointnet-3d-deep-learning",
+      "title": "PointNet & 3D Deep Learning on Point Clouds",
+      "summary": "PointNet processes an unordered point set by applying a shared MLP to each point, then pooling across points with a symmetric function (max-pool). Permutation-invariant by construction; PointNet++ adds local-region hierarchies to capture geometric structure.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "architecture",
+        "cv",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "multilayer-perceptron-mlp",
+        "convolutional-neural-network-cnn"
+      ],
+      "related": [
+        "graph-convolutional-network-gcn",
+        "nerf-gaussian-splatting",
+        "set-transformer-deep-sets"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "neural-ode",
+      "title": "Neural Ordinary Differential Equations",
+      "summary": "A neural ODE defines the hidden-state evolution as \\( dh/dt = f_\\theta(h, t) \\), integrated by a black-box ODE solver. Training uses the adjoint method to back-propagate at constant memory regardless of solver depth. Connects residual networks to continuous flows and underlies continuous normalising flows and flow matching.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "generative",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "residual-connection-skip-connection",
+        "multilayer-perceptron-mlp",
+        "backpropagation"
+      ],
+      "related": [
+        "normalizing-flows",
+        "flow-matching-rectified-flow",
+        "ito-calculus-stochastic-differential-equations",
+        "fokker-planck-probability-flow-ode"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pointer-networks",
+      "title": "Pointer Networks",
+      "summary": "A seq2seq architecture whose decoder outputs indices into the input sequence via attention weights (a 'pointer') rather than tokens from a fixed vocabulary. Ideal for combinatorial problems whose output vocabulary depends on the input (convex hull, TSP, sorting) and for extractive QA / span prediction.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "architecture",
+        "landmark",
+        "ml",
+        "nlp",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "attention-mechanism",
+        "sequence-to-sequence-seq2seq"
+      ],
+      "related": [
+        "luong-attention-global-and-local",
+        "encoder-decoder-architecture",
+        "react-reason-act"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "siamese-networks-metric-learning",
+      "title": "Siamese Networks & Metric Learning",
+      "summary": "Train a shared encoder so that semantically similar inputs map to nearby embeddings (contrastive / triplet loss) or that query-key scores reflect similarity directly. Used in face verification, signature matching, image retrieval; the conceptual parent of SimCLR, CLIP, and BiEncoder retrieval.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "architecture",
+        "cv",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "cosine-similarity",
+        "triplet-margin-loss",
+        "loss-function"
+      ],
+      "related": [
+        "contrastive-learning-simclr-moco",
+        "clip-contrastive-language-image-pre-training",
+        "dense-retrieval"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "highway-networks",
+      "title": "Highway Networks",
+      "summary": "Predecessor to ResNet: a gated skip connection \\( y = H(x) \\cdot T(x) + x \\cdot (1 - T(x)) \\), where \\( T(x) \\in [0,1] \\) is a learned transform gate. Enabled training of 100+ layer networks before residual connections simplified the construction in ResNet.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "architecture",
+        "historical",
+        "landmark",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "deep-neural-network",
+        "residual-connection-skip-connection",
+        "sigmoid"
+      ],
+      "related": [
+        "resnet-architecture",
+        "gated-recurrent-unit-gru",
+        "long-short-term-memory-lstm"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "capsule-networks",
+      "title": "Capsule Networks",
+      "summary": "Hinton's alternative to CNN pooling: neurons are grouped into 'capsules' whose vector output encodes both existence and pose of an entity. Dynamic routing by agreement replaces max-pool, so each capsule decides which higher-level capsule to vote for based on agreement. Historically significant; practically superseded by transformers.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "architecture",
+        "cv",
+        "historical",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "convolutional-neural-network-cnn",
+        "activation-function"
+      ],
+      "related": [
+        "vision-transformer-vit",
+        "attention-mechanism",
+        "pointnet-3d-deep-learning"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "memory-augmented-transformers",
+      "title": "Memory-Augmented Transformers",
+      "summary": "Transformer variants that extend effective context length with an external memory — Recurrent Memory Transformers (RMT) pass summary tokens across chunks, Memorizing Transformers retrieve past kNN keys, Infini-attention compresses the tail of context into a linear-attention state. A bridge between fixed-context Transformers and sequence models with unbounded memory.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "attention",
+        "ml",
+        "transformer",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "transformer",
+        "attention-mechanism",
+        "sliding-window-attention",
+        "long-context-pretraining"
+      ],
+      "related": [
+        "retnet-retention-networks",
+        "state-space-models-mamba",
+        "linear-attention",
+        "ring-attention-context-parallel"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "set-transformer-deep-sets",
+      "title": "Set Transformer & Deep Sets (Permutation Invariance)",
+      "summary": "Deep Sets: any permutation-invariant function on sets equals \\( \\rho(\\sum_i \\phi(x_i)) \\) for learnable \\( \\phi, \\rho \\). Set Transformer replaces the sum with self-attention via Induced Set Attention Blocks, giving element-wise interactions while remaining permutation-equivariant.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "architecture",
+        "attention",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "multilayer-perceptron-mlp",
+        "self-attention",
+        "pointnet-3d-deep-learning"
+      ],
+      "related": [
+        "pointer-networks",
+        "graph-convolutional-network-gcn"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sharpness-aware-minimization-sam",
+      "title": "Sharpness-Aware Minimization (SAM)",
+      "summary": "Minimise a loss whose value is worst-case over a small \\( \\rho \\)-ball of weight perturbations: \\( \\min_\\theta \\max_{\\|\\varepsilon\\| \\le \\rho} \\mathcal{L}(\\theta + \\varepsilon) \\). The ascent step \\( \\varepsilon^\\star \\approx \\rho \\, \\nabla \\mathcal{L}/\\|\\nabla \\mathcal{L}\\| \\) biases training toward flat minima, improving generalisation across ViT, ResNet, and LLM finetuning.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "optimization",
+        "theory",
+        "path-scaling-advanced",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "gradient-descent",
+        "stochastic-gradient-descent-sgd",
+        "loss-landscape-flat-vs-sharp-minima"
+      ],
+      "related": [
+        "adamw-optimizer",
+        "pac-bayes-bounds",
+        "weight-decay",
+        "double-descent"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "lion-optimizer",
+      "title": "Lion Optimizer",
+      "summary": "A momentum-only optimizer discovered by neural search: updates are \\( \\theta \\leftarrow \\theta - \\eta \\, \\text{sign}(\\beta_1 m + (1-\\beta_1) g) \\). Uses only the sign of a momentum estimate — no second moment, half the state of AdamW, often matches or beats it on large-scale training with smaller learning rates.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "optimization",
+        "implementation",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "adam-optimizer",
+        "adamw-optimizer",
+        "momentum"
+      ],
+      "related": [
+        "muon-optimizer",
+        "stochastic-gradient-descent-sgd",
+        "adafactor"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "shampoo-kfac-preconditioners",
+      "title": "Shampoo & K-FAC Preconditioners",
+      "summary": "Second-order optimizers for deep nets. K-FAC approximates the Fisher as layerwise \\( A \\otimes G \\) (activation × output-gradient Gram matrices). Shampoo uses a Kronecker factored inverse-\\( p \\)-th root \\( G \\leftarrow (L_1^{1/2p} \\otimes L_2^{1/2p})^{-1} G \\). Both make curvature practical at neural-network scale.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "optimization",
+        "theory",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "natural-gradient-fisher-rao-geometry",
+        "the-fisher-information-matrix",
+        "adam-optimizer"
+      ],
+      "related": [
+        "muon-optimizer",
+        "adamw-optimizer",
+        "adafactor",
+        "trust-region-policy-optimization-trpo"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "adafactor",
+      "title": "AdaFactor Optimizer",
+      "summary": "A memory-efficient Adam variant. Replaces the full second-moment matrix with row and column running averages (a rank-1 factorisation): memory is \\( O(m + n) \\) instead of \\( O(mn) \\). Used by T5, Meta's BlenderBot, and many large-scale models to free memory for bigger batches and longer contexts.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "optimization",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "adam-optimizer",
+        "adamw-optimizer"
+      ],
+      "related": [
+        "lion-optimizer",
+        "muon-optimizer",
+        "shampoo-kfac-preconditioners"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "maml-reptile-meta-learning",
+      "title": "Meta-Learning: MAML & Reptile",
+      "summary": "MAML learns an initialisation \\( \\theta \\) such that one or a few SGD steps on a new task yield good performance — formally \\( \\min_\\theta \\sum_\\tau \\mathcal{L}_\\tau(\\theta - \\alpha \\nabla \\mathcal{L}_\\tau(\\theta)) \\). Reptile is a first-order simplification that moves \\( \\theta \\) toward per-task adapted parameters. Influential early 'learn to learn' recipes, since absorbed into prompt-based few-shot learning.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "optimization",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "gradient-descent",
+        "transfer-learning",
+        "few-shot-prompting"
+      ],
+      "related": [
+        "active-learning",
+        "curriculum-learning",
+        "in-context-learning"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "focal-loss-class-imbalance",
+      "title": "Focal Loss & Class-Imbalance Objectives",
+      "summary": "Focal loss \\( \\text{FL}(p_t) = -(1-p_t)^\\gamma \\log p_t \\) down-weights the loss contribution of confidently-classified easy examples, focusing gradient on hard ones. Designed for extreme foreground-background imbalance in one-stage detection; widely used in segmentation and long-tailed classification.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "cv",
+        "implementation",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "cross-entropy",
+        "binary-cross-entropy",
+        "logistic-regression"
+      ],
+      "related": [
+        "yolo-family",
+        "object-detection-rcnn-detr",
+        "semantic-instance-segmentation"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "infonce-nt-xent-losses",
+      "title": "InfoNCE & NT-Xent Contrastive Losses",
+      "summary": "InfoNCE maximises a mutual-information lower bound by classifying a positive pair against \\( k \\) negatives: \\( \\mathcal{L} = -\\log \\exp(s^+) / \\sum_i \\exp(s_i) \\). NT-Xent is InfoNCE with temperature-scaled cosine similarities. Drives SimCLR, MoCo, CLIP, and most modern self-supervised representation learning.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "noise-contrastive-estimation",
+        "cosine-similarity",
+        "contrastive-learning-simclr-moco"
+      ],
+      "related": [
+        "clip-contrastive-language-image-pre-training",
+        "siamese-networks-metric-learning",
+        "triplet-margin-loss"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gradient-accumulation",
+      "title": "Gradient Accumulation & Micro-Batching",
+      "summary": "Split a large effective batch into \\( k \\) micro-batches; accumulate their gradients in a buffer, then step once. Decouples statistical batch size from hardware batch size, enabling \\( N\\cdot k \\) effective batch without a \\( k\\times \\) memory blow-up. Essential for training large models on any GPU.",
+      "domain": "deep-learning",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "intro",
+        "implementation",
+        "ml",
+        "optimization",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "mini-batch-gradient-descent",
+        "backpropagation"
+      ],
+      "related": [
+        "data-parallelism",
+        "gradient-checkpointing-activation-recomputation",
+        "mixed-precision-training"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "expected-calibration-error-ece",
+      "title": "Expected Calibration Error (ECE) & Reliability Diagrams",
+      "summary": "Measures miscalibration: \\( \\text{ECE} = \\sum_b (|B_b|/n) \\, |\\text{acc}(B_b) - \\text{conf}(B_b)| \\). Predictions are bucketed by confidence; the gap between mean confidence and accuracy in each bucket sums to ECE. Deep nets are typically over-confident; temperature scaling restores calibration.",
+      "domain": "evaluation",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "calibration",
+        "accuracy",
+        "softmax"
+      ],
+      "related": [
+        "temperature-scaling",
+        "platt-scaling-isotonic-regression",
+        "bayesian-deep-learning-mc-dropout-ensembles"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "platt-scaling-isotonic-regression",
+      "title": "Platt Scaling & Isotonic Regression",
+      "summary": "Two classical post-hoc calibration methods. Platt scaling fits a one-parameter logistic \\( \\sigma(a f(x) + b) \\) on validation scores. Isotonic regression fits a non-parametric monotone step function, trading smoothness for flexibility. Both restore calibration without changing model rankings.",
+      "domain": "evaluation",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "expected-calibration-error-ece",
+        "logistic-regression",
+        "calibration"
+      ],
+      "related": [
+        "temperature-scaling",
+        "bayesian-deep-learning-mc-dropout-ensembles",
+        "conformal-prediction"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bayesian-deep-learning-mc-dropout-ensembles",
+      "title": "Bayesian Deep Learning: MC Dropout & Deep Ensembles",
+      "summary": "Two cheap uncertainty-quantification recipes. MC dropout keeps dropout active at test time, treating each sample as a draw from an approximate posterior. Deep ensembles train \\( M \\) networks from different seeds and average their predictions. Both reduce over-confidence and improve calibration at the cost of inference compute.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "dropout",
+        "bayes-theorem",
+        "expected-calibration-error-ece"
+      ],
+      "related": [
+        "variational-inference-elbo",
+        "conformal-prediction",
+        "pac-bayes-bounds"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "conformal-prediction",
+      "title": "Conformal Prediction",
+      "summary": "A distribution-free procedure for turning any point predictor into a prediction <b>set</b> with guaranteed finite-sample coverage \\( 1 - \\alpha \\) under exchangeability. Requires only a scoring function and a calibration set; no assumption on the underlying model or data distribution.",
+      "domain": "evaluation",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "landmark",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "expected-calibration-error-ece",
+        "bayesian-deep-learning-mc-dropout-ensembles",
+        "hypothesis-testing-and-p-values"
+      ],
+      "related": [
+        "platt-scaling-isotonic-regression",
+        "pac-bayes-bounds"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "paired-bootstrap-mcnemar-tests",
+      "title": "Paired Bootstrap & McNemar's Test for Model Comparison",
+      "summary": "Two non-parametric procedures for deciding whether model A beats model B with statistical significance. Paired bootstrap resamples matched predictions to estimate a confidence interval on the metric difference. McNemar's test uses a chi-squared on the \\( 2\\times 2 \\) contingency table of agreement / disagreement.",
+      "domain": "evaluation",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "bootstrap-resampling",
+        "confidence-interval",
+        "hypothesis-testing-and-p-values"
+      ],
+      "related": [
+        "a-b-testing-ml-systems",
+        "model-evaluation",
+        "lmsys-chatbot-arena"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "data-curation-quality-filters",
+      "title": "Data Curation & Quality Filters (FineWeb, Dolma)",
+      "summary": "Modern pretraining pipelines filter terabytes of web data through language ID, heuristic rules (repetition, punctuation ratios), classifier-based quality scoring, and toxicity / PII removal. The FineWeb and Dolma recipes document which filters mattered — often delivering per-token quality gains equivalent to 2–3× scale-up.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "nlp",
+        "product",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "pretraining-corpus",
+        "pretraining-data-deduplication",
+        "pretraining"
+      ],
+      "related": [
+        "chinchilla-scaling-laws",
+        "data-mixture",
+        "synthetic-data-post-training"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "minhash-lsh-deduplication",
+      "title": "MinHash & LSH for Large-Scale Deduplication",
+      "summary": "MinHash approximates Jaccard similarity in constant space by hashing the minimum shingle under \\( k \\) random permutations. Locality-Sensitive Hashing bands these signatures to retrieve near-duplicates in sub-linear time. The algorithm behind modern corpus dedup (Lee et al. 2021, FineWeb).",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "nlp",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "pretraining-data-deduplication",
+        "probability-distribution"
+      ],
+      "related": [
+        "hnsw-hierarchical-navigable-small-world",
+        "dense-retrieval",
+        "sparse-retrieval",
+        "data-curation-quality-filters"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "synthetic-data-post-training",
+      "title": "Synthetic Data Generation for Post-Training",
+      "summary": "Modern instruction-tuning and RL-based alignment rely on LLM-generated synthetic data: self-instruct / Evol-Instruct expand seed prompts, teacher models produce high-quality completions, and process-reward models validate chain-of-thought steps. The backbone of the post-ChatGPT post-training stack.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "nlp",
+        "product",
+        "path-transformer-llm",
+        "path-alignment"
+      ],
+      "prerequisites": [
+        "instruction-tuning",
+        "supervised-fine-tuning-sft",
+        "reinforcement-learning-from-human-feedback-rlhf"
+      ],
+      "related": [
+        "self-play-fine-tuning-spin",
+        "process-reward-models-vs-outcome-reward-models",
+        "rlaif-rl-from-ai-feedback",
+        "self-rewarding-language-models"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "continual-pretraining-mid-training",
+      "title": "Continual Pretraining & Mid-Training",
+      "summary": "Continue pretraining an existing base model on a domain or task-focused corpus (code, math, a new language) before final post-training. Achieves domain gains that would cost 10× more to obtain by fine-tuning alone. Sits between pretraining and SFT in modern recipes.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "nlp",
+        "product",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "pretraining",
+        "continual-learning",
+        "finetuning"
+      ],
+      "related": [
+        "instruction-tuning",
+        "domain-specific-pretraining",
+        "long-context-pretraining"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "langevin-dynamics",
+      "title": "Langevin Dynamics & MALA",
+      "summary": "Langevin MCMC treats gradient noise as deliberate: proposals drift along \\( -\\nabla \\log \\pi(\\theta) \\) plus Gaussian perturbation so the chain targets \\( \\pi \\). Metropolis-adjusted Langevin (MALA) corrects discretisation bias with an MH acceptance; unadjusted Langevin (ULA) trades bias for simplicity and scales to big data via stochastic gradients (SGLD).",
+      "domain": "math",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "markov-chain-monte-carlo-mcmc",
+        "metropolis-hastings-algorithm",
+        "gradient-descent"
+      ],
+      "related": [
+        "hamiltonian-monte-carlo-hmc",
+        "metropolis-hastings-algorithm",
+        "variational-inference-elbo"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "pixelcnn",
+      "title": "PixelCNN / PixelCNN++",
+      "summary": "Autoregressive image models that factor \\( p(x) = \\prod_i p(x_i \\mid x_{1:i-1}) \\) with masked convolutions so each pixel sees only pixels above and to the left. Tractable likelihood and sharp samples; PixelCNN++ improves expressive conditioners (e.g. gated activations, horizontal/vertical stacks).",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "generative",
+        "ml",
+        "theory",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "convolutional-neural-network-cnn",
+        "chain-rule-of-probability",
+        "autoregressive-language-model"
+      ],
+      "related": [
+        "autoregressive-flows-maf-iaf",
+        "variational-autoencoder-vae",
+        "normalizing-flows"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "self-rewarding-language-models",
+      "title": "Self-Rewarding Language Models",
+      "summary": "Train a model to both generate responses and judge them, using the same weights. Each iteration: generate a pool of candidates, self-rate them, extract preference pairs, DPO-train on the pairs. Recursive improvement without external reward data; bottlenecks surface around judgement quality and diversity collapse.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "reinforcement",
+        "path-alignment",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "rlaif-rl-from-ai-feedback",
+        "direct-preference-optimization-dpo",
+        "reward-model"
+      ],
+      "related": [
+        "self-play-fine-tuning-spin",
+        "iterative-dpo",
+        "synthetic-data-post-training",
+        "rlaif-rl-from-ai-feedback"
+      ],
+      "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
