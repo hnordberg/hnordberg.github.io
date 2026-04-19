@@ -22,7 +22,13 @@ const DOMAINS = new Set([
   "history",
   "other",
 ]);
-const LEVELS = new Set(["basic", "intro", "intermediate", "advanced"]);
+const LEVELS = new Set([
+  "basic",
+  "foundational",
+  "intro",
+  "intermediate",
+  "advanced",
+]);
 const TYPES = new Set([
   "definition",
   "intuition",
