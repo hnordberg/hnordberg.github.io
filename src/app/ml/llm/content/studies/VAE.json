@@ -2,6 +2,34 @@
   "id": "VAE",
   "title": "Auto-Encoding Variational Bayes",
   "shortTitle": "Variational Autoencoder",
+  "meta": {
+    "year": 2014,
+    "authors": [
+      "Kingma",
+      "Welling"
+    ],
+    "venue": "ICLR 2014",
+    "arxivId": "1312.6114",
+    "prerequisites": [
+      "kl-divergence",
+      "maximum-likelihood-estimate-mle",
+      "multivariate-gaussian-distribution",
+      "autoencoders",
+      "bayes-theorem",
+      "stochastic-gradient-descent-sgd"
+    ],
+    "related": [
+      "variational-inference-elbo",
+      "evidence-lower-bound-elbo-derivation",
+      "reparameterization-trick-vae",
+      "jensens-inequality",
+      "expectation-maximization-em-algorithm",
+      "latent-space",
+      "normalizing-flows",
+      "denoising-diffusion-probabilistic-models-ddpm"
+    ],
+    "supersededBy": []
+  },
   "pages": [
     {
       "pageIndex": 1,
@@ -9,81 +37,230 @@
       "sections": [
         {
           "kind": "prose",
-          "body": "<p>When performing generative modeling, our goal is to model the true data distribution \\( p(x) \\). Typically, we define a latent variable model \\( p(x, z) = p(x|z)p(z) \\) where \\( z \\) represents unobserved factors of variation. To train this model via maximum likelihood, we must marginalize out the latent variables: \\( p(x) = \\int p(x|z)p(z) dz \\).</p><p>For any reasonably complex neural network decoder, this integral is <b>intractable</b>. Furthermore, calculating the true posterior \\( p(z|x) = p(x|z)p(z)/p(x) \\) is universally difficult because it inherently relies on \\( p(x) \\).</p>"
+          "body": "<p>Generative modelling with latent variables aims to model a data distribution \\( p(x) \\) through an auxiliary unobserved variable \\( z \\), with the joint \\( p_\\theta(x, z) = p_\\theta(x \\mid z)\\, p(z) \\) and a simple prior \\( p(z) \\) (typically an isotropic Gaussian \\( \\mathcal{N}(0, I) \\)). Maximum-likelihood training requires the marginal over \\( z \\):</p>"
+        },
+        {
+          "kind": "equation",
+          "title": "Marginal likelihood",
+          "equation": "p_\\theta(x) = \\int p_\\theta(x \\mid z)\\, p(z)\\, dz"
+        },
+        {
+          "kind": "prose",
+          "body": "<p>Two quantities are intractable for neural-network decoders. The marginal \\( p_\\theta(x) \\) is an integral over a high-dimensional continuous \\( z \\); no closed form exists when \\( p_\\theta(x \\mid z) \\) is a neural net. The posterior \\( p_\\theta(z \\mid x) = p_\\theta(x \\mid z)\\, p(z) / p_\\theta(x) \\) inherits the same intractability via its denominator. Classical <a href=\"/ml/wiki/topics/expectation-maximization-em-algorithm\">EM</a> works when the posterior is tractable (Gaussian mixtures, factor analysis); it does not here.</p>"
         },
         {
           "kind": "pitfall",
-          "title": "Why not just a standard Autoencoder?",
-          "body": "<p>Traditional autoencoders learn a deterministic mapping from inputs to a bottleneck vector \\( z \\) and back to the reconstructed input. This yields a disjoint, non-smooth latent space. You cannot easily sample an arbitrary \\( z \\) from a prior and expect the decoder to produce realistic, novel data. A VAE solves this by forcing the encoder to output a continuous distribution over \\( z \\).</p>"
+          "title": "Why not a standard autoencoder?",
+          "body": "<p><b>Common misconception:</b> a <a href=\"/ml/wiki/topics/autoencoders\">standard autoencoder</a> already maps \\( x \\) to a bottleneck code and back, so why bother with a probabilistic formulation. A deterministic autoencoder yields an arbitrary, non-smooth code space with no probabilistic interpretation: sampling \\( z \\sim p(z) \\) and decoding does not produce realistic data because the decoder was never asked to cover a known prior. The VAE adds two couplings — a probabilistic recognition network and a KL penalty against the prior — precisely so that the decoder maps the whole prior to plausible data.</p>"
+        },
+        {
+          "kind": "prose",
+          "body": "<p>The paper introduces a practical stochastic gradient estimator for this setup: an <b>amortized</b> recognition network, a tight lower bound on \\( \\log p_\\theta(x) \\) called the ELBO, and a <b>reparameterization</b> of the sampling step so gradients flow through a differentiable path. Together these let any differentiable encoder/decoder pair be trained end-to-end with SGD on a single scalar objective.</p>"
         }
       ]
     },
     {
       "pageIndex": 2,
-      "pageTitle": "The Evidence Lower Bound (ELBO)",
+      "pageTitle": "Generative Model & Amortized Inference",
       "sections": [
         {
           "kind": "prose",
-          "body": "<p>Since we cannot compute the true posterior, we use <b>variational inference</b>. We introduce a parametric recognition model \\( q_\\phi(z|x) \\) (the encoder network) to approximate the true posterior. We then maximize a lower bound on the marginal likelihood, known as the Evidence Lower Bound (ELBO).</p>"
+          "body": "<p>The generative story is fixed: sample a latent \\( z \\sim p(z) = \\mathcal{N}(0, I) \\), then sample an observation \\( x \\sim p_\\theta(x \\mid z) \\) from a neural-network decoder. Training requires a surrogate for the posterior \\( p_\\theta(z \\mid x) \\) used during learning — one that is tractable, trainable, and close enough to the truth to give useful gradients.</p>"
         },
         {
-          "kind": "equation",
-          "title": "The ELBO Objective",
-          "equation": "\\mathcal{L}(\\theta, \\phi; x) = \\mathbb{E}_{q_\\phi(z|x)}[\\log p_\\theta(x|z)] - D_{KL}(q_\\phi(z|x) \\,\\|\\, p(z))"
+          "kind": "figure",
+          "title": "Amortized inference",
+          "source": "src/app/ml/llm/content/studies/figures/VAE/graphical_model.py",
+          "body": "<svg viewBox=\"70 58.0 300 162.0\" xmlns=\"http://www.w3.org/2000/svg\" style=\"display:block; margin:12px auto; max-width:560px; border-radius:8px; overflow:hidden;\">\n<defs><marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/></marker></defs>\n<rect x=\"70\" y=\"58.0\" width=\"300\" height=\"162.0\" fill=\"#1a202c\"/>\n<circle cx=\"120\" cy=\"120\" r=\"22\" fill=\"#2d3748\" stroke=\"#63b3ed\" stroke-width=\"1.5\"/><text x=\"120\" y=\"125\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\">z</text>\n<circle cx=\"320\" cy=\"120\" r=\"22\" fill=\"#4a5568\" stroke=\"#cbd5e0\" stroke-width=\"1.5\"/><text x=\"320\" y=\"125\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\">x</text>\n<path d=\"M 142 120 L 152 92.0 L 288 92.0 L 298 120\" fill=\"none\" stroke=\"#63b3ed\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<path d=\"M 298 120 L 288 148.0 L 152 148.0 L 142 120\" fill=\"none\" stroke=\"#f6ad55\" stroke-width=\"2\" stroke-dasharray=\"4 3\" marker-end=\"url(#arrow)\"/>\n<text x=\"120\" y=\"88\" fill=\"#63b3ed\" font-family=\"sans-serif\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"middle\">p(z) = 𝒩(0, I)</text>\n<text x=\"320\" y=\"88\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"middle\">observed</text>\n<text x=\"220.0\" y=\"86.0\" fill=\"#63b3ed\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">p_θ(x | z)   generative</text>\n<text x=\"220.0\" y=\"166.0\" fill=\"#f6ad55\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">q_φ(z | x)   recognition  (amortized)</text>\n<text x=\"220.0\" y=\"192\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"middle\">One encoder network predicts q_φ(z | x) for every x — not per-datapoint.</text>\n</svg><p style=\"text-align:center; font-size:0.9em; color:#888;\">Generative path p_θ(x | z) (solid) and recognition path q_φ(z | x) (dashed). Variational parameters φ are shared across every x.</p>"
         },
         {
           "kind": "prose",
-          "body": "<p>The loss we must minimize is the negative ELBO. It separates into two powerful tug-of-war components:<ul><li><b>Reconstruction term:</b> \\( \\mathbb{E}[\\log p_\\theta(x|z)] \\) encourages the decoder \\( p_\\theta \\) to accurately reconstruct the input from the samples produced by the encoder.</li><li><b>Regularization term:</b> \\( D_{KL}(q_\\phi(z|x) \\,\\|\\, p(z)) \\) forces the approximate posterior to stay close to a chosen prior \\( p(z) \\), which is almost universally structured as a standard isotropic Gaussian \\( \\mathcal{N}(0, I) \\).</li></ul></p>"
+          "title": "Amortization",
+          "body": "<p>Classical variational inference optimises a separate distribution \\( q(z) \\) per datapoint, which costs one optimisation run per example and does not scale. The VAE introduces a <b>recognition network</b> \\( q_\\phi(z \\mid x) \\) whose parameters \\( \\phi \\) are <b>shared</b> across all \\( x \\): a single forward pass predicts the approximate posterior for any input. This is amortized inference — the per-example inference cost is amortised into the shared encoder parameters. The same trick also generalises to unseen \\( x \\) at test time, which classical per-datapoint VI cannot.</p>"
+        },
+        {
+          "kind": "prose",
+          "title": "Gaussian parameterization",
+          "body": "<p>The paper picks a diagonal-Gaussian recognition distribution:</p><p>\\[ q_\\phi(z \\mid x) = \\mathcal{N}\\bigl(z;\\, \\mu_\\phi(x),\\, \\operatorname{diag}(\\sigma_\\phi^2(x))\\bigr) \\]</p><p>where \\( \\mu_\\phi \\) and \\( \\log \\sigma_\\phi^2 \\) are the two outputs of the encoder MLP. The choice is not mandatory — any reparameterisable family works — but diagonal Gaussian keeps the encoder cheap, the KL closed-form (page 3), and the sampler trivially reparameterisable (page 4).</p>"
         }
       ]
     },
     {
       "pageIndex": 3,
-      "pageTitle": "The Reparameterization Trick",
+      "pageTitle": "The Evidence Lower Bound (ELBO)",
       "sections": [
         {
           "kind": "prose",
-          "body": "<p>To optimize the encoder parameters \\( \\phi \\), we must backpropagate through the sampling step \\( z \\sim q_\\phi(z|x) \\). However, stochastic nodes block backpropagation because the act of sampling provides no gradient defined by the deterministic path of the neural network.</p>"
+          "body": "<p>The ELBO falls out of a single identity. For any \\( q_\\phi(z \\mid x) \\), adding and subtracting \\( \\log q_\\phi(z \\mid x) \\) inside the expectation and collecting terms yields:</p>"
         },
         {
           "kind": "equation",
-          "title": "Reparameterization Trick",
-          "equation": "z = \\mu_\\phi(x) + \\sigma_\\phi(x) \\odot \\epsilon \\quad \\text{where} \\quad \\epsilon \\sim \\mathcal{N}(0, I)"
+          "title": "Log-evidence decomposition",
+          "equation": "\\log p_\\theta(x) = \\mathcal{L}(\\theta, \\phi; x) + D_{\\mathrm{KL}}\\bigl(q_\\phi(z \\mid x)\\, \\|\\, p_\\theta(z \\mid x)\\bigr)"
         },
         {
           "kind": "prose",
-          "body": "<p>By separating the random noise \\( \\epsilon \\) from the deterministic network outputs \\( \\mu_\\phi \\) and \\( \\sigma_\\phi \\), we reroute the stochasticity. The node \\( z \\) is now a deterministic function of its parameters and an external, parameter-less noise source. This restores the chain rule allowing <a href=\"/ml/wiki/topics/backpropagation\">backpropagation</a> to flow easily through the encoder to update \\( \\phi \\).</p>"
+          "body": "<p>The second term is the <a href=\"/ml/wiki/topics/kl-divergence\">KL divergence</a> between the approximate and true posterior — non-negative by construction. Therefore \\( \\mathcal{L}(\\theta, \\phi; x) \\le \\log p_\\theta(x) \\): the first term lower-bounds the log-evidence, hence \"evidence lower bound\" (<a href=\"/ml/wiki/topics/evidence-lower-bound-elbo-derivation\">ELBO</a>). Maximising the ELBO in \\( \\theta \\) pushes \\( \\log p_\\theta(x) \\) up; maximising in \\( \\phi \\) pushes \\( q_\\phi(z \\mid x) \\) towards the true posterior.</p>"
+        },
+        {
+          "kind": "equation",
+          "title": "The ELBO — reconstruction / regularisation split",
+          "equation": "\\mathcal{L}(\\theta, \\phi; x) = \\mathbb{E}_{q_\\phi(z \\mid x)}\\bigl[\\log p_\\theta(x \\mid z)\\bigr] - D_{\\mathrm{KL}}\\bigl(q_\\phi(z \\mid x)\\, \\|\\, p(z)\\bigr)"
+        },
+        {
+          "kind": "prose",
+          "body": "<p>The two terms have distinct roles. The first is a <b>reconstruction</b> term: under \\( z \\) sampled from the recognition network, the decoder should assign high likelihood to the observed \\( x \\). The second is a <b>regularisation</b> term: \\( q_\\phi(z \\mid x) \\) should not drift far from the prior \\( p(z) = \\mathcal{N}(0, I) \\), so that latent codes remain globally coherent and samples \\( z \\sim p(z) \\) decode to plausible \\( x \\).</p>"
+        },
+        {
+          "kind": "example",
+          "title": "Closed-form KL for diagonal Gaussians",
+          "body": "<p>With \\( q_\\phi(z \\mid x) = \\mathcal{N}(\\mu, \\operatorname{diag}(\\sigma^2)) \\) and \\( p(z) = \\mathcal{N}(0, I) \\), the KL has an analytic form (Appendix B of the paper):</p><p>\\[ D_{\\mathrm{KL}} = -\\tfrac{1}{2} \\sum_{j=1}^{d_z} \\bigl(1 + \\log \\sigma_j^2 - \\mu_j^2 - \\sigma_j^2\\bigr) \\]</p><p>Only the reconstruction term still needs Monte-Carlo estimation; the KL is computed exactly in closed form. This keeps the estimator's variance low enough for L = 1 sample per batch to suffice (page 5).</p>"
         }
       ]
     },
     {
       "pageIndex": 4,
-      "pageTitle": "Posterior Collapse & Training Dynamics",
+      "pageTitle": "The Reparameterization Trick",
       "sections": [
         {
           "kind": "prose",
-          "body": "<p>In sequence generation or when using highly capacity decoders (like autoregressive models), VAEs run into a severe dynamic issue known as <b>posterior collapse</b>. The model completely ignores the latent code \\( z \\) and relies entirely on the powerful decoder to predict the data.</p>"
+          "body": "<p>Optimising the ELBO in \\( \\phi \\) requires gradients of \\( \\mathbb{E}_{q_\\phi(z \\mid x)}[\\log p_\\theta(x \\mid z)] \\) with respect to \\( \\phi \\). The naïve score-function estimator \\( \\nabla_\\phi \\mathbb{E}_q[f] = \\mathbb{E}_q[f\\, \\nabla_\\phi \\log q] \\) is unbiased but has variance too high for practical SGD at this scale. The <a href=\"/ml/wiki/topics/reparameterization-trick-vae\">reparameterization trick</a> rewrites the sample as a deterministic function of parameters and external noise, making the gradient pathwise.</p>"
+        },
+        {
+          "kind": "equation",
+          "title": "Reparameterized Gaussian sample",
+          "equation": "z = \\mu_\\phi(x) + \\sigma_\\phi(x) \\odot \\epsilon, \\qquad \\epsilon \\sim \\mathcal{N}(0, I)"
+        },
+        {
+          "kind": "figure",
+          "title": "Gradient flow under reparameterization",
+          "source": "src/app/ml/llm/content/studies/figures/VAE/reparameterization.py",
+          "body": "<svg viewBox=\"-8 92 976 246\" xmlns=\"http://www.w3.org/2000/svg\" style=\"display:block; margin:12px auto; max-width:820px; border-radius:8px; overflow:hidden;\">\n<defs><marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"><path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cbd5e0\"/></marker></defs>\n<rect x=\"-8\" y=\"92\" width=\"976\" height=\"246\" fill=\"#1a202c\"/>\n<rect x=\"20\" y=\"140\" width=\"80\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#68d391\" stroke-width=\"1.5\"/><text x=\"60.0\" y=\"164.0\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">x</text>\n<rect x=\"140\" y=\"140\" width=\"120\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#63b3ed\" stroke-width=\"1.5\"/><text x=\"200.0\" y=\"164.0\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Encoder q_φ</text>\n<rect x=\"360\" y=\"120\" width=\"80\" height=\"20\" rx=\"4\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-width=\"1.5\"/><text x=\"400.0\" y=\"134.0\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">μ_φ(x)</text>\n<rect x=\"360\" y=\"180\" width=\"80\" height=\"20\" rx=\"4\" fill=\"#2d3748\" stroke=\"#cbd5e0\" stroke-width=\"1.5\"/><text x=\"400.0\" y=\"194.0\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">σ_φ(x)</text>\n<rect x=\"600\" y=\"140\" width=\"80\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#63b3ed\" stroke-width=\"1.5\"/><text x=\"640.0\" y=\"164.0\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">z</text>\n<rect x=\"700\" y=\"140\" width=\"120\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#63b3ed\" stroke-width=\"1.5\"/><text x=\"760.0\" y=\"164.0\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Decoder p_θ</text>\n<rect x=\"860\" y=\"140\" width=\"80\" height=\"40\" rx=\"4\" fill=\"#2d3748\" stroke=\"#68d391\" stroke-width=\"1.5\"/><text x=\"900.0\" y=\"164.0\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" text-anchor=\"middle\">x̂</text>\n<circle cx=\"520\" cy=\"160\" r=\"12\" fill=\"#2d3748\" stroke=\"#f6ad55\" stroke-width=\"1.5\"/><text x=\"520\" y=\"165\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\">+</text>\n<circle cx=\"480\" cy=\"200\" r=\"10\" fill=\"#2d3748\" stroke=\"#f6ad55\" stroke-width=\"1.5\"/><text x=\"480\" y=\"205\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"13\" font-weight=\"bold\" text-anchor=\"middle\">×</text>\n<circle cx=\"520\" cy=\"280\" r=\"14\" fill=\"#2d3748\" stroke=\"#f6ad55\" stroke-width=\"1.5\"/><text x=\"520\" y=\"285\" fill=\"#cbd5e0\" font-family=\"sans-serif\" font-size=\"13\" font-weight=\"bold\" text-anchor=\"middle\">ε</text>\n<line x1=\"100\" y1=\"160.0\" x2=\"140\" y2=\"160.0\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<line x1=\"260\" y1=\"160.0\" x2=\"360\" y2=\"130.0\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<line x1=\"260\" y1=\"160.0\" x2=\"360\" y2=\"190.0\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<line x1=\"440\" y1=\"130.0\" x2=\"508\" y2=\"160\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<line x1=\"440\" y1=\"190.0\" x2=\"470\" y2=\"200\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<line x1=\"520\" y1=\"266\" x2=\"480\" y2=\"210\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<line x1=\"480\" y1=\"190\" x2=\"520\" y2=\"172\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<line x1=\"532\" y1=\"160\" x2=\"600\" y2=\"160.0\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<line x1=\"680\" y1=\"160.0\" x2=\"700\" y2=\"160.0\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<line x1=\"820\" y1=\"160.0\" x2=\"860\" y2=\"160.0\" stroke=\"#cbd5e0\" stroke-width=\"2\" marker-end=\"url(#arrow)\"/>\n<text x=\"520\" y=\"310\" fill=\"#f6ad55\" font-family=\"sans-serif\" font-size=\"11\" font-weight=\"bold\" text-anchor=\"middle\">ε ~ 𝒩(0, I)</text>\n<text x=\"640.0\" y=\"130\" fill=\"#63b3ed\" font-family=\"sans-serif\" font-size=\"12\" font-weight=\"bold\" text-anchor=\"middle\">z = μ + σ ⊙ ε</text>\n<text x=\"420.0\" y=\"232\" fill=\"#68d391\" font-family=\"sans-serif\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"middle\">gradients flow through deterministic path (μ, σ)</text>\n<text x=\"634\" y=\"284\" fill=\"#4a5568\" font-family=\"sans-serif\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"start\">noise is external — not differentiated</text>\n</svg><p style=\"text-align:center; font-size:0.9em; color:#888;\">Encoder outputs μ_φ(x), σ_φ(x); stochasticity lives in ε. Gradients w.r.t. φ flow through the deterministic (μ, σ) path.</p>"
+        },
+        {
+          "kind": "prose",
+          "title": "Why the rewrite helps",
+          "body": "<p>With \\( z = g(\\epsilon, \\phi, x) \\), expectations under \\( q_\\phi \\) become expectations under the fixed distribution of \\( \\epsilon \\), and the integrand is differentiable in \\( \\phi \\) through \\( g \\). The <b>pathwise</b> estimator \\( \\nabla_\\phi \\mathbb{E}_\\epsilon[f(g(\\epsilon, \\phi, x))] = \\mathbb{E}_\\epsilon[\\nabla_\\phi f(g(\\epsilon, \\phi, x))] \\) is also unbiased and has dramatically lower variance than the score-function estimator — the shared randomness \\( \\epsilon \\) across the forward and backward pass is the reason.</p>"
         },
         {
           "kind": "pitfall",
-          "title": "Diagnosing Posterior Collapse",
-          "body": "<p>If the KL divergence term collapses to exactly zero (i.e. \\( q_\\phi(z|x) = p(z) \\) everywhere), the generative model defaults to a system that completely ignores its condition inputs. The standard operational fix is <b>KL Annealing</b>: multiply the KL loss term by a scalar \\( \\beta \\) that slowly scales from 0 up to 1 over the early epochs, forcing the network to utilize \\( z \\) for reconstructions before paying the penalty.</p>"
+          "title": "Not every distribution is reparameterizable",
+          "body": "<p><b>Common misconception:</b> reparameterization is a universal trick. It works cleanly for location-scale families (Gaussian, Laplace, uniform), and with more care for others (concrete / Gumbel-softmax for categoricals; Kumaraswamy for Beta). Genuinely discrete latents do not admit a pathwise gradient and require alternatives such as straight-through estimators (used by VQ-VAE) or score-function with control variates.</p>"
+        }
+      ]
+    },
+    {
+      "pageIndex": 5,
+      "pageTitle": "Training Recipe & Decoder Choices",
+      "sections": [
+        {
+          "kind": "prose",
+          "body": "<p>The paper demonstrates the estimator on modest MLPs — the method is architecture-agnostic, and the experimental choices reflect what was practical on a 2013 single-GPU machine. All numbers below are from §5 of the paper.</p>"
+        },
+        {
+          "kind": "table",
+          "title": "Experimental setup",
+          "source": "§5 of arXiv:1312.6114",
+          "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\"><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Setting</th><th style=\"padding:6px; text-align:left;\">Value</th></tr><tr><td style=\"padding:6px;\">Encoder / decoder</td><td style=\"padding:6px;\">MLP with 500 hidden units, tanh activation</td></tr><tr><td style=\"padding:6px;\">Latent dimensionality \\( d_z \\)</td><td style=\"padding:6px;\">swept over { 3, 5, 10, 20, 200 }</td></tr><tr><td style=\"padding:6px;\">Batch size \\( M \\)</td><td style=\"padding:6px;\">100</td></tr><tr><td style=\"padding:6px;\">MC samples \\( L \\) per datapoint</td><td style=\"padding:6px;\">1 (sufficient when \\( M \\ge 100 \\))</td></tr><tr><td style=\"padding:6px;\">Optimiser</td><td style=\"padding:6px;\">Adagrad</td></tr><tr><td style=\"padding:6px;\">Datasets</td><td style=\"padding:6px;\">MNIST (binary), Frey Face (continuous)</td></tr></table>"
+        },
+        {
+          "kind": "prose",
+          "title": "Decoder family depends on the data",
+          "body": "<p>The decoder's output distribution matches the data type:</p><ul><li><b>Bernoulli decoder</b> for binary pixels (MNIST): \\( p_\\theta(x \\mid z) = \\prod_i \\mathrm{Bern}(x_i;\\, \\pi_i(z)) \\), where the decoder outputs logits fed through a sigmoid. The reconstruction term becomes binary cross-entropy.</li><li><b>Gaussian decoder</b> for continuous pixels (Frey Face): \\( p_\\theta(x \\mid z) = \\mathcal{N}(x;\\, \\mu_\\theta(z),\\, \\sigma_\\theta^2(z)\\, I) \\). The decoder outputs mean and (log-)variance per pixel. The reconstruction term becomes squared error scaled by the predicted variance.</li></ul><p>The rest of the pipeline — encoder, reparameterisation, KL term — is identical across the two.</p>"
+        },
+        {
+          "kind": "prose",
+          "title": "Why L = 1 works",
+          "body": "<p>A batch of size \\( M = 100 \\) already averages 100 independent noise draws \\( \\epsilon^{(m)} \\), one per datapoint. The gradient estimator is therefore an average over 100 pathwise samples even with one sample per datapoint — low-variance enough for stable SGD. Increasing \\( L \\) per datapoint was tested but did not materially improve training in the paper's experiments.</p>"
+        }
+      ]
+    },
+    {
+      "pageIndex": 6,
+      "pageTitle": "Results: AEVB vs Wake-Sleep",
+      "sections": [
+        {
+          "kind": "prose",
+          "body": "<p>The paper's headline experiments compare AEVB (the proposed training algorithm) against the <b>wake-sleep</b> algorithm, the dominant prior method for training deep generative models with recognition networks. Both methods train the same MLP architecture on the same data; only the gradient estimator differs.</p>"
+        },
+        {
+          "kind": "result",
+          "title": "Bound vs compute",
+          "source": "Figure 2 of arXiv:1312.6114",
+          "body": "<p>On both MNIST and Frey Face, AEVB reached higher variational lower bounds than wake-sleep and reached them faster per training sample, across every latent dimensionality tested (\\( d_z \\in \\{3, 5, 10, 20, 200\\} \\)). The gap was largest for larger \\( d_z \\), where wake-sleep's coordinate-ascent-style update struggles with high-dimensional latent spaces.</p>"
+        },
+        {
+          "kind": "result",
+          "title": "Marginal likelihood estimates",
+          "source": "§5.1 and Figure 3 of arXiv:1312.6114",
+          "body": "<p>For MNIST with small training sets, the paper additionally estimates the true marginal log-likelihood via importance sampling through the trained \\( q_\\phi \\). AEVB again outperformed wake-sleep; the gap narrowed with larger training sets, consistent with both methods eventually saturating at the data's true log-likelihood.</p>"
+        },
+        {
+          "kind": "prose",
+          "title": "Qualitative samples",
+          "body": "<p>The paper also shows generated samples from the prior — \\( z \\sim \\mathcal{N}(0, I) \\) fed through the trained decoder. The MNIST samples are recognisable digits; the Frey Face samples are coherent faces with smooth interpolations as \\( z \\) is varied along a line in latent space. The continuity is not an accident: the KL-to-prior term is what forces the decoder to map the whole Gaussian ball to plausible data, which is also why simple autoencoders (with no KL term) fail at unconditional sampling.</p>"
+        }
+      ]
+    },
+    {
+      "pageIndex": 7,
+      "pageTitle": "Posterior Collapse & Legacy",
+      "sections": [
+        {
+          "kind": "prose",
+          "body": "<p>The original paper's MLP decoders never had enough capacity to ignore \\( z \\), so the training dynamics were benign. Later work combined VAEs with autoregressive decoders (PixelRNN/PixelCNN) or strong text decoders, and ran headlong into <b>posterior collapse</b>: the recognition network converges to the prior everywhere, the KL term goes to zero, and the decoder generates from its own prior without using the latent code.</p>"
+        },
+        {
+          "kind": "pitfall",
+          "title": "Why powerful decoders break the VAE",
+          "body": "<p><b>Common misconception:</b> a more powerful decoder always makes the VAE better. When the decoder's marginal \\( \\int p_\\theta(x \\mid z)\\, p(z)\\, dz \\) already models the data well without \\( z \\), the optimiser finds a local minimum where \\( q_\\phi(z \\mid x) = p(z) \\) for all \\( x \\) — the regularisation term is zero, the reconstruction term is modelled by the decoder alone, and the latent code carries no information. Fixes: KL annealing (scale the KL term by \\( \\beta_t \\) rising from 0 to 1 during training), free bits (forbid the KL from dropping below a threshold per latent dimension), and architectural restrictions on decoder capacity.</p>"
+        },
+        {
+          "kind": "table",
+          "title": "Descendants and relatives",
+          "source": "Author synthesis; each line has its own paper.",
+          "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\"><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Variant</th><th style=\"padding:6px; text-align:left;\">What it changes</th></tr><tr><td style=\"padding:6px;\">β-VAE (Higgins et al., 2017)</td><td style=\"padding:6px;\">Weights the KL term by \\( \\beta > 1 \\) to trade reconstruction for disentangled latent dimensions.</td></tr><tr><td style=\"padding:6px;\">VQ-VAE (van den Oord et al., 2017)</td><td style=\"padding:6px;\">Discrete codebook latents trained with a straight-through estimator; bypasses reparameterisation.</td></tr><tr><td style=\"padding:6px;\">Hierarchical / NVAE</td><td style=\"padding:6px;\">Deep stacks of latent groups \\( z_1, z_2, \\ldots \\) with top-down generation.</td></tr><tr><td style=\"padding:6px;\">Latent diffusion (Stable Diffusion)</td><td style=\"padding:6px;\">VAE compresses images to a small latent grid; a diffusion model generates in that latent space.</td></tr><tr><td style=\"padding:6px;\"><a href=\"/ml/wiki/topics/normalizing-flows\">Normalising flows</a></td><td style=\"padding:6px;\">Exact likelihoods via invertible maps; trades model expressivity for a tighter bound (no bound at all — the likelihood is exact).</td></tr></table>"
+        },
+        {
+          "kind": "prose",
+          "title": "Why the paper still matters",
+          "body": "<p>Two specific contributions from 2014 persisted into every subsequent deep generative model: <b>amortized inference</b> via a shared recognition network, and the <b>reparameterization trick</b> for low-variance pathwise gradients through stochastic sampling. Both are used in modern diffusion training, in RL policy-gradient variants, and anywhere a differentiable surrogate is needed for an otherwise-stochastic operation. The VAE itself now most often appears as the image encoder in front of a <a href=\"/ml/wiki/topics/latent-diffusion\">latent diffusion</a> model, not as the final generator.</p>"
         }
       ]
     }
   ],
   "quiz": [
     {
-      "prompt": "Why can't we optimize the marginal likelihood directly, requiring us to use the ELBO in a Variational Autoencoder?",
-      "answer": "<p>Evaluating the marginal likelihood \\( p(x) = \\int p(x|z)p(z) dz \\) implies integrating over every possible value of the latent space \\( z \\), which is mathematically intractable for meaningful continuous dimensions and non-linear decoders.</p>"
+      "prompt": "Why are both the marginal \\( p_\\theta(x) \\) and the posterior \\( p_\\theta(z \\mid x) \\) intractable for a neural-network decoder, and why does classical EM not rescue us?",
+      "answer": "<p>The marginal \\( p_\\theta(x) = \\int p_\\theta(x \\mid z)\\, p(z)\\, dz \\) is an integral over high-dimensional continuous \\( z \\) with no closed form when \\( p_\\theta(x \\mid z) \\) is a neural net. The posterior \\( p_\\theta(z \\mid x) = p_\\theta(x \\mid z)\\, p(z) / p_\\theta(x) \\) inherits the intractability via its denominator. EM requires an E-step that computes (or tractably represents) the exact posterior — feasible for Gaussian mixtures and factor analysis, not for neural decoders.</p>"
     },
     {
-      "prompt": "What exactly does the reparameterization trick accomplish in the VAE architecture?",
-      "answer": "<p>The trick expresses the stochastic sample as \\( z = \\mu + \\sigma \\odot \\epsilon \\) where \\( \\epsilon \\sim \\mathcal{N}(0,I) \\), allowing analytical gradients to flow backwards through \\( \\mu \\) and \\( \\sigma \\) into the encoder parameters, bypassing the non-differentiable sampling operation.</p>"
+      "prompt": "What does \"amortized\" mean in amortized variational inference, and why does it matter at scale?",
+      "answer": "<p>Classical variational inference fits a separate variational distribution \\( q(z) \\) per datapoint, paying one optimisation run for each example. Amortized inference replaces that per-example cost with a single shared recognition network \\( q_\\phi(z \\mid x) \\) whose parameters \\( \\phi \\) are learned once across the whole dataset. Inference at test time is then a single forward pass; the network also generalises to unseen \\( x \\), which per-example VI cannot.</p>"
     },
     {
-      "prompt": "If your VAE outputs extremely blurry images but the KL divergence is suspiciously sitting right at 0, what optimization trap has the network fallen into?",
-      "answer": "<p>The network suffered from <b>posterior collapse</b>. The encoder predicts the prior distribution perfectly for all inputs, and the decoder completely ignores the latent vector \\( z \\), defaulting to predicting the generic mean of the entire dataset rather than reconstructing individual data instances.</p>"
+      "prompt": "State the identity that produces the ELBO from \\( \\log p_\\theta(x) \\), and explain what maximising the ELBO does to both \\( \\theta \\) and \\( \\phi \\).",
+      "answer": "<p>\\( \\log p_\\theta(x) = \\mathcal{L}(\\theta, \\phi; x) + D_{\\mathrm{KL}}(q_\\phi(z \\mid x)\\, \\|\\, p_\\theta(z \\mid x)) \\). Because the KL on the right is non-negative, \\( \\mathcal{L} \\le \\log p_\\theta(x) \\) — hence \"lower bound\". Maximising \\( \\mathcal{L} \\) over \\( \\theta \\) raises \\( \\log p_\\theta(x) \\) (since the KL bounds the gap). Maximising over \\( \\phi \\) drives the KL towards zero, pushing \\( q_\\phi(z \\mid x) \\) towards the true posterior.</p>"
+    },
+    {
+      "prompt": "Why is the score-function estimator \\( \\nabla_\\phi \\mathbb{E}_{q_\\phi}[f] = \\mathbb{E}_{q_\\phi}[f\\, \\nabla_\\phi \\log q_\\phi] \\) inadequate for training VAEs, and what does the reparameterization trick replace it with?",
+      "answer": "<p>The score-function estimator is unbiased but has variance that scales poorly with \\( d_z \\) because the signal \\( f \\nabla \\log q \\) correlates weakly with \\( \\phi \\). Reparameterization writes the sample as \\( z = g(\\epsilon, \\phi, x) = \\mu_\\phi(x) + \\sigma_\\phi(x) \\odot \\epsilon \\) with \\( \\epsilon \\sim \\mathcal{N}(0, I) \\). The pathwise estimator \\( \\nabla_\\phi \\mathbb{E}_\\epsilon[f(g(\\epsilon, \\phi, x))] = \\mathbb{E}_\\epsilon[\\nabla_\\phi f(g(\\epsilon, \\phi, x))] \\) shares \\( \\epsilon \\) between forward and backward pass, dramatically reducing variance.</p>"
+    },
+    {
+      "prompt": "With \\( q_\\phi(z \\mid x) \\) a diagonal Gaussian and \\( p(z) = \\mathcal{N}(0, I) \\), why does the paper need only \\( L = 1 \\) Monte-Carlo sample per datapoint?",
+      "answer": "<p>The KL term has a closed-form solution for diagonal Gaussians (Appendix B of the paper) so no Monte-Carlo is needed there. Only the reconstruction term \\( \\mathbb{E}_{q_\\phi}[\\log p_\\theta(x \\mid z)] \\) is estimated by sampling. A minibatch of size \\( M = 100 \\) averages over 100 independent \\( \\epsilon \\) draws even with one sample per datapoint, so the gradient's variance is already small. Larger \\( L \\) was tested but did not materially improve training.</p>"
+    },
+    {
+      "prompt": "The paper compares AEVB against the wake-sleep algorithm. On what axes did AEVB win, and where was the gap largest?",
+      "answer": "<p>AEVB reached higher variational lower bounds than wake-sleep across every latent dimensionality tested (\\( d_z \\in \\{3, 5, 10, 20, 200\\} \\)) on both MNIST and Frey Face, and it reached them with fewer training samples (Figure 2 of arXiv:1312.6114). The gap grew with \\( d_z \\); wake-sleep's coordinate-ascent-style update is particularly inefficient in high-dimensional latent spaces, while AEVB's joint pathwise gradient handles large \\( d_z \\) without penalty.</p>"
+    },
+    {
+      "prompt": "What is posterior collapse, why did the original 2014 paper not suffer from it, and what are two standard fixes?",
+      "answer": "<p>Posterior collapse is the training pathology where \\( q_\\phi(z \\mid x) \\to p(z) \\) for all \\( x \\), the KL term goes to zero, and the decoder generates from its own prior without using \\( z \\). It requires a decoder strong enough to model \\( p(x) \\) on its own — the original paper's shallow MLP decoders could not, so the phenomenon only became prominent with later autoregressive/text decoders. Standard fixes: <b>KL annealing</b> (scale the KL term by \\( \\beta_t \\) from 0 to 1 during training) and <b>free bits</b> (forbid the KL from falling below a per-dimension threshold).</p>"
+    },
+    {
+      "prompt": "Two contributions from the 2014 paper persisted into essentially every deep generative model that followed. What are they, and where do they show up in modern systems?",
+      "answer": "<p>(1) <b>Amortized inference</b> via a shared recognition network replaced per-datapoint variational fits with a single forward pass — now ubiquitous in any model with a learned posterior or encoder. (2) The <b>reparameterization trick</b> for pathwise gradients through sampling — used in every diffusion training loop, in stochastic policies for RL, in Gumbel-softmax for approximately-discrete choices, and in any situation where a stochastic node sits between parameters and a loss. The VAE itself most often appears today as the image encoder feeding a latent-diffusion model.</p>"
     }
   ]
 }
