@@ -1,4 +1,4 @@
 :HL["/_next/static/chunks/1288z3_7rhs_u.css","style"]
 :HL["/_next/static/chunks/15wfqkhpg5y6g.css","style"]
 :HL["/_next/static/chunks/0f.j-ezqifxhv.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"ml","param":null,"prefetchHints":0,"slots":{"children":{"name":"wiki","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"gated-recurrent-unit-gru","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"Zjkhy72GZkIWGko3j6i0D"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"ml","param":null,"prefetchHints":0,"slots":{"children":{"name":"wiki","param":null,"prefetchHints":0,"slots":{"children":{"name":"slug","param":{"type":"d","key":"gated-recurrent-unit-gru","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}}}},"staleTime":300,"buildId":"UUNU6LK8k8UnLQ9DTSFc6"}
