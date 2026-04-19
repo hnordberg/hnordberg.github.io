@@ -10,11 +10,11 @@ function formatPaperCitation(citation: string): string {
     .replace(/&nbsp;|&#160;/gi, " ")
     .replace(/&#x0*a0;/gi, " ")
     .replace(/&middot;|&#183;/gi, "·")
-    .replace(/&amp;/gi, "&")
     .replace(/&lt;/gi, "<")
     .replace(/&gt;/gi, ">")
     .replace(/&quot;/gi, '"')
     .replace(/&#39;/g, "'")
+    .replace(/&amp;/gi, "&")
     .replace(/\s+/g, " ")
     .trim();
 }
