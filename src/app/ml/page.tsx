@@ -46,7 +46,7 @@ const MLPage = () => {
         </header>
 
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12 border-b-0">
-          <div className="group relative bg-white dark:bg-[#1a1a1a] rounded-xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1" id="wiki">
+          <Link href="/ml/wiki" className="group relative block bg-white dark:bg-[#1a1a1a] rounded-xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1" id="wiki">
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 dark:from-indigo-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl pointer-events-none"></div>
             <div className="relative z-10 h-full flex flex-col">
               <div className="flex items-center space-x-4 mb-4">
@@ -62,15 +62,15 @@ const MLPage = () => {
                 </p>
               </div>
               <div className="pt-6 mt-auto">
-                <Link href="/ml/wiki" className="inline-flex items-center font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors">
+                <span className="inline-flex items-center font-medium text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors">
                   Open the wiki 
                   <span className="ml-1 text-lg group-hover:translate-x-1 transition-transform inline-block">→</span>
-                </Link>
+                </span>
               </div>
             </div>
-          </div>
+          </Link>
 
-          <div className="group relative bg-white dark:bg-[#1a1a1a] rounded-xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1" id="llm">
+          <Link href="/ml/llm" className="group relative block bg-white dark:bg-[#1a1a1a] rounded-xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1" id="llm">
              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 dark:from-blue-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl pointer-events-none"></div>
              <div className="relative z-10 h-full flex flex-col">
               <div className="flex items-center space-x-4 mb-4">
@@ -85,15 +85,15 @@ const MLPage = () => {
                 </p>
               </div>
               <div className="pt-6 mt-auto">
-                <Link href="/ml/llm" className="inline-flex items-center font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors">
+                <span className="inline-flex items-center font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-800 dark:group-hover:text-blue-300 transition-colors">
                   View timeline
                   <span className="ml-1 text-lg group-hover:translate-x-1 transition-transform inline-block">→</span>
-                </Link>
+                </span>
               </div>
             </div>
-          </div>
+          </Link>
 
-          <div className="group relative bg-white dark:bg-[#1a1a1a] rounded-xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1" id="interesting">
+          <Link href="/ml/interesting" className="group relative block bg-white dark:bg-[#1a1a1a] rounded-xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1" id="interesting">
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 dark:from-emerald-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl pointer-events-none"></div>
             <div className="relative z-10 h-full flex flex-col">
               <div className="flex items-center space-x-4 mb-4">
@@ -108,15 +108,15 @@ const MLPage = () => {
                 </p>
               </div>
               <div className="pt-6 mt-auto">
-                <Link href="/ml/interesting" className="inline-flex items-center font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 transition-colors">
+                <span className="inline-flex items-center font-medium text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-800 dark:group-hover:text-emerald-300 transition-colors">
                   Read highlights
                   <span className="ml-1 text-lg group-hover:translate-x-1 transition-transform inline-block">→</span>
-                </Link>
+                </span>
               </div>
             </div>
-          </div>
+          </Link>
 
-          <div className="group relative bg-white dark:bg-[#1a1a1a] rounded-xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1" id="transformer">
+          <Link href="/ml/transformer" className="group relative block bg-white dark:bg-[#1a1a1a] rounded-xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1" id="transformer">
              <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 dark:from-amber-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl pointer-events-none"></div>
              <div className="relative z-10 h-full flex flex-col">
               <div className="flex items-center space-x-4 mb-4">
@@ -131,15 +131,15 @@ const MLPage = () => {
                 </p>
               </div>
               <div className="pt-6 mt-auto">
-                <Link href="/ml/transformer" className="inline-flex items-center font-medium text-amber-600 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 transition-colors">
+                <span className="inline-flex items-center font-medium text-amber-600 dark:text-amber-400 group-hover:text-amber-800 dark:group-hover:text-amber-300 transition-colors">
                   Read more 
                   <span className="ml-1 text-lg group-hover:translate-x-1 transition-transform inline-block">→</span>
-                </Link>
+                </span>
               </div>
             </div>
-          </div>
+          </Link>
 
-          <div className="group relative bg-white dark:bg-[#1a1a1a] rounded-xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 md:col-span-2" id="suggest-topic">
+          <Link href="/ml/suggest-topic" className="group relative block bg-white dark:bg-[#1a1a1a] rounded-xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 md:col-span-2" id="suggest-topic">
             <div className="absolute inset-0 bg-gradient-to-br from-violet-50/50 dark:from-violet-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl pointer-events-none"></div>
             <div className="relative z-10 h-full flex flex-col md:flex-row md:items-center md:gap-10">
               <div className="flex-1">
@@ -156,13 +156,13 @@ const MLPage = () => {
                 </div>
               </div>
               <div className="pt-6 md:pt-0 md:flex-shrink-0">
-                <Link href="/ml/suggest-topic" className="inline-flex items-center font-medium text-violet-600 dark:text-violet-400 hover:text-violet-800 dark:hover:text-violet-300 transition-colors">
+                <span className="inline-flex items-center font-medium text-violet-600 dark:text-violet-400 group-hover:text-violet-800 dark:group-hover:text-violet-300 transition-colors">
                   Open the form
                   <span className="ml-1 text-lg group-hover:translate-x-1 transition-transform inline-block">→</span>
-                </Link>
+                </span>
               </div>
             </div>
-          </div>
+          </Link>
 
         </section>
       </div>
