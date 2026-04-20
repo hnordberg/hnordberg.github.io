@@ -161,7 +161,7 @@
           "kind": "table",
           "title": "Experimental setup",
           "source": "§5 of arXiv:1312.6114",
-          "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\"><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Setting</th><th style=\"padding:6px; text-align:left;\">Value</th></tr><tr><td style=\"padding:6px;\">Encoder / decoder</td><td style=\"padding:6px;\">MLP with 500 hidden units, tanh activation</td></tr><tr><td style=\"padding:6px;\">Latent dimensionality \\( d_z \\)</td><td style=\"padding:6px;\">swept over { 3, 5, 10, 20, 200 }</td></tr><tr><td style=\"padding:6px;\">Batch size \\( M \\)</td><td style=\"padding:6px;\">100</td></tr><tr><td style=\"padding:6px;\">MC samples \\( L \\) per datapoint</td><td style=\"padding:6px;\">1 (sufficient when \\( M \\ge 100 \\))</td></tr><tr><td style=\"padding:6px;\">Optimiser</td><td style=\"padding:6px;\">Adagrad</td></tr><tr><td style=\"padding:6px;\">Datasets</td><td style=\"padding:6px;\">MNIST (binary), Frey Face (continuous)</td></tr></table>"
+          "body": "<table style=\"width:100%; border-collapse:collapse; margin:12px 0;\"><tr style=\"background:#4a5568; color:#fff;\"><th style=\"padding:6px; text-align:left;\">Setting</th><th style=\"padding:6px; text-align:left;\">Value</th></tr><tr><td style=\"padding:6px;\">Encoder / decoder</td><td style=\"padding:6px;\">MLP with tanh activation; 500 hidden units for MNIST, 200 for Frey Face</td></tr><tr><td style=\"padding:6px;\">Latent dimensionality \\( d_z \\)</td><td style=\"padding:6px;\">{ 2, 5, 10, 20 } for visualization (Figure 5); 3 for marginal-likelihood estimation</td></tr><tr><td style=\"padding:6px;\">Batch size \\( M \\)</td><td style=\"padding:6px;\">100</td></tr><tr><td style=\"padding:6px;\">MC samples \\( L \\) per datapoint</td><td style=\"padding:6px;\">1 (sufficient when \\( M \\ge 100 \\))</td></tr><tr><td style=\"padding:6px;\">Optimiser</td><td style=\"padding:6px;\">Adagrad</td></tr><tr><td style=\"padding:6px;\">Datasets</td><td style=\"padding:6px;\">MNIST (binary), Frey Face (continuous)</td></tr></table>"
         },
         {
           "kind": "prose",
@@ -187,7 +187,7 @@
           "kind": "result",
           "title": "Bound vs compute",
           "source": "Figure 2 of arXiv:1312.6114",
-          "body": "<p>On both MNIST and Frey Face, AEVB reached higher variational lower bounds than wake-sleep and reached them faster per training sample, across every latent dimensionality tested (\\( d_z \\in \\{3, 5, 10, 20, 200\\} \\)). The gap was largest for larger \\( d_z \\), where wake-sleep's coordinate-ascent-style update struggles with high-dimensional latent spaces.</p>"
+          "body": "<p>On both MNIST and Frey Face, AEVB reached higher variational lower bounds than wake-sleep and reached them faster per training sample, across every latent dimensionality tested (several latent dimensionalities). The gap was largest for larger \\( d_z \\), where wake-sleep's coordinate-ascent-style update struggles with high-dimensional latent spaces.</p>"
         },
         {
           "kind": "result",
@@ -252,7 +252,7 @@
     },
     {
       "prompt": "The paper compares AEVB against the wake-sleep algorithm. On what axes did AEVB win, and where was the gap largest?",
-      "answer": "<p>AEVB reached higher variational lower bounds than wake-sleep across every latent dimensionality tested (\\( d_z \\in \\{3, 5, 10, 20, 200\\} \\)) on both MNIST and Frey Face, and it reached them with fewer training samples (Figure 2 of arXiv:1312.6114). The gap grew with \\( d_z \\); wake-sleep's coordinate-ascent-style update is particularly inefficient in high-dimensional latent spaces, while AEVB's joint pathwise gradient handles large \\( d_z \\) without penalty.</p>"
+      "answer": "<p>AEVB reached higher variational lower bounds than wake-sleep across every latent dimensionality tested (several latent dimensionalities) on both MNIST and Frey Face, and it reached them with fewer training samples (Figure 2 of arXiv:1312.6114). The gap grew with \\( d_z \\); wake-sleep's coordinate-ascent-style update is particularly inefficient in high-dimensional latent spaces, while AEVB's joint pathwise gradient handles large \\( d_z \\) without penalty.</p>"
     },
     {
       "prompt": "What is posterior collapse, why did the original 2014 paper not suffer from it, and what are two standard fixes?",
