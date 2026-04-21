@@ -1238,6 +1238,25 @@
     "controversialReason": "Mostly accepted; some debate about evaluation parity vs."
   },
   {
+    "id": "Mamba",
+    "period": "2023",
+    "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+    "org": "Carnegie Mellon University, Princeton University",
+    "location": "https://arxiv.org/pdf/2312.00752",
+    "paperTitle": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+    "authors": [
+      "Albert Gu",
+      "Tri Dao"
+    ],
+    "description": "Mamba introduced a selective state space model (SSM) that makes the state transition and input/output matrices input-dependent, letting the model decide which information to retain or discard per token. Unlike Transformers, which scale quadratically with sequence length, Mamba runs in linear time and constant memory per step via a hardware-aware parallel scan, while matching or exceeding Transformer quality at comparable parameter counts. It rekindled interest in recurrence-based architectures as a viable alternative to attention for long-context language, audio, and genomics modeling.",
+    "citations": 2400,
+    "icon": "ml/cmu.png",
+    "details": "To implement a Mamba block, start from a structured state space model hₜ = Āhₜ₋₁ + B̄xₜ, yₜ = Chₜ, where the discretized matrices (Ā, B̄) come from a continuous-time (A, B) via a step size Δ. The key change is making Δ, B, and C functions of the input xₜ (selective SSM), while A remains a learned diagonal or HiPPO-initialized structure shared across timesteps. Each layer projects input to these parameters with small MLPs, applies a 1D depthwise convolution, then runs the selective scan. Because naive recurrence is sequential, use a work-efficient parallel scan kernel (the official CUDA implementation keeps state in SRAM and avoids materializing hidden states in HBM), giving O(L) time and O(1) memory per token at inference. Stack Mamba blocks with residual connections and RMSNorm similarly to a Transformer; for language modeling, follow it with a token embedding, stacked blocks, and a tied LM head. Train with AdamW, mixed precision, and standard causal language modeling loss. At inference, cache only the SSM state (not a full KV cache), enabling extremely long contexts on modest hardware.",
+    "repo": "https://github.com/state-spaces/mamba",
+    "controversialness": 3,
+    "controversialReason": "Debate over whether SSMs truly match Transformers on in-context recall and associative tasks, and how much of the speedup comes from the architecture vs. the custom CUDA scan kernel."
+  },
+  {
     "id": "MoE_Test_Time",
     "period": "2024",
     "title": "Mixture-of-Experts (MoE) and Test-Time Compute Scaling",
