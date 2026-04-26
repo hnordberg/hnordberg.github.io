@@ -151,7 +151,7 @@ const MLPage = () => {
                 </div>
                 <div className="space-y-4">
                   <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-base">
-                    Request a new ML Wiki topic or gap to cover. Submissions use Cloudflare Turnstile before they reach the suggestion endpoint.
+                    Request a new ML Wiki topic.
                   </p>
                 </div>
               </div>
