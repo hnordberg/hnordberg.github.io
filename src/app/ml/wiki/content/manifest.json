@@ -17546,6 +17546,20 @@
       ],
       "updatedAt": "2026-04-25",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "compressed-sparse-attention-csa",
+      "domain": "llm",
+      "level": "advanced",
+      "tags": [
+        "ml",
+        "implementation",
+        "advanced",
+        "attention",
+        "transformer",
+        "architecture"
+      ],
+      "flags": []
     }
   ]
 }
