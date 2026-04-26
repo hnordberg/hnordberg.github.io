@@ -54,6 +54,274 @@
       "criteria": {
         "includeTags": ["path-scaling-advanced"]
       }
+    },
+    {
+      "slug": "generalization-theory",
+      "title": "Generalization & Learning Theory",
+      "description": "Rare but high-value theoretical foundations. Move from PAC learning and VC dimension to modern insights like double descent and neural collapse.",
+      "estimatedMinutes": 120,
+      "criteria": {
+        "slugs": [
+          "pac-learning-probably-approximately-correct",
+          "vc-dimension-and-shattering",
+          "rademacher-complexity",
+          "pac-bayes-bounds",
+          "double-descent"
+        ]
+      }
+    },
+    {
+      "slug": "optimization-dynamics",
+      "title": "Optimization Dynamics",
+      "description": "Deep dive into why models converge. From convex fundamentals to the implicit bias of SGD and sharpness-aware minimization.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "slugs": [
+          "convex-optimization-fundamentals",
+          "stochastic-gradient-descent-sgd",
+          "implicit-bias-of-sgd",
+          "sharpness-aware-minimization-sam"
+        ]
+      }
+    },
+    {
+      "slug": "information-theoretic-ml",
+      "title": "Information-Theoretic ML",
+      "description": "The physics of information in learning. Entropy, mutual information, and the MDL principle as a lens for generalization.",
+      "estimatedMinutes": 60,
+      "criteria": {
+        "slugs": [
+          "shannon-entropy",
+          "mutual-information-and-conditional-entropy",
+          "minimum-description-length-mdl",
+          "information-bottleneck"
+        ]
+      }
+    },
+    {
+      "slug": "representation-learning",
+      "title": "Representation Learning",
+      "description": "How models learn useful features. Explore contrastive learning, self-supervised systems like SimCLR/BYOL, and disentanglement.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "slugs": [
+          "contrastive-learning-simclr-moco",
+          "byol-self-distillation",
+          "beta-vae-disentanglement"
+        ]
+      }
+    },
+    {
+      "slug": "embedding-similarity",
+      "title": "Embedding & Similarity",
+      "description": "The engine of modern search and retrieval. Metric learning, vector databases, and efficient ANN search systems.",
+      "estimatedMinutes": 45,
+      "criteria": {
+        "slugs": [
+          "siamese-networks-metric-learning",
+          "vector-database"
+        ]
+      }
+    },
+    {
+      "slug": "multimodal-learning",
+      "title": "Multimodal Learning",
+      "description": "Bridging vision and language. Study CLIP, cross-modal embeddings, and unified multimodal transformers.",
+      "estimatedMinutes": 60,
+      "criteria": {
+        "slugs": [
+          "clip-contrastive-language-image-pre-training",
+          "vision-language-contrastive-beyond-clip"
+        ]
+      }
+    },
+    {
+      "slug": "llm-systems",
+      "title": "LLM Systems",
+      "description": "The engineering behind large models. Scaling laws, tokenization, KV cache optimization, and high-performance serving.",
+      "estimatedMinutes": 120,
+      "criteria": {
+        "slugs": [
+          "scaling-laws",
+          "chinchilla-scaling-laws",
+          "kv-cache-compression-h2o-snapkv",
+          "paged-vs-block-kv-cache",
+          "quantized-kv-cache",
+          "disaggregated-prefill-decode-serving"
+        ]
+      }
+    },
+    {
+      "slug": "llm-reasoning",
+      "title": "LLM Reasoning",
+      "description": "Inducing System 2 thinking. From in-context learning to chain-of-thought and learned tool-use architectures.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "slugs": [
+          "gpt-3-and-few-shot-in-context-learning",
+          "in-context-learning",
+          "chain-of-thought",
+          "chain-of-thought-monitorability",
+          "toolformer-learned-tool-use",
+          "tool-use-function-calling-benchmarks"
+        ]
+      }
+    },
+    {
+      "slug": "alignment-safety",
+      "title": "Alignment & Safety",
+      "description": "Ensuring models behave predictably. RLHF, DPO, reward modeling, and the frontiers of mechanistic interpretability.",
+      "estimatedMinutes": 150,
+      "criteria": {
+        "slugs": [
+          "reinforcement-learning-from-human-feedback-rlhf",
+          "direct-preference-optimization-dpo",
+          "iterative-dpo",
+          "kl-divergence-penalty-in-rlhf",
+          "reward-hacking-specification-gaming-rlhf",
+          "hallucination",
+          "safety-alignment",
+          "interpretability",
+          "mechanistic-interpretability",
+          "sparse-autoencoder-mechanistic-interpretability"
+        ]
+      }
+    },
+    {
+      "slug": "diffusion-models",
+      "title": "Diffusion Models",
+      "description": "Modern generative engines. Score matching, SDEs, and the transition to latent diffusion and video generation.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "slugs": [
+          "denoising-diffusion-probabilistic-models-ddpm",
+          "score-matching",
+          "denoising-score-matching",
+          "latent-diffusion",
+          "diffusion-transformers-dit",
+          "classifier-free-guidance"
+        ]
+      }
+    },
+    {
+      "slug": "generative-theory",
+      "title": "Generative Modeling Theory",
+      "description": "The mathematical framework of creation. VAEs, normalizing flows, and energy-based models.",
+      "estimatedMinutes": 60,
+      "criteria": {
+        "slugs": [
+          "variational-autoencoder-vae",
+          "reparameterization-trick-vae"
+        ]
+      }
+    },
+    {
+      "slug": "transformer-variants",
+      "title": "Transformer Variants",
+      "description": "Beyond vanilla attention. Explore Mixture-of-Experts (MoE), linear attention, and state-space models like Mamba.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "slugs": [
+          "attention-mechanism",
+          "sparse-mixture-of-experts-moe-layer",
+          "sparsely-gated-mixture-of-experts-moe",
+          "linear-attention",
+          "state-space-models-mamba"
+        ]
+      }
+    },
+    {
+      "slug": "neural-fields",
+      "title": "Neural Fields & Continuous Representations",
+      "description": "Implicit neural representations for vision and physics. Study NeRF and the emerging world of Gaussian splatting.",
+      "estimatedMinutes": 45,
+      "criteria": {
+        "slugs": [
+          "nerf-gaussian-splatting"
+        ]
+      }
+    },
+    {
+      "slug": "distributed-training",
+      "title": "Distributed Training",
+      "description": "Training at warehouse scale. Data parallelism, model parallelism, and FSDP/ZeRO techniques.",
+      "estimatedMinutes": 60,
+      "criteria": {
+        "slugs": [
+          "data-parallelism",
+          "model-parallelism",
+          "fully-sharded-data-parallel-fsdp"
+        ]
+      }
+    },
+    {
+      "slug": "efficient-ml",
+      "title": "Efficient ML",
+      "description": "Inference and training efficiency. Quantization, low-rank adaptation (LoRA), and structured pruning.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "slugs": [
+          "quantization",
+          "post-training-quantization-ptq",
+          "quantization-aware-training-qat",
+          "gptq-quantization",
+          "awq-activation-aware-weight-quantization",
+          "low-rank-adaptation-lora",
+          "lora-adapter",
+          "qlora-quantized-lora"
+        ]
+      }
+    },
+    {
+      "slug": "data-centric-ai",
+      "title": "Data-Centric AI",
+      "description": "Focusing on the data, not just the model. Dataset design, curation, and quality governance.",
+      "estimatedMinutes": 45,
+      "criteria": {
+        "slugs": []
+      }
+    },
+    {
+      "slug": "robustness-ood",
+      "title": "Robustness & OOD",
+      "description": "Reliability under pressure. Handling adversarial examples, distribution shift, and uncertainty estimation.",
+      "estimatedMinutes": 60,
+      "criteria": {
+        "slugs": [
+          "calibration",
+          "expected-calibration-error-ece"
+        ]
+      }
+    },
+    {
+      "slug": "causal-ml",
+      "title": "Causal Machine Learning",
+      "description": "Moving from correlation to causation. Structural causal models, counterfactuals, and IRM.",
+      "estimatedMinutes": 60,
+      "criteria": {
+        "slugs": []
+      }
+    },
+    {
+      "slug": "decision-making-rl",
+      "title": "Decision Making & RL",
+      "description": "The logic of reward-driven behavior. Policy gradients, actor-critic methods, and offline reinforcement learning.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "slugs": [
+          "policy-gradient-theorem",
+          "actor-critic-methods"
+        ]
+      }
+    },
+    {
+      "slug": "ml-for-science",
+      "title": "ML for Science",
+      "description": "Physics-informed learning and surrogate models for scientific discovery.",
+      "estimatedMinutes": 45,
+      "criteria": {
+        "slugs": []
+      }
     }
   ]
 }
