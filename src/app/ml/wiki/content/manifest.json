@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-18",
+  "updatedAt": "2026-04-25",
   "sourceDeck": "Machine Learning by Henrik Nordberg",
   "topics": [
     {
@@ -16568,6 +16568,983 @@
         "unified-multimodal-models"
       ],
       "updatedAt": "2026-04-18",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "mean-field-theory-of-neural-networks",
+      "title": "Mean Field Theory of Neural Networks",
+      "summary": "An infinite-width analysis of two-layer networks that, unlike the Neural Tangent Kernel, captures genuine feature learning. With width-\\( N \\) hidden units scaled as \\( 1/N \\), training dynamics converge to a gradient flow on the empirical distribution of neuron parameters, governed by a Vlasov-McKean PDE. Mei-Montanari-Nguyen, Chizat-Bach, and Sirignano-Spiliopoulos independently established this limit in 2018.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "optimization",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "neural-tangent-kernel-ntk",
+        "stochastic-gradient-descent-sgd",
+        "over-parameterization"
+      ],
+      "related": [
+        "neural-tangent-kernel-ntk",
+        "implicit-regularization-of-sgd",
+        "double-descent",
+        "spectral-bias-of-neural-networks"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "information-bottleneck-theory",
+      "title": "Information Bottleneck Theory",
+      "summary": "A theory of representation learning that frames the goal as finding a compressed code \\( T \\) of input \\( X \\) preserving information about target \\( Y \\). The IB Lagrangian \\( I(X;T) - \\beta\\,I(T;Y) \\) trades compression against predictive sufficiency. Tishby & Zaslavsky (2015) and Schwartz-Ziv & Tishby (2017) proposed that SGD-trained networks pass through a 'fitting' phase followed by a 'compression' phase along this trade-off — a claim later contested by Saxe et al. (2018).",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "mutual-information-and-conditional-entropy",
+        "kl-divergence",
+        "representation-learning"
+      ],
+      "related": [
+        "entropy-cross-entropy-kl-unified",
+        "spectral-bias-of-neural-networks",
+        "implicit-regularization-of-sgd",
+        "double-descent"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "stability-and-generalization",
+      "title": "Stability and Generalization",
+      "summary": "An algorithm is uniformly \\( \\beta \\)-stable if replacing one training point changes its output's loss by at most \\( \\beta \\). Bousquet & Elisseeff (2002) proved that \\( \\beta \\)-stability bounds the generalization gap by \\( O(\\beta + 1/\\sqrt{n}) \\); Hardt, Recht & Singer (2016) showed SGD on smooth losses is \\( O(T/n) \\)-stable, giving the first algorithm-dependent generalization bound for deep learning that grows with training time.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "optimization",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "generalization",
+        "stochastic-gradient-descent-sgd",
+        "concentration-inequalities-hoeffding-bernstein"
+      ],
+      "related": [
+        "pac-bayes-bounds",
+        "rademacher-complexity",
+        "vc-dimension-and-shattering",
+        "implicit-regularization-of-sgd"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "algorithmic-alignment-theory",
+      "title": "Algorithmic Alignment Theory",
+      "summary": "A neural architecture generalises better on a reasoning task when its computational structure aligns with the algorithm that solves the task. Xu et al. (2020) formalise sample complexity in terms of the number of network modules that must be learned and the per-module learnability, predicting that GNNs (multi-step message passing) align with dynamic-programming algorithms while plain MLPs do not.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "architecture",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "message-passing-in-graph-neural-networks-gnns",
+        "neural-tangent-kernel-ntk",
+        "generalization"
+      ],
+      "related": [
+        "mean-field-theory-of-neural-networks",
+        "spectral-bias-of-neural-networks",
+        "neural-collapse"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "spectral-bias-of-neural-networks",
+      "title": "Spectral Bias of Neural Networks",
+      "summary": "Standard SGD-trained networks fit low Fourier frequencies of the target function much faster than high frequencies. Rahaman et al. (2019) demonstrated this empirically; the NTK perspective explains it via the eigendecomposition of the kernel — eigenfunctions with larger eigenvalues (lower frequencies, for typical data) converge first under gradient descent. This bias is why position encodings, Fourier features, and SIREN activations are needed for high-frequency tasks like NeRF.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "neural-tangent-kernel-ntk",
+        "gradient-descent",
+        "deep-neural-network"
+      ],
+      "related": [
+        "mean-field-theory-of-neural-networks",
+        "implicit-regularization-of-sgd",
+        "double-descent",
+        "grokking"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "neural-collapse",
+      "title": "Neural Collapse",
+      "summary": "At the terminal phase of training (TPT) — long after zero training error — the last-layer features and classifier weights of a deep classifier converge to a highly symmetric configuration: per-class feature means form a Simplex Equiangular Tight Frame (ETF), within-class variability collapses to zero, classifier weights align with the class means, and prediction reduces to nearest-class-centre. Papyan, Han & Donoho (2020) established this as a robust empirical phenomenon across architectures and datasets.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "cross-entropy",
+        "classification",
+        "deep-neural-network"
+      ],
+      "related": [
+        "representation-learning",
+        "implicit-regularization-of-sgd",
+        "loss-landscape-flat-vs-sharp-minima",
+        "spectral-bias-of-neural-networks"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "mode-connectivity-in-loss-landscapes",
+      "title": "Mode Connectivity in Loss Landscapes",
+      "summary": "Solutions found by SGD from different random initialisations are not isolated minima — Garipov et al. (2018) and Draxler et al. (2018) showed independently trained minima can be connected by simple low-loss curves (quadratic Bezier, polygonal chains). Linear mode connectivity is more subtle: it generally requires permuting one network to the other's neuron labelling first, as Ainsworth et al.'s 'Git Re-Basin' (2022) demonstrated.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "optimization",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "loss-landscape-flat-vs-sharp-minima",
+        "stochastic-gradient-descent-sgd",
+        "over-parameterization"
+      ],
+      "related": [
+        "lottery-ticket-hypothesis",
+        "implicit-regularization-of-sgd",
+        "bayesian-deep-learning-mc-dropout-ensembles",
+        "double-descent"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gradient-noise-scale",
+      "title": "Gradient Noise Scale",
+      "summary": "A scalar diagnostic that estimates the largest useful batch size by comparing the variance of per-example gradients to the squared norm of the mean gradient: \\( B_{\\text{noise}} = \\operatorname{tr}(\\Sigma)/\\|g\\|^2 \\). McCandlish et al. (2018) argue that returns to scaling batch size diminish sharply once \\( B \\gg B_{\\text{noise}} \\), giving a principled way to choose batch size during large-scale training.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "optimization",
+        "implementation",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "stochastic-gradient-descent-sgd",
+        "gradient-descent",
+        "over-parameterization"
+      ],
+      "related": [
+        "adam-optimizer",
+        "adamw-optimizer",
+        "implicit-regularization-of-sgd",
+        "scaling-laws"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "adaptive-gradient-clipping-agc",
+      "title": "Adaptive Gradient Clipping (AGC)",
+      "summary": "A per-parameter clipping rule introduced by Brock et al. (2021) that bounds each weight's update by a fraction of the weight's own norm: clip \\( g \\) so \\( \\|g\\|/\\|w\\| \\le \\lambda \\). Unlike global-norm clipping, AGC scales naturally with parameter magnitude and made it possible to train Normalizer-Free Networks (NFNets) without batch normalisation while matching its training stability.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "optimization",
+        "implementation",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "gradient-clipping",
+        "stochastic-gradient-descent-sgd",
+        "batch-normalization"
+      ],
+      "related": [
+        "weight-decay",
+        "layer-normalization",
+        "residual-connection-skip-connection",
+        "sharpness-aware-minimization-sam"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "self-paced-learning",
+      "title": "Self-Paced Learning",
+      "summary": "A curriculum-learning variant where the model itself decides which examples are 'easy enough' to train on at the current step, by minimising a joint objective \\( \\sum_i v_i \\ell_i - \\lambda \\sum_i v_i \\) over both parameters \\( \\theta \\) and per-example weights \\( v_i \\in \\{0,1\\} \\) (or \\( [0,1] \\)). Kumar, Packer & Koller (2010) introduced it as a non-convex EM-style alternative to handcrafted curricula; \\( \\lambda \\) is annealed from low (only easy examples) to high (all examples).",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "optimization",
+        "implementation",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "curriculum-learning",
+        "stochastic-gradient-descent-sgd",
+        "loss-function"
+      ],
+      "related": [
+        "implicit-regularization-of-sgd",
+        "adam-optimizer",
+        "data-curation-quality-filters"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "loss-landscape-visualization",
+      "title": "Loss Landscape Visualization",
+      "summary": "Methods for visualising high-dimensional loss surfaces by projecting parameters onto 1-D or 2-D subspaces. Goodfellow's linear interpolation (2014) plots loss along the line between two solutions; Li et al.'s filter normalisation (2018) plots loss in a 2-D plane spanned by random Gaussian directions normalised per-filter. The latter reveals that residual connections smooth the landscape and that flat minima correspond to wide bowls in the visualisation.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "implementation",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "loss-function",
+        "stochastic-gradient-descent-sgd",
+        "deep-neural-network"
+      ],
+      "related": [
+        "loss-landscape-flat-vs-sharp-minima",
+        "mode-connectivity-in-loss-landscapes",
+        "residual-connection-skip-connection",
+        "sharpness-aware-minimization-sam"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "gradient-surgery-pcgrad",
+      "title": "Gradient Surgery (PCGrad) for Multi-Task Learning",
+      "summary": "When two task gradients in multi-task learning point in conflicting directions (negative cosine), they partially cancel each other and slow learning. Yu et al.'s PCGrad (2020) projects each task gradient onto the normal plane of any conflicting task's gradient before summing, removing the destructive component. This 'gradient surgery' restores monotone progress on both tasks at modest cost.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "optimization",
+        "implementation",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "gradient-descent",
+        "stochastic-gradient-descent-sgd",
+        "loss-function"
+      ],
+      "related": [
+        "adam-optimizer",
+        "weight-decay",
+        "implicit-regularization-of-sgd",
+        "sharpness-aware-minimization-sam"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "contrastive-learning-theory",
+      "title": "Contrastive Learning Theory",
+      "summary": "The theoretical account of why contrastive self-supervised objectives like InfoNCE produce useful representations. Wang & Isola (2020) show the InfoNCE loss decomposes into two asymptotic terms — \\( \\mathcal{L}_{\\text{align}} \\), pulling positive pairs together, and \\( \\mathcal{L}_{\\text{unif}} \\), spreading the marginal feature distribution uniformly on the hypersphere. The downstream linear-probe accuracy correlates almost perfectly with this alignment-uniformity trade-off, giving a geometric explanation for why contrastive learning works at all.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "representation-learning",
+        "path-representation-theory"
+      ],
+      "prerequisites": [
+        "contrastive-learning-simclr-moco",
+        "infonce-nt-xent-losses",
+        "mutual-information-and-conditional-entropy"
+      ],
+      "related": [
+        "noise-contrastive-estimation",
+        "byol-self-distillation",
+        "representation-learning",
+        "clip-contrastive-language-image-pre-training"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "non-contrastive-ssl",
+      "title": "Non-Contrastive SSL (BYOL, SimSiam, Barlow Twins, VICReg)",
+      "summary": "Self-supervised methods that learn from positive pairs alone — no negatives — and yet do not collapse to a constant. BYOL (Grill et al. 2020) and SimSiam (Chen & He 2021) achieve this by an asymmetric architecture: a predictor MLP on one branch and a stop-gradient on the other. Barlow Twins (Zbontar et al. 2021) and VICReg (Bardes et al. 2022) instead enforce non-collapse explicitly via a feature covariance regulariser. The common theme is replacing the contrastive uniformity term by an architectural or statistical anti-collapse mechanism.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "implementation",
+        "representation-learning",
+        "path-representation-theory"
+      ],
+      "prerequisites": [
+        "byol-self-distillation",
+        "contrastive-learning-simclr-moco",
+        "representation-learning"
+      ],
+      "related": [
+        "dinov2",
+        "masked-autoencoder-mae",
+        "contrastive-learning-theory",
+        "representation-collapse"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "disentangled-representation-learning",
+      "title": "Disentangled Representation Learning",
+      "summary": "The pursuit of latent variables \\( z = (z_1, \\ldots, z_d) \\) whose components correspond to independent semantic factors of variation (pose, identity, lighting). β-VAE (Higgins et al. 2017) up-weights the KL term in the VAE ELBO to encourage axis-aligned independent posteriors; FactorVAE (Kim & Mnih 2018) penalises the total correlation directly. Locatello et al. (2019) prove that fully unsupervised disentanglement is impossible without inductive biases, reframing the field around weak supervision and benchmark-driven evaluation.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "representation-learning",
+        "path-representation-theory",
+        "generative"
+      ],
+      "prerequisites": [
+        "variational-autoencoder-vae",
+        "representation-learning",
+        "beta-vae-disentanglement"
+      ],
+      "related": [
+        "reparameterization-trick-vae",
+        "autoencoders",
+        "sparse-autoencoder-mechanistic-interpretability",
+        "distributed-representation"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sparse-representations-in-deep-nets",
+      "title": "Sparse Representations in Deep Nets",
+      "summary": "Modern deep networks naturally produce sparse activations: ReLU networks have median activation sparsity \\( \\sim 50\\% \\); transformer MLPs reach \\( 80–95\\% \\) per-token sparsity in late layers. Sparsity is a free regulariser, an exploitable inference acceleration target, and a theoretical lens — the lottery-ticket hypothesis (Frankle & Carbin 2019) shows dense networks contain sparse subnetworks that train to full accuracy in isolation. Recent work (Mirzadeh et al. 2024, Liu et al. 2023) leverages activation sparsity for 2–10× LLM inference speedups via top-k routing.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "implementation",
+        "representation-learning",
+        "path-representation-theory",
+        "regularization"
+      ],
+      "prerequisites": [
+        "representation-learning",
+        "relu",
+        "autoencoders"
+      ],
+      "related": [
+        "lottery-ticket-hypothesis",
+        "sparse-autoencoder-mechanistic-interpretability",
+        "dropout",
+        "sparse-mixture-of-experts-moe-layer"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "representation-collapse",
+      "title": "Representation Collapse",
+      "summary": "A failure mode of representation learning where the encoder produces low-rank or constant features, eliminating useful signal. Three common modes: <b>complete collapse</b> (\\( f \\equiv c \\), seen in non-contrastive SSL without anti-collapse mechanisms), <b>dimensional collapse</b> (Jing et al. 2022 — features span a low-dimensional subspace), and <b>neural collapse</b> (Papyan, Han & Donoho 2020 — late-training features cluster onto class-mean simplex). Each mode has distinct diagnostics (feature variance, eigenspectrum decay, simplex angle) and distinct mitigations.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "representation-learning",
+        "path-representation-theory"
+      ],
+      "prerequisites": [
+        "representation-learning",
+        "byol-self-distillation",
+        "contrastive-learning-simclr-moco"
+      ],
+      "related": [
+        "neural-collapse",
+        "non-contrastive-ssl",
+        "batch-normalization",
+        "contrastive-learning-theory"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "invariance-vs-equivariance",
+      "title": "Invariance vs Equivariance",
+      "summary": "A representation \\( f: X \\to Z \\) is <i>invariant</i> to a group action \\( g \\in G \\) if \\( f(g \\cdot x) = f(x) \\), and <i>equivariant</i> if \\( f(g \\cdot x) = \\rho_Z(g) \\cdot f(x) \\) for some representation \\( \\rho_Z \\) of \\( G \\) on \\( Z \\). Invariance throws away the group's information; equivariance preserves it in a structured form. Choosing one over the other depends on whether the downstream task needs to recover the group element. CNNs are translation-equivariant; group-equivariant CNNs (Cohen & Welling 2016) extend this to rotations, reflections, and beyond.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "representation-learning",
+        "path-representation-theory",
+        "architecture"
+      ],
+      "prerequisites": [
+        "representation-learning",
+        "convolutional-neural-network-cnn"
+      ],
+      "related": [
+        "set-transformer-deep-sets",
+        "contrastive-learning-simclr-moco",
+        "data-augmentation"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "embedding-geometry",
+      "title": "Embedding Geometry",
+      "summary": "The geometry of learned vector representations — how distance, angle, and clustering structure encode semantics. Word2vec produced the famous parallelogram \\( \\vec{\\text{king}} - \\vec{\\text{man}} + \\vec{\\text{woman}} \\approx \\vec{\\text{queen}} \\) (Mikolov et al. 2013). Modern embeddings exhibit anisotropy — token embeddings cluster in narrow cones — addressed by whitening and isotropy-promoting losses. Cosine similarity dominates as the standard metric because magnitude in trained embeddings often confounds frequency rather than semantics.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "representation-learning",
+        "path-representation-theory"
+      ],
+      "prerequisites": [
+        "word-embedding",
+        "representation-learning",
+        "cosine-similarity"
+      ],
+      "related": [
+        "word2vec",
+        "glove-word-embeddings",
+        "umap-uniform-manifold-approximation",
+        "distributed-representation"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "metric-learning-at-scale",
+      "title": "Metric Learning at Scale",
+      "summary": "Metric learning trains an encoder so that distances in embedding space match a semantic similarity. At billion-vector scale (web search, face identification, ad recommendation), the bottleneck shifts from loss design to nearest-neighbour data structures (HNSW, IVF-PQ in FAISS), product quantization for index compression, and hard-negative mining strategies that don't blow up training cost. ArcFace's angular margin loss (Deng et al. 2019) and proxy losses replaced triplet/contrastive once the negatives became impractical to enumerate.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "implementation",
+        "representation-learning",
+        "path-representation-theory"
+      ],
+      "prerequisites": [
+        "siamese-networks-metric-learning",
+        "triplet-margin-loss",
+        "cosine-similarity"
+      ],
+      "related": [
+        "hnsw-hierarchical-navigable-small-world",
+        "k-nearest-neighbors-knn",
+        "dense-retrieval",
+        "contrastive-learning-simclr-moco"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "representation-alignment-across-modalities",
+      "title": "Representation Alignment Across Modalities",
+      "summary": "Cross-modal alignment trains separate encoders for different input types (image, text, audio) so that paired examples land near each other in a shared embedding space. CLIP (Radford et al. 2021) uses a symmetric InfoNCE on \\( 4 \\times 10^8 \\) image–text pairs from the web, learning a joint space where zero-shot image classification is performed by similarity to a text prototype. The geometry of the joint space is the entire interface between modalities — downstream tasks (retrieval, classification, generation guidance) operate on this aligned embedding rather than on raw pixels or tokens.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "representation-learning",
+        "path-representation-theory",
+        "vision",
+        "language"
+      ],
+      "prerequisites": [
+        "clip-contrastive-language-image-pre-training",
+        "representation-learning",
+        "contrastive-learning-simclr-moco"
+      ],
+      "related": [
+        "vision-language-contrastive-beyond-clip",
+        "infonce-nt-xent-losses",
+        "vision-encoder",
+        "encoder-transformer"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "tokenization-as-representation",
+      "title": "Tokenization as Representation",
+      "summary": "Tokenization is a representation choice, not a preprocessing detail — it determines what the model can and cannot see. BPE/Unigram merges encode frequency-weighted statistical priors over the corpus; the vocabulary fixes the model's lexical resolution; and morphologically poor segmentations (digit splits, code-token splits, multilingual under-coverage) cap downstream performance regardless of model size. Recent work (Limisiewicz et al. 2024, Tay et al. 2022) treats the tokenizer as a learnable component co-designed with the model.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "language",
+        "representation-learning",
+        "path-representation-theory"
+      ],
+      "prerequisites": [
+        "tokenization",
+        "subword-tokenization",
+        "word-embedding"
+      ],
+      "related": [
+        "wordpiece-unigram-sentencepiece-tokenization",
+        "tokenizer-training-dynamics",
+        "tokenization-pipeline",
+        "embedding-geometry"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "autoregressive-vs-diffusion-tradeoffs",
+      "title": "Autoregressive vs Diffusion Tradeoffs",
+      "summary": "Autoregressive models factorise \\( p(x) = \\prod_t p(x_t \\mid x_{<t}) \\) and dominate text generation; diffusion models learn a denoising process and dominate continuous-modality generation. The two paradigms differ in likelihood tractability, sampling cost, controllability, and compositionality — and the right choice depends on whether tokens are discrete, parallel decoding is required, and whether log-likelihood or perceptual quality is the figure of merit.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "generative",
+        "architecture",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "autoregressive-language-model",
+        "denoising-diffusion-probabilistic-models-ddpm"
+      ],
+      "related": [
+        "latent-diffusion",
+        "flow-matching-rectified-flow",
+        "consistency-models",
+        "diffusion-transformers-dit"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "text-to-image-alignment",
+      "title": "Text-to-Image Alignment",
+      "summary": "Text-to-image (T2I) alignment is the task of making generated images faithfully follow textual prompts — covering spatial layout, attribute binding, count, and style. Modern alignment relies on contrastive image–text encoders (CLIP, SigLIP, T5) injected via cross-attention into a diffusion or flow backbone, plus classifier-free guidance, RLHF-style preference fine-tuning, and reward models that grade prompt adherence.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "generative",
+        "cv",
+        "nlp",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "clip-contrastive-language-image-pre-training",
+        "latent-diffusion",
+        "classifier-free-guidance"
+      ],
+      "related": [
+        "text-to-image-dalle-imagen",
+        "stable-diffusion-pipeline",
+        "siglip",
+        "diffusion-transformers-dit",
+        "preference-based-alignment"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "generative-model-evaluation",
+      "title": "Generative Model Evaluation (FID, IS, and their limits)",
+      "summary": "Fréchet Inception Distance (FID) and Inception Score (IS) are the standard automated metrics for image generative models; both rely on Inception-v3 features and have well-known biases. Modern T2I evaluation supplements them with CLIPScore, prompt-adherence benchmarks (T2I-CompBench, GenEval), human-preference Elo (ImageReward, HPS), and likelihood / NLL where applicable.",
+      "domain": "evaluation",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "evaluation",
+        "generative",
+        "cv",
+        "path-generative-models"
+      ],
+      "prerequisites": [
+        "benchmark-ml-evaluation",
+        "denoising-diffusion-probabilistic-models-ddpm",
+        "clip-contrastive-language-image-pre-training"
+      ],
+      "related": [
+        "text-to-image-alignment",
+        "lmsys-chatbot-arena",
+        "stable-diffusion-pipeline",
+        "core-llm-benchmarks"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "in-context-learning-mechanisms",
+      "title": "In-Context Learning Mechanisms",
+      "summary": "In-context learning (ICL) is the empirical phenomenon that a frozen LLM solves new tasks from few-shot examples in the prompt. Mechanistic studies show ICL is implemented by a small set of attention circuits — induction heads, function vectors, and implicit gradient-descent-like updates — that emerge during pretraining once the data and depth budget cross a threshold.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "transformer",
+        "interpretability",
+        "path-mechanistic-interpretability",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "in-context-learning",
+        "induction-heads",
+        "self-attention"
+      ],
+      "related": [
+        "mechanistic-interpretability",
+        "circuit-analysis",
+        "what-are-emergent-capabilities-in-large-language-models",
+        "prompt-engineering"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "memory-in-llms",
+      "title": "Memory in LLMs",
+      "summary": "An LLM's working memory is the KV-cache for the current context window; longer-term memory is implemented externally by retrieval over vector / hybrid stores, by writing to scratchpads or tool state, or by parameter updates (continual fine-tuning). Each option has a different latency, capacity, and forgetting profile; production systems combine all three.",
+      "domain": "llm",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "transformer",
+        "implementation",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "large-language-model-llm",
+        "context-window",
+        "key-value-kv-caching",
+        "retrieval-augmented-generation-rag"
+      ],
+      "related": [
+        "memory-augmented-transformers",
+        "vector-database",
+        "long-context-pretraining",
+        "neural-turing-machine-ntm"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "alignment-techniques-rlhf-dpo-rlaif",
+      "title": "Alignment Techniques (RLHF, DPO, RLAIF, comparison)",
+      "summary": "Modern LLM alignment uses preference data to adjust a pretrained model so it follows instructions, refuses unsafe content, and ranks desired behaviours above undesired ones. The dominant recipes — RLHF with PPO, DPO and its variants, and RLAIF with AI-generated preferences — share the same Bradley–Terry preference model but differ in optimiser, reward-model dependence, and stability.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-alignment-rlhf",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-from-human-feedback-rlhf",
+        "direct-preference-optimization-dpo",
+        "rlaif-rl-from-ai-feedback"
+      ],
+      "related": [
+        "preference-based-alignment",
+        "reward-model",
+        "kl-divergence-penalty-in-rlhf",
+        "constitutional-ai",
+        "iterative-dpo"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "neural-fields-implicit-representations",
+      "title": "Neural Fields / Implicit Neural Representations",
+      "summary": "A neural field represents a signal — image, 3D shape, scene, or PDE solution — as a neural network that maps coordinates to values, e.g., \\( f_\\theta : \\mathbb{R}^d \\to \\mathbb{R}^k \\). The model parameters <i>are</i> the data: storage, querying, and editing all flow through the network. NeRF is the most famous instance, but the framework spans signed distance functions, occupancy fields, light fields, and physics fields.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "cv",
+        "architecture",
+        "generative"
+      ],
+      "prerequisites": [
+        "multilayer-perceptron-mlp",
+        "sinusoidal-positional-encoding"
+      ],
+      "related": [
+        "nerf-gaussian-splatting",
+        "convolutional-neural-network-cnn",
+        "vision-transformer-vit"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "vision-transformer-variants",
+      "title": "Vision Transformer (ViT) Variants",
+      "summary": "Since the original ViT, a wide family of variants has emerged that improve data efficiency, locality, hierarchy, and pretraining objective. The most influential are DeiT (training recipe), Swin (windowed hierarchical attention), MAE (masked-image pretraining), DINOv2 (self-distilled features), and SigLIP (sigmoid contrastive pretraining). Each addresses a specific weakness of the vanilla ViT.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "cv",
+        "architecture",
+        "transformer"
+      ],
+      "prerequisites": [
+        "vision-transformer-vit",
+        "self-attention",
+        "transformer"
+      ],
+      "related": [
+        "masked-autoencoder-mae",
+        "dinov2",
+        "siglip",
+        "convolutional-neural-network-cnn"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "graph-transformers",
+      "title": "Graph Transformers",
+      "summary": "Graph Transformers apply self-attention over graph-structured data, with positional encodings (Laplacian eigenvectors, random walks, shortest-path distances) injecting graph topology that vanilla attention lacks. They generalise message-passing GNNs and have become the leading architecture for molecular property prediction, code understanding, and combinatorial optimisation.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "architecture",
+        "transformer"
+      ],
+      "prerequisites": [
+        "transformer",
+        "self-attention",
+        "message-passing-in-graph-neural-networks-gnns"
+      ],
+      "related": [
+        "graph-attention-network-gat",
+        "graph-convolutional-network-gcn",
+        "vision-transformer-vit"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "perceiver-architecture",
+      "title": "Perceiver Architecture",
+      "summary": "The Perceiver is a cross-attention-based architecture that handles arbitrary input modalities (images, audio, point clouds, video) by first attending from a small fixed-size <i>latent</i> array onto the input, then iterating self-attention over latents. This decouples compute from input size and gives a unified backbone for multimodal models.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "architecture",
+        "transformer"
+      ],
+      "prerequisites": [
+        "transformer",
+        "cross-attention",
+        "self-attention"
+      ],
+      "related": [
+        "vision-transformer-vit",
+        "linear-attention",
+        "multi-head-latent-attention-mla"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "neural-architecture-search",
+      "title": "Neural Architecture Search (modern approaches)",
+      "summary": "NAS automates the design of network architectures by searching a parameterised space against a validation objective. Modern NAS abandons the slow RL-controller approach (NASNet) in favour of weight-sharing one-shot supernets (DARTS, ProxylessNAS), zero-cost proxies, and architecture-aware scaling laws (EfficientNet, NFNet). NAS has produced strong vision backbones but plays a smaller role in the LLM era.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "architecture",
+        "optimization"
+      ],
+      "prerequisites": [
+        "convolutional-neural-network-cnn",
+        "transformer",
+        "hyperparameter"
+      ],
+      "related": [
+        "mixture-of-depths",
+        "scaling-laws",
+        "knowledge-distillation"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "modular-neural-networks",
+      "title": "Modular Neural Networks",
+      "summary": "A modular network composes specialised sub-networks (modules) under a routing or composition rule that decides which modules process each input. Mixture-of-Experts is the most successful instance, but the family includes routed adapter networks, modular meta-learners, and compositional architectures designed for systematic generalisation. The motivation is parameter efficiency and reusable skills.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "architecture",
+        "transformer"
+      ],
+      "prerequisites": [
+        "sparse-mixture-of-experts-moe-layer",
+        "low-rank-adaptation-lora",
+        "neural-network"
+      ],
+      "related": [
+        "adapter-layers-houlsby",
+        "router-network",
+        "mixture-of-depths",
+        "multi-head-latent-attention-mla"
+      ],
+      "updatedAt": "2026-04-25",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "neural-program-interpreters",
+      "title": "Neural Program Interpreters",
+      "summary": "A neural program interpreter (NPI) is a network that executes program-like computations: looking up arguments, calling sub-routines, manipulating an external memory or stack, and conditioning on intermediate state. Early work (NPI, NTM, DNC, NeuralGPU) targeted symbolic algorithms; modern descendants are tool-using LLMs and chain-of-thought executors that lean on external interpreters and structured memory.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "architecture",
+        "historical"
+      ],
+      "prerequisites": [
+        "recurrent-neural-network-rnn",
+        "neural-turing-machine-ntm",
+        "transformer"
+      ],
+      "related": [
+        "function-calling",
+        "tool-use-function-calling-benchmarks",
+        "memory-augmented-transformers",
+        "chain-of-thought"
+      ],
+      "updatedAt": "2026-04-25",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
