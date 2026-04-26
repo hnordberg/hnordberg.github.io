@@ -26,9 +26,22 @@ export function resolvePathTopics(
   manifest: WikiManifest,
   pathDef: WikiLearningPath
 ): WikiTopicIndexEntry[] {
-  const { includeTags = [], excludeTags = [], levels = [] } = pathDef.criteria;
+  const {
+    includeTags = [],
+    excludeTags = [],
+    levels = [],
+    slugs = [],
+  } = pathDef.criteria;
 
-  // 1. Filter
+  // If explicit slugs are provided, prioritize them and maintain order
+  if (slugs.length > 0) {
+    const slugMap = new Map(manifest.topics.map((t) => [t.slug, t]));
+    return slugs
+      .map((slug) => slugMap.get(slug))
+      .filter((t): t is WikiTopicIndexEntry => !!t);
+  }
+
+  // Fallback to tag-based filtering
   const matched = manifest.topics.filter((topic) => {
     // Optimization: skip if levels are specified and topic level doesn't match
     if (levels.length > 0 && !levels.includes(topic.level)) {
@@ -41,7 +54,7 @@ export function resolvePathTopics(
       if (hasExcluded) return false;
     }
 
-    // Include condition (OR logic as requested by user)
+    // Include condition (OR logic)
     if (includeTags.length > 0) {
       const hasIncluded = topic.tags.some((tag) => includeTags.includes(tag));
       if (!hasIncluded) return false;

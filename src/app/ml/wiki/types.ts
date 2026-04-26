@@ -124,9 +124,10 @@ export type WikiManifest = {
 };
 
 export interface PathCriteria {
-  includeTags: string[]; // Let's interpret this as OR (matching 'or' user preference)
+  includeTags?: string[];
   excludeTags?: string[];
   levels?: WikiLevel[];
+  slugs?: string[];
 }
 
 export type WikiLearningPath = {

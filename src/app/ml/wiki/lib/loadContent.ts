@@ -11,6 +11,7 @@ import {
   validateWikiPaths,
 } from "./validate";
 
+import { resolvePathTopics } from "./paths";
 import manifestJson from "../content/manifest.json";
 import pathsJson from "../content/paths.json";
 import topicsJson from "../content/topics.json";
@@ -146,7 +147,14 @@ export function getManifest(): WikiManifest {
 }
 
 export function getPaths(): WikiPathsFile {
-  return getWikiCorpus().paths;
+  const { paths, manifest } = getWikiCorpus();
+  return {
+    ...paths,
+    paths: paths.paths.filter((p) => {
+      const topics = resolvePathTopics(manifest, p);
+      return topics.length >= 5 && topics.length <= 300;
+    }),
+  };
 }
 
 export function collectAllTags(): string[] {
