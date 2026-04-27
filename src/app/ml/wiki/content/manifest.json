@@ -17560,6 +17560,537 @@
         "architecture"
       ],
       "flags": []
+    },
+    {
+      "slug": "offline-reinforcement-learning",
+      "title": "Offline Reinforcement Learning",
+      "summary": "Offline reinforcement learning learns a policy from a fixed logged dataset without further interaction with the environment. Its central difficulty is distribution shift: Bellman backups evaluate actions that are poorly supported by the data, so modern methods either constrain the learned policy to stay near the behavior data or pessimistically down-value unsupported actions.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-rl",
+        "policy-reinforcement-learning",
+        "the-bellman-equation"
+      ],
+      "related": [
+        "model-based-reinforcement-learning",
+        "decision-transformers",
+        "world-model",
+        "q-learning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "model-based-reinforcement-learning",
+      "title": "Model-Based Reinforcement Learning",
+      "summary": "Model-based reinforcement learning learns an explicit or latent model of environment dynamics and uses that model for planning, imagination rollouts, or policy optimization. Its main advantage is sample efficiency, while its main failure mode is model bias: the policy can exploit errors in the learned simulator unless planning and training control compounding prediction error.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-rl",
+        "the-bellman-equation",
+        "policy-reinforcement-learning"
+      ],
+      "related": [
+        "world-model",
+        "offline-reinforcement-learning",
+        "safe-reinforcement-learning",
+        "q-learning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "decision-transformers",
+      "title": "Decision Transformers",
+      "summary": "Decision Transformers cast offline reinforcement learning as conditional sequence modeling: a Transformer predicts the next action from past returns-to-go, states, and actions. This avoids explicit Bellman backups and instead treats policy learning like autoregressive imitation conditioned on the desired future return.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "transformer",
+        "path-reinforcement",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "transformer",
+        "reinforcement-learning-rl",
+        "offline-reinforcement-learning"
+      ],
+      "related": [
+        "autoregressive-language-model",
+        "offline-reinforcement-learning",
+        "world-model",
+        "model-based-reinforcement-learning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "multi-agent-reinforcement-learning",
+      "title": "Multi-Agent Reinforcement Learning",
+      "summary": "Multi-agent reinforcement learning studies environments where several learning agents interact simultaneously, making each agent's dynamics depend on the evolving policies of the others. The main challenges are non-stationarity, coordination, and credit assignment, which is why centralized training with decentralized execution is a common modern design.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-rl",
+        "policy-reinforcement-learning",
+        "q-learning"
+      ],
+      "related": [
+        "agentic-multi-agent-orchestration",
+        "exploration-vs-exploitation-deep-rl",
+        "safe-reinforcement-learning",
+        "hierarchical-reinforcement-learning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "exploration-vs-exploitation-deep-rl",
+      "title": "Exploration vs Exploitation (Deep RL View)",
+      "summary": "Exploration versus exploitation is the trade-off between taking actions that seem best under current knowledge and taking actions that improve knowledge of the environment. In deep RL the problem is harder than in bandits because rewards can be sparse, state spaces are large, and short-term randomness is often not enough to discover long-horizon strategies.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-rl",
+        "q-learning",
+        "multi-armed-bandits"
+      ],
+      "related": [
+        "multi-agent-reinforcement-learning",
+        "safe-reinforcement-learning",
+        "hierarchical-reinforcement-learning",
+        "offline-reinforcement-learning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "reward-hacking",
+      "title": "Reward Hacking",
+      "summary": "Reward hacking occurs when an agent maximizes the formal reward signal while failing at the designer's intended objective. It is a general Goodhart-style failure mode in reinforcement learning: stronger optimization pressure often finds loopholes in the proxy reward faster than humans can patch them.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "safety",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-rl",
+        "goodharts-law-and-specification-gaming",
+        "reward-signal"
+      ],
+      "related": [
+        "reward-hacking-specification-gaming-rlhf",
+        "safe-reinforcement-learning",
+        "rlhf-as-kl-regularized-policy-optimization",
+        "alignment-ai"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "safe-reinforcement-learning",
+      "title": "Safe Reinforcement Learning",
+      "summary": "Safe reinforcement learning studies how to optimize long-term return while satisfying safety constraints during training and deployment. The standard formalism is a constrained Markov decision process, where the policy must maximize reward subject to a bound on expected cost, risk, or unsafe-state visitation.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "safety",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-rl",
+        "policy-reinforcement-learning",
+        "the-bellman-equation"
+      ],
+      "related": [
+        "reward-hacking",
+        "exploration-vs-exploitation-deep-rl",
+        "model-based-reinforcement-learning",
+        "hierarchical-reinforcement-learning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "hierarchical-reinforcement-learning",
+      "title": "Hierarchical Reinforcement Learning",
+      "summary": "Hierarchical reinforcement learning decomposes control across time scales, usually by letting a high-level policy choose skills, options, or subgoals and a low-level policy execute them. This can make sparse-reward and long-horizon problems easier, but only if the learned hierarchy discovers reusable abstractions rather than collapsing back to flat control.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-rl",
+        "policy-reinforcement-learning",
+        "exploration-vs-exploitation-deep-rl"
+      ],
+      "related": [
+        "safe-reinforcement-learning",
+        "multi-agent-reinforcement-learning",
+        "model-based-reinforcement-learning",
+        "offline-reinforcement-learning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "distributed-training-data-model-parallelism",
+      "title": "Distributed Training (Data & Model Parallelism)",
+      "summary": "Distributed training scales learning across many devices by splitting either the data, the model, or both. Data parallelism is simplest when the model fits on each device, while model parallel approaches such as tensor and pipeline parallelism are needed when parameters or activations are too large for one accelerator.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "implementation",
+        "ml",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "distributed-computing-ml-training",
+        "gradient-descent",
+        "data-parallelism"
+      ],
+      "related": [
+        "data-parallelism",
+        "model-parallelism",
+        "pipeline-parallelism",
+        "fully-sharded-data-parallel-fsdp"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "efficient-inference-distillation-pruning",
+      "title": "Efficient Inference (Distillation, Pruning)",
+      "summary": "Efficient inference reduces latency, memory, or serving cost without retraining a model from scratch, often by distilling a smaller student or pruning unimportant weights and structures. Distillation transfers behavior; pruning removes computation, and the two are often combined with quantization for deployment-grade compression.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "inference-optimization",
+        "knowledge-distillation",
+        "pruning"
+      ],
+      "related": [
+        "knowledge-distillation",
+        "pruning",
+        "quantization",
+        "serving-llms-at-scale"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "serving-llms-at-scale",
+      "title": "Serving LLMs at Scale",
+      "summary": "Serving LLMs at scale is a systems problem of jointly optimizing prompt prefill throughput, token-by-token decode latency, KV-cache memory, batching policy, and fleet utilization. Modern serving stacks rely on continuous batching, prefix caching, PagedAttention, speculative decoding, and sometimes prefill/decode disaggregation to keep both tail latency and GPU cost under control.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "product",
+        "transformer",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "inference-optimization",
+        "pagedattention",
+        "disaggregated-prefill-decode-serving"
+      ],
+      "related": [
+        "speculative-decoding",
+        "pagedattention",
+        "disaggregated-prefill-decode-serving",
+        "efficient-inference-distillation-pruning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "data-centric-ai",
+      "title": "Data-Centric AI",
+      "summary": "Data-centric AI treats data quality, labeling, coverage, and feedback loops as first-class levers of model performance rather than focusing only on architecture or hyperparameters. The core workflow is to diagnose failure slices, improve the dataset that generates those failures, and measure whether the model gets better for the right reasons.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "model-evaluation",
+        "data-leakage",
+        "supervised-learning"
+      ],
+      "related": [
+        "dataset-versioning-and-lineage",
+        "feature-stores",
+        "ml-system-monitoring-and-drift-detection",
+        "feedback-loop-ml-systems"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "dataset-versioning-and-lineage",
+      "title": "Dataset Versioning & Lineage",
+      "summary": "Dataset versioning and lineage track exactly which raw data, labels, transformations, and filters produced a training or evaluation set. They matter because reproducibility, compliance, rollback, and debugging all depend on being able to answer \"which data built this model?\" with more precision than a folder name or timestamp.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "product",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "data-centric-ai",
+        "model-evaluation",
+        "data-leakage"
+      ],
+      "related": [
+        "feature-stores",
+        "ml-system-monitoring-and-drift-detection",
+        "data-centric-ai",
+        "feedback-loop-ml-systems"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "feature-stores",
+      "title": "Feature Stores",
+      "summary": "Feature stores are systems for defining, computing, and serving reusable machine-learning features consistently across training and production. Their core promise is point-in-time correctness and train/serve consistency: the feature a model saw offline should match the feature served online for the same entity and timestamp.",
+      "domain": "deep-learning",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "product",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "supervised-learning",
+        "data-centric-ai",
+        "dataset-versioning-and-lineage"
+      ],
+      "related": [
+        "dataset-versioning-and-lineage",
+        "ml-system-monitoring-and-drift-detection",
+        "data-centric-ai",
+        "data-leakage"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "adversarial-robustness-modern-attacks",
+      "title": "Adversarial Robustness (Modern Attacks)",
+      "summary": "Adversarial robustness studies how learned models can be forced into wrong predictions by carefully chosen perturbations that are small, structured, or semantically deceptive. Modern attack families include gradient-based \\(\\ell_p\\) attacks, universal perturbations, adversarial patches, and transfer attacks; defenses must avoid merely hiding gradients while leaving the model fragile.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "loss-function",
+        "gradient-descent",
+        "model-evaluation"
+      ],
+      "related": [
+        "distribution-shift-and-dataset-shift",
+        "uncertainty-estimation-in-deep-learning",
+        "adversarial-prompting",
+        "safe-reinforcement-learning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "distribution-shift-and-dataset-shift",
+      "title": "Distribution Shift & Dataset Shift",
+      "summary": "Distribution shift occurs when the joint distribution seen at deployment differs from the one used for training or validation. The main cases are covariate shift, label shift, and concept shift; each breaks generalization in a different way and therefore requires different detection and mitigation strategies.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "generalization",
+        "model-evaluation",
+        "calibration"
+      ],
+      "related": [
+        "uncertainty-estimation-in-deep-learning",
+        "ml-system-monitoring-and-drift-detection",
+        "adversarial-robustness-modern-attacks",
+        "data-centric-ai"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "uncertainty-estimation-in-deep-learning",
+      "title": "Uncertainty Estimation in Deep Learning",
+      "summary": "Uncertainty estimation in deep learning tries to quantify when a model should be unsure, not just what label it predicts. The key distinction is between aleatoric uncertainty from irreducible noise in the data and epistemic uncertainty from limited knowledge of the model, and modern methods such as deep ensembles, MC dropout, and conformal prediction target those uncertainties differently.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "calibration",
+        "bayesian-deep-learning-mc-dropout-ensembles",
+        "conformal-prediction"
+      ],
+      "related": [
+        "distribution-shift-and-dataset-shift",
+        "ml-system-monitoring-and-drift-detection",
+        "expected-calibration-error-ece",
+        "adversarial-robustness-modern-attacks"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "ml-system-monitoring-and-drift-detection",
+      "title": "ML System Monitoring & Drift Detection",
+      "summary": "ML system monitoring tracks whether a deployed model is still receiving the kind of data it was built for and whether its business and technical behavior remain acceptable. Drift detection is one part of that job: teams also monitor latency, calibration, feature freshness, label delay, feedback loops, and downstream outcomes, because data drift alone does not tell the whole production story.",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "product",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "model-evaluation",
+        "distribution-shift-and-dataset-shift",
+        "data-centric-ai"
+      ],
+      "related": [
+        "feature-stores",
+        "dataset-versioning-and-lineage",
+        "a-b-testing-ml-systems",
+        "feedback-loop-ml-systems"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "rlhf-as-kl-regularized-policy-optimization",
+      "title": "RLHF as KL-Regularized Policy Optimization",
+      "summary": "A deeper theoretical view of RLHF treats post-training as optimizing a policy against a learned reward while regularizing toward a reference model with a KL penalty. This viewpoint explains why PPO-RLHF, reward-model training, and even DPO-style objectives are closely related: they are different ways of solving or approximating the same regularized preference-optimization problem.",
+      "domain": "llm",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "nlp",
+        "reinforcement",
+        "theory",
+        "transformer",
+        "path-transformer-llm",
+        "path-scaling-advanced"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-from-human-feedback-rlhf",
+        "kl-divergence-penalty-in-rlhf",
+        "reward-model"
+      ],
+      "related": [
+        "reinforcement-learning-from-human-feedback-rlhf",
+        "direct-preference-optimization-dpo",
+        "preference-based-alignment",
+        "reward-hacking-specification-gaming-rlhf"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
