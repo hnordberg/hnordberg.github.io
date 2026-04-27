@@ -11,8 +11,11 @@ import {
   type RefObject,
 } from "react";
 
-const MATHJAX_SRC =
-  "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js";
+/**
+ * Served from `public/mathjax/` (copied from the `mathjax` npm package via `postinstall`).
+ * `tex-chtml-full` preloads TeX extensions (e.g. `boldsymbol`); lighter bundles can race autoload.
+ */
+const MATHJAX_SRC = "/mathjax/tex-chtml-full.js";
 
 type MathJaxGlobal = {
   version?: string;
@@ -194,7 +197,7 @@ export function useMathJax(
         return (
           <Script
             src={MATHJAX_SRC}
-            strategy="lazyOnload"
+            strategy="afterInteractive"
             onLoad={handleScriptLoad}
           />
         );

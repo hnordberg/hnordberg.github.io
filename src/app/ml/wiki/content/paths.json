@@ -322,6 +322,44 @@
       "criteria": {
         "slugs": []
       }
+    },
+    {
+      "decision-making-rl": [
+        "offline-reinforcement-learning",
+        "model-based-reinforcement-learning",
+        "decision-transformers",
+        "multi-agent-reinforcement-learning",
+        "exploration-vs-exploitation-deep-rl",
+        "safe-reinforcement-learning",
+        "hierarchical-reinforcement-learning"
+      ],
+      "distributed-training": [
+        "distributed-training-data-model-parallelism",
+        "pipeline-parallelism",
+        "zero-zero-redundancy-optimizer",
+        "mixed-precision-training"
+      ],
+      "efficient-ml": [
+        "efficient-inference-distillation-pruning",
+        "serving-llms-at-scale",
+        "knowledge-distillation",
+        "pruning"
+      ],
+      "data-centric-ai": [
+        "data-centric-ai",
+        "dataset-versioning-and-lineage",
+        "feature-stores",
+        "ml-system-monitoring-and-drift-detection"
+      ],
+      "robustness-ood": [
+        "adversarial-robustness-modern-attacks",
+        "distribution-shift-and-dataset-shift",
+        "uncertainty-estimation-in-deep-learning",
+        "ml-system-monitoring-and-drift-detection"
+      ],
+      "alignment-safety": [
+        "rlhf-as-kl-regularized-policy-optimization"
+      ]
     }
   ]
 }
