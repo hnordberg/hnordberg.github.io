@@ -299,7 +299,18 @@
       "description": "Moving from correlation to causation. Structural causal models, counterfactuals, and IRM.",
       "estimatedMinutes": 60,
       "criteria": {
-        "slugs": []
+        "slugs": [
+          "interventions-vs-observations",
+          "structural-causal-models-scm",
+          "simpsons-paradox-in-ml",
+          "causal-discovery-from-data",
+          "counterfactual-inference",
+          "spurious-correlations-in-ml",
+          "out-of-distribution-generalization",
+          "invariant-risk-minimization-irm",
+          "causal-representation-learning",
+          "causal-reinforcement-learning"
+        ]
       }
     },
     {
@@ -324,42 +335,134 @@
       }
     },
     {
-      "decision-making-rl": [
-        "offline-reinforcement-learning",
-        "model-based-reinforcement-learning",
-        "decision-transformers",
-        "multi-agent-reinforcement-learning",
-        "exploration-vs-exploitation-deep-rl",
-        "safe-reinforcement-learning",
-        "hierarchical-reinforcement-learning"
-      ],
-      "distributed-training": [
-        "distributed-training-data-model-parallelism",
-        "pipeline-parallelism",
-        "zero-zero-redundancy-optimizer",
-        "mixed-precision-training"
-      ],
-      "efficient-ml": [
-        "efficient-inference-distillation-pruning",
-        "serving-llms-at-scale",
-        "knowledge-distillation",
-        "pruning"
-      ],
-      "data-centric-ai": [
-        "data-centric-ai",
-        "dataset-versioning-and-lineage",
-        "feature-stores",
-        "ml-system-monitoring-and-drift-detection"
-      ],
-      "robustness-ood": [
-        "adversarial-robustness-modern-attacks",
-        "distribution-shift-and-dataset-shift",
-        "uncertainty-estimation-in-deep-learning",
-        "ml-system-monitoring-and-drift-detection"
-      ],
-      "alignment-safety": [
-        "rlhf-as-kl-regularized-policy-optimization"
-      ]
+      "slug": "statistical-decision-theory-inference-glue",
+      "title": "Statistical Decision Theory & Inference",
+      "description": "Bridge the probability and decision-theoretic ideas that connect Bayesian inference, calibrated prediction, and classical statistical learning.",
+      "estimatedMinutes": 75,
+      "criteria": {
+        "slugs": [
+          "law-of-total-probability",
+          "conditional-independence",
+          "sufficient-statistics",
+          "bayes-risk-and-the-bayes-optimal-classifier",
+          "proper-scoring-rules",
+          "surrogate-losses-and-classification-calibration"
+        ]
+      }
+    },
+    {
+      "slug": "learning-theory-evaluation-glue",
+      "title": "Learning Theory & Evaluation",
+      "description": "Connect risk minimization, validation protocol, evaluation metrics, and deployment-shift thinking so model selection and measurement line up with generalization.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "slugs": [
+          "empirical-risk-minimization-erm",
+          "structural-risk-minimization-srm",
+          "train-validation-test-split",
+          "k-fold-cross-validation",
+          "confusion-matrix",
+          "precision-recall-curve-and-average-precision",
+          "feature-scaling-and-standardization",
+          "distribution-shift-and-dataset-shift"
+        ]
+      }
+    },
+    {
+      "slug": "classical-supervised-ml-glue",
+      "title": "Classical Supervised ML",
+      "description": "Fill in the classical classification concepts around margins, kernels, asymmetric costs, and imbalance-aware objectives.",
+      "estimatedMinutes": 75,
+      "criteria": {
+        "slugs": [
+          "hinge-loss",
+          "support-vector-machine-svm",
+          "kernel-methods",
+          "cost-sensitive-learning",
+          "class-imbalance-and-reweighting"
+        ]
+      }
+    },
+    {
+      "slug": "rl-causality-history-anchors",
+      "title": "RL, Causality & History Anchors",
+      "description": "Anchor reinforcement learning, causal inference, and two landmark papers that shaped modern deep learning and transformers.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "slugs": [
+          "markov-decision-process-mdp",
+          "dynamic-programming-for-rl",
+          "potential-outcomes-framework",
+          "confounding-colliders-and-simpsons-paradox",
+          "attention-is-all-you-need",
+          "alexnet"
+        ]
+      }
+    },
+    {
+      "slug": "statistical-inference-and-calibration",
+      "title": "Statistical Inference & Calibration",
+      "description": "Move from hypothesis testing and likelihood methods to uncertainty quantification and probabilistic scoring.",
+      "estimatedMinutes": 90,
+      "criteria": {
+        "slugs": [
+          "multiple-hypothesis-testing-and-false-discovery-rate",
+          "likelihood-ratio-tests",
+          "importance-sampling",
+          "bootstrap-confidence-intervals",
+          "brier-score"
+        ]
+      }
+    },
+    {
+      "slug": "classical-probabilistic-models",
+      "title": "Classical & Probabilistic Models",
+      "description": "Study classical unsupervised, latent-variable, and sequential-state models that still shape modern machine learning.",
+      "estimatedMinutes": 120,
+      "criteria": {
+        "slugs": [
+          "one-class-svm",
+          "anomaly-detection",
+          "latent-dirichlet-allocation-lda-topic-models",
+          "factor-analysis",
+          "kalman-filter",
+          "particle-filter",
+          "canonical-correlation-analysis-cca"
+        ]
+      }
+    },
+    {
+      "slug": "experimental-method-and-rl-fundamentals",
+      "title": "Experimental Method & RL Fundamentals",
+      "description": "Connect reliable experimentation to the dynamic-programming and return-estimation ideas at the core of reinforcement learning.",
+      "estimatedMinutes": 105,
+      "criteria": {
+        "slugs": [
+          "missing-data-and-imputation",
+          "target-leakage-vs-data-leakage",
+          "ablation-studies-and-experimental-control",
+          "value-iteration",
+          "policy-iteration",
+          "monte-carlo-reinforcement-learning",
+          "credit-assignment-problem"
+        ]
+      }
+    },
+    {
+      "slug": "causal-inference-and-attention-bridges",
+      "title": "Causal Inference & Historical Bridges",
+      "description": "Bridge causal estimands, interventional reasoning, and the landmark sequence-model ideas that led into modern attention and deep learning.",
+      "estimatedMinutes": 120,
+      "criteria": {
+        "slugs": [
+          "instrumental-variables",
+          "counterfactuals",
+          "do-calculus",
+          "bahdanau-attention",
+          "seq2seq-with-attention",
+          "backpropagation-history-werbos-rumelhart-hinton-williams"
+        ]
+      }
     }
   ]
 }

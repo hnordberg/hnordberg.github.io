@@ -18091,6 +18091,1253 @@
       ],
       "updatedAt": "2026-04-27",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "law-of-total-probability",
+      "title": "Law of Total Probability",
+      "summary": "The law of total probability computes an event probability by summing over mutually exclusive, exhaustive cases. In machine learning it is the basic marginalization identity behind latent-variable models, mixture models, and many Bayesian calculations.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "conditional-probability",
+        "probability-distribution"
+      ],
+      "related": [
+        "bayes-theorem",
+        "chain-rule-of-probability",
+        "conditional-independence"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "conditional-independence",
+      "title": "Conditional Independence",
+      "summary": "Conditional independence means two variables become unrelated once a third variable is known. It is the simplifying assumption that makes graphical models tractable and explains why conditioning can either remove dependence or, in collider structures, create it.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "conditional-probability",
+        "probability-distribution"
+      ],
+      "related": [
+        "bayesian-networks-directed-graphical-models",
+        "mutual-information-and-conditional-entropy",
+        "confounding-colliders-and-simpsons-paradox"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "sufficient-statistics",
+      "title": "Sufficient Statistics",
+      "summary": "A sufficient statistic is a summary of the sample that retains all information about a parameter relevant for inference. This is why many classical models can replace an entire dataset with counts, sums, or means without changing the likelihood-based conclusions about the parameter.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "probability-distribution",
+        "maximum-likelihood-estimate-mle"
+      ],
+      "related": [
+        "exponential-family-of-distributions",
+        "the-fisher-information-matrix",
+        "bayes-theorem"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bayes-risk-and-the-bayes-optimal-classifier",
+      "title": "Bayes Risk and the Bayes Optimal Classifier",
+      "summary": "Bayes risk is the minimum achievable expected loss under the true data distribution, and the Bayes-optimal classifier attains it by minimizing posterior expected loss for each input. Under ordinary 0–1 loss, that rule becomes “predict the class with highest posterior probability.”",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "classification",
+        "loss-function",
+        "conditional-probability"
+      ],
+      "related": [
+        "proper-scoring-rules",
+        "cost-sensitive-learning",
+        "maximum-a-posteriori-map-estimation",
+        "naive-bayes-classifier"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "proper-scoring-rules",
+      "title": "Proper Scoring Rules",
+      "summary": "A scoring rule is proper if a forecaster minimizes expected score by reporting their true predictive distribution. Proper scoring rules matter because they reward honest, calibrated probabilities rather than merely getting the top-ranked class right.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "probability-distribution",
+        "calibration"
+      ],
+      "related": [
+        "cross-entropy",
+        "calibration",
+        "expected-calibration-error-ece",
+        "surrogate-losses-and-classification-calibration"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "surrogate-losses-and-classification-calibration",
+      "title": "Surrogate Losses and Classification Calibration",
+      "summary": "Surrogate losses replace hard-to-optimize 0–1 classification loss with tractable objectives such as logistic or hinge loss. A surrogate is classification-calibrated if optimizing it still drives the classifier toward the Bayes-optimal decision rule.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "classification",
+        "loss-function",
+        "proper-scoring-rules"
+      ],
+      "related": [
+        "hinge-loss",
+        "cross-entropy",
+        "calibration",
+        "bayes-risk-and-the-bayes-optimal-classifier"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "empirical-risk-minimization-erm",
+      "title": "Empirical Risk Minimization (ERM)",
+      "summary": "Empirical risk minimization chooses the model with the smallest average training loss. It is the default principle behind most supervised learning, but it must be paired with capacity control or held-out evaluation because low training loss alone does not guarantee generalization.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "loss-function",
+        "generalization"
+      ],
+      "related": [
+        "structural-risk-minimization-srm",
+        "overfitting",
+        "train-validation-test-split",
+        "generalization"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "structural-risk-minimization-srm",
+      "title": "Structural Risk Minimization (SRM)",
+      "summary": "Structural risk minimization extends empirical risk minimization by balancing training fit against model complexity. It is the learning-theoretic principle behind regularization, margin control, and choosing among hypothesis classes of different capacity.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "empirical-risk-minimization-erm",
+        "vc-dimension-and-shattering"
+      ],
+      "related": [
+        "l2-regularization-ridge-weight-decay",
+        "early-stopping",
+        "pac-learning-probably-approximately-correct",
+        "empirical-risk-minimization-erm"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "train-validation-test-split",
+      "title": "Train/Validation/Test Split",
+      "summary": "A train/validation/test split separates fitting, model selection, and final evaluation into different datasets. The test set is kept untouched until the end so it remains a credible estimate of out-of-sample performance.",
+      "domain": "evaluation",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "supervised-learning"
+      ],
+      "related": [
+        "data-leakage",
+        "k-fold-cross-validation",
+        "early-stopping",
+        "hyperparameter"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "k-fold-cross-validation",
+      "title": "k-Fold Cross-Validation",
+      "summary": "k-fold cross-validation rotates a held-out fold through the dataset so every example is used for validation once and training the other times. It uses limited data efficiently for model selection, but it costs multiple training runs and must keep preprocessing inside each fold.",
+      "domain": "evaluation",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "train-validation-test-split"
+      ],
+      "related": [
+        "bias-variance-tradeoff",
+        "data-leakage",
+        "train-validation-test-split",
+        "early-stopping"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "confusion-matrix",
+      "title": "Confusion Matrix",
+      "summary": "A confusion matrix counts predicted labels against true labels. In binary classification it yields the four basic counts—true positives, false positives, true negatives, and false negatives—from which most common thresholded metrics are derived.",
+      "domain": "evaluation",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "binary-classification"
+      ],
+      "related": [
+        "precision",
+        "recall",
+        "accuracy",
+        "f1-score"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "precision-recall-curve-and-average-precision",
+      "title": "Precision-Recall Curve and Average Precision",
+      "summary": "A precision-recall curve shows how precision and recall trade off as the decision threshold moves through a ranked list of predictions. Average precision summarizes that curve and is especially informative when the positive class is rare.",
+      "domain": "evaluation",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "precision",
+        "recall",
+        "confusion-matrix"
+      ],
+      "related": [
+        "receiver-operating-characteristic-roc-and-auc",
+        "f1-score",
+        "class-imbalance-and-reweighting",
+        "precision"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "feature-scaling-and-standardization",
+      "title": "Feature Scaling and Standardization",
+      "summary": "Feature scaling rescales input dimensions to comparable magnitudes, while standardization specifically subtracts the training mean and divides by the training standard deviation. It matters because optimization, distances, and margins can otherwise be dominated by whichever feature uses the largest units.",
+      "domain": "supervised",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "supervised-learning"
+      ],
+      "related": [
+        "gradient-descent",
+        "support-vector-machine-svm",
+        "k-means-objective-function-inertia",
+        "data-leakage"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "hinge-loss",
+      "title": "Hinge Loss",
+      "summary": "Hinge loss penalizes examples that are misclassified or that lie too close to the decision boundary. It is the convex margin-based loss underlying soft-margin SVMs and emphasizes confident separation rather than calibrated probabilities.",
+      "domain": "supervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "loss-function",
+        "binary-classification"
+      ],
+      "related": [
+        "support-vector-machine-svm",
+        "logistic-regression",
+        "surrogate-losses-and-classification-calibration"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "cost-sensitive-learning",
+      "title": "Cost-Sensitive Learning",
+      "summary": "Cost-sensitive learning assigns different penalties to different kinds of mistakes instead of treating every error equally. It is the right framework when the real objective is to minimize downstream harm or utility loss rather than raw misclassification rate.",
+      "domain": "supervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "classification",
+        "bayes-risk-and-the-bayes-optimal-classifier"
+      ],
+      "related": [
+        "class-imbalance-and-reweighting",
+        "confusion-matrix",
+        "precision-recall-curve-and-average-precision",
+        "calibration"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "class-imbalance-and-reweighting",
+      "title": "Class Imbalance and Reweighting",
+      "summary": "Class imbalance means some labels are much rarer than others, so an unweighted objective can be dominated by the majority class. Reweighting changes the loss or sampling scheme so rare classes exert more influence during training.",
+      "domain": "supervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "classification",
+        "cross-entropy"
+      ],
+      "related": [
+        "focal-loss-class-imbalance",
+        "cost-sensitive-learning",
+        "precision-recall-curve-and-average-precision",
+        "logit-adjustment"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "markov-decision-process-mdp",
+      "title": "Markov Decision Process (MDP)",
+      "summary": "A Markov decision process formalizes sequential decision-making with states, actions, transitions, rewards, and a discount factor. Its key assumption is that the next-state and reward distribution depends only on the current state and action, which makes Bellman-style planning possible.",
+      "domain": "foundations",
+      "level": "intro",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-rl",
+        "the-markov-property"
+      ],
+      "related": [
+        "the-bellman-equation",
+        "dynamic-programming-for-rl",
+        "value-function",
+        "policy-reinforcement-learning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "dynamic-programming-for-rl",
+      "title": "Dynamic Programming for RL",
+      "summary": "Dynamic programming solves an MDP with a known model by repeatedly applying Bellman updates until values or policies become self-consistent. Policy evaluation, policy improvement, policy iteration, and value iteration are the core algorithms in that family.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "markov-decision-process-mdp",
+        "the-bellman-equation"
+      ],
+      "related": [
+        "value-function",
+        "q-learning",
+        "policy-reinforcement-learning",
+        "actor-critic-methods"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "potential-outcomes-framework",
+      "title": "Potential Outcomes Framework",
+      "summary": "The potential outcomes framework defines causal effects by comparing the outcomes a unit would have under different treatments. Because only one of those potential outcomes is observed for any given unit, causal inference is fundamentally about identifying missing counterfactuals under defensible assumptions.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "probability-distribution",
+        "conditional-probability"
+      ],
+      "related": [
+        "confounding-colliders-and-simpsons-paradox",
+        "conditional-independence",
+        "bayes-risk-and-the-bayes-optimal-classifier"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "confounding-colliders-and-simpsons-paradox",
+      "title": "Confounding, Colliders, and Simpson’s Paradox",
+      "summary": "Confounders create misleading associations because they affect both treatment and outcome, while colliders create bias when you condition on them. Simpson’s paradox is the visible symptom that aggregate and stratified associations can reverse direction when the underlying causal structure is ignored.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "potential-outcomes-framework",
+        "conditional-independence"
+      ],
+      "related": [
+        "bayesian-networks-directed-graphical-models",
+        "law-of-total-probability",
+        "potential-outcomes-framework"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "attention-is-all-you-need",
+      "title": "Attention Is All You Need",
+      "summary": "“Attention Is All You Need” introduced the Transformer: a sequence model built around self-attention instead of recurrence or convolution. The paper mattered because it showed that attention-based, highly parallel sequence modeling could outperform recurrent seq2seq systems and set the template for modern LLMs.",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "architecture",
+        "landmark",
+        "ml",
+        "theory",
+        "transformer",
+        "path-architectures",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "sequence-to-sequence-seq2seq",
+        "self-attention",
+        "encoder-decoder-architecture"
+      ],
+      "related": [
+        "transformer",
+        "multi-head-attention",
+        "sinusoidal-positional-encoding",
+        "decoder-only-transformer"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "alexnet",
+      "title": "AlexNet",
+      "summary": "AlexNet was the deep convolutional network that won ILSVRC 2012 by a huge margin and triggered the modern deep-learning wave in vision. Its impact came from the full recipe—ImageNet-scale data, GPU training, ReLU, dropout, and augmentation—not from a single isolated trick.",
+      "domain": "history",
+      "level": "basic",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "architecture",
+        "cv",
+        "landmark",
+        "ml",
+        "theory",
+        "path-vision",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "convolutional-neural-network-cnn",
+        "imagenet-dataset",
+        "relu"
+      ],
+      "related": [
+        "dropout",
+        "data-augmentation",
+        "imagenet-dataset",
+        "vision-transformer-vit"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "multiple-hypothesis-testing-and-false-discovery-rate",
+      "title": "Multiple Hypothesis Testing and False Discovery Rate",
+      "summary": "Multiple hypothesis testing asks how to control false positives when many tests are run at once. False discovery rate control, especially the Benjamini–Hochberg procedure, limits the expected fraction of rejected hypotheses that are actually null and is usually less conservative than family-wise error control.",
+      "domain": "math",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "evaluation",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "hypothesis-testing-and-p-values",
+        "confidence-interval"
+      ],
+      "related": [
+        "likelihood-ratio-tests",
+        "bootstrap-confidence-intervals",
+        "a-b-testing-ml-systems"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "likelihood-ratio-tests",
+      "title": "Likelihood Ratio Tests",
+      "summary": "A likelihood ratio test compares how well two nested statistical models explain the same data by taking the ratio of their maximized likelihoods. Large likelihood-ratio statistics indicate that the larger model fits substantially better than the restricted one, and under regularity conditions the test statistic is asymptotically chi-squared.",
+      "domain": "math",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "evaluation",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "log-likelihood",
+        "maximum-likelihood-estimate-mle",
+        "hypothesis-testing-and-p-values"
+      ],
+      "related": [
+        "multiple-hypothesis-testing-and-false-discovery-rate",
+        "confidence-interval",
+        "maximum-a-posteriori-map-estimation"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "importance-sampling",
+      "title": "Importance Sampling",
+      "summary": "Importance sampling estimates an expectation under a target distribution by drawing samples from a different proposal distribution and reweighting them. It is powerful when the proposal places more mass in the important regions of the integrand, but unstable weights can make the variance explode.",
+      "domain": "math",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "probability-distribution",
+        "random-variables-expectation-variance-axiomatic",
+        "bayes-theorem"
+      ],
+      "related": [
+        "markov-chain-monte-carlo-mcmc",
+        "gibbs-sampling",
+        "particle-filter"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bootstrap-confidence-intervals",
+      "title": "Bootstrap Confidence Intervals",
+      "summary": "Bootstrap confidence intervals estimate uncertainty by resampling the observed dataset with replacement and recomputing the statistic many times. They are useful when analytic standard errors are awkward, but they inherit the sample's biases and can fail when the original sample is too small or unrepresentative.",
+      "domain": "evaluation",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "evaluation",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "bootstrap-resampling",
+        "confidence-interval"
+      ],
+      "related": [
+        "bootstrap-resampling",
+        "confidence-interval",
+        "hypothesis-testing-and-p-values"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "brier-score",
+      "title": "Brier Score",
+      "summary": "The Brier score measures the mean squared error of probabilistic predictions, so it rewards both correctness and calibration. Lower is better, and unlike accuracy it penalizes a confidently wrong 0.99 prediction much more than a cautious 0.6 prediction.",
+      "domain": "evaluation",
+      "level": "basic",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "evaluation",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "calibration",
+        "proper-scoring-rules",
+        "classification"
+      ],
+      "related": [
+        "expected-calibration-error-ece",
+        "platt-scaling-isotonic-regression",
+        "receiver-operating-characteristic-roc-and-auc"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "one-class-svm",
+      "title": "One-Class SVM",
+      "summary": "A one-class SVM learns a boundary around mostly normal data by separating mapped training points from the origin with maximum margin in feature space. It is a classic novelty-detection method because it needs examples of the inlier class but not labeled anomalies.",
+      "domain": "unsupervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "support-vector-machine-svm",
+        "kernel-methods"
+      ],
+      "related": [
+        "anomaly-detection",
+        "support-vector-machine-svm",
+        "kernel-methods"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "anomaly-detection",
+      "title": "Anomaly Detection",
+      "summary": "Anomaly detection identifies observations that look unlikely under the pattern of normal data. The main families are density-based methods, reconstruction-based methods, and one-class classification methods, and the right choice depends on whether you have labels, strong feature engineering, or only normal examples.",
+      "domain": "unsupervised",
+      "level": "basic",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "unsupervised-learning",
+        "probability-distribution"
+      ],
+      "related": [
+        "one-class-svm",
+        "ml-system-monitoring-and-drift-detection",
+        "the-curse-of-dimensionality"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "latent-dirichlet-allocation-lda-topic-models",
+      "title": "Latent Dirichlet Allocation (LDA Topic Models)",
+      "summary": "Latent Dirichlet Allocation models each document as a mixture of latent topics and each topic as a distribution over words. It is a generative model for uncovering coarse semantic structure in bag-of-words corpora, not a modern contextual language model.",
+      "domain": "unsupervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "nlp",
+        "path-architectures",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "beta-and-dirichlet-distributions",
+        "document-term-matrix"
+      ],
+      "related": [
+        "gibbs-sampling",
+        "variational-inference-elbo",
+        "word-embedding"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "factor-analysis",
+      "title": "Factor Analysis",
+      "summary": "Factor analysis models observed variables as linear combinations of a small number of latent factors plus variable-specific noise. It is useful when the goal is to explain covariance structure rather than merely reduce dimension, which is the key difference from PCA.",
+      "domain": "unsupervised",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "variance-covariance-correlation",
+        "multivariate-gaussian-distribution"
+      ],
+      "related": [
+        "principal-component-analysis-pca",
+        "independent-component-analysis",
+        "expectation-maximization-em-algorithm",
+        "canonical-correlation-analysis-cca"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "kalman-filter",
+      "title": "Kalman Filter",
+      "summary": "The Kalman filter recursively estimates the hidden state of a linear Gaussian dynamical system by alternating a prediction step with a measurement update. It is optimal for that model class because the posterior remains Gaussian and is fully described by a mean and covariance.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "multivariate-gaussian-distribution",
+        "bayes-theorem"
+      ],
+      "related": [
+        "particle-filter",
+        "hidden-markov-model-hmm",
+        "expectation-maximization-em-algorithm"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "particle-filter",
+      "title": "Particle Filter",
+      "summary": "A particle filter approximates the posterior over a hidden state with weighted samples, or particles, instead of a single Gaussian. It is useful for nonlinear or non-Gaussian state-space models, but resampling and weight degeneracy are central practical issues.",
+      "domain": "foundations",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "bayes-theorem",
+        "importance-sampling",
+        "kalman-filter"
+      ],
+      "related": [
+        "markov-chain-monte-carlo-mcmc",
+        "hidden-markov-model-hmm",
+        "kalman-filter"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "canonical-correlation-analysis-cca",
+      "title": "Canonical Correlation Analysis (CCA)",
+      "summary": "Canonical correlation analysis finds linear combinations of two random vectors that are maximally correlated with each other. It is the right tool when the question is about shared structure between two views of the same examples rather than variance within a single view.",
+      "domain": "unsupervised",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "variance-covariance-correlation",
+        "principal-component-analysis-pca"
+      ],
+      "related": [
+        "factor-analysis",
+        "independent-component-analysis",
+        "multivariate-gaussian-distribution"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "missing-data-and-imputation",
+      "title": "Missing Data and Imputation",
+      "summary": "Missing-data methods try to preserve inference when some values are unobserved by modeling why data are missing and how to fill or integrate over the missing entries. The key distinction is between MCAR, MAR, and MNAR, because imputation is far safer when missingness can be treated as conditionally ignorable.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "probability-distribution",
+        "bayes-theorem"
+      ],
+      "related": [
+        "expectation-maximization-em-algorithm",
+        "train-validation-test-split",
+        "target-leakage-vs-data-leakage"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "target-leakage-vs-data-leakage",
+      "title": "Target Leakage vs. Data Leakage",
+      "summary": "Data leakage is any contamination that lets training or validation use information that would not be available at prediction time. Target leakage is the specific case where features encode the label or a post-outcome proxy for it, so every target leakage problem is data leakage, but not every data leakage problem is target leakage.",
+      "domain": "evaluation",
+      "level": "basic",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "implementation",
+        "ml",
+        "evaluation",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "data-leakage",
+        "train-validation-test-split"
+      ],
+      "related": [
+        "missing-data-and-imputation",
+        "model-evaluation",
+        "ablation-studies-and-experimental-control"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "ablation-studies-and-experimental-control",
+      "title": "Ablation Studies and Experimental Control",
+      "summary": "An ablation study removes or alters one component of a system to measure how much that component actually contributes. Experimental control matters because an ablation is only informative when the comparison keeps everything else fixed, including data, tuning budget, and evaluation protocol.",
+      "domain": "evaluation",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "implementation",
+        "ml",
+        "evaluation",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "model-evaluation",
+        "hypothesis-testing-and-p-values"
+      ],
+      "related": [
+        "a-b-testing-ml-systems",
+        "target-leakage-vs-data-leakage",
+        "multiple-hypothesis-testing-and-false-discovery-rate"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "value-iteration",
+      "title": "Value Iteration",
+      "summary": "Value iteration solves a known Markov decision process by repeatedly applying the Bellman optimality backup until the value function converges. Once the optimal value is approximated, a greedy policy with respect to that value is optimal or near-optimal.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "markov-decision-process-mdp",
+        "the-bellman-equation",
+        "value-function"
+      ],
+      "related": [
+        "policy-iteration",
+        "dynamic-programming-for-rl",
+        "policy-reinforcement-learning"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "policy-iteration",
+      "title": "Policy Iteration",
+      "summary": "Policy iteration alternates between evaluating the current policy and improving it by acting greedily with respect to that value function. It often converges in fewer outer loops than value iteration because each improvement step uses a more fully solved subproblem.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "markov-decision-process-mdp",
+        "value-function",
+        "policy-reinforcement-learning"
+      ],
+      "related": [
+        "value-iteration",
+        "dynamic-programming-for-rl",
+        "the-bellman-equation"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "monte-carlo-reinforcement-learning",
+      "title": "Monte Carlo Reinforcement Learning",
+      "summary": "Monte Carlo reinforcement learning estimates values from complete sampled returns rather than from one-step bootstrapped targets. That makes the targets unbiased with respect to the episode return, but usually higher variance than temporal-difference methods.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "markov-decision-process-mdp",
+        "value-function",
+        "policy-reinforcement-learning"
+      ],
+      "related": [
+        "temporal-difference-learning",
+        "value-iteration",
+        "credit-assignment-problem",
+        "reinforce-algorithm"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "credit-assignment-problem",
+      "title": "Credit Assignment Problem",
+      "summary": "The credit assignment problem is the problem of determining which earlier actions, states, or internal computations deserve blame or credit for a later outcome. It is hard because rewards and losses are often delayed, sparse, or distributed across many interacting decisions.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "reinforcement",
+        "theory",
+        "path-reinforcement"
+      ],
+      "prerequisites": [
+        "reinforcement-learning-rl",
+        "backpropagation-through-time-bptt"
+      ],
+      "related": [
+        "monte-carlo-reinforcement-learning",
+        "temporal-difference-learning",
+        "policy-gradient-theorem",
+        "what-is-the-vanishing-gradient-problem"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "instrumental-variables",
+      "title": "Instrumental Variables",
+      "summary": "Instrumental variables identify causal effects when treatment is confounded, provided an instrument affects treatment, is as-good-as random with respect to unobserved confounders, and influences the outcome only through treatment. In simple linear settings, the IV estimand is the ratio of the instrument-outcome covariance to the instrument-treatment covariance.",
+      "domain": "foundations",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "confounding-colliders-and-simpsons-paradox",
+        "potential-outcomes-framework",
+        "conditional-independence"
+      ],
+      "related": [
+        "counterfactuals",
+        "do-calculus",
+        "bayes-risk-and-the-bayes-optimal-classifier"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "counterfactuals",
+      "title": "Counterfactuals",
+      "summary": "A counterfactual asks what would have happened under a different action or treatment than the one that actually occurred. The central difficulty is that for any individual unit, only one potential outcome is observed, so causal inference always requires assumptions to recover the missing alternative.",
+      "domain": "foundations",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "potential-outcomes-framework",
+        "confounding-colliders-and-simpsons-paradox"
+      ],
+      "related": [
+        "instrumental-variables",
+        "do-calculus",
+        "bayes-theorem"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "do-calculus",
+      "title": "Do-Calculus",
+      "summary": "Do-calculus is Pearl's set of graphical transformation rules for turning interventional quantities into observational quantities when the causal graph permits it. It matters because it separates what can be identified from data plus structure from what remains fundamentally unidentifiable.",
+      "domain": "foundations",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "path-core-foundations"
+      ],
+      "prerequisites": [
+        "conditional-independence",
+        "confounding-colliders-and-simpsons-paradox",
+        "counterfactuals"
+      ],
+      "related": [
+        "instrumental-variables",
+        "potential-outcomes-framework",
+        "bayes-theorem"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "bahdanau-attention",
+      "title": "Bahdanau Attention",
+      "summary": "Bahdanau attention is the original additive attention mechanism for sequence-to-sequence models, where the decoder scores each encoder state before producing the next token. It solved the fixed-context bottleneck of early seq2seq RNNs by letting the decoder look back over the whole source sequence at every step.",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "attention",
+        "architecture",
+        "nlp",
+        "historical",
+        "landmark",
+        "path-architectures",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "sequence-to-sequence-seq2seq",
+        "encoder-decoder-architecture",
+        "attention-mechanism"
+      ],
+      "related": [
+        "seq2seq-with-attention",
+        "luong-attention-global-and-local",
+        "cross-attention",
+        "attention-mechanism"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "seq2seq-with-attention",
+      "title": "Seq2Seq with Attention",
+      "summary": "Seq2seq with attention augments the encoder-decoder architecture so the decoder conditions on a context vector built from all encoder states at each output step. That change made neural machine translation far more effective than fixed-context seq2seq and directly paved the way to modern cross-attention and Transformer models.",
+      "domain": "history",
+      "level": "intermediate",
+      "type": "mixed",
+      "tags": [
+        "intermediate",
+        "ml",
+        "theory",
+        "attention",
+        "architecture",
+        "nlp",
+        "historical",
+        "landmark",
+        "path-architectures",
+        "path-transformer-llm"
+      ],
+      "prerequisites": [
+        "sequence-to-sequence-seq2seq",
+        "bahdanau-attention",
+        "encoder-decoder-architecture"
+      ],
+      "related": [
+        "luong-attention-global-and-local",
+        "cross-attention",
+        "t5-text-to-text-transfer-transformer",
+        "bahdanau-attention"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "backpropagation-history-werbos-rumelhart-hinton-williams",
+      "title": "Backpropagation — History (Werbos → Rumelhart/Hinton/Williams)",
+      "summary": "The history of backpropagation is the story of an idea known in pieces before it became a practical neural-network training method. Werbos articulated reverse-mode differentiation for network training in the 1970s, and Rumelhart, Hinton, and Williams turned it into the landmark 1986 demonstration that made multilayer neural networks trainable in practice.",
+      "domain": "history",
+      "level": "basic",
+      "type": "mixed",
+      "tags": [
+        "foundational",
+        "ml",
+        "theory",
+        "historical",
+        "landmark",
+        "optimization",
+        "path-core-foundations",
+        "path-architectures"
+      ],
+      "prerequisites": [
+        "backpropagation",
+        "chain-rule"
+      ],
+      "related": [
+        "backpropagation",
+        "backpropagation-through-time-bptt",
+        "automatic-differentiation",
+        "neural-network"
+      ],
+      "updatedAt": "2026-04-27",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
