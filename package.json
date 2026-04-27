@@ -12,28 +12,28 @@
     "llm-studies:validate": "node scripts/llm-papers/validate-studies.mjs"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "4.1.18",
-    "firebase": "12.12.0",
+    "@tailwindcss/postcss": "4.2.4",
+    "firebase": "12.12.1",
     "highlight.js": "11.11.1",
     "mathjax": "3.2.2",
     "next": "16.2.4",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
     "yet-another-react-lightbox": "3.31.0"
   },
   "devDependencies": {
-    "@types/node": "25.5.2",
+    "@types/node": "25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "autoprefixer": "10.4.27",
-    "eslint": "10.2.0",
+    "eslint": "9.39.4",
     "eslint-config-next": "16.2.4",
     "playwright": "1.59.1",
-    "postcss": "8.5.10",
-    "tailwindcss": "4.2.2",
-    "typescript": "6.0.2"
+    "postcss": "8.5.12",
+    "tailwindcss": "4.2.4",
+    "typescript": "6.0.3"
   },
   "overrides": {
-    "protobufjs": "7.5.5"
+    "protobufjs": "7.5.5",
+    "postcss": "8.5.12"
   }
 }
