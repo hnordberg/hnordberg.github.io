@@ -99,5 +99,27 @@
     "repo": "https://github.com/hustvl/MoDA",
     "controversialness": 2,
     "controversialReason": "New attention variant; reported gains and kernel efficiency need replication on other hardware and training recipes."
+  },
+  {
+    "id": "Grokking_Progress_Measures",
+    "period": "2023",
+    "title": "Progress Measures for Grokking via Mechanistic Interpretability",
+    "org": "UC Berkeley",
+    "location": "https://arxiv.org/pdf/2301.05217.pdf",
+    "paperTitle": "Progress measures for grokking via mechanistic interpretability",
+    "authors": [
+      "Neel Nanda",
+      "Lawrence Chan",
+      "Tom Lieberum",
+      "Jess Smith",
+      "Jacob Steinhardt"
+    ],
+    "description": "Grokking is the puzzle where a network keeps training long after reaching zero training loss and then suddenly transitions from memorization to generalization. This paper reverse-engineers a one-layer transformer trained on modular addition and shows the network implements the task with discrete Fourier transforms and trigonometric identities: inputs are mapped to a small set of rotating frequencies and the answer is read off the angle of their sum. Using that mechanistic picture, the authors define progress measures—restricted loss and excluded loss—that project weights onto the learned Fourier components and track the underlying circuit directly. Those measures reveal that grokking is not a single mysterious phase shift but three overlapping phases: memorization, circuit formation, and cleanup of the memorized weights. The work is one of the canonical examples of using mechanistic interpretability to derive concrete, falsifiable claims about training dynamics.",
+    "citations": 420,
+    "icon": "ml/berkeley.svg",
+    "details": "To reproduce, train a one-layer attention-only transformer on modular addition with a prime around 113, a small training fraction (~30%), and sustained weight decay—grokking only appears with strong regularization, so do not turn it off after training stalls. Once trained, take the FFT of the embedding matrix and the MLP weights; you should see energy concentrated on a handful of key frequencies. Define restricted loss as the loss recomputed when the model is projected onto those Fourier components and excluded loss when those components are removed; plotting both alongside train and test loss makes the three phases (memorization, circuit formation, cleanup) visible. Treat the modular-addition circuit as a worked example, not a template—do not assume the same Fourier story carries over to larger LMs without re-running the analysis on whatever circuit you actually find.",
+    "repo": "https://github.com/mechanistic-interpretability-grokking/progress-measures-paper",
+    "controversialness": 1,
+    "controversialReason": "Mechanistic findings on a toy modular-addition task; how cleanly the three-phase grokking story transfers to large language models is still open."
   }
 ]
