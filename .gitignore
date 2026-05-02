@@ -7,6 +7,9 @@
 /.next/
 /out/
 
+# Vendored from npm (scripts/copy-mathjax.mjs)
+/public/mathjax/tex-chtml-full.js
+
 # Production artifacts
 /.vercel
 
