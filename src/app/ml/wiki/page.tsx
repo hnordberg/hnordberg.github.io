@@ -119,6 +119,20 @@ const ENTRY_POINTS = [
     body: "Best for repeat visitors who want new additions, recent edits, or timely topics without scrolling a path list.",
     bullets: ["Recent topics", "Updated collections", "Lower revisit friction"],
   },
+  {
+    kicker: "Plan your study",
+    title: "Make a study plan",
+    href: "/ml/wiki/study-plan",
+    body: "Best for readers who want to set a concrete goal and build a sustainable routine before diving in.",
+    bullets: ["Set a goal", "Pick a path", "Build a routine"],
+  },
+  {
+    kicker: "Beyond the wiki",
+    title: "ML learning resources",
+    href: "/ml/wiki/resources",
+    body: "Best for finding complementary websites, books, courses, and videos to deepen study outside the wiki.",
+    bullets: ["Websites", "Books & courses", "Videos"],
+  },
 ];
 
 export default function MlWikiIndexPage() {
@@ -188,6 +202,20 @@ export default function MlWikiIndexPage() {
               Study a topic in one sentence, open the derivation only when you
               need it, and return later with spaced repetition.
             </p>
+            <div className="wiki-home-cta">
+              <Link
+                href="/ml/wiki/study-plan"
+                className="wiki-home-btn-amber"
+              >
+                Make a study plan
+              </Link>
+              {/* <Link
+                href="/ml/wiki/resources"
+                className="wiki-home-btn-amber"
+              >
+                ML learning resources
+              </Link> */}
+            </div>
             <div className="wiki-home-cta">
               <Link
                 href="/ml/wiki/paths/core-foundations"
