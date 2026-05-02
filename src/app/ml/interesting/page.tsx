@@ -23,7 +23,9 @@ type InterestingEntry = {
 const InterestingPapersPage = () => {
   const dataPath = path.join(process.cwd(), 'data/interesting_papers.json')
   const raw = fs.readFileSync(dataPath, 'utf8')
-  const papers = JSON.parse(raw) as InterestingEntry[]
+  const papers = (JSON.parse(raw) as InterestingEntry[])
+    .slice()
+    .sort((a, b) => Number(b.period) - Number(a.period))
 
   return (
     <main>
