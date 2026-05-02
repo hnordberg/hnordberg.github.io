@@ -1174,6 +1174,42 @@ body.dark-mode .wiki-topic-list-link {
     min-width: 0;
 }
 
+section.wiki-article h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.25;
+    text-align: left;
+    border-bottom: 1px solid rgba(127, 127, 127, 0.25);
+    padding-bottom: 0.35rem;
+}
+
+section.wiki-article h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+    text-align: left;
+}
+
+section.wiki-article p {
+    line-height: 1.65;
+    margin: 0 0 1rem;
+}
+
+section.wiki-article ul {
+    line-height: 1.65;
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+    list-style: disc;
+}
+
+section.wiki-article ul li {
+    margin-bottom: 0.35rem;
+}
+
 .wiki-sr-only {
     position: absolute;
     width: 1px;
@@ -2068,6 +2104,7 @@ body.dark-mode .wiki-home-accent-amber {
     margin-top: 0.25rem;
 }
 
+.wiki-home-btn-amber,
 .wiki-home-btn-primary,
 .wiki-home-btn-ghost {
     display: inline-flex;
@@ -2128,6 +2165,28 @@ body.dark-mode .wiki-home-btn-ghost {
 body.dark-mode .wiki-home-btn-ghost:hover {
     border-color: rgba(255, 255, 255, 0.4);
     color: #fff;
+}
+
+.wiki-home-btn-amber {
+    background: transparent;
+    color: #d97706;
+    border: 1px solid #d97706;
+}
+
+.wiki-home-btn-amber:hover {
+    background: #d97706;
+    color: #fff;
+    text-decoration: none;
+}
+
+body.dark-mode .wiki-home-btn-amber {
+    color: #fbbf24;
+    border-color: #fbbf24;
+}
+
+body.dark-mode .wiki-home-btn-amber:hover {
+    background: #fbbf24;
+    color: #1a1a1a;
 }
 
 .wiki-home-meta-row {
