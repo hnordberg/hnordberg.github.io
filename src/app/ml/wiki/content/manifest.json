@@ -19338,6 +19338,35 @@
       ],
       "updatedAt": "2026-04-27",
       "sourceDeck": "Machine Learning by Henrik Nordberg"
+    },
+    {
+      "slug": "equivariant-neural-networks",
+      "title": "Equivariant Neural Networks",
+      "summary": "Equivariant neural networks bake a symmetry group action into the architecture so that \\( f(g \\cdot x) = \\rho(g) \\cdot f(x) \\) holds exactly by construction, achieved by constraining each layer's weights to the operators that commute with the group action. The dominant examples are CNNs (translation), Deep Sets and GNNs (permutation), G-CNNs (discrete rotations), and SE(3)-equivariant networks like EGNN, NequIP, and AlphaFold's IPA (3D rigid motions for molecules and proteins).",
+      "domain": "deep-learning",
+      "level": "advanced",
+      "type": "mixed",
+      "tags": [
+        "advanced",
+        "ml",
+        "theory",
+        "architecture",
+        "representation-learning",
+        "path-representation-theory"
+      ],
+      "prerequisites": [
+        "invariance-vs-equivariance",
+        "convolutional-neural-network-cnn"
+      ],
+      "related": [
+        "invariance-vs-equivariance",
+        "set-transformer-deep-sets",
+        "message-passing-in-graph-neural-networks-gnns",
+        "graph-convolutional-network-gcn",
+        "data-augmentation"
+      ],
+      "updatedAt": "2026-05-02",
+      "sourceDeck": "Machine Learning by Henrik Nordberg"
     }
   ]
 }
