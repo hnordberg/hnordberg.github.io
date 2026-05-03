@@ -15,6 +15,7 @@ import { CardEvidence } from "./CardEvidence";
 import { WikiTopicReferences } from "./WikiTopicReferences";
 import { WikiTopicSidebar } from "./WikiTopicSidebar";
 import { TopicStudyButton } from "../flashcards";
+import { CustomPathToggle } from "./CustomPathToggle";
 
 type WikiTopicClientProps = {
   topic: WikiTopic;
@@ -137,6 +138,9 @@ export function WikiTopicClient({ topic, manifest }: WikiTopicClientProps) {
                   <span className="wiki-sr-only">Topic information</span>
                 </button>
               </div>
+            </div>
+            <div style={{ marginBottom: "1.5rem" }}>
+              <CustomPathToggle slug={topic.slug} variant="prominent" />
             </div>
             <div className="wiki-sections">
               {topic.sections.map((s, idx) => (

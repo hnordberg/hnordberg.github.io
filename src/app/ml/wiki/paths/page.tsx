@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getManifest, getPaths } from "../lib/loadContent";
 import { resolvePathTopics } from "../lib/paths";
 import WikiShell from "../components/WikiShell";
+import { MyPathCard } from "../components/MyPathCard";
 
 export const metadata: Metadata = {
   title: "ML Wiki — Learning paths | Henrik Nordberg",
@@ -27,6 +28,7 @@ export default function MlWikiPathsIndexPage() {
         </p>
       </header>
       <ul className="wiki-path-list card-grid">
+        <MyPathCard />
         {paths.map((p) => {
           const matchedTopics = resolvePathTopics(manifest, p);
           return (

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { typesetMathInSubtree, useMathJax } from "../../../components/MathJax";
 import type { WikiManifest } from "../types";
+import { CustomPathToggle } from "./CustomPathToggle";
 
 type WikiIndexFilterProps = {
   manifest: WikiManifest;
@@ -74,14 +75,19 @@ export function WikiIndexFilter({ manifest }: WikiIndexFilterProps) {
         </p>
         <ul className="wiki-topic-list">
           {filtered.map((t) => (
-            <li key={t.slug} className="wiki-topic-list-item">
-              <Link href={`/ml/wiki/${t.slug}`} className="wiki-topic-list-link">
+            <li
+              key={t.slug}
+              className="wiki-topic-list-item"
+              style={{ display: "flex", alignItems: "flex-start", gap: "1rem" }}
+            >
+              <Link href={`/ml/wiki/${t.slug}`} className="wiki-topic-list-link" style={{ flex: 1 }}>
                 <span className="wiki-topic-list-title">{t.title}</span>
                 <span className="wiki-topic-list-meta">
                   {t.domain} · {t.level}
                 </span>
                 <span className="wiki-topic-list-summary">{t.summary}</span>
               </Link>
+              <CustomPathToggle slug={t.slug} variant="compact" />
             </li>
           ))}
         </ul>

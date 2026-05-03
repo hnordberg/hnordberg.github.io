@@ -15,11 +15,13 @@ export function useWikiProgress() {
   const { user } = useAuth();
   const [completedSlugs, setCompletedSlugs] = useState<Set<string>>(new Set());
   const [learningPaths, setLearningPaths] = useState<Record<string, PathProgress>>({});
+  const [customPathSlugs, setCustomPathSlugs] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!user) {
       setCompletedSlugs(new Set());
       setLearningPaths({});
+      setCustomPathSlugs(new Set());
       return;
     }
 
@@ -31,6 +33,11 @@ export function useWikiProgress() {
         }
         if (data.learningPaths) {
           setLearningPaths(data.learningPaths);
+        }
+        if (Array.isArray(data.customPath)) {
+          setCustomPathSlugs(new Set(data.customPath));
+        } else {
+          setCustomPathSlugs(new Set());
         }
       }
     });
@@ -100,12 +107,40 @@ export function useWikiProgress() {
      });
   }, [user, markCompleted]);
 
-  return { 
-    completedSlugs, 
-    markCompleted, 
+  const inCustomPath = useCallback((slug: string) => {
+    return customPathSlugs.has(slug);
+  }, [customPathSlugs]);
+
+  const toggleCustomPath = useCallback((slug: string) => {
+    if (!user) return;
+    setCustomPathSlugs((prev) => {
+      const next = new Set(prev);
+      if (next.has(slug)) {
+        next.delete(slug);
+      } else {
+        next.add(slug);
+      }
+
+      setDoc(doc(db, "users", user.uid), {
+        customPath: [...next],
+        updatedAt: new Date().toISOString()
+      }, { merge: true }).catch((err) => {
+        console.error("Failed to sync custom path", err);
+      });
+
+      return next;
+    });
+  }, [user]);
+
+  return {
+    completedSlugs,
+    markCompleted,
     isCompleted,
     learningPaths,
     updatePathProgress,
-    markPathTopicCompleted
+    markPathTopicCompleted,
+    customPathSlugs,
+    inCustomPath,
+    toggleCustomPath
   };
 }
