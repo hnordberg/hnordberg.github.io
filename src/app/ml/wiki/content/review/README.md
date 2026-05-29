@@ -35,7 +35,7 @@ Local-only workflow for auditing changes to [topics.json](../topics.json) agains
 - Multiple batch files are loaded together (`topics_reviewed_batch_*.json`, sorted by name). If two batches reference the same slug, the later filename wins and a warning is shown in the UI.
 - Entries whose slug is not in `topics.json` are skipped with a warning.
 - The save endpoint refuses requests unless `NODE_ENV=development`, so a stray production deploy can't write to the repo.
-- `next.config.mjs` only enables `output: 'export'` when `NODE_ENV=production`, so `next dev` runs as a real Node server (needed by the API route). The POST handler is **not** compatible with static export — before running `next build` for a GitHub Pages deploy, temporarily delete `src/app/api/review/` (and `src/app/ml/wiki/review/`), or the build will fail.
+- `next.config.mjs` only enables `output: 'export'` when `NODE_ENV=production`, so `next dev` runs as a real Node server (needed by the API route). The save route must not use `export const dynamic = "force-dynamic"` — that flag is incompatible with static export and will fail `npm run build`.
 - Do **not** edit `topics.json` directly while running this — only the merge step should touch it.
 - `topics_reviewed_accepted.json` is regenerated on every save. Don't hand-edit it; redo the decision in the UI instead.
 

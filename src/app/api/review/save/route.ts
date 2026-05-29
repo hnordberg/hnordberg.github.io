@@ -9,7 +9,6 @@ import type {
 } from "../../../ml/wiki/review/types";
 
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
 
 function isObject(v: unknown): v is Record<string, unknown> {
   return v !== null && typeof v === "object" && !Array.isArray(v);
