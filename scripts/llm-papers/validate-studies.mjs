@@ -30,7 +30,8 @@ const SECTION_KINDS = new Set([
   "code",
 ]);
 
-const FIGURE_SOURCES = /^(hand-svg|paper-ref|scripts\/llm-papers\/figures\/)/;
+const FIGURE_SOURCES =
+  /^(hand-svg|paper-ref|src\/app\/ml\/llm\/content\/studies\/figures\/)/;
 
 const BANNED_PHRASES = [
   /\bit's important to note that\b/i,
@@ -100,7 +101,6 @@ function checkBannedPhrases(text, label) {
 
 function validateStudy(filename, data, wikiSlugs) {
   const issues = [];
-  const id = data.id || filename;
   const here = (msg) => `${filename}: ${msg}`;
 
   // Required top-level fields
