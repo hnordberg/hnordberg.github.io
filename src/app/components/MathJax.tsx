@@ -1,12 +1,7 @@
 "use client";
 
-import Script from "next/script";
 import {
-  useCallback,
   useEffect,
-  useMemo,
-  useRef,
-  type MutableRefObject,
   type ReactElement,
   type RefObject,
 } from "react";
@@ -66,144 +61,133 @@ export function configureMathJax(
 }
 
 /**
- * Clear previous MathJax output under `roots`, then typeset. Clearing is required
- * whenever React replaces or mutates text under a subtree that was already
- * typeset — otherwise MathJax may call `splitText` at stale offsets
- * (`IndexSizeError`).
+ * Module-level singleton: resolves once the MathJax bundle has loaded and its
+ * startup has finished, so callers can `await` a deterministic "ready" signal
+ * instead of polling. Created lazily on first use.
  */
-function typesetAfterClear(
-  mj: MathJaxGlobal,
-  roots: HTMLElement[],
-  onError?: (err: unknown) => void
-): void {
-  const nodes = roots.filter(Boolean);
-  if (nodes.length === 0 || !mj.typesetPromise) return;
-  if (typeof mj.typesetClear === "function") {
-    mj.typesetClear(nodes);
+let mathJaxReadyPromise: Promise<MathJaxGlobal> | null = null;
+
+function ensureMathJaxReady(): Promise<MathJaxGlobal> {
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("MathJax cannot load during SSR"));
   }
-  void mj.typesetPromise(nodes).catch((err: unknown) => {
-    if (onError) onError(err);
-    else console.error("MathJax typeset error:", err);
+  if (mathJaxReadyPromise) return mathJaxReadyPromise;
+
+  mathJaxReadyPromise = new Promise<MathJaxGlobal>((resolve, reject) => {
+    configureMathJax();
+
+    const finishWhenStartupDone = () => {
+      const mj = (window as MathJaxWindow).MathJax;
+      if (!mj) {
+        reject(new Error("MathJax global missing after script load"));
+        return;
+      }
+      if (mj.startup?.promise) {
+        mj.startup.promise
+          .then(() => resolve(mj))
+          .catch((err: unknown) => reject(err instanceof Error ? err : new Error(String(err))));
+        return;
+      }
+      if (typeof mj.typesetPromise === "function") {
+        resolve(mj);
+        return;
+      }
+      reject(new Error("MathJax loaded but typesetPromise is unavailable"));
+    };
+
+    /** MathJax might already be present if another component finished `ensureMathJaxReady` earlier in the session. */
+    const existingGlobal = (window as MathJaxWindow).MathJax;
+    if (existingGlobal?.typesetPromise) {
+      finishWhenStartupDone();
+      return;
+    }
+
+    let script = document.querySelector<HTMLScriptElement>(
+      'script[data-mathjax-loader="true"]'
+    );
+    if (!script) {
+      script = document.createElement("script");
+      script.src = MATHJAX_SRC;
+      script.async = true;
+      script.dataset.mathjaxLoader = "true";
+      document.head.appendChild(script);
+    }
+
+    if (script.dataset.mathjaxLoaded === "true") {
+      finishWhenStartupDone();
+      return;
+    }
+
+    script.addEventListener(
+      "load",
+      () => {
+        script!.dataset.mathjaxLoaded = "true";
+        finishWhenStartupDone();
+      },
+      { once: true }
+    );
+    script.addEventListener(
+      "error",
+      () => reject(new Error(`Failed to load ${MATHJAX_SRC}`)),
+      { once: true }
+    );
   });
+
+  return mathJaxReadyPromise;
 }
 
 /**
- * Typeset TeX delimiters inside `root` only. Does not use the one-shot guard in
- * {@link useMathJax}, so it is safe to call when new HTML (e.g. a collapsible
- * answer) mounts after the initial article pass.
+ * Typeset TeX delimiters inside `root` once MathJax is ready.
+ *
+ * Fire-and-forget: errors are logged. If `root` is detached from the document
+ * before MathJax finishes loading, the call is skipped silently.
+ *
+ * Replaces an earlier polling-based implementation that raced on cold loads
+ * (the bug where math stayed as raw `\( ... \)` until the user refreshed).
+ * The single shared `ensureMathJaxReady` promise removes the race entirely.
  */
 export function typesetMathInSubtree(root: HTMLElement | null): void {
-  if (typeof window === "undefined" || !root) return;
-  const w = window as MathJaxWindow;
-  const run = () => {
-    const mj = w.MathJax;
-    if (!mj?.typesetPromise) return;
-    typesetAfterClear(mj, [root]);
-  };
-  const mj = w.MathJax;
-  if (mj?.typesetPromise) {
-    if (mj.startup?.promise) void mj.startup.promise.then(run);
-    else run();
-    return;
-  }
-  const id = window.setInterval(() => {
-    if (w.MathJax?.typesetPromise) {
-      window.clearInterval(id);
-      const mj2 = w.MathJax;
-      if (mj2?.startup?.promise) void mj2.startup.promise.then(run);
-      else run();
-    }
-  }, 100);
-  window.setTimeout(() => window.clearInterval(id), 5000);
+  if (!root || typeof window === "undefined") return;
+  ensureMathJaxReady()
+    .then((mj) => {
+      if (!root.isConnected) return;
+      if (typeof mj.typesetClear === "function") {
+        mj.typesetClear([root]);
+      }
+      if (typeof mj.typesetPromise !== "function") return;
+      return mj.typesetPromise([root]).catch((err: unknown) => {
+        console.error("MathJax typeset error:", err);
+      });
+    })
+    .catch((err: unknown) => {
+      console.error("MathJax load error:", err);
+    });
 }
 
-function typeset(
-  containerRef: RefObject<HTMLElement | null>,
-  hasRenderedRef: MutableRefObject<boolean>
-): void {
-  if (hasRenderedRef.current) return;
-  const MathJax = (window as MathJaxWindow).MathJax;
-  if (!MathJax?.typesetPromise || !containerRef.current) return;
-  hasRenderedRef.current = true;
-  typesetAfterClear(MathJax, [containerRef.current], (err: unknown) => {
-    hasRenderedRef.current = false;
-    console.error("MathJax typeset error:", err);
-  });
+/** Backwards-compatible no-op component returned by {@link useMathJax}. */
+function NoopMathJaxScript(): ReactElement | null {
+  return null;
 }
 
 /**
- * Hook to load MathJax and typeset a container once it and the script are ready.
- * Returns a component that renders the MathJax script; render it and pass the
- * same ref to the element that contains LaTeX (e.g. $...$ or $$...$$).
+ * Hook that typesets `containerRef.current` once MathJax is ready.
+ *
+ * Returns `{ MathJaxScript }` for backwards compatibility — older call sites
+ * embedded `<MathJaxScript />` in their JSX to materialise the loader script.
+ * Script injection is now handled inside {@link ensureMathJaxReady}, so the
+ * returned component renders `null` and can be left in or removed safely.
  *
  * @example
  *   const mathRef = useRef<HTMLDivElement>(null);
- *   const { MathJaxScript } = useMathJax(mathRef);
- *   return (
- *     <>
- *       <MathJaxScript />
- *       <div ref={mathRef}>Inline: $x^2$ and display: $$E=mc^2$$</div>
- *     </>
- *   );
+ *   useMathJax(mathRef);
+ *   return <div ref={mathRef}>Inline: $x^2$ and display: $$E=mc^2$$</div>;
  */
 export function useMathJax(
   containerRef: RefObject<HTMLElement | null>
-): { MathJaxScript: () => ReactElement } {
-  configureMathJax();
-
-  const hasRenderedRef = useRef(false);
-
-  const doTypeset = useCallback(() => {
-    typeset(containerRef, hasRenderedRef);
+): { MathJaxScript: () => ReactElement | null } {
+  useEffect(() => {
+    typesetMathInSubtree(containerRef.current);
   }, [containerRef]);
 
-  useEffect(() => {
-    const tryTypeset = () => {
-      if (hasRenderedRef.current) return true;
-      const MathJax = (window as MathJaxWindow).MathJax;
-      if (!MathJax?.typesetPromise || !containerRef.current) return false;
-      doTypeset();
-      return true;
-    };
-    if (tryTypeset()) return;
-    const id = setInterval(() => {
-      if (tryTypeset()) clearInterval(id);
-    }, 200);
-    const timeout = setTimeout(() => {
-      tryTypeset();
-      clearInterval(id);
-    }, 5000);
-    return () => {
-      clearInterval(id);
-      clearTimeout(timeout);
-    };
-  }, [containerRef, doTypeset]);
-
-  const handleScriptLoad = useCallback(() => {
-    if (hasRenderedRef.current) return;
-    const MathJax = (window as MathJaxWindow).MathJax;
-    if (!MathJax || !containerRef.current) return;
-    const run = () => doTypeset();
-    if (MathJax.startup?.promise) {
-      MathJax.startup.promise.then(run);
-    } else if (typeof MathJax.typesetPromise === "function") {
-      run();
-    }
-  }, [containerRef, doTypeset]);
-
-  const MathJaxScript = useMemo(
-    () =>
-      function MathJaxScript() {
-        return (
-          <Script
-            src={MATHJAX_SRC}
-            strategy="afterInteractive"
-            onLoad={handleScriptLoad}
-          />
-        );
-      },
-    [handleScriptLoad]
-  );
-
-  return { MathJaxScript };
+  return { MathJaxScript: NoopMathJaxScript };
 }
