@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "comment: postinstall": "node scripts/copy-mathjax.mjs",
+    "mathjax:copy": "node scripts/copy-mathjax.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

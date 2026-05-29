@@ -7,10 +7,16 @@ import {
 } from "react";
 
 /**
- * Served from `public/mathjax/` (copied from the `mathjax` npm package via `postinstall`).
- * `tex-chtml-full` preloads TeX extensions (e.g. `boldsymbol`); lighter bundles can race autoload.
+ * Served from `public/mathjax/` (copied from the `mathjax` npm package).
+ * Toggle renderer with `NEXT_PUBLIC_MATHJAX_RENDERER=chtml|svg` (default: chtml).
  */
-const MATHJAX_SRC = "/mathjax/tex-chtml-full.js";
+type MathJaxRenderer = "chtml" | "svg";
+
+const configuredRenderer = process.env.NEXT_PUBLIC_MATHJAX_RENDERER;
+const MATHJAX_RENDERER: MathJaxRenderer =
+  configuredRenderer === "svg" ? "svg" : "chtml";
+const MATHJAX_SRC =
+  MATHJAX_RENDERER === "svg" ? "/mathjax/tex-svg.js" : "/mathjax/tex-chtml.js";
 
 type MathJaxGlobal = {
   version?: string;
@@ -128,7 +134,12 @@ function ensureMathJaxReady(): Promise<MathJaxGlobal> {
     );
     script.addEventListener(
       "error",
-      () => reject(new Error(`Failed to load ${MATHJAX_SRC}`)),
+      () =>
+        reject(
+          new Error(
+            `Failed to load ${MATHJAX_SRC} (renderer=${MATHJAX_RENDERER})`
+          )
+        ),
       { once: true }
     );
   });
