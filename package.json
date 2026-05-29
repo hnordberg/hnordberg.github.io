@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "node scripts/copy-mathjax.mjs",
+    "comment: postinstall": "node scripts/copy-mathjax.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -12,28 +12,28 @@
     "llm-studies:validate": "node scripts/llm-papers/validate-studies.mjs"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "4.2.4",
-    "firebase": "12.12.1",
+    "@tailwindcss/postcss": "4.3.0",
+    "firebase": "12.13.0",
     "highlight.js": "11.11.1",
-    "mathjax": "3.2.2",
-    "next": "16.2.4",
-    "react": "19.2.5",
-    "react-dom": "19.2.5",
-    "yet-another-react-lightbox": "3.31.0"
+    "mathjax": "4.1.2",
+    "next": "16.2.6",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "yet-another-react-lightbox": "3.32.0"
   },
   "devDependencies": {
-    "@types/node": "25.6.0",
-    "@types/react": "19.2.14",
+    "@types/node": "25.9.1",
+    "@types/react": "19.2.15",
     "@types/react-dom": "19.2.3",
     "eslint": "9.39.4",
-    "eslint-config-next": "16.2.4",
-    "playwright": "1.59.1",
-    "postcss": "8.5.12",
-    "tailwindcss": "4.2.4",
+    "eslint-config-next": "16.2.6",
+    "playwright": "1.60.0",
+    "postcss": "8.5.15",
+    "tailwindcss": "4.3.0",
     "typescript": "6.0.3"
   },
   "overrides": {
-    "protobufjs": "7.5.5",
-    "postcss": "8.5.12"
+    "protobufjs": "7.6.1",
+    "postcss": "8.5.15"
   }
 }
