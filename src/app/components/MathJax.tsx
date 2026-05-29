@@ -13,10 +13,20 @@ import {
 type MathJaxRenderer = "chtml" | "svg";
 
 const configuredRenderer = process.env.NEXT_PUBLIC_MATHJAX_RENDERER;
-const MATHJAX_RENDERER: MathJaxRenderer =
+const DEFAULT_MATHJAX_RENDERER: MathJaxRenderer =
   configuredRenderer === "svg" ? "svg" : "chtml";
-const MATHJAX_SRC =
-  MATHJAX_RENDERER === "svg" ? "/mathjax/tex-svg.js" : "/mathjax/tex-chtml.js";
+let activeMathJaxRenderer: MathJaxRenderer = DEFAULT_MATHJAX_RENDERER;
+let hasAttemptedSvgFallback = false;
+
+const TYPESET_TIMEOUT_MS = 3000;
+
+function mathJaxSrcFor(renderer: MathJaxRenderer): string {
+  return renderer === "svg" ? "/mathjax/tex-svg.js" : "/mathjax/tex-chtml.js";
+}
+
+function createTimeoutError(ms: number): Error {
+  return new Error(`MathJax typeset timed out after ${ms}ms`);
+}
 
 type MathJaxGlobal = {
   version?: string;
@@ -43,7 +53,11 @@ export const defaultMathJaxConfig = {
     processEnvironments: true,
     tags: "ams" as const,
   },
-  svg: { fontCache: "global" as const },
+  svg: {
+    fontCache: "global" as const,
+    // Prevent aggressive inline wrapping that can split equations into stacked fragments.
+    linebreaks: { inline: false, width: "100%" },
+  },
   startup: { typeset: false },
 };
 
@@ -73,14 +87,42 @@ export function configureMathJax(
  */
 let mathJaxReadyPromise: Promise<MathJaxGlobal> | null = null;
 
+function resetMathJaxRuntime(nextRenderer: MathJaxRenderer): void {
+  if (typeof window === "undefined") return;
+  const script = document.querySelector<HTMLScriptElement>(
+    'script[data-mathjax-loader="true"]'
+  );
+  if (script?.parentNode) {
+    script.parentNode.removeChild(script);
+  }
+  const w = window as MathJaxWindow;
+  delete w.MathJax;
+  mathJaxReadyPromise = null;
+  activeMathJaxRenderer = nextRenderer;
+}
+
+async function typesetWithTimeout(
+  mj: MathJaxGlobal,
+  nodes: HTMLElement[]
+): Promise<void> {
+  if (typeof mj.typesetPromise !== "function") return;
+  await Promise.race([
+    mj.typesetPromise(nodes),
+    new Promise<never>((_, reject) =>
+      window.setTimeout(() => reject(createTimeoutError(TYPESET_TIMEOUT_MS)), TYPESET_TIMEOUT_MS)
+    ),
+  ]);
+}
+
 function ensureMathJaxReady(): Promise<MathJaxGlobal> {
   if (typeof window === "undefined") {
     return Promise.reject(new Error("MathJax cannot load during SSR"));
   }
   if (mathJaxReadyPromise) return mathJaxReadyPromise;
 
-  mathJaxReadyPromise = new Promise<MathJaxGlobal>((resolve, reject) => {
+  const createdPromise = new Promise<MathJaxGlobal>((resolve, reject) => {
     configureMathJax();
+    const scriptSrc = mathJaxSrcFor(activeMathJaxRenderer);
 
     const finishWhenStartupDone = () => {
       const mj = (window as MathJaxWindow).MathJax;
@@ -113,10 +155,17 @@ function ensureMathJaxReady(): Promise<MathJaxGlobal> {
     );
     if (!script) {
       script = document.createElement("script");
-      script.src = MATHJAX_SRC;
+      script.src = scriptSrc;
       script.async = true;
       script.dataset.mathjaxLoader = "true";
-      document.head.appendChild(script);
+    }
+
+    // If MathJax is already ready (e.g. script executed before we subscribed), resolve immediately.
+    const existingNow = (window as MathJaxWindow).MathJax;
+    if (existingNow?.typesetPromise) {
+      script.dataset.mathjaxLoaded = "true";
+      finishWhenStartupDone();
+      return;
     }
 
     if (script.dataset.mathjaxLoaded === "true") {
@@ -124,24 +173,43 @@ function ensureMathJaxReady(): Promise<MathJaxGlobal> {
       return;
     }
 
+    const onLoad = () => {
+      script!.dataset.mathjaxLoaded = "true";
+      finishWhenStartupDone();
+    };
+    const onError = () =>
+      reject(
+        new Error(
+          `Failed to load ${scriptSrc} (renderer=${activeMathJaxRenderer})`
+        )
+      );
+
+    // Register listeners before append to avoid missing fast/cached `load` events.
     script.addEventListener(
       "load",
-      () => {
-        script!.dataset.mathjaxLoaded = "true";
-        finishWhenStartupDone();
-      },
+      onLoad,
       { once: true }
     );
     script.addEventListener(
       "error",
-      () =>
-        reject(
-          new Error(
-            `Failed to load ${MATHJAX_SRC} (renderer=${MATHJAX_RENDERER})`
-          )
-        ),
+      onError,
       { once: true }
     );
+    if (!script.isConnected) {
+      document.head.appendChild(script);
+    } else {
+      // Existing script can already be loaded but missing our marker.
+      const alreadyReady = (window as MathJaxWindow).MathJax;
+      if (alreadyReady?.typesetPromise) {
+        script.dataset.mathjaxLoaded = "true";
+        finishWhenStartupDone();
+      }
+    }
+  });
+  mathJaxReadyPromise = createdPromise.catch((err: unknown) => {
+    // Allow a future call to retry after transient load failures.
+    mathJaxReadyPromise = null;
+    throw err instanceof Error ? err : new Error(String(err));
   });
 
   return mathJaxReadyPromise;
@@ -160,19 +228,36 @@ function ensureMathJaxReady(): Promise<MathJaxGlobal> {
 export function typesetMathInSubtree(root: HTMLElement | null): void {
   if (!root || typeof window === "undefined") return;
   ensureMathJaxReady()
-    .then((mj) => {
+    .then(async (mj) => {
       if (!root.isConnected) return;
       if (typeof mj.typesetClear === "function") {
         mj.typesetClear([root]);
       }
-      if (typeof mj.typesetPromise !== "function") return;
-      return mj.typesetPromise([root]).catch((err: unknown) => {
-        console.error("MathJax typeset error:", err);
-      });
+      await typesetWithTimeout(mj, [root]);
     })
-    .catch((err: unknown) => {
-      console.error("MathJax load error:", err);
-    });
+    .catch(async (err: unknown) => {
+      // SVG can stall in some environments; transparently fall back to CHTML once.
+      if (activeMathJaxRenderer === "svg" && !hasAttemptedSvgFallback) {
+        hasAttemptedSvgFallback = true;
+        console.warn(
+          "MathJax SVG typeset stalled; falling back to CHTML renderer.",
+          err
+        );
+        try {
+          resetMathJaxRuntime("chtml");
+          const fallbackMj = await ensureMathJaxReady();
+          if (!root.isConnected) return;
+          if (typeof fallbackMj.typesetClear === "function") {
+            fallbackMj.typesetClear([root]);
+          }
+          await typesetWithTimeout(fallbackMj, [root]);
+          return;
+        } catch (fallbackErr: unknown) {
+          console.error("MathJax fallback-to-CHTML failed:", fallbackErr);
+        }
+      }
+      console.error("MathJax load/typeset error:", err);
+    })
 }
 
 /** Backwards-compatible no-op component returned by {@link useMathJax}. */

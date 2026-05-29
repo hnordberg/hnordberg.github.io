@@ -1792,6 +1792,18 @@ body.dark-mode .wiki-section {
     line-height: 1.65;
 }
 
+/* Tailwind preflight sets `svg { display: block; }`, which breaks inline MathJax SVG layout. */
+mjx-container[jax="SVG"] > svg {
+    display: inline-block !important;
+    vertical-align: baseline;
+}
+
+/* Keep display equations block-level and centered. */
+mjx-container[jax="SVG"][display="true"] > svg {
+    display: block !important;
+    margin: 0 auto;
+}
+
 .wiki-section-body p {
     margin: 0 0 0.75rem 0;
 }
