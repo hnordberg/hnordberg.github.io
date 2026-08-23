@@ -8,33 +8,29 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "ml-wiki:validate": "node scripts/ml-wiki/validate-content.mjs",
-    "llm-studies:validate": "node scripts/llm-papers/validate-studies.mjs"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "4.3.0",
-    "firebase": "12.13.0",
-    "highlight.js": "11.11.1",
-    "mathjax": "4.1.2",
-    "next": "16.2.6",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "yet-another-react-lightbox": "3.32.0"
+    "@tailwindcss/postcss": "4.3.3",
+    "firebase": "12.18.0",
+    "mathjax": "4.1.3",
+    "next": "16.3.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "yet-another-react-lightbox": "3.32.2"
   },
   "devDependencies": {
-    "@types/node": "25.9.1",
-    "@types/react": "19.2.15",
-    "@types/react-dom": "19.2.3",
-    "eslint": "9.39.4",
-    "eslint-config-next": "16.2.6",
-    "playwright": "1.60.0",
-    "postcss": "8.5.15",
-    "tailwindcss": "4.3.0",
-    "typescript": "6.0.3"
+    "@types/node": "26.2.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "eslint": "10.8.1",
+    "eslint-config-next": "16.3.1",
+    "postcss": "8.5.26",
+    "tailwindcss": "4.3.3",
+    "typescript": "7.0.2"
   },
   "overrides": {
-    "protobufjs": "7.6.1",
-    "postcss": "8.5.15"
+    "protobufjs": "7.6.5",
+    "postcss": "8.5.26"
   }
 }

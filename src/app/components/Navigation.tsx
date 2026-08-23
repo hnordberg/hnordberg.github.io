@@ -12,12 +12,12 @@ function isNavLinkActive(pathname: string, href: string): boolean {
 export default function Navigation() {
   const pathname = usePathname() ?? ''
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const links = [
+  const links: { href: string; label: string; external?: boolean }[] = [
     { href: '/', label: 'Home' },
     // { href: '/resume', label: 'Resume' },
     { href: '/projects', label: 'Projects' },
     { href: '/technology', label: 'Technology' },
-    { href: '/ml', label: 'Machine Learning' },
+    { href: 'https://axioml.org', label: 'Machine Learning', external: true },
     { href: '/leadership', label: 'Leadership' },
     { href: '/publications', label: 'Publications' },
     { href: '/contact', label: 'Contact' },
@@ -44,9 +44,15 @@ export default function Navigation() {
       <ul className={isMenuOpen ? 'menu-open' : ''}>
         {links.map(link => (
           <li key={link.href}>
-            <Link href={link.href} className={isNavLinkActive(pathname, link.href) ? 'active' : ''} onClick={closeMenu} >
-              {link.label}
-            </Link>
+            {link.external ? (
+              <a href={link.href} onClick={closeMenu}>
+                {link.label}
+              </a>
+            ) : (
+              <Link href={link.href} className={isNavLinkActive(pathname, link.href) ? 'active' : ''} onClick={closeMenu} >
+                {link.label}
+              </Link>
+            )}
           </li>
         ))}
       </ul>
