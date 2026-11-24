@@ -1,7 +1,9 @@
 import Contents from '../components/Contents'
+import { BELLS_INEQUALITY_ENABLED } from '../lib/features'
 
 const TechnologyPage = () => {
   const articles = [
+    ...(BELLS_INEQUALITY_ENABLED ? [{ id: 'bells-inequality', title: "Bell's Inequality" }] : []),
     { id: 'hard-problem-llms', title: 'The Hard Problem of LLMs' },
     { id: 'debugging', title: 'The Art of Debugging' },
     { id: 'security', title: 'Software Security' },
@@ -14,6 +16,39 @@ const TechnologyPage = () => {
     <main className="page-with-contents">
       <Contents articles={articles} />
       <section className="card-grid">
+        {BELLS_INEQUALITY_ENABLED && (
+        <div className="card" id="bells-inequality">
+          <div className="card-title">Bell&apos;s Inequality</div>
+          <div className="card-title-subtitle">Delve deeper with the <a href="/p/bells-inequality">Interactive Mermin Device Simulator</a></div>
+          <div className="card-text">
+            In 1935, Einstein, Podolsky, and Rosen (EPR) argued that quantum mechanics must be an incomplete theory.
+            When two entangled particles fly apart, measuring one immediately determines the state of the other, no matter
+            how far apart they are. Rejecting &ldquo;spooky action at a distance,&rdquo; EPR proposed <i>local realism</i>:
+            each particle must carry pre-existing hidden properties (an &ldquo;instruction set&rdquo;) fixed at the moment
+            of emission that dictate how it will respond to any measurement.
+          </div>
+          <div className="card-subtitle pt-4">Why It Is Significant</div>
+          <div className="card-text">
+            For nearly thirty years, whether particles carry hidden instruction sets (EPR) or only acquire definite values upon
+            measurement (the Copenhagen interpretation) was treated as a purely philosophical question. In 1964, John Stewart Bell
+            proved that any local hidden-variable theory must obey a strict statistical bound—<b>Bell&apos;s Inequality</b>—that
+            quantum mechanics violates when measurements are made at intermediate angles.
+          </div>
+          <div className="card-text">
+            Experimental tests by John Clauser, Alain Aspect, and Anton Zeilinger (awarded the 2022 Nobel Prize in Physics)
+            confirmed the quantum predictions and ruled out local hidden variables. Nature is genuinely non-local in its
+            correlations, forming the foundation of modern quantum cryptography, quantum networks, and quantum computing.
+          </div>
+          <div className="card-subtitle pt-4">Mermin&apos;s Quantum Mysteries</div>
+          <div className="card-text">
+            Physicist N. David Mermin stripped away the abstract math by framing both Bell&apos;s theorem and its 3-particle
+            GHZ extension (<i>&ldquo;Quantum mysteries revisited&rdquo;</i>) as black-box detectors with numbered switches and
+            Red/Green lights. Try the <a href="/p/bells-inequality">interactive simulator and explanation</a> to see why
+            pre-assigned EPR instruction sets cannot reproduce the predictions of quantum mechanics.
+          </div>
+        </div>
+        )}
+
         <div className="card" id="hard-problem-llms">
         <div className="card-title-subtitle">Delve deeper with the <a href="https://axioml.org/llm">history of Machine Learning & LLMs</a></div>
         <div className="card-text"><i>Note: these are some musings on similarities between LLMs and human thought</i></div>
