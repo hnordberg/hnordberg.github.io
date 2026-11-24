@@ -1,0 +1,31 @@
+1:"$Sreact.fragment"
+2:"/_next/static/chunks/27gjg8e11zukd.js"
+3:"/_next/static/chunks/22pohm8xi8mtj.js"
+4:I[44873,["$2","$3"],"AuthProvider"]
+5:I[58195,["$2","$3"],"default"]
+6:I[62863,["$2","$3"],"default"]
+7:I[39756,["$2","$3"],"default"]
+8:I[37457,["$2","$3"],"default"]
+9:"/_next/static/chunks/08jfex9olwtrw.js"
+a:"/_next/static/chunks/0855_80gdu7e7.js"
+b:I[22016,["$2","$3","$9","$a"],""]
+11:I[97367,["$2","$3"],"OutletBoundary"]
+12:"$Sreact.suspense"
+14:"ViewportBoundary"
+15:I[97367,["$2","$3"],"$14"]
+17:"MetadataBoundary"
+18:I[97367,["$2","$3"],"$17"]
+1a:I[68027,["$2","$3"],"default",1]
+:HL["/_next/static/chunks/34y0ij7jxqi25.css","style"]
+:HL["/_next/static/chunks/0g6c-9z5gmek-.css","style"]
+d:X
+f:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":["$L10",[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/0g6c-9z5gmek-.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/_next/static/chunks/08jfex9olwtrw.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/_next/static/chunks/0855_80gdu7e7.js","async":true,"nonce":"$undefined"}]],["$","$L11",null,{"children":["$","$12",null,{"name":"Next.MetadataOutlet","children":"$@13"}]}]]}],"p":false,"v":null}}]]
+e:[["children",{"s":"bells-inequality","h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L7",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$d"},"c":"$Qf"}]]
+c:[["children",{"s":"p","h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L7",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$d"},"c":"$Qe"}]]
+0:{"P":null,"c":["","p","bells-inequality"],"q":"","i":false,"t":{"t":{"s":"","h":528,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/34y0ij7jxqi25.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/_next/static/chunks/27gjg8e11zukd.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/_next/static/chunks/22pohm8xi8mtj.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"\n(function(){\n  try {\n    var t = localStorage.getItem('theme');\n    if (t !== 'light-mode' && t !== 'dark-mode') t = 'dark-mode';\n    document.body.className = t;\n  } catch (e) {\n    document.body.className = 'dark-mode';\n  }\n})();"}}],["$","$L4",null,{"children":[["$","header",null,{"className":"site-header","children":[["$","$L5",null,{}],["$","$L6",null,{}]]}],["$","$L7",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"\n(function(){\n  try {\n    var p = location.pathname.replace(//index.html$/, '').replace(/.html$/, '');\n    if (p === '/ml' || p.indexOf('/ml/') === 0) {\n      location.replace('https://axioml.org' + (p === '/ml' ? '/' : p.slice(3)) + location.search + location.hash);\n    }\n  } catch (e) {}\n})();"}}],["$","main",null,{"className":"page-with-contents","children":["$","div",null,{"className":"flex-1 w-full min-w-0 mt-4 xl:mt-0","children":[["$","h1",null,{"children":"Page not found"}],["$","p",null,{"children":["The machine learning section moved to"," ",["$","a",null,{"href":"https://axioml.org","children":"axioml.org"}],"; if you followed an old"," ",["$","code",null,{"children":"/ml"}]," link you should be redirected there automatically."]}],["$","p",null,{"children":["Otherwise, head ",["$","$Lb",null,{"href":"/","children":"back to the home page"}],"."]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","footer",null,{"children":["$","p",null,{"children":["© ",2026," Henrik Nordberg"]}]}]]}]]}]}]]}],"p":false,"v":null},"c":"$Qc"},"h":{"r":["$","$1","h",{"children":[null,["$","$L15",null,{"children":"$L16"}],["$","$L18",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$12",null,{"name":"Next.Metadata","children":"$L19"}]}],null]}],null]}],"p":false,"v":null}},"m":"$undefined","G":["$1a",[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/34y0ij7jxqi25.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"fTl2xe1jPSn1mUCs7oFoM"}
+10:E{"digest":"NEXT_HTTP_ERROR_FALLBACK;404"}
+d:C
+16:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+1b:I[27201,["$2","$3"],"IconMark"]
+13:null
+19:[["$","title","0",{"children":"Henrik Nordberg, Principal Engineer"}],["$","meta","1",{"name":"description","content":"Henrik Nordberg's project showcase"}],["$","meta","2",{"name":"google-site-verification","content":"dSCg0rCRcZOPSbSef9V6h5pLtxGs_osM0t7viz7yKUk"}],["$","link","3",{"rel":"shortcut icon","href":"/favicon.ico"}],["$","link","4",{"rel":"icon","href":"/favicon.ico"}],["$","link","5",{"rel":"apple-touch-icon","href":"/favicon.ico"}],["$","$L1b","6",{}]]
